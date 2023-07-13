@@ -1,0 +1,177 @@
+@(forma: Form[Oficio])
+@import helper._
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+
+    <!-- bootstrap-daterangepicker -->
+    <link href="@routes.Assets.at("gentelella/vendors/bootstrap-daterangepicker/daterangepicker.css")" rel="stylesheet">
+    <link href="@routes.Assets.at("clockpicker-gh-pages/dist/bootstrap-clockpicker.css")" rel="stylesheet">
+
+@main {
+
+	<style>
+	.vertical-centered-text {
+	  -ms-display: flex;
+	  display: flex;
+	  /* alineacion vertical */
+	  align-items: center;
+	   /* alineacion horizontal */
+	  justify-content: center;
+	}
+	</style>
+	@views.html.usuario.ventanasModales()
+	<div id="operacionFormulario" data-operacion="edit" data-idedicion=@forma("id").value()></div>
+    <div class="row">
+       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+              <li><a href="@routes.AdminOficioController.list()">Oficios</a></li>
+              <li>Editar</li>
+            </ol>
+        </div>
+    </div>
+        
+    <h1>Editar Oficio @forma.get.oficio</h1>
+    
+    @form( CSRF(routes.AdminOficioController.update(forma.get().id)), 'role->"form", 'id->"frmAux") {
+    	<input type="hidden" id="id" name="id">
+        @oficioForm(forma)
+        <div class="row">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                    <input type="submit" value="Actualizar oficio" class="btn btn-success btn-block">
+                </div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                    <input type="button" value="Eliminar oficio" class="btn btn-danger btn-block">
+                </div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block"> 
+                    <a href="@routes.AdminOficioController.list()" class="btn btn-warning btn-block">Cancelar</a>
+                </div>
+            </div> 
+        </div>
+        
+        
+    }
+    
+}
+
+
+<script type="text/javascript">
+	$(function() {
+	    $('form').validator();
+	    $('[data-toggle="popover"]').popover(
+	        {trigger: "hover"}
+	    );
+	    leer();
+	    //$("#oficioArchivoOficio").click();
+
+
+        // Archivos del Oficio
+        $.when(edoInicialArchivos(@forma.get().id)).done(function(data){
+            $("#ajaxEdoInicialArchivos").html(data);
+        });
+
+
+	});
+	
+
+    
+    function leer(){
+    	$("#id").val(@forma.get().id);
+    	@for(s<-forma.get().servicios){
+    		$("input[name='auxServicios[]'][value=@s.servicio.id]").prop("checked", true);
+    		if (@s.servicio.id == 2){
+    			$("#FechasGrabacion").toggle( $(this).prop('checked'));
+    			@if(forma.get().fechagrabaciones.length>0){
+    				@for(fg<-forma.get().fechagrabaciones){
+    					agregarFechaGrabacion();
+    					$("input[name='fechagrabaciones.fecha']:last").val("@fg.inicio.format("dd/MM/YYYY")");
+    					$("input[name='fechagrabaciones.inicio']:last").val("@fg.inicio.format("HH:mm")");
+    					$("input[name='fechagrabaciones.fin']:last").val("@fg.fin.format("HH:mm")");
+    					console.log( "@fg.inicio" )	
+    				}
+    			}
+    		}
+    	}
+    	
+    	@for(p<-forma.get().productoresSolicitados){
+            $("input[name='auxProductores[]'][value=@p.personal.id]").prop("checked", true);
+        }    	
+
+        // ArchivoOficio
+		var na = "@forma.field("imagenes[0].nombrearchivo").value()";
+		var na2 = "@forma.field("oficiosrespuestas[0].nombrearchivo").value()";
+		if(na==""){
+			$("#nombreArchivo").prop("placeholder", "No se ha seleccionado archivo de oficio...");
+			$("#btnVerArchivo").css("display", "none");
+		}else{
+			$("#nombreArchivo").prop("placeholder", na);
+			$("#btnVerArchivo").css("display", "block");
+		}
+		//ArchivoOficioRespuesta
+		if(na2==""){
+			$("#nombreArchivoRespuesta").prop("placeholder", "No se ha seleccionado archivo del oficio de respuesta...");
+			$("#nombreArchivoRespuesta").css("display", "none");
+		}else{
+			$("#nombreArchivoRespuesta").prop("placeholder", na2);
+			$("#btnVerArchivoRespuesta").css("display", "block");
+		}
+
+
+
+
+
+
+
+
+    	@if(forma.get().contactos.length!=0){
+	        @for(c<-forma.get().contactos){
+	            agregarContacto();
+	            var contactoId = $("#divContactos div[id^='contacto']").last().attr("id");
+	            console.log(contactoId)
+	            contactoId = contactoId.substr(8)
+	            console.log(contactoId)
+	            $("input[type='text'][name='auxContactos']:visible").last().val("@c.nombre");
+	            @if(c.telefonos.length!=0){
+	            	@for(t<-c.telefonos){
+		            	$("input[name^='contactos.telefono']:visible").last().val("@t.telefono");
+		            	//agregarTelefono( $("div[id^='renContacto']:visible").length-1  );
+		            	agregarTelefono(contactoId);
+	            	}
+	            }
+        
+                @if(c.correos.length!=0){
+                    @for(e<-c.correos){                        
+                        $("input[name='contactos.correo']:visible").last().val("@e.correo");
+                        //agregarCorreo(  $("div[id^='renContacto']:visible").length-1  );
+                        agregarCorreo(contactoId);
+                    }
+                }	            
+	        }    	
+    	} else {
+//    		agregarContacto(1);
+//    		agregarTelefono(1);
+//    		agregarCorreo(1);
+    		agregarContacto();
+    	}
+    }
+    
+   
+	function oficioCargado(){
+		$("#start").find("span").text("jajajaj");
+	}    
+    
+</script>    
+
+    <!-- bootstrap-daterangepicker -->
+    
+    <script src="@routes.Assets.at("gentelella/vendors/moment/min/moment.min.js")"></script>    
+    <script src="@routes.Assets.at("gentelella/vendors/bootstrap-daterangepicker/daterangepicker.js")"></script>
+    <script src="@routes.Assets.at("clockpicker-gh-pages/dist/bootstrap-clockpicker.js")"></script>      
+
+	<script src="@routes.Assets.at("javascripts/oficio.js")"></script>
+	<script src="@routes.Assets.at("javascripts/general.js")"></script>
+    <script src="@routes.Assets.at("bootstrap-notify/bootstrap-notify.min.js")"></script>
+

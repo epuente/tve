@@ -1,0 +1,161 @@
+@(id:Long, forma: Form[Vehiculo], roles:List[Rol], tipo:String)
+@import helper._
+
+@main {
+    <div class="row">
+       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+              <li><a href="@routes.AdminVehiculoController.list()">Vehiculos</a></li>
+              <li>Editar</li>
+            </ol>
+        </div>
+    </div>
+        
+    <h1>Editar Vehículo</h1>
+    @form( CSRF(routes.AdminVehiculoController.delete(id)), 'id->"frmAux") {
+    }
+    @form(CSRF(routes.AdminVehiculoController.update(id)), 'role->"form") {
+    
+    
+    
+    
+     
+        @vehiculoForm(forma, roles, "edit")                
+        <br/><br/>
+        <div class="row">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                    <input type="submit" value="Actualizar" class="btn btn-primary btn-block">
+                </div>
+                
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                    <a href="@routes.AdminVehiculoController.list()" class="btn btn-warning btn-block">Cancelar</a>
+                </div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                        <input type="button" class="btn btn-danger btn-block" value="Eliminar" id="btnEliminar">
+                </div>
+            </div>            
+        </div>      
+    }
+}
+
+<script type="text/javascript">
+    $(function() {
+        $("#filtroOpera").click();
+        $('form').validator();
+        leer();
+    });
+
+    $("form").submit(function(){
+        $("[type='checkbox'][id^='auxRoles_']:checked").each(function(i,e){
+            $(this).attr("name","cuentas[0].roles["+i+"].rol.id");
+        });         
+        
+        $("#divOperador select[name^='operadores['][name$='].personal.id']").each(function(i,e){            
+            $(this).attr('name', "operadores["+i+"].personal.id");
+        });
+        
+        $("#divOperador select[name^='operadores['][name$='].turno']").each(function(i,e){            
+            $(this).attr('name', "operadores["+i+"].turno");
+        });
+
+
+        
+        
+        $("#divTablaMantto.row").each(function(i,e){
+            alert("linea "+i);
+        });
+        
+
+        
+            
+        $("#divMantto #divTablaMantto input[name='mantenimiento.vehiculo']").each(function(i,e){
+            $(this).attr('name', "mantenimiento["+i+"].vehiculo.id");
+            $(this).val( @forma.get().id );
+        });        
+       
+        $("#divMantto input[name='mantenimiento.desde']").each(function(i,e){
+            $(this).attr('name', "mantenimiento["+i+"].desde");
+        });        
+
+        $("#divMantto input[name='mantenimiento.hasta']").each(function(i,e){
+            $(this).attr('name', "mantenimiento["+i+"].hasta");
+        });   
+       
+        $("#divMantto select[name='mantenimiento.tipo.id']").each(function(i,e){
+            $(this).attr('name', "mantenimiento["+i+"].tipo.id");
+        }); 
+
+        $("#divMantto input[name='mantenimiento.motivo']").each(function(i,e){            
+            $(this).attr('name', "mantenimiento["+i+"].motivo");
+        });         
+        
+        
+
+        
+        
+    });
+
+    $("#btnEliminar").click(function(){
+        $("#frmAux").submit();
+    });    
+
+    
+    
+    $("#filtroOpera, #filtroMantto").click(function(){
+        toggleFiltro(this);
+        
+        
+    });    
+    
+    function toggleFiltro(e){       
+        $("div[name='filtroEdo']").css("font-weight", "normal");
+        $("div[name='filtroEdo']").css("border-bottom","3px solid #F2F2F2");
+        $(e).css("font-weight", "bold");
+        $(e).css("border-bottom","3px solid "+$(e).css("color"));
+        $("#divOperador").toggle( $(e).prop("id")=="filtroOpera"  );
+        $("#divMantto").toggle( $(e).prop("id")=="filtroMantto"  );
+    }
+        
+    
+    $("#agregarMantto").click(function(e){
+        e.preventDefault();
+        $("#divTablaMantto").append(
+                '<div class="row">'
+                    +'<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">'
+                        +'<input type="hidden" name="mantenimiento.vehiculo" value="">'
+                        +'<input type="date" name="mantenimiento.desde" value="" class="form-control">'
+                    +'</div>'
+                    +'<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">'
+                        +'<input type="date" name="mantenimiento.hasta" value="" class="form-control">'
+                    +'</div>'
+                    +'<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">'
+                        +'<select name="mantenimiento.tipo.id" class="form-control">'
+                        +'<option class="blank" value="">-- Seleccione --</option>'
+                           @for( (a, b)<-models.TipoMantenimiento.options()){
+                               +'<option value=@a>@b </option>'
+                           } 
+                        +'</select>'              
+                    +'</div>'                    
+                    +'<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">'
+                        +'<input type="text" name="mantenimiento.motivo" placeholder="Descipción" class="form-control">'
+                    +'</div>'
+
+                    +'<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">'
+                        +'<h5 id="homeTitle" class="text-danger">Eliminar<a href="javascript:eliminaMantto('+$("#divTablaMantto div.row").length+')" data-toggle="popover" data-content="Eliminar mantenimiento" class="text-danger" id="btnEliminarMantto">  <i class="fa fa-minus-circle" aria-hidden="true"></i> </a></h5>'
+                    +'</div>'                   
+                +'</div>');
+    });
+    
+    
+    function leer(){
+
+    }
+    
+
+    
+</script>

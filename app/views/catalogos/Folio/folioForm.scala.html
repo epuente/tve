@@ -1,0 +1,220 @@
+@(forma: Form[Folio], oficio:Oficio)
+@import helper._  
+
+<style>
+	dd.info {
+		font-size: 0.8em !important;
+	}
+</style>
+
+	  @inputText(forma("oficio.id"), '_label->"", 'type->"hidden")
+	  @if(oficio == null){
+			<div class="row">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="col-sm-6">
+							<label>Oficio</label><br> <select class="selectpicker"
+								data-live-search="true" id="busquedaOficio">
+								@for(o<-models.Oficio.find.orderBy("oficio").findList()){
+								<option value="@o.oficio">@o.oficio @o.descripcion</option> }
+							</select> <br>
+							<br>
+							<button type="button" class="btn btn-primary" id="btnBuscar"
+								style="display: none;"></button>
+						</div>
+						
+						<div class="col-sm-6" id="divOficiosAsignados2"></div>
+					</div>
+				</div>
+			</div>
+			}
+    	<div class="row" id="divRowOficioInfo" style="display:@if(oficio!=null){block}else{none}">
+    		<div class="col-sm-12">
+			  <div class="panel panel-default">
+			    <div class="panel-body">
+			    	<div class="row">
+			    		<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+			    			<h3>Datos del Oficio</h3>
+			    		</div>
+			    		<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+			    		@if(oficio!=null){
+			    			@if(oficio.imagenes.size!=0){
+				    			<button type="button" class="btn btn-primary" id="btnVerArchivo" onClick="javascript:verOficio(@oficio.imagenes.get(0).id, '')"  target="_blank">Ver oficio</button>
+
+
+							}
+		    			}
+			    		</div>			    		
+			    	</div>
+			    	<div class="row">
+			    		<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+			    		
+			    			<div class="row"> 
+    							<div class="col-sm-4">
+    								<strong>Número de oficio </strong><div id="oficio.oficio" class="mismaLinea"></div>
+   								</div>
+    							<div class="col-sm-8">
+									<strong>Título </strong><div id="oficio.titulo" class="mismaLinea"></div>
+    							</div>
+   							</div>
+    							
+		                    <div class="row">
+		                        <div class="col-sm-12">
+		                            <strong>Descripción </strong><div id="oficio.descripcion" class="mismaLinea"></div>
+		                        </div>
+		                    </div>
+		                    <div class="row">
+		                        <div class="col-sm-12">
+		                            <strong>Unidad responsable </strong>
+		                                <div id="oficio.urremitente.nombreLargo" class="mismaLinea"></div>
+		                        </div>
+		                    </div>
+		                    
+		                    <div class="row">
+		                    	<div class="col-sm-12">
+						    			<div class="row">
+											<div class="col-sm-12">
+												<strong>Observación</strong><br>
+												<div id="oficio.observacion" class="mismaLinea"></div>
+											</div>
+										</div>	    		
+								</div>		                    
+		                    </div>
+		                    
+			
+		    			</div>
+				    			
+		    		<!-- 8 -->
+			    		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+			    			<div class="row">
+			    				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		                            <strong>Servicios solicitados </strong>
+		                            <div class='row'>
+		                            	<div id="oficio.servicios" class="">
+	                            		</div>
+	                                </div>		                            
+	                            </div>
+
+                            </div>	
+		                    <div class="row" style="margin-top: 1em;">
+		                    	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		                            <strong>Productores solicitados </strong>
+		                            <div class="row">
+			                            <div id="oficio.productores" class="">		
+		                                </div>		                            
+		                            </div>
+								</div>		                            
+
+                           </div>
+						</div>	
+		    		</div>
+
+				    			
+	    		</div>
+
+			    	</div>
+			    		<div id = "divCuadroFolios" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 mail_view" style=" padding-left: 2em;">
+			    		
+			    		</div>
+                    </div>
+			    </div>
+
+	
+	
+	<div id="conDatos" class="" name="conOficio" style="display: none;">
+	</div>
+	
+	
+    	<div class="row" name="conOficio" style="display: none;">
+
+			    		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 form-group">
+						    <div class="panel panel-default">
+							    <div class="panel-body">			    		
+						    			<div class="row">
+									    		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 form-group">
+									    			@inputText(forma("numfolio"), '_label -> "Número de folio", '_help -> "4 digitos del año y 4 digitos para consecutivo",  'class->"form-control soloNumerosCero", 'placeholder->"Ejemplo: 20220001")
+									    			<div class="help-block with-errors"></div>
+									    		</div>    				
+									    		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 form-group">
+								    				<div class="row">
+									                 @inputDate(forma("fechaentrega"), '_label->"Fecha de entrega", 'class->"form-control", '_help -> "Fecha de entrega al solicitante", 'placeholder->"dd/mm/aaaa" ,'required->true)
+									                 <div class="help-block with-errors"></div>
+								    				</div>
+								   				</div>
+									    		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 form-group">
+									    			@inputText(forma("numeroresguardo"), '_label -> "Número de resguardo", '_help -> "Número que se usará en videoteca", 'class->"form-control soloNumerosCero", 'placeholder->"Ejemplo: XXXXX")
+									    			<div class="help-block with-errors"></div>
+									    		</div>    				
+								   				
+   				    					</div>
+
+								        <div class="row" name="conOficio" style="display: none;">
+								            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								                @textarea(forma("observacion"), '_label->"Observación", 'class->"form-control")
+								            </div>
+								        </div>
+
+    							</div>
+			    			</div>
+		    			</div>
+
+						<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 form-group" id="divProductores">
+						  <div class="panel panel-default">
+						    <div class="panel-body">
+						        <div class="row">
+						            <div class="col-lg-12">
+						                <h3>Asignar productores</h3>
+						            </div>
+						        </div>
+			                    <div class="row">
+			                        <div class="col-lg-12">
+					                    <div class="form-group">
+					                        @for((key, value) <- models.Personal.optionsProductoresActivos()) {
+					                        	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+								    				<table>
+								    					<tr>
+								    						<td valign="baseline">
+									    						<input type="checkbox" id="auxProductores_@key" name="auxProductores[]" value="@key">&nbsp;
+								    						</td>
+								    						<td valign="baseline">
+																@value
+								    						</td>				    						
+								    					</tr>
+								    				</table>					                        	
+					                            </div>
+					                        }    
+					                    </div>                    
+
+			                            <div class="form-group">
+				                            @for((key, value) <- models.Personal.optionsProductoresInActivos()) {
+					                        	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+								    				<table>
+								    					<tr>
+								    						<td valign="baseline">
+									    						<input type="checkbox" id="auxProductores_@key" name="auxProductores[]" value="@key" label="Servicios" disabled="disabled">&nbsp;
+								    						</td>
+								    						<td valign="baseline">
+																@value
+								    						</td>				    						
+								    					</tr>
+								    				</table>					                        	
+					                            </div>
+				                            }
+				                        </div>                        
+			                    </div>
+		                    </div>
+			                    <div class="row">
+			                        <div class="col-lg-12">
+			                            <div class="help-block with-errors" id="msgProductores"></div>
+			                        </div>
+			                    </div>
+									
+								   
+								</div>			    
+						    </div>
+						  </div>  	
+       	
+    	</div>
+
+
+        

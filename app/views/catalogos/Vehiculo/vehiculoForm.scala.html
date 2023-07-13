@@ -1,0 +1,53 @@
+@(forma: Form[Vehiculo], roles:List[Rol], tipo:String)
+
+@import helper._
+
+        <fieldset>
+            <div class="row">
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                     <div class="form-group">
+                        @inputText(forma("placa"), '_label -> "Placa", 'class->"form-control", 'required->true )
+                        <div class="help-block with-errors"></div>
+                     </div>                        
+                </div>
+            
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                     <div class="form-group">
+                         @inputText(forma("descripcion"), '_label -> "Descripción", 'class->"form-control", 'required->true )
+                         <div class="help-block with-errors"></div>
+                     </div>                        
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 form-group">
+                        @select(forma("estado.id"), options(models.EstadoEquipoAccesorioVehiculo.options), 
+                            '_label->"Estado", 
+                            'size->options(models.EstadoEquipoAccesorioVehiculo.options).length,
+                            'required->true,
+                            'class->"form-control" )
+                        <div class="help-block with-errors"></div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4 form-group">
+                    @inputText(forma("modelo"), '_label -> "Modelo", 'class->"form-control", 'size->"5")                
+                </div>                
+                <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4 form-group">
+                       @inputRadioGroup(
+                         forma("activo"),
+                         options = options("S"->"Si\n","N"->"No"),
+                         '_label -> "Activo",
+                         '_error -> forma("activo").error.map(_.withMessage("Seleccione ")),
+                         'required->true                         
+                         )
+                                               
+                       <div class="help-block with-errors"></div>  
+                </div>
+
+            </div>
+            
+
+      
+            
+        </fieldset>
+        
+        

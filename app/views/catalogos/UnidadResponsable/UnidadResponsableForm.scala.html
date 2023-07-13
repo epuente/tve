@@ -1,0 +1,27 @@
+@(urForm: Form[UnidadResponsable])
+@import helper._
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }         
+        
+        <fieldset>
+            @inputText(urForm("tipo"), '_label -> "tipo", '_help -> "", 'class->"form-control", 'value->"0", 'class->"hidden", '_label->"")
+	        <div class="row">
+	            <div class="col-sm-6"></div>
+	            <div class="col-sm-6 form-group">
+	               @inputText(urForm("clave"), '_label -> "Clave", '_help -> "", 'class->"form-control", 'required->true, 'maxlength->6)
+	               <div class="help-block with-errors"></div>
+	            </div>            
+	        </div>        
+	        <br/><br/>	        
+	        <div class="row">
+	            <div class="col-sm-6 form-group">
+	               @inputText(urForm("nombreLargo"), '_label -> "Nombre largo", '_help -> "", 'class->"form-control validaLongitud", 'required->true, 'maxlength->150)
+	               <div class="help-block with-errors"></div>
+	            </div>
+	            <div class="col-sm-6">@inputText(urForm("nombreCorto"), '_label -> "Nombre corto", '_help -> "", 'class->"form-control validaLongitud", 'maxlength->50)</div>
+	        </div>
+	        <br/>
+	        <div class="row">
+	            <div class="col-sm-6">@select(urForm("nivel"), options("0"->"No aplica", "1"->"Medio Superior", "2"->"Superior", "4"->"Posgrado"),  'class->"form-control", '_label->"Nivel Académico")</div>
+	            <div class="col-sm-6">@select(urForm("areaConocimiento"), options("0"->"No aplica", "1"->"Administración", "2"->"Ciencias biológicas", "3"->"Ingeniería", "4"->"Interdisciplinaria", "5"->"No especificada"),  'class->"form-control", '_label->"Área del conocimiento")</div>
+	        </div>        
+        </fieldset>

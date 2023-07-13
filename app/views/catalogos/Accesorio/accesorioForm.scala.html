@@ -1,0 +1,60 @@
+@(forma: Form[Accesorio], roles:List[Rol])
+
+@import helper._
+
+        <fieldset>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+		                     <div class="form-group">
+		                         @inputText(forma("descripcion"), '_label -> "Descripcion", 'class->"form-control", 'required->true )
+		                         <div class="help-block with-errors"></div>
+		                     </div>                        
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                             <div class="form-group">
+                                 @inputText(forma("serie"), '_label -> "Número de serie", 'class->"form-control" )
+                                 <div class="help-block with-errors"></div>
+                             </div>                           
+                        </div>                        
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                            <div class="form-group">
+                                @select(forma("tipo.id"), 
+                                    options(models.TipoEquipoAccesorio.options), 
+                                    '_default->"-- Seleccione un tipo --",
+                                    '_label->"Tipo", 'class->"form-control", 'required->true)
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-8 col-sm-4 col-md-4 col-lg-4">
+                            <div class="form-group">
+                                @inputText(forma("modelo"), '_label->"Modelo", 'class->"form-control", 'required->true)
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>                        
+                    </div>                    
+
+                
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        @select(forma("estado.id"), options(models.EstadoEquipoAccesorioVehiculo.options), 
+                            '_label->"Estado", 
+                            'size->options(models.EstadoEquipoAccesorioVehiculo.options).length,
+                            'required->true )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    @textarea(forma("observacion"), '_label->"Observacion", 'class->"form-control")  
+                    <div class="help-block with-errors"></div>    
+                </div>
+            </div>      
+            
+        </fieldset>

@@ -1,0 +1,21 @@
+@if(session.get("rolActual")=="100" || session.get("rolActual")=="1"  ){                        
+                        <div class="panel panel-default" name="preguntaLocutoresSolicitados">
+                          <div class="panel-body">
+                            <div class="row">
+                              <div class="col-md-12 small">
+                                  <div class="form-group" style="width:100%">
+                                      <div style="display:inline">
+                                          <select multiple="multiple" size="10" name="selectLocutoresDisponibles" style="min-width:100%" disabled>
+                                          </select>
+                                      </div>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                        <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+}

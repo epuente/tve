@@ -1,0 +1,36 @@
+@formatos() = @{
+	models.FormatoIngesta.find.all();
+} 
+
+
+@if(session.get("rolActual")=="16"){
+	<div class="row">
+		<div class="col-md-3">
+			Formato de ingesta
+		</div>
+		<div class="col-md-9">
+			<div  class="row">
+			    @for(i <- formatos()){
+					<div class="col-md-2">
+                         <div class="form-group">
+                         		@i.descripcion
+							<div style="display:inline-block; ">	   
+								<input type="hidden" name="formatoingestaId-@i.id"> 
+								<input type="text" name="cantidadTarjetas-@i.id" class="form-control soloNumerosCero" 
+								placeholder="# tarjetas">
+                         	</div>
+                         </div>
+					</div>
+				}
+			</div>	
+			<div class="row">
+											<div>
+												¿Que otro formato?
+												<input type="text" name="otroFormato" placeholder="Escriba el otro formato">											
+											</div>			
+			</div>		
+		</div>
+	</div>
+}
+
+

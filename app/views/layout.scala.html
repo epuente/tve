@@ -1,0 +1,57 @@
+@(content: Html)
+
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>Dirección de Educación Virtual - Televisión Educativa</title>
+        <link rel='stylesheet' href='@routes.Assets.at("lib/bootstrap/css/bootstrap.min.css")'>
+        
+
+    <!-- jQuery -->
+    <script src="@routes.Assets.at("gentelella/vendors/jquery/dist/jquery.min.js")"></script>
+    <!-- Bootstrap -->
+    <script src="@routes.Assets.at("gentelella/vendors/bootstrap/dist/js/bootstrap.min.js")"></script>
+        
+        
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")"/> 
+	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	    <!-- Meta, title, CSS, favicons, etc. -->
+	    <meta name="Descripcion" content="Sistema de TVE">
+	    
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    
+    
+    
+   
+    <body>
+<style>
+.Aligner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Aligner-item {
+  max-width: 75%;
+}
+
+.Aligner-item--top {
+  align-self: flex-start;
+}
+
+.Aligner-item--bottom {
+  align-self: flex-end;
+
+}
+</style>         
+        <section id="layout">
+        	<div class="row center-block" style="width: 100%">
+        		<div class="col-sm-12" id="divContent" class="center-block">@content</div>
+        	</div>
+        </section>
+        
+    </body>
+</html>

@@ -1,0 +1,36 @@
+@if(session.get("rolActual")=="16"){
+	<div class="row">
+		<div class="col-md-4">
+			¿Hubo problemas en la ingesta?
+		</div>
+		<div class="col-md-8">
+			<div class="row">
+				<div style="display: inline-block;">
+					<label class="radio radio-inline">
+           				<input name="problema" value="true" type="radio"> Si
+               		</label>
+				</div>
+				<div style="display: inline-block;">
+					&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				<div style="display: inline-block;">
+					<label class="radio radio-inline">
+                    	<input name="problema" value="false" type="radio"> No
+                    </label>
+          		</div>				
+			</div>
+			<div class="row">
+			     <div class="form-group">
+			     	<div style="display: inline-block;">
+			     		<form>
+			     	    	<textarea class="form-control" rows="2" cols="100"  id="DescripcionProblemas" placeholder="Describa que problemática existió" disabled="disabled"></textarea>
+			     	    </form>
+			     	</div>
+			               
+			     </div>	
+			</div>
+		</div>
+	</div>
+}
+
+

@@ -1,0 +1,14 @@
+
+SELECT 'select nextval('''||c.relname||'_seq'');'
+                                     FROM pg_class c, pg_attribute a
+                                    WHERE c.relkind = 'r'
+                                      AND a.attrelid = c.oid
+                                      AND a.attname = 'id';
+
+
+
+SELECT 'select setval('''||c.relname||'_seq'', '|| '(select max(id)+1 from '|| c.relname ||'));'
+                                     FROM pg_class c, pg_attribute a
+                                    WHERE c.relkind = 'r'
+                                      AND a.attrelid = c.oid
+                                      AND a.attname = 'id'

@@ -1,0 +1,431 @@
+@main{
+
+	<style>
+		.seleccionado {background-color: rgba(38,185,154,.07);}	
+	</style>
+
+	<div class="row" >
+		<div class="col-sm-3 col-md-3 col-lg-3" id="divMenuInterno">
+			<div class="row">
+				<div class="col-sm-12">
+					<a href="javascript:void(0)" id="sabanaNavegaAnioMenos"><i class="fas fa-chevron-left"></i></a>
+					&nbsp;&nbsp;<span id="divAnio"></span>&nbsp;&nbsp;
+					<a href="javascript:void(0)" id="sabanaNavegaAnioMas"><i class="fas fa-chevron-right"></i></a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<a href="javascript:void(0)" id="sabanaNavegaMesMenos"><i class="fas fa-chevron-left"></i></a>
+					&nbsp;&nbsp;<span id="divMes"></span>&nbsp;&nbsp;
+					<a href="javascript:void(0)" id="sabanaNavegaMesMas"><i class="fas fa-chevron-right"></i></a>
+				</div>
+			</div>			
+			<div class="row">
+				<div class="col-sm-12">
+					<a href="javascript:void(0)" id="sabanaNavegaHoy">Hoy</a>
+				</div>
+			</div>					
+			<hr>
+			<div id="navegacionFechas"></div>			
+		</div>
+		<div class="col-sm-9 col-md-9 col-lg-9">
+			<div id="divSabana"></div>
+		</div>
+	</div>
+}
+
+
+<script type="text/javascript">
+	const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+	const dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viérnes", "Sábado", "Domingo"];
+	$(function(){
+		$("#sabanaNavegaHoy").click();
+	});
+
+
+
+	
+	
+	$("#sabanaNavegaAnioMenos").click(function(){
+		navegar("anio", -1);		
+	});
+	
+	$("#sabanaNavegaAnioMas").click(function(){
+		navegar("anio", 1);		
+	});
+	
+	
+	$("#sabanaNavegaMesMas").click(function(){
+		console.log("Enviando mes: "+1+"    divMeses: "+meses.indexOf($("#divMes").text()));
+		navegar("mes", 1 );		
+	});
+
+	$("#sabanaNavegaMesMenos").click(function(){
+		console.log("Enviando mes: -1   divMeses: "+meses.indexOf($("#divMes").text()));
+		navegar("mes", -1 );		
+	});	
+	
+	$("#sabanaNavegaHoy").click(function(){
+		navegar("hoy", 0);	
+		
+	});
+	
+	
+	function navegar(unidad, cantidad){		
+		var fecha = "01/"+meses.indexOf($("#divMes").text())+"/"+$("#divAnio").text();
+		$("#divSabana").html("");
+		console.log("enviando al controlador::  "+fecha)
+		$.ajax({
+			url: '/ajaxSabanaNavega',
+			method: 'POST',
+		    data: JSON.stringify( { "unidad": unidad, "cantidad":cantidad, "fecha":fecha}),
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "json"
+		}).success(function(data){	
+			console.dir(data)
+			var c="<table class='table table-condensed table-bordered' id='tablaNavegacionFechas'>";
+			
+			for (var f=0; f<data.fechas.length; f++) {
+					c+="<tr style='cursor:pointer'><td><small>Semana</small><div name='semana"+data.fechas[f].nsemana+"'>"+data.fechas[f].nsemana+"</div></td><td  class='small'> Del "+  data.fechas[f].desde+" al "+data.fechas[f].hasta+"</td></tr>";
+			}
+			c+="</table>"
+ 			$("#divAnio").html(data.anio);
+			$("#divMes").html(meses[data.mes]);
+			$("#navegacionFechas").html(c);
+			
+			
+			
+			$("#navegacionFechas tr:even").css("background-color","#f0f0f0");
+			
+			
+			$('#tablaNavegacionFechas').off('click', 'tr');
+			$('#tablaNavegacionFechas').on('click', 'tr', function(event) {
+				$("#navegacionFechas tr:even").css("background-color","#f0f0f0");
+				$(this).css('background-color','');
+				$(this).addClass('seleccionado').siblings().removeClass('seleccionado');
+				
+				
+				
+			});			
+			
+			
+		}).error(function(xhr, status, error) {
+			  alert("error en ajax (LlamadaAjaxBuscaServiciosFolio) -  "+ error );
+			});			
+	}
+	
+	
+	
+	$(document).off('click','#tablaNavegacionFechas tr');
+	$(document).on('click','#tablaNavegacionFechas tr',function(){
+		var anio = $("#divAnio").text();
+		var nSemana = $(this).find("td:eq(0) [name^='semana']  ").text();
+		console.log("semana "+nSemana+" de "+anio);
+		
+		var $ret = LlamadaAjax("/ajaxSabana","POST", JSON.stringify( { "anio": anio, "nSemana": nSemana}));
+		$.when($ret).done(function(data){			
+			console.log("data LlamadaSabanaAjax")
+			console.dir(data)
+			$("#divSabana").html('<a id="menu_toggle_interno"><i class="fas fa-arrow-left" id="tt"></i></a>&nbsp;');
+			if (data.agenda.length==0){
+				$("#divSabana").append("No se encontraron registros para la semana solicitada.");
+			} else {
+				$("#divSabana").append("Se encontraron "+data.agenda.length+" registros.");
+				
+				var cadena="";
+				
+				var s3 = buscarSalaEnJson(3, data.salas );
+				console.log("s3")
+				console.dir(s3)
+				
+				var s3tm = buscarTurnoOperador('M',s3.operadores);
+				console.log("s3tm ",s3tm)
+				console.dir(s3tm)
+				var s3tv = buscarTurnoOperador('V',s3.operadores);
+				console.dir(s3tv)				
+				/*
+				var s7 = buscarSalaEnJson(7, data.salas );
+				console.dir(s7)
+				var s7tm = buscarTurnoOperador('M',s7.operadores);
+				console.dir(s7tm)
+				var s7tv = buscarTurnoOperador('V',s7.operadores);
+				console.dir(s7tv)
+				*/
+				var s2 = buscarSalaEnJson(2, data.salas );
+				console.dir(s2)
+				var s2tm = buscarTurnoOperador('M',s2.operadores);
+				console.dir(s2tm)
+				var s2tv = buscarTurnoOperador('V',s2.operadores);
+				console.dir(s2tv)
+				
+				var s1 = buscarSalaEnJson(1, data.salas );
+				console.dir(s1)
+				
+				var s4 = buscarSalaEnJson(4, data.salas );
+				console.dir(s4)
+				var s4tm = buscarTurnoOperador('M',s4.operadores);
+				console.dir(s4tm)
+				var s4tv = buscarTurnoOperador('V',s4.operadores);
+				console.dir(s4tv)	
+				
+				//Inicia trazado de la tabla
+				
+				cadena+="<table class='table table-bordered table-condensed' id='tablaSabana'>";
+				cadena+="<tr style='background-color:#e6e8ed'>";
+				cadena+="<td rowspan=2 colspan=2>"+anio+"<br>"+$("#divMes").text()+"</td>";
+				
+				cadena+="<td>"+s3.descripcion+"</td>";
+				//cadena+="<td>"+s7.descripcion+"</td>";
+				cadena+="<td>"+s2.descripcion+"</td>";				
+				cadena+="<td>"+s1.descripcion+"</td>";
+				cadena+="<td>"+s4.descripcion+"</td>";
+				cadena+="<td rowspan=2>Portátil 1</td>";
+				cadena+="<td rowspan=2>Portátil 2</td>";
+				cadena+="<td rowspan=2>Portátil 3</td>";
+				cadena+="<td rowspan=2>Observaciones</td>";
+				cadena+="</tr>";
+				cadena+="<tr style='background-color:#e6e8ed'>";
+
+				console.log("s3tv")
+				console.dir(s3tv)
+				if (s3tm!=null)
+					cadena+="<td><p style='line-height: 0.8em'><small>"+nombreCompleto(s3tm.personal)+"</p><p style='line-height: 0.8em'>"+nombreCompleto(s3tv.personal)+"</p></small></td>";
+				/*
+				if (s7tm!=null)
+				cadena+="<td><p style='line-height: 0.8em'><small>"+nombreCompleto(s7tm.personal)+"</p><p style='line-height: 0.8em'>"+nombreCompleto(s7tv.personal)+"</p></small></td>";
+				*/
+				if (s2tm!=null)
+					cadena+="<td><p style='line-height: 0.8em'><small>"+nombreCompleto(s2tm.personal)+"</p><p style='line-height: 0.8em'>"+nombreCompleto(s2tv.personal)+"</p></small></td>";
+					
+				cadena+="<td><p style='line-height: 0.8em'><small>"+"</p><p style='line-height: 0.8em'></small></small></td>";
+				if (s4tv!=null)
+				cadena+="<td><p style='line-height: 0.8em'><small>"+nombreCompleto(s4tv.personal)+"</p><p style='line-height: 0.8em'>"+"</p></small></td>";
+				
+				cadena+="</tr>";
+				
+				for (var i=0;i<data.dias.length; i++){
+					var dia = data.dias[i];
+					var f=dia.split("/");
+					cadena+="<tr>";
+					cadena+="<td rowspan=2>"+dias[i]+"<br>"+f[0]+"</td>";
+					cadena+="<td>Matutino</td>";
+					cadena+="<td id='"+f[0]+"MS3'></td>";
+					cadena+="<td id='"+f[0]+"MS7'></td>";
+					cadena+="<td id='"+f[0]+"MS2'></td>";
+					cadena+="<td id='"+f[0]+"MS1'></td>";
+					cadena+="<td id='"+f[0]+"MS4'></td>";
+					cadena+="<td id='"+f[0]+"MP1'></td>";
+					cadena+="<td id='"+f[0]+"MP2'></td>";
+					cadena+="<td id='"+f[0]+"MP3'></td>";
+					cadena+="<td id='"+f[0]+"MOb'></td>";
+					cadena+="</tr>";
+					cadena+="<tr>";
+					cadena+="<td>Vespertino</td>";
+					cadena+="<td id='"+f[0]+"VS3'></td>";
+					cadena+="<td id='"+f[0]+"VS7'></td>";
+					cadena+="<td id='"+f[0]+"VS2'></td>";
+					cadena+="<td id='"+f[0]+"VS1'></td>";
+					cadena+="<td id='"+f[0]+"VS4'></td>";
+					cadena+="<td id='"+f[0]+"VP1'></td>";
+					cadena+="<td id='"+f[0]+"VP2'></td>";
+					cadena+="<td id='"+f[0]+"VP3'></td>";
+					cadena+="<td id='"+f[0]+"VOb'></td>";
+					
+					cadena+="<tr>";
+				}
+				cadena+="</table>";
+				
+				$("#divSabana").html($("#divSabana").text()+cadena);
+				
+				// Fin de trazado de tabla
+				
+				for(var i=0;i<data.agenda.length;i++){
+					var agenda = data.agenda[i];
+					var fecha = moment(agenda.inicio,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("DD/MM/YYYY");
+					var inicio = moment(agenda.inicio,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("HH:mm");
+					var fin = moment(agenda.fin,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("HH:mm");
+					var elId=fecha.split("/")[0];
+					
+					if (moment(agenda.inicio,"YYYY-MM-DDTHH:mm:ss.SSSSZ").isSameOrAfter( moment(fecha+" 15:00", "DD/MM/YYYY HH:mm"),"hour")){
+						elId+="V";
+					} else{
+						elId+="M";
+					}
+					if (agenda.salas.length>0){
+						elId+="S"+agenda.salas[0].sala.id;
+					}
+					if ( (agenda.fase.id==2)  ||   (agenda.fase.id==1 && agenda.salas.length==0)  ){
+						if ( $("#"+elId+"P1 p").length == 0 ||   ($("#"+elId+"P1 p").length < $("#"+elId+"P2 p").length ) )
+							elId+="P1";
+						else
+							if ( $("#"+elId+"P1 p").length >  $("#"+elId+"P2 p").length )
+								elId+="P2";
+							else
+								elId+="P3";
+					}
+					console.log("elId", elId)
+					var cad="<p style='line-height: 0.8em'><small>";
+					cad+="<span class='visible-lg-inline'>"+agenda.folioproductorasignado.folio.numfolio+"</span><br>";
+					
+					if(agenda.fase.id==1 && agenda.salas.length==0){
+						if (agenda.juntas.length>0){
+							cad+="Junta<br>";
+						} else {
+							cad+="Scouting<br>";
+						}
+					}
+					
+					
+					cad+="De "+inicio+" a "+fin+"<br>";
+					for(var si=0;si<agenda.salidas.length;si++){
+						var s = agenda.salidas[si].salida;
+						cad+="Salida: "+moment(s,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("HH:mm")+"<br>"
+					}
+					cad+=nombreCompleto(agenda.folioproductorasignado.personal)+"<br>";
+					
+					
+					
+					/*
+					for(var pi=0;pi<agenda.personal.length;pi++){
+						var p = agenda.personal[pi];
+						var pasa=false;
+						for (var q=0; q<p.personal.cuentas[0].roles.length;q++){
+							var r = p.personal.cuentas[0].roles[q];
+							if (r.id!=1)
+								pasa=true;
+						}
+						if (pasa){
+							cad+=nombreCompleto(p.personal)+"<br>"
+						}						
+					}
+					*/
+					
+					for(var pi=0;pi<agenda.cuentaRol.length;pi++){
+						var p = agenda.cuentaRol[pi];
+						var pasa=false;
+						if (p.cuentarol.rol.id!=1)
+							pasa=true;
+						if (pasa){
+							cad+=nombreCompleto(p.cuentarol.cuenta.personal)+"<br>"
+						}						
+					}					
+					
+					
+					
+					
+					for(var ei=0;ei<agenda.equipos.length;ei++){
+						var e = agenda.equipos[ei];
+						cad+= e.equipo.descripcion+"<br>"
+					}					
+					for(var ai=0;ai<agenda.accesorios.length; ai++){
+						var a = agenda.accesorios[ai];
+						cad+= a.accesorio.descripcion+"<br>"
+					}		
+					for(var li=0;li<agenda.locaciones.length; li++){
+						var l = agenda.locaciones[li];
+						cad+= "Locación: "+l.locacion+"<br>"
+					}					
+					if (agenda.vehiculos.length>0){
+						console.log(agenda.vehiculos.length)
+						console.dir(agenda.vehiculos[0])
+						console.log(agenda.vehiculos[0].vehiculo.placa)
+					}
+					for(var vvi=0; vvi<agenda.vehiculos.length; vvi++){						
+						cad+="Vehiculo: "+agenda.vehiculos[vvi].vehiculo.placa+"<br>";
+					}
+					console.log("o1:"+agenda.observacion)
+					console.log("o2:"+agenda.folioproductorasignado.folio.observacion)
+					console.log("o3:"+agenda.folioproductorasignado.folio.oficio.observacion)
+					if (agenda.observacion!="" && agenda.observacion!=null){
+						cad+=agenda.observacion+"<br>";
+					}
+					if (agenda.folioproductorasignado.folio.observacion!=""){
+						cad+="Observación del folio: "+agenda.folioproductorasignado.folio.observacion+"<br>";
+					}
+					if (agenda.folioproductorasignado.folio.oficio.observacion!=""){
+						cad+="Observación del oficio: "+agenda.folioproductorasignado.folio.oficio.observacion+"<br>";
+					}						
+					cad+="</small></p>";
+					$("#"+elId).append(cad);
+					
+				}
+				
+				
+				
+			}
+		});
+		
+		
+		$("#tablaSabana tr:even").css("background-color","#f0f0f0");
+	});
+	
+	
+	
+	function buscarSalaEnJson(salaId, arreglo){
+		for (var i = 0; i < arreglo.length; i++){
+			  if (arreglo[i].id == salaId){
+			     return arreglo[i];
+			  }
+			}
+		return null;
+	}
+
+	function buscarTurnoOperador(turno, arreglo){
+		for (var i = 0; i < arreglo.length; i++){
+			  // look for the entry with a matching `code` value
+			  if (arreglo[i].turno == turno){
+			     return arreglo[i];
+			    // obj[i].name is the matched result
+			  }
+			}
+		return null;
+	}
+	
+	function nombreCompleto(personal){		
+		console.log("id del personal : "+personal)
+		return personal.nombre+" "+personal.paterno+" "+personal.materno;
+	}
+	
+	
+	$(document).off('click','#menu_toggle_interno');
+	$(document).on('click','#menu_toggle_interno',function(){
+		console.log("desde click de menuinterno")
+		console.log(   $("#tt").attr("class").split(" ")   )
+		$("#divSabana").hide();
+		
+		//$("#divMenuInterno").toggle("slow", function(){			
+			if ( $("#divMenuInterno:visible").length==0  ){
+				console.log("estaba oculto")
+				$("#divMenuInterno").show();
+				$("#tt").removeClass("fa-arrow-right");
+				
+				$("#divSabana").parent().removeClass("col-lg-12");
+				$("#divSabana").parent().removeClass("col-md-12");
+				$("#divSabana").parent().removeClass("col-sm-12");
+				$("#tt").addClass("fa-arrow-left");
+				$("#divSabana").parent().addClass("col-lg-9");
+				$("#divSabana").parent().addClass("col-md-9");
+				$("#divSabana").parent().addClass("col-sm-9");
+			} else {
+				console.log("estaba visible")
+				$("#divMenuInterno").hide();
+				$("#tt").removeClass("fa-arrow-left");
+				$("#divSabana").parent().removeClass("col-lg-9");
+				$("#divSabana").parent().removeClass("col-md-9");
+				$("#divSabana").parent().removeClass("col-sm-9");
+				$("#tt").addClass("fa-arrow-right");
+				$("#divSabana").parent().addClass("col-lg-12");
+				$("#divSabana").parent().addClass("col-md-12");
+				$("#divSabana").parent().addClass("col-sm-12");				
+			}
+			$("#divSabana").show();
+	//	});
+		
+	});
+	
+</script>
+
+    <script src="@routes.Assets.at("lib/moment/min/moment.min.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("lib/moment/locale/es.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/sabanaAjax.js")"></script>
+

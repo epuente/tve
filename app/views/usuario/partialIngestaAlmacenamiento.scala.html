@@ -1,0 +1,32 @@
+@medios() = @{
+	models.MedioAlmacenamiento.find.all();
+} 
+
+@if(session.get("rolActual")=="16"   ){
+	<div class="row">
+		<div class="col-md-3">
+			Se almacenó en:
+		</div>
+		<div class="col-md-9">
+				<div  class="row">
+				    @for(i <- medios()){
+						<div class="col-md-4">
+                               <div class="form-group">
+                               		<form>
+										<div class="checkbox">
+										   @i.descripcion
+										    <input type="checkbox" value="@i.id" name="almacenamiento" style="margin-left: 5px">
+										</div>
+                               		</form>
+                               		@if(i.descripcion=="Otro"){
+                       	        		<input class="form-control" type="text"  id="otroMedio" placeholder="En que otro medio" disabled="disabled">
+                               		}
+                               </div>
+						</div>
+					}
+				</div>		
+		</div>
+	</div>
+}
+
+

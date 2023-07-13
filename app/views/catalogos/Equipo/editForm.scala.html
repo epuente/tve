@@ -1,0 +1,71 @@
+@(id:Long, forma: Form[Equipo], roles:List[Rol])
+
+@import helper._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
+
+@main {
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+              <li><a href="@routes.AdminEquipoController.list()">Equipo</a></li>
+              <li>Editar</li>
+            </ol>
+        </div>
+    </div>
+    
+    <h1>Edición de Equipo</h1>
+    @form( CSRF(routes.AdminEquipoController.delete(id)), 'id->"frmAux") {
+    }
+    @form(CSRF(routes.AdminEquipoController.update(id)), 'id->"forma", 'role->"form") {
+        @equipoForm(forma, roles)        
+
+        <br/><br/>
+        <div class="row">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                    <input type="submit" value="Actualizar" class="btn btn-primary btn-block">
+                </div>
+                
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                    <a href="@routes.AdminEquipoController.list()" class="btn btn-warning btn-block">Cancelar</a>
+                </div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                        <input type="button" class="btn btn-danger btn-block" value="Eliminar" id="btnEliminar">
+                </div>
+            </div>            
+        </div>
+        
+    }
+    
+}
+
+<script type="text/javascript">
+	$(function() {
+		$('#forma').validator();
+		leer();
+	});
+
+	$("form").submit(function(){
+		
+	});
+	
+
+	function leer(){
+
+		
+	}
+	
+
+    $("#btnEliminar").click(function(){
+        $("#frmAux").submit();
+    });
+</script>
+
+ <script src="@routes.Assets.at("javascripts/agenda.js")"></script> 
+ <script src="@routes.Assets.at("javascripts/general.js")"></script>  

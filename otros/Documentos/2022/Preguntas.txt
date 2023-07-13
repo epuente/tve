@@ -1,0 +1,9 @@
+Inicialmente los roles de administrador y jefe de Depto se diferenciaban en que el jefe era el único que podia indicar la fecha de entrega de un producto y  asignar personal, equipo, accesorios y vehículos para un evento.
+Posteriormente los roles de administrador y Jefe de Depto hacian lo mismo.
+
+¿Como quedará?
+
+
+
+
+

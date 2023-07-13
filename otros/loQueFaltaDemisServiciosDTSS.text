@@ -1,0 +1,568 @@
+
+        //Oficios que no han sido asignados
+        if (estado.compareTo("0")==0){
+            System.out.println("x");
+            List<Folio> f = Folio.find.fetch("oficio").select("id").findList();
+            System.out.println("f size: "+f.size());
+            Long[] arrIds = new Long[f.size()];
+            System.out.println("arrIds size(1): "+arrIds.length);
+            //arrIds = f.toArray(arrIds);
+            System.out.println("arrIds size(2): "+arrIds.length);
+
+            // Convertir List a array
+            Long[] arrLong = new Long[f.size()];
+            int ii=0;
+            for ( Folio val : f  ) {
+                arrLong[ii++] = val.oficio.id;
+            }
+
+            String arrToString = Arrays.toString(arrLong).substring(1, Arrays.toString(arrLong).length()-1);
+
+            Query<Oficio> qo1 = Oficio.find.where("id  not in("+ arrToString +")" );
+            Query<Oficio> qo2 = Oficio.find.where("id  not in("+ arrToString +")  AND ("+
+                    "urremitente.nombreLargo like :cadena "+
+                    "or descripcion like :cadena "+
+                    ")").setParameter("cadena", "%"+filtro+"%");
+
+            pagOficio = Oficio.find
+                    .fetch("urremitente")
+                    .where("id  not in("+ arrToString +") and "
+                            + " ("+
+                            "urremitente.nombreLargo like :cadena "+
+                            "or descripcion like :cadena "+
+                            ")").setParameter("cadena", "%"+filtro+"%")
+                    .orderBy( "c"+    (colOrden==0?columnasOrdenables.get(0)  :  columnasOrdenables.get(colOrden)-1)  +" "+tipoOrden )
+                    .findPagingList(numRegistros)
+                    .setFetchAhead(false)
+                    .getPage(numPag);
+
+            System.out.println("pagOficio list size "+pagOficio.getList().size());
+            filtrados = qo2.findList().size();
+            sinFiltro = qo1.findList().size();
+        }    // fin del compareTo "0"
+
+        if (estado.compareTo("4")==0){
+            //q1 = Folio.find.where("(productoresAsignados.agenda.estado.id = 4) ").where();
+            //q2 = q1.query().where("and "+strFiltro).where();
+
+            q1 = Folio.find.where("(productoresAsignados.agenda.estado.id = 4 and  productoresAsignados.personal.id = "+session("usuario")+") ").where();
+            q2 = q1.query().where("and "+strFiltro).where();
+
+            serv = q2.query()
+                    .fetch("oficio")
+                    .fetch("oficio.urremitente")
+                    .fetch("productoresAsignados")
+                    .fetch("estado")
+                    .orderBy( "c"+    (colOrden==0?columnasOrdenables.get(0)  :  columnasOrdenables.get(colOrden)-1)  +" "+tipoOrden )
+                    .findPagingList(numRegistros)
+                    .setFetchAhead(false)
+                    .getPage(numPag);
+
+            if (session("rolActual").compareTo("1")==0){
+                System.out.println("------ rol 1 administrador");
+/*				 q1 = Folio.find.where().ne("id", null);
+				 q2 = q1.eq("productoresAsignados.folio.estado.id",4L)
+						 .ilike("numfolio", "%"+filtro+"%")
+						 .or(Expr.ilike("oficio.urremitente.nombreLargo", "%"+filtro+"%"), Expr.ilike("oficio.descripcion", "%"+filtro+"%"));*/
+                q1 = Folio.find.where("id is not null and productoresAsignados.folio.estado.id = 4").where();
+                q2 = q1.query().where(" and cast(numfolio as varchar) ilike '%"+filtro+"%' or oficio.urremitente.nombreLargo ilike '%"+filtro+"%' or oficio.descripcion ilike '%"+filtro+"%'").where();
+
+                serv = q2.query()
+                        .fetch("oficio")
+                        //	 .fetch("oficio.urremitente")
+                        .fetch("productoresAsignados")
+                        .fetch("productoresAsignados.preagendas")
+                        .fetch("productoresAsignados.preagendas.estado")
+                        .orderBy( "c"+    (colOrden==0?columnasOrdenables.get(0)  :  columnasOrdenables.get(colOrden)-1)  +" "+tipoOrden )
+                        .findPagingList(numRegistros)
+                        .setFetchAhead(false)
+                        .getPage(numPag);
+            }
+            filtrados = q2.findList().size();
+            sinFiltro = q1.findList().size();
+        }        // fin del compareTo "4"
+
+        // El productor ha realizado la solicitud
+        if (estado.compareTo("5")==0){
+            q1 = Folio.find.where("(productoresAsignados.personal.id ="+ session("usuario")+" and  productoresAsignados.agenda.estado.id = 5)").where();
+            q2 = q1.query().where("and "+strFiltro).where();
+            serv = q2.query()
+                    .fetch("oficio")
+                    .fetch("oficio.urremitente")
+                    .fetch("productoresAsignados")
+                    .fetch("productoresAsignados.preagendas")
+                    .fetch("productoresAsignados.preagendas.estado")
+                    .orderBy( "c"+columnasOrdenables.get(colOrden)+" "+tipoOrden )
+                    .findPagingList(numRegistros)
+                    .setFetchAhead(false)
+                    .getPage(numPag);
+
+            // Es administrador?
+            if (session("rolActual").compareTo("1")==0){
+                System.out.println("Soy administrador en estado 5");
+                //q1 = Folio.find.where(" (productoresAsignados.preagendas.estado.id = "+estado+") ");
+                q1 = Folio.find.where().eq("productoresAsignados.preagendas.estado.id", 5L);
+                q2 = q1.query().where("cast(numfolio as varchar) ilike '%"+filtro+"%' and (oficio.urremitente.nombreLargo like '%"+filtro+"%' or oficio.descripcion like '%"+filtro+"%')").where();
+
+                serv = q2.query()
+                        .fetch("oficio")
+                        .fetch("oficio.urremitente")
+                        .fetch("productoresAsignados")
+                        .fetch("productoresAsignados.preagendas")
+                        .fetch("productoresAsignados.preagendas.estado")
+                        .orderBy( "c"+columnasOrdenables.get(colOrden)+" "+tipoOrden )
+                        .findPagingList(numRegistros)
+                        .setFetchAhead(false)
+                        .getPage(numPag);
+                System.out.println("fin de administrador estado 5");
+            }
+
+            // Es ingeniero encargado de la adqministración de equipo y accesorios?
+            if (session("rolActual").compareTo("10")==0){
+                System.out.println("Soy ngeniero encargado de la adqministración de equipo y accesorios en estado 5");
+                // buscar en AgendaIngAdmonEqpo los agenda.id (donde el ingeniero.id = session usuario)
+                List<AgendaIngAdmonEqpo> qAgeInges = AgendaIngAdmonEqpo.find.where().eq("ingeniero.id" ,session("usuario")).findList();
+                if ( qAgeInges.size()>0) {
+                    List<Long> foliosIds = qAgeInges.stream().map(m -> m.agenda.folioproductorasignado.folio.id).collect(Collectors.toList());
+                    String cadena = "";
+                     StringBuilder sb = new StringBuilder();
+                    for (AgendaIngAdmonEqpo x : qAgeInges) {
+                        //cadena += x.agenda.folioproductorasignado.folio.id + ", ";
+                         sb.append(x.agenda.folioproductorasignado.folio.id);
+                         sb.append(", ");
+                    }
+                    cadena = sb.toString();
+                    if (cadena.length() > 2)
+                        cadena = cadena.substring(0, cadena.length() - 2);
+
+                    System.out.println("foliosIds: " + foliosIds);
+                    System.out.println("cadena: " + cadena);
+
+                    //q1 = Folio.find.where("id in (" + cadena + ") and (productoresAsignados.agenda.accesorios.autorizo=null)");
+                    q1 = Folio.find.where()
+                            .idIn(foliosIds)
+                            .isNull("productoresAsignados.agenda.accesorios.autorizo");
+                     /*
+					 q2 = Folio.find.where("id in (" + cadena + ") and (productoresAsignados.agenda.accesorios.autorizo=null) and (" +
+							 "numfolio like :cadena " +
+									 "or oficio.urremitente.nombreLargo like :cadena " +
+									 "or oficio.descripcion like :cadena " +
+									 ")").setParameter("cadena", "%" + filtro + "%");
+
+					 q2 = q1.like("numfolio", "%"+filtro+"%")
+							 .or(Expr.ilike("oficio.urremitente.nombreLargo", "%"+filtro+"%"), Expr.ilike("oficio.descripcion", "%"+filtro+"%"));
+
+                     */
+                    q2 = q1.where().or(Expr.ilike("oficio.urremitente.nombreLargo", "%"+filtro+"%"), Expr.ilike("oficio.descripcion", "%"+filtro+"%"))
+                            .query().where("cast( numfolio as varchar) like '%"+filtro+"%'").where();
+
+                    System.out.println("OJO 1    q1:"+q1);
+                    System.out.println("OJO 1    q2:"+q2);
+
+                    System.out.println("OJO 1    "+q1.findList());
+                    System.out.println("OJO 1    "+q2.findList());
+
+
+                    serv = q2.query()
+                            .fetch("oficio")
+                            .fetch("oficio.urremitente")
+                            .fetch("productoresAsignados")
+                            .fetch("productoresAsignados.preagendas")
+                            .fetch("productoresAsignados.preagendas.estado")
+                            .fetch("productoresAsignados.agenda")
+                            .fetch("productoresAsignados.agenda.estado")
+                            .fetch("estado")
+                            /*
+                            .where(
+                                    "id in (" + cadena + ") AND " +
+                                            "numfolio like :cadena " +
+                                            "or oficio.urremitente.nombreLargo like :cadena " +
+                                            "or oficio.descripcion like :cadena "
+                            ).setParameter("cadena", "%" + filtro + "%")
+
+                             */
+                            .orderBy("c" + (colOrden == 0 ? columnasOrdenables.get(0) : columnasOrdenables.get(colOrden) - 1) + " " + tipoOrden)
+                            .findPagingList(numRegistros)
+                            .setFetchAhead(false)
+                            .getPage(numPag);
+                    System.out.println("OJO 2    q1:"+q1);
+                    System.out.println("OJO 2    q2:"+q2);
+
+                    System.out.println("OJO 2    "+q1.findList());
+                    System.out.println("OJO 2    "+q2.findList());
+                } else {
+                    q1 = Folio.find.where().idEq(0L);
+                    q2 = Folio.find.where().idEq(0L);
+
+                    System.out.println("OJO 3    q1:"+q1);
+                    System.out.println("OJO 3    q2:"+q2);
+
+                    System.out.println("OJO 3    "+q1.findList());
+                    System.out.println("OJO 3    "+q2.findList());
+                }
+            }
+
+            filtrados = q2.findList().size();
+            sinFiltro = q1.findList().size();
+            System.out.println("fin de estado 5");
+
+        }// Fin del compareTo "5"
+
+        // Los que se han autorizado por el administrador
+        // (para el equipo/accesorios se requiere ademas que el ingeniero haga la asignación de equipo)
+        if (estado.compareTo("7")==0){
+            System.out.println("estado 7");
+            q1 = Folio.find.where("(productoresAsignados.agenda.estado.id = 7 and productoresAsignados.personal.id = "+session("usuario")+") ").where();
+            q2 = q1.query().where("and "+strFiltro).where();
+            System.out.println("estado 7 015");
+            serv = q2.query()
+                    .fetch("oficio")
+                    .fetch("oficio.urremitente")
+                    .fetch("productoresAsignados")
+                    .fetch("productoresAsignados.agenda")
+                    .fetch("productoresAsignados.agenda.estado")
+                    .orderBy( "c"+columnasOrdenables.get(colOrden)+" "+tipoOrden )
+                    .findPagingList(numRegistros)
+                    .setFetchAhead(false)
+                    .getPage(numPag);
+
+            System.out.println("estado 7 020");
+            //Es administrador?
+            if (session("rolActual").compareTo("1")==0){
+                System.out.println("estado 7 025");
+                //q1 = Folio.find.where(" (productoresAsignados.agenda.estado.id = "+estado+") ");
+                q1 = Folio.find.where().eq("productoresAsignados.agenda.estado.id", Long.parseLong(estado));
+                 /*q2 = q1.ilike("numfolio".toString(), "%"+filtro+"%")
+						 .or(Expr.ilike("oficio.urremitente.nombreLargo", "%"+filtro+"%"), Expr.ilike("oficio.descripcion", "%"+filtro+"%"));
+						 */
+                q2 = Folio.find.where("productoresAsignados.agenda.estado.id = "+estado +" " +
+                        " or cast(numfolio as varchar) ilike '%"+filtro+"%'" +
+                        " or lower(nombre_largo) like '%"+filtro+"%'" +
+                        " or lower(descripcion) like '%"+filtro+"%'" ).where();
+
+                //.or(Expr.ilike("oficio.urremitente.nombreLargo", "%"+filtro+"%"), Expr.ilike("oficio.descripcion", "%"+filtro+"%"));
+
+                serv = q2.query()
+                        .fetch("oficio")
+                        .fetch("oficio.urremitente")
+                        .fetch("productoresAsignados")
+                        .fetch("productoresAsignados.agenda")
+                        .fetch("productoresAsignados.agenda.estado")
+                        .orderBy( "c"+columnasOrdenables.get(colOrden)+" "+tipoOrden )
+                        .findPagingList(numRegistros)
+                        .setFetchAhead(false)
+                        .getPage(numPag);
+                System.out.println("estado 7 030");
+            }
+
+            // Es ingeniero encargado de la administración de equipo y accesorios?
+            if (session("rolActual").compareTo("10")==0){
+                System.out.println("estado 7 035");
+                System.out.println("es ingeniero ");
+                System.out.println("estado "+estado);
+                 /*
+				 String ingenieroId = estado.split("-")[1];
+				 System.out.println("ingeniero "+ingenieroId);
+				  */
+                // buscar en AgendaIngAdmonEqpo los agenda.id (donde el ingeniero.id = session usuario)
+                List<AgendaIngAdmonEqpo> qAgeInges = AgendaIngAdmonEqpo.find.where().eq("ingeniero.id" ,Long.parseLong(session("usuario"))).findList();
+                System.out.println("qAgeInges.size "+qAgeInges.size());
+                if ( qAgeInges.size()>0) {
+                    List<Long> foliosIds = qAgeInges.stream().map(m -> m.agenda.folioproductorasignado.folio.id).collect(Collectors.toList());
+                    String cadena = foliosIds.stream().distinct().map(String::valueOf)
+                            .collect(Collectors.joining("-"));
+                    System.out.println("foliosIds: " + foliosIds);
+                    System.out.println("cadena: " + cadena);
+                    q1 = Folio.find.where()
+                            .idIn(foliosIds)
+                            .isNull("productoresAsignados.agenda.accesorios.autorizo")
+                            .eq("productoresAsignados.agenda.estado.id", 7L);
+                    System.out.println("query: " + q1.query().getGeneratedSql());
+/*
+                    q2 = q1.ilike("numfolio" ,"%" +filtro+"%")
+                            .or( Expr.ilike("oficio.urremitente.nombreLargo", "%"+filtro+"%"), Expr.ilike("oficio.descripcion", "%"+filtro+"%"));
+
+ */
+
+                    q2 = q1.query().where("cast(numfolio as varchar) ilike '%"+filtro+"%' or oficio.urremitente.nombreLargo ilike '%"+filtro+"%' or oficio.descripcion ilike '%"+filtro+"%'").where();
+                    serv = q2.query()
+                            .fetch("oficio")
+                            .fetch("oficio.urremitente")
+                            .fetch("productoresAsignados")
+                            .fetch("productoresAsignados.preagendas")
+                            .fetch("productoresAsignados.preagendas.estado")
+                            .fetch("productoresAsignados.agenda")
+                            .fetch("productoresAsignados.agenda.estado")
+                            .fetch("estado")
+                            .orderBy("c" + (colOrden == 0 ? columnasOrdenables.get(0) : columnasOrdenables.get(colOrden) - 1) + " " + tipoOrden)
+                            .findPagingList(numRegistros)
+                            .setFetchAhead(false)
+                            .getPage(numPag);
+                } else {
+                    q1 = Folio.find.where().eq("id", 0L);
+                    q2 = Folio.find.where().eq("id",0L);
+                }
+                System.out.println("estado 7 040");
+            }
+            System.out.println("estado 7 045");
+
+            System.out.println("estado 7 047");
+            sinFiltro = q1.findList().size();
+            System.out.println("estado 7 050");
+            filtrados = q2.findList().size();
+            System.out.println("fin de estado 7");
+        } // fin de estado compareTo "7"
+
+        //El equipo y accesorios necesitan validarse/asignarse por el ingeniero
+        if (estado.compareTo("8")==0) {
+            // Es ingeniero encargado de la administración de equipo y accesorios?
+            if (session("rolActual").compareTo("10")==0){
+                System.out.println("es ingeniero ");
+                System.out.println("estado "+estado);
+                // buscar en AgendaIngAdmonEqpo los agenda.id (donde el ingeniero.id = session usuario)
+                List<AgendaIngAdmonEqpo> qAgeInges = AgendaIngAdmonEqpo.find.where().eq("ingeniero.id" ,session("usuario")).findList();
+                System.out.println("qAgeInges.size "+qAgeInges.size());
+                if ( qAgeInges.size()>0) {
+                    List<Long> foliosIds = qAgeInges.stream().map(m -> m.agenda.folioproductorasignado.folio.id).collect(Collectors.toList());
+                    String cadena = foliosIds.stream().distinct().map(String::valueOf)
+                            .collect(Collectors.joining("-"));
+                    System.out.println("foliosIds: " + foliosIds);
+                    System.out.println("cadena: " + cadena);
+                    System.out.println("filtro: " + filtro);
+
+
+                    q1 = Folio.find.where()
+                            .idIn(foliosIds)
+                            .isNotNull("productoresAsignados.agenda.accesorios.autorizo")
+                            .eq("productoresAsignados.agenda.estado.id", 8);
+                    System.out.println("q1 size: " + q1.findList().size());
+                    sinFiltro = q1.findList().size();
+                    /*
+                    q2 = q1.ilike("numfolio" ,"%" +filtro+"%")
+                            .or( Expr.ilike("oficio.urremitente.nombreLargo", "%"+filtro+"%"), Expr.ilike("oficio.descripcion", "%"+filtro+"%"));
+
+                     */
+
+
+                    q2 = q1.query().where("cast(numfolio as varchar) ilike '%"+filtro+"%' or oficio.urremitente.nombreLargo ilike '%"+filtro+"%' or oficio.descripcion ilike '%"+filtro+"%'").where();
+                    System.out.println("q2 size: " + q2.findList().size());
+
+                    serv = q2.query()
+                            .fetch("oficio")
+                            .fetch("oficio.urremitente")
+                            .fetch("productoresAsignados")
+                            .fetch("productoresAsignados.preagendas")
+                            .fetch("productoresAsignados.preagendas.estado")
+                            .fetch("productoresAsignados.agenda")
+                            .fetch("productoresAsignados.agenda.estado")
+                            .fetch("estado")
+                            .orderBy("c" + (colOrden == 0 ? columnasOrdenables.get(0) : columnasOrdenables.get(colOrden) - 1) + " " + tipoOrden)
+                            .findPagingList(numRegistros)
+                            .setFetchAhead(false)
+                            .getPage(numPag);
+                    System.out.println("serv size: " + serv.getList().size());
+
+                    qq1 = Folio.find
+                            .where("id in ("+cadena+") and productoresAsignados.agenda.estado.id = 8 and productoresAsignados.agenda.accesorios.autorizo is not null" );
+                    qq2 = qq1.where(" and (cast(numfolio as varchar) ilike '%"+filtro+"%' or oficio.urremitente.nombreLargo ilike '%"+filtro+"%' or oficio.descripcion ilike '%"+filtro+"%')");
+                    Page<Folio> qqserv = qq2
+                            .fetch("oficio")
+                            .fetch("oficio.urremitente")
+                            .fetch("productoresAsignados")
+                            .fetch("productoresAsignados.preagendas")
+                            .fetch("productoresAsignados.preagendas.estado")
+                            .fetch("productoresAsignados.agenda")
+                            .fetch("productoresAsignados.agenda.estado")
+                            .fetch("estado")
+                            .orderBy("c" + (colOrden == 0 ? columnasOrdenables.get(0) : columnasOrdenables.get(colOrden) - 1) + " " + tipoOrden)
+                            .findPagingList(numRegistros)
+                            .setFetchAhead(false)
+                            .getPage(numPag);
+
+                    System.out.println("qq1 size: " + qq1.findList().size()+"\n"+qq1.getGeneratedSql());
+
+                    System.out.println("qq2 size: " + qq2.findList().size()+"\n"+qq2.getGeneratedSql());
+
+                    System.out.println("qqserv size: " + qqserv.getList().size());
+
+                    serv = qqserv;
+
+
+                } else {
+                    q1 = Folio.find.where().idEq(0);
+                    q2 = Folio.find.where().idEq(0);
+                }
+            }
+            sinFiltro = q1.findList().size();
+            filtrados = q2.findList().size();
+        } // fin de estado compareTo "8"
+
+
+        // Terminado
+        if (estado.compareTo("99")==0){
+            //q1 = Folio.find.where(" (productoresAsignados.agenda.estado.id > 7) and productoresAsignados.personal.id = "+session("usuario"));
+            //q1 = Folio.find.where().and(Expr.gt("productoresAsignados.agenda.estado.id",7), Expr.eq("productoresAsignados.personal.id", session("usuario")));
+             /*
+			 q2 = q1.ilike("numfolio" ,"%" +filtro+"%")
+					 .or( Expr.ilike("oficio.urremitente.nombreLargo", "%"+filtro+"%"), Expr.ilike("oficio.descripcion", "%"+filtro+"%"));
+
+
+			  */
+            q1 = Folio.find.where("(productoresAsignados.agenda.estado.id >= 11  and productoresAsignados.agenda.estado.id <= 99) and productoresAsignados.personal.id = "+session("usuario")).where();
+            q2 = q1.query().where("and "+strFiltro).where();
+
+             /*
+			 q2 = Folio.find.where(" (productoresAsignados.agenda.estado.id > 7) and productoresAsignados.personal.id = "+session("usuario")+" AND ("+						"numfolio like :cadena "+
+						"or oficio.urremitente.nombreLargo like :cadena "+
+						"or oficio.descripcion like :cadena "+
+					    ")").setParameter("cadena", "%"+filtro+"%");
+
+			  */
+            serv = q2.query()
+                    .fetch("oficio")
+                    .fetch("oficio.urremitente")
+                    .fetch("productoresAsignados")
+                    .fetch("productoresAsignados.agenda")
+                    .fetch("productoresAsignados.agenda.estado")
+                    .orderBy( "c"+columnasOrdenables.get(colOrden)+" "+tipoOrden )
+                    .findPagingList(numRegistros)
+                    .setFetchAhead(false)
+                    .getPage(numPag);
+            if (session("rolActual").compareTo("1")==0){
+                System.out.println("Administrador estado 99");
+                //q1 = Folio.find.where(" (productoresAsignados.agenda.estado.id > 7) ");
+                q1 = Folio.find.where().gt("productoresAsignados.agenda.estado.id",7);
+                 /*
+				 q2 = q1.ilike("numfolio" ,"%" +filtro+"%")
+						 .or( Expr.ilike("oficio.urremitente.nombreLargo", "%"+filtro+"%"), Expr.ilike("oficio.descripcion", "%"+filtro+"%"));
+
+
+				  */
+System.out.println("strFiltro:   "+strFiltro);
+
+                 /*
+				 q2 = Folio.find.where(" (productoresAsignados.agenda.estado.id > 7)  AND ("+
+							"numfolio like :cadena "+
+							"or oficio.urremitente.nombreLargo like :cadena "+
+							"or oficio.descripcion like :cadena "+
+						    ")").setParameter("cadena", "%"+filtro+"%");
+
+				  */
+
+                q1 = Folio.find.where("(productoresAsignados.agenda.estado.id > 8  and productoresAsignados.agenda.estado.id < 100) ").where();
+                q2 = q1.query().where("and "+strFiltro).where();
+
+
+                serv = q2.query()
+                        .fetch("oficio")
+                        .fetch("oficio.urremitente")
+                        .fetch("productoresAsignados")
+                        .fetch("productoresAsignados.agenda")
+                        .fetch("productoresAsignados.agenda.estado")
+                        /*
+                        .where(" ((productoresAsignados.agenda.estado.id > 7) or  (productoresAsignados.folio.estado.id = 99)   ) and ("+
+                           "numfolio like :cadena "+
+                           "or oficio.urremitente.nombreLargo like :cadena "+
+                           "or oficio.descripcion like :cadena "+
+                           ")").setParameter("cadena", "%"+filtro+"%")
+
+                         */
+                        .orderBy( "c"+columnasOrdenables.get(colOrden)+" "+tipoOrden )
+                        .findPagingList(numRegistros)
+                        .setFetchAhead(false)
+                        .getPage(numPag);
+            }
+            filtrados = q2.findList().size();
+            sinFiltro = q1.findList().size();
+        }
+
+        //Cancelados
+        if (estado.compareTo("100") ==0){
+//			 q1 = Folio.find.where().and(Expr.eq("productoresAsignados.agenda.estado.id",100), Expr.eq("productoresAsignados.personal.id", session("usuario")));
+            q1 = Folio.find.where("productoresAsignados.personal.id = "+session("usuario")+" and productoresAsignados.agenda.estado.id = 100").where();
+//            q2 = q1.query().where(" and "+strFiltro).where();
+            q2 = q1.query().where("cast(numfolio as varchar) ilike '%"+filtro+"%' or oficio.urremitente.nombreLargo ilike '%"+filtro+"%' or oficio.descripcion ilike '%"+filtro+"%'").where();
+
+            serv = q2.query()
+                    .fetch("oficio")
+                    .fetch("oficio.urremitente")
+                    .fetch("productoresAsignados")
+                    .fetch("productoresAsignados.agenda")
+                    .fetch("productoresAsignados.agenda.estado")
+                    .orderBy( "c"+columnasOrdenables.get(colOrden)+" "+tipoOrden )
+                    .findPagingList(numRegistros)
+                    .setFetchAhead(false)
+                    .getPage(numPag);
+            // Es administrador?
+            if (session("rolActual").compareTo("1")==0){
+                 /*
+				 q1 = Folio.find.where(" (productoresAsignados.preagendas.estado.id =100) or (productoresAsignados.agenda.estado.id = 100) ");
+				 q2 = Folio.find.where(" ((productoresAsignados.preagendas.estado.id =100) or (productoresAsignados.agenda.estado.id = 100))  AND ("+
+							"numfolio like :cadena "+
+							"or oficio.urremitente.nombreLargo like :cadena "+
+							"or oficio.descripcion like :cadena "+
+						    ")").setParameter("cadena", "%"+filtro+"%");
+				  */
+                q1 = Folio.find.where().or(Expr.eq("productoresAsignados.preagendas.estado.id",100), Expr.eq("productoresAsignados.agenda.estado.id", 100));
+                q2 = q1.ilike("numfolio" ,"%" +filtro+"%")
+                        .or( Expr.ilike("oficio.urremitente.nombreLargo", "%"+filtro+"%"), Expr.ilike("oficio.descripcion", "%"+filtro+"%"));
+
+                q1 = Folio.find.where("(productoresAsignados.agenda.estado.id = 100)").where();
+                q2 = q1.query().where("and "+strFiltro).where();
+
+
+                serv = q2.query()
+                        .fetch("oficio")
+                        .fetch("oficio.urremitente")
+                        .fetch("productoresAsignados")
+                        .fetch("productoresAsignados.agenda")
+                        .fetch("productoresAsignados.agenda.estado")
+                        .orderBy( "c"+columnasOrdenables.get(colOrden)+" "+tipoOrden )
+                        .findPagingList(numRegistros)
+                        .setFetchAhead(false)
+                        .getPage(numPag);
+            }
+
+            // Es ingeniero encargado de la administración de equipo y accesorios?
+            if (session("rolActual").compareTo("10")==0) {
+                List<Long> foliosIds = new ArrayList<>();
+                String cadena="";
+                List<AgendaIngAdmonEqpo> qAgeInges = AgendaIngAdmonEqpo.find.where().eq("ingeniero.id" ,session("usuario")).findList();
+                System.out.println("tam qAgeInges: " + qAgeInges.size());
+                if ( qAgeInges.size()>0) {
+                    foliosIds = qAgeInges.stream().map(m -> m.agenda.folioproductorasignado.folio.id).collect(Collectors.toList());
+                    StringBuilder sb = new StringBuilder();
+                    for (AgendaIngAdmonEqpo x : qAgeInges) {
+                        //cadena += x.agenda.folioproductorasignado.folio.id + ", ";
+                        sb.append(x.agenda.folioproductorasignado.folio.id);
+                        sb.append(", ");
+                    }
+                    cadena = sb.toString();
+                    if (cadena.length() > 2)
+                        cadena = cadena.substring(0, cadena.length() - 2);
+                    System.out.println("foliosIds: " + foliosIds);
+                    System.out.println("cadena: " + cadena);
+                    q1 = Folio.find.where().idIn(foliosIds).eq("estado.id",100);
+                    q2 = q1.query().where("cast(numfolio as varchar) ilike '%"+filtro+"%' or oficio.urremitente.nombreLargo ilike '%"+filtro+"%' or oficio.descripcion ilike '%"+filtro+"%'").where();
+                    serv = q2.query()
+                            .fetch("oficio")
+                            .fetch("oficio.urremitente")
+                            .fetch("productoresAsignados")
+                            .fetch("productoresAsignados.preagendas")
+                            .fetch("productoresAsignados.preagendas.estado")
+                            .fetch("productoresAsignados.agenda")
+                            .fetch("productoresAsignados.agenda.estado")
+                            .fetch("estado")
+                            .orderBy("c" + (colOrden == 0 ? columnasOrdenables.get(0) : columnasOrdenables.get(colOrden) - 1) + " " + tipoOrden)
+                            .findPagingList(numRegistros)
+                            .setFetchAhead(false)
+                            .getPage(numPag);
+                } else {
+                    q1 = Folio.find.where().idEq(0);
+                    q2 = q1;
+                }
+            }
+            filtrados = q2.findList().size();
+            sinFiltro = q1.findList().size();
+        }
+        System.out.println("**************************************************************************************"       );

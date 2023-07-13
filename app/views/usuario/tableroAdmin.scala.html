@@ -1,0 +1,661 @@
+<link rel="stylesheet" href="@routes.Assets.at("horizontal-timeline/css/reset.css")")>
+<!-- Resource style -->
+<style>
+.row.vdivide [class*='col-']:not (:last-child ):after {
+	background: #e0e0e0;
+	width: 1px;
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.sticky-bottom {
+	position: absolute;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	padding: 1rem;
+//	background-color: #efefef;
+	text-align: center;
+	
+}
+
+.btn-circle {
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	padding: 6px 0;
+	font-size: 12px;
+	line-height: 1.428571429;
+	border-radius: 15px;
+}
+
+.btn-circle.btn-md {
+	width: 30px;
+	height: 30px;
+	padding: 6px 0;
+	font-size: 10px;
+	line-height: 1.428571429;
+	border-radius: 25px;
+}
+
+.btn-circle.btn-lg {
+	width: 50px;
+	height: 50px;
+	padding: 10px 16px;
+	font-size: 18px;
+	line-height: 1.33;
+	border-radius: 25px;
+}
+
+.btn-circle.btn-xl {
+	width: 70px;
+	height: 70px;
+	padding: 10px 16px;
+	font-size: 24px;
+	line-height: 1.33;
+	border-radius: 35px;
+}
+</style>
+
+
+@main{
+
+	<button class="btn btn-default" id="btnEnviarCorreosEnCola">Prueba correos </button>
+
+	<div id="edoCtaCorreoSalida"></div>
+	<br>
+	<p id="cargando" style='font-size:40px; color: lightgray; height: 80%; display: none;'></p>
+	<div id="c1" style="display: none;">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+				<div class="x_panel fixed_height_320">
+					<div class="x_title">
+						<div class="row">
+							<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+								<h1>Oficios</h1>
+							</div>
+							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+								<h1> <a href="@routes.AdminOficioController.create()" data-toggle="popover" data-content="Agregar Oficio" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a></h1>
+							</div>							
+						</div>
+						<!-- 
+            <h1>Oficios <a href="@routes.AdminOficioController.create()" data-toggle="popover" data-content="Agregar Oficio" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a>
+</h1>
+ -->
+					</div>
+					<div class="x_content">
+						<div style="text-align: center; margin-bottom: 17px">
+							<h1 class="name_title">
+								<div id="oficioAll" class="mismaLinea"></div>
+							</h1>
+							<h5>Oficios registrados</h5>
+							<div class="divider"></div>
+							<p>Recibidos y registrados.</p>
+						</div>
+					</div>
+					<div class="sticky-bottom">
+						<div class="row vdivide">
+							<div class="col-sm-4 col-md-4 col-lg-4 text-center">
+								<a href="@routes.AdminOficioController.list()" class="text-primary"><i
+									class="fas fa-list-ul"></i></a>
+							</div>
+							<div class="col-sm-4 col-md-4 col-lg-4 text-center">
+								<a href="/oficio" data-toggle="popover"
+									data-content="Agregar Oficio" class="text-success"
+									data-original-title="" title=""> <i class="fa fa-plus-circle"
+									aria-hidden="true"></i>
+								</a>
+							</div>
+							<div class="col-sm-4 col-md-4 col-lg-4 text-center">
+								<a href="javascript:void(0);" data-toggle="popover"
+									data-content="Buscar en oficios" class="text-success"
+									data-original-title="" title="" onclick="javascript:preguntarFiltro()"> 
+									<i class="fa fa-search" aria-hidden="true"></i>
+								</a>							
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+				<div class="x_panel fixed_height_320">
+					<div class="x_title">
+						<h1>Folios</h1>
+						<div class="clearfix"></div>
+					</div>
+					<div class="x_content">
+						<div style="text-align: center; margin-bottom: 17px">
+							<!-- 
+			                                <span class="chart" data-percent="100">
+			                                 <span class="percent">@models.Oficio.find.all().size</span>
+			                                 <canvas height="110" width="110"></canvas>
+			                                </span>
+			                                 -->
+		
+							<div class="row vdivide">
+								<div class="col-sm-3 text-center">
+									<h3 class="name_title">
+										<div id="asignados"
+											style="text-align: center; margin-bottom: 17px"></div>
+									</h3>
+									<h5>Productores asignados</h5>
+								</div>
+								<div class="col-sm-3 text-center">
+									<h3 class="name_title">
+										<div id="solicitudes"
+											style="text-align: center; margin-bottom: 17px"></div>
+									</h3>
+									<h5>Solicitudes por atender</h5>
+								</div>
+								<div class="col-sm-3 text-center">
+									<h3 class="name_title">
+										<div id="autorizados"
+											style="text-align: center; margin-bottom: 17px"></div>
+									</h3>
+									<h5>Solicitudes autorizadas</h5>
+								</div>
+								<div class="col-sm-3 text-center">
+									<h3 class="name_title">
+										<div id="terminados"
+											style="text-align: center; margin-bottom: 17px"></div>
+									</h3>
+									<h5>trabajos terminados</h5>
+								</div>
+							</div>
+		
+							<h3 class="name_title">
+								<div id="asignados5"
+									style="text-align: center; margin-bottom: 17px"></div>
+							</h3>
+							<p>Productores asignados</p>
+						</div>
+						<div class="divider"></div>
+						<p></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-12 col-md-12 col-lg-12">
+				<div class="x_panel">
+					<div class="x_title">
+						<h2>Personal activo</h2>
+						<ul class="nav navbar-right panel_toolbox">
+							<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+							<ul class="dropdown-menu" role="menu">
+							<li><a href="#">Productores</a>
+							</li>
+							<li><a href="#">Operadores sala</a>
+							</li>
+							</ul>
+							</li>
+						</ul>
+						<div class="clearfix"></div>
+					</div>
+					<div class="x_content">
+						<table id="tablaPersonal" class="table table-bordered table-condensed table-striped jambo_table">
+							<thead>
+								<tr><th>Número</th><th>Nombre</th><th>Rol</th><th>Horario</th><th>Cuenta</th></tr>
+						</table>				
+					</div>
+				</div>
+			</div>
+		</div>
+		
+            <div class="row" id="divPanelFechasCaducadas" style="display: none;" >
+                <div class="col-sm-12 col-md-12 col-lg-12"  >
+                    <div class="x_panel">
+                    <div class="x_title">
+                            <h2>Fechas caducadas</h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                 <li><a class="collapse-link"><i class="fa fa-chevron-up" name="iconClosePanel"></i></a>
+                                 </li>
+                                 <li><a class="close-link"><i class="fas fa-times"></i></a>
+                                 </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                          </div>
+
+                        <div class="x_content">
+                          <div style="margin-bottom: 17px">
+                              <h1 class="name_title"></h1>
+                              <div id="fechasCaducadas"></div>
+                              
+                              <div class="center-block">
+                                <button class="btn btn-success btn-lg" onclick="javascript:terminar(0,'grupo')"><i class="far fa-star"></i> Marcar todos como terminados</button>
+                                
+                              </div>
+                              
+                              
+                              <div class="divider"></div>
+                              <div id="divFeCad">
+					            <table class='table table-bordered table-striped jambo_table bulk_action order-column dataTable no-footer' id='tablaCaducos'>
+					               <thead>
+					                   <tr>
+					                        <th>Folio</th>
+							                <th>Descripción</th>
+							                <th>Fase</th>           
+							                <th>Fecha</th>
+							                <th>Desde</th>
+							                <th>Hasta</th>
+							                <th></th>
+					                   </tr>        
+					              </thead>
+					              <tbody></tbody>
+					              </table>
+                              </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>	
+		
+		<div class="row" id="divPanelProximasFechas">
+			<div class="col-sm-12 col-md-12 col-lg-12">
+				<div class="x_panel">
+					<div class="x_title">
+						<h2>Próximas fechas</h2>
+						<ul class="nav navbar-right panel_toolbox">
+							<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+						</ul>
+						<div class="clearfix"></div>
+					</div>
+		
+					<div class="x_content">
+						<div style="margin-bottom: 17px">
+							<h1 class="name_title"></h1>
+		
+							<div class="cd-horizontal-timeline">
+								<div class="timeline">
+									<div class="events-wrapper">
+										<div class="events">
+											<ol id="htlEventos">
+		
+											</ol>
+		
+											<span class="filling-line" aria-hidden="true"></span>
+										</div>
+										<!-- .events -->
+									</div>
+									<!-- .events-wrapper -->
+		
+									<ul class="cd-timeline-navigation">
+										<li><a href="#0" class="prev inactive">Prev</a></li>
+										<li><a href="#0" class="next">Next</a></li>
+									</ul>
+									<!-- .cd-timeline-navigation -->
+								</div>
+								<!-- .timeline -->
+		
+								<div class="events-content"></div>
+		
+		
+							</div>
+		
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="losCorreos"></div>
+
+
+		
+	</div>
+}
+
+<script type="text/javascript">
+	const diassemana=["Sábado", "Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
+
+  $(function() {
+	  moment.locale('es');
+	  var $actaliza = LlamadaAjax("/ajaxTableroAdmin","GET",JSON.stringify( {}));
+	  var $ctaSalida = LlamadaAjax("/existeActiva","GET",JSON.stringify( {}));
+	  $("#cargando").html("<i class='fas fa-sync-alt fa-spin fa-5x center-block'></i>");
+	  $("#cargando").fadeIn("slow");
+	  $.when($actaliza, $ctaSalida).done(function(data, dataSalida){
+		  console.dir(data)
+		  console.dir(dataSalida)
+		  actualiza(data)
+		  
+		  if(dataSalida.existe==false){
+			  var itemtitulo='No hay cuenta de correo de salida.';
+			  var itemDescripcion='En el menú de Sistema/Correo electrónico administre las cuentas de salida y especifique una de ellas como activa.';
+			 // agregarNotificacion(itemtitulo, itemDescripcion,"/correosSalida");
+			  $("#edoCtaCorreoSalida").html("<div class=\"panel panel-danger\">"+
+					  "<div class=\"panel-heading\"><i class=\"fas fa-skull-crossbones\" style=\"margin-right:10px;\"></i>No se encuentra registro de una cuenta <strong>activa</strong> para los correos de salida del sistema</div>"+
+						"</div>");
+		  }
+		  else {
+			  $("#losCorreos").html("La cuenta de correo de salida del sistema es <strong>"+dataSalida.cuenta+" </strong>");			  
+		  }
+	  });
+	  
+	  
+      $.notifyDefaults({
+          type: 'success',
+          newest_on_top: true,
+          z_index: 999000
+      });	
+
+  });
+  
+
+	  
+
+  
+  function actualiza(data){
+	    	console.dir(data)
+	    	var auxFeCad="";
+	        $("#oficioAll").html( data.oficioAll  );
+	    	$("#asignados").html( data.soloAsignados  );
+	    	$("#solicitudes").html( data.solicitudes  );
+	    	$("#autorizados").html( data.autorizados  );
+	    	$("#terminados").html( data.terminados  );
+	    	
+	    	// Actualiza info de personal
+	    	$("#tablaPersonal tbody").empty();
+	    	$.each(data.personal, function(ip, p){
+	    		var requiereHorario=false;
+	    		var requiereCuenta = false;
+	    		var rolesCta="";
+	    		$.each(p.cuentas, function(icta, cta){
+		    		$.each(cta.roles, function(irol, rol){
+		    			console.log("rol.id "+rol.rol.id)
+		    			rolesCta+=rol.rol.descripcion+"<br>";
+		    			if (rol.rol.id==16){
+		    				requiereHorario = true;
+		    			}
+		    		});
+	    		});
+
+	    		if (p.cuentas.length==0)
+	    			requiereCuenta = true;
+	    		
+	    		console.log(p.id+" - H "+requiereHorario +" C "+requiereCuenta)
+	    		
+	    		if ( (requiereCuenta && (p.cuentas.length==0))  ||  (requiereHorario && p.horarios.length==0)   ){
+	    			var c = "<tr><td><a href='/personal/"+p.id+"'>"+p.numEmpleado+"</a></td><td>"+p.paterno+" "+p.materno+" "+p.nombre+"</td>";
+		    		if (rolesCta.length==0)
+		    			c+="<td></td>";
+		    		else
+		    			c+="<td>"+rolesCta+"</td>";	    			
+		    		if(requiereHorario){
+		    			if (p.horarios.length==0){
+			    			c+="<td class='text-danger'>";
+			    			c+="Sin horario definido, ingrese información";
+			    			c+="</td>";		    				
+		    			} else {
+			    			c+="<td>";
+			    			var d="<div class='row'>";
+			    			$.each(p.horarios, function(ih, h){
+			    				d+="<div class='col-sm-4 col-md-4 col-ld-4'>"+diassemana[h.diasemana]+" "+moment(h.desde).format("HH:mm")+" - "+moment(h.hasta).format("HH:mm")+"</div>";
+			    			});
+			    			d+="</div>";
+			    			c+=d;
+			    			c+="</td>";
+			    		}	  
+			    		if (p.cuentas.length>0){
+				    		c+="<td>";
+			    			var cta0="<div class='row'>";
+			    			$.each(p.cuentas, function(icta, cta){
+			    				cta0+="<div class='col-sm-12 col-md-12 col-ld-12'>Si tiene cuenta de acceso</div>";
+			    			});
+			    			cta0+="</div>";
+			    			c+=cta0;	
+			    			c+="</td>";
+			    		}		    			
+		    		} else {
+		    			c+="<td>";
+		    			c+="";
+		    			c+="</td>";	
+		    		}
+		    		if (requiereCuenta){
+		    			if (p.horarios.length>0){
+			    			c+="<td>";
+			    			var d="<div class='row'>";
+			    			$.each(p.horarios, function(ih, h){
+			    				d+="<div class='col-sm-4 col-md-4 col-ld-4'>"+diassemana[h.diasemana]+" "+moment(h.desde).format("HH:mm")+" - "+moment(h.hasta).format("HH:mm")+"</div>";
+			    			});
+			    			d+="</div>";
+			    			c+=d;
+			    			c+="</td>";
+			    		}		    			
+			    		if (p.cuentas.length>0){
+				    		c+="<td>";
+			    			var cta0="<div class='row'>";
+			    			$.each(p.cuentas, function(icta, cta){
+			    				cta0+="<div class='col-sm-12 col-md-12 col-ld-12'>Si tiene cuenta de acceso</div>";
+			    			});
+			    			cta0+="</div>";
+			    			c+=cta0;	
+			    			c+="</td>";
+			    		} else {
+				    		c+="<td class='text-danger'>";
+			    			c+="No tiene cuenta de acceso";
+			    			c+="</td>";
+			    		}
+		    		}  			
+		    		c+="</tr>";
+		    		$("#tablaPersonal").append(c);	    			
+	    		}
+	    		
+	    		
+	    	});
+	    	
+	    	
+	    	// Actualiza el panel de fechas caducadas
+	    	$("#divPanelFechasCaducadas").toggle(data.fechasCaducadas.length >0);
+	    	if (data.fechasCaducadas.length >0){	    	
+		    	$("#fechasCaducadas").html("<h5>Se encontraron "+data.fechasCaducadas.length+" fechas atrasadas que no se han terminado</h5>");
+		    	auxFeCad +="<table class='table table-bordered table-striped jambo_table bulk_action order-column dataTable no-footer' id='tablaCaducos'>";
+		    	auxFeCad += "  <thead>";
+		        auxFeCad += "  <tr>";
+	            auxFeCad += "    <th>Folio</th>";
+	            auxFeCad += "    <th>Descripción</th>";
+	            auxFeCad += "    <th>Fase</th>";                
+	            auxFeCad += "    <th>Fecha</th>";
+	            auxFeCad += "    <th>Desde</th>";
+	            auxFeCad += "    <th>Hasta</th>";
+	            auxFeCad += "    <th></th>";
+	            auxFeCad += "  </tr>";            
+	            auxFeCad += "  </thead>";
+	            auxFeCad += "  <tbody>";
+		    	$.each(data.fechasCaducadas, function(i, v){
+		    		auxFeCad += "<tr id='fc-"+v.id+"'>";
+		    		auxFeCad += "  <td>"+v.folioproductorasignado.folio.numfolio+"</td>";
+		    		auxFeCad += "  <td>"+v.folioproductorasignado.folio.oficio.descripcion+"</td>";
+		    		auxFeCad += "  <td>"+v.fase.descripcion+"</td>";	    		
+		    		auxFeCad += "  <td>"+moment(v.inicio,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("DD/MM/YYYY")+"</td>";
+		    		auxFeCad += "  <td>"+moment(v.inicio,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("HH:mm")+"</td>";
+		    		auxFeCad += "  <td>"+moment(v.fin,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("HH:mm")+"</td>";
+		    		auxFeCad += "  <td>";
+		    		auxFeCad += "       <a href='javascript:terminar("+v.id+",\"individual\")' style='padding-bottom: 5px; cursor: pointer; font-weight: bold;'><i class='far fa-star'></i></a>";
+		    		auxFeCad += "       <a href='javascript:cancelarEvento("+v.id+")' style='padding-bottom: 5px; cursor: pointer; font-weight: bold;'><i class='fas fa-ban'></i></a>";
+		    		auxFeCad += "  </td>";
+		    		auxFeCad += "</tr>";
+		    	});
+	            auxFeCad += "  </tbody>";
+		    	auxFeCad +="</table>";
+	            $("#divFeCad").html(  auxFeCad    );
+	    	}
+
+	    	
+	    	
+	    	// Actualiza el componente horizontaltimeline	    	
+	    	console.log("T A M ",data.eventosProximos.length)
+	    	$("#divPanelProximasFechas").toggle(data.eventosProximos.length>0);
+	    	$("#htlEventos").html("");
+	    	$.each(data.eventosProximos, function(i,v){
+	    			if ( moment(v).isSameOrAfter( moment(), 'day' )  ){
+		    			if ($("#htlEventos li").length>0){
+		    				$("#htlEventos").append("<li><a href='#0' data-date='"+moment(v,"YYYY-MM-DD").format("DD/MM/YYYY")+"'>"+moment(v,"YYYY-MM-DD").format("MMM D")+"</a></li>");
+		    			}else {
+		    				console.log("NUEVO")
+		    				 var li = $('<li/>')
+		    		            .appendTo('#htlEventos');
+	
+		    		        $('<a />')
+		    		            .text(moment(v,"YYYY-MM-DD").format("MMM D"))
+		    		            .attr('href', '#0')
+		    		            .attr('class','non-selected')
+		    		            .attr("data-date",moment(v,"YYYY-MM-DD").format("DD/MM/YYYY"))
+		    		            .appendTo(li);      
+		    			}
+		    			console.log("evento agregado:", moment(v,"YYYY-MM-DD").format("DD/MM/YYYY"))
+	    			}
+	    		 
+	    	});
+	    	
+	    	if ($("#htlEventos li").length>0){	    	
+		    	initTimeline($('.cd-horizontal-timeline'));
+		 	   //Seleccionar la primer fecha en el timeline
+			    $("#htlEventos li a:first").addClass("selected").click();
+	    	 } else {
+	    		 $("#divPanelProximasFechas").find("h1.name_title").html("No hay servicios agendados.");
+	    	 }
+			$("#cargando").fadeOut(function(){$("#c1").fadeIn("slow");});
+  }
+  
+  
+  
+  $("#btnEnviarCorreosEnCola").click(function(){
+	  console.log("preparando para enviar correos")
+	  $("#losCorreos").html("");
+	  // Llamada ajax para enviar correos
+	  
+	    $.ajax({
+	        url: '/colaCorreos.enviar',
+	        method: 'POST',
+	        dataType: "json"
+	    }).success(function(data){
+	    	console.dir(data)
+	    	if (data.length==0){
+				$.notify({
+					title: "<strong>Aviso:</strong> ",
+					message: "No hay correos por enviar."
+				},{
+					type: 'warning'
+				});	
+	    	} else {
+				$.notify("Se enviaron los correos electrónicos (prueba)");		    		
+	    	}
+	    	
+	    	$.each(data, function(i,c){
+		    	$("#losCorreos").html(  $("#losCorreos").text()+c.contenido);	
+		    	
+	    	});
+
+	    });
+	  
+	  
+  });
+  
+  function preguntarFiltro(){
+	  console.log("se abre  ventana sweetalert2")
+		var inputValue="";
+		const { value: ipAddress } = swal({
+		  title: 'Busqueda en oficios',
+		  input: 'text',
+		  inputValue: inputValue,
+		  showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: '#3085d6',		  
+		  confirmButtonText: "Buscar",
+		  cancelButtonText: "Cancelar" 
+		}).then(function (retorno) {
+			console.log("valor "+retorno)
+			/*
+			$("form").attr("action","/oficios");
+			$("form").attr("method","GET");
+			$("form").submit();
+			*/
+			/*
+			var nvaForma = document.createElement("div");
+			nvaForma.setAttribute("method","GET");
+			nvaForma.setAttribute("action","/oficios?filtro="+retorno);
+			document.nvaForma.submit();
+			*/
+			 //$('<form action="/oficios?filtro="'+retorno>+' method="GET"></form>').appendTo('body').submit();
+			
+			
+		    var newForm = jQuery('<form>', {
+		        'action': "/oficios",
+        		'method': "GET",
+		        'target': '_top'
+		    }).append(jQuery('<input>', {
+		        'name': 'filtro',
+		        'value': retorno,
+		        'type': 'hidden'
+		    }));
+		    $(document.body).append(newForm);
+		    newForm.submit();			
+			
+		});
+		
+  }
+  
+  function cancelarEvento(servicioId){
+		// Generalas opciones para motivo de cancelación  
+		  var inputOptionsPromise = new Promise(function(resolve) {
+				  resolve({
+					  @for(m <-models.MotivoCancelacion.find.all()){
+						  @m.id : "@m.descripcion",
+					  }
+				  });
+			})	  
+			swal({
+				  type: 'question',
+			      title: '¿Motivo de cancelación?',
+			      input: 'select',
+			      inputOptions: inputOptionsPromise,
+			      inputPlaceholder: 'Seleccione motivo',
+			      showCancelButton: true,
+			      inputValidator: function(value) {
+			        return new Promise(function(resolve, reject) {
+			          if (value != '') {
+			            resolve();
+			          } else {
+			            reject('Seleccione un motivo')
+			          }
+			        }).catch(swal.noop);
+			      }
+			    }).then(function(result) {
+			   	  $cancela =  LlamadaAjaxCancelaEvento(servicioId, result); 
+			  	  $.when($cancela).done(function(datac){
+			  		  console.dir(datac)
+			  		  if (datac.cancelado){
+			  			$.notify("Se canceló el evento");
+			  			  actualiza();
+			  		  } else {
+	                      $.notify(
+	                              "No se pudo cancelar el evento"
+	                          ,{
+	                          	type:"danger"
+	                          }); 
+			  		  }
+			  	  });
+			    })	  
+		} 
+  
+  
+  
+</script>
+<script src="@routes.Assets.at("lib/moment/min/moment.min.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("lib/moment/locale/es.js")" type="text/javascript"></script>
+
+<script src="@routes.Assets.at("horizontal-timeline/js/main.js")"></script>
+<!-- Resource jQuery -->
+<script src="@routes.Assets.at("horizontal-timeline/js/modernizr.js")"></script>
+<!-- Modernizr -->
+
+<script src="@routes.Assets.at("bootstrap-notify/bootstrap-notify.min.js")"></script>

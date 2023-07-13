@@ -1,0 +1,51 @@
+@(s:String)
+
+
+    <!-- jQuery -->
+    <script src="@routes.Assets.at("gentelella/vendors/jquery/dist/jquery.min.js")"></script>
+    <!-- Bootstrap -->
+    <script src="@routes.Assets.at("gentelella/vendors/bootstrap/dist/js/bootstrap.min.js")"></script>
+    <link rel='stylesheet' href='@routes.Assets.at("lib/bootstrap/css/bootstrap.min.css")'>
+    
+    <!-- FastClick -->
+    <script src="@routes.Assets.at("gentelella/vendors/fastclick/lib/fastclick.js")"></script>
+    <!-- NProgress -->
+    <script src="@routes.Assets.at("gentelella/vendors/nprogress/nprogress.js")"></script>
+
+    <!-- Custom Theme Style -->
+    <link href="@routes.Assets.at("gentelella/build/css/custom.css")" rel="stylesheet"> 
+    <link href="@routes.Assets.at("gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.css")" rel="stylesheet">
+
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/excepciones.css")"/>
+<div class="container">
+   <section style="width: 80%">
+
+       <div class="row">
+       		<div class="col-lg-12 text-center">
+       			<i class="far fa-angry fa-7x  text-danger"></i></br>
+       			<h1 class="error-number">Ocurrió un error</h1>
+		        <h1>No existe la acción solicitada.</h1> 
+		       <h1>No se encontró la página @s</h1>       			
+       		</div>
+       </div>
+       </br>
+		<div class="row">
+			<div class="col-lg-6 text-center"><h3><a href="javascript:window.history.go(-1);">Regresar</a></h3></div>
+			<div class="col-lg-6 text-center"><h3><a href="@routes.Application.login()">Ingresar con otra cuenta</a></h3></div>
+		</div>       
+       
+   </section>
+     
+     
+
+     
+     
+</div>
+
+
+
+
+    
+    <script defer src="@routes.Assets.at("lib/font-awesome/js/all.min.js")"></script>
+    <link href="@routes.Assets.at("lib/font-awesome/css/all.min.css")" rel="stylesheet">  
+

@@ -1,0 +1,41 @@
+@(fase:Long)
+@tipos() = @{
+	models.RolFase.find.where().eq("fase.id", fase).orderBy("id").findList()
+}
+@rolesFase()=@{
+	models.RolFase.find.where().eq("fase.id", fase).not(com.avaje.ebean.Expr.in("rol.id", java.util.Arrays.asList(15,16))) .findList()
+} 
+
+@if(session.get("rolActual")=="1" || session.get("rolActual")=="100" ){
+	<div class="panel panel-default" name="preguntaPersonalSolicitado" style="display:none">
+		<div class="panel-body">
+			<div class="row">
+                    @for(tpf <- tipos()){
+                        @if(tpf.rol.id!=16   && tpf.rol.id!=15 ){
+		                      <div class="col-sm-@(12/rolesFase().length)">
+		                          <div class="form-group">
+		                         	<div style="display:inline">
+	                                    <label class="control-label">                                                                     
+	                                        @Rol.find.byId(tpf.rol.id).descripcion
+	                                    </label>
+	                                    <br>
+										<input name="inp_preprod_@tpf.rol.id" type="text" size="1" maxlength="1" class="soloNumeros input-sm form-control">
+		                            </div>
+	                               </div>
+	                          </div>                    
+                        }                            
+                     }
+			</div>
+            <div class="row">
+                <div class="col-sm-12">
+                        <div class="help-block with-errors"></div>
+                </div>
+            </div>
+                <div class="row">
+                    <div class="col-sm-12 small">
+                        Indique el número requerido de cada perfil.
+                    </div>
+                </div>
+		  </div>
+	  </div>
+  }                        

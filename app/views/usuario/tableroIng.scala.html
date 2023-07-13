@@ -1,0 +1,228 @@
+<link rel="stylesheet" href="@routes.Assets.at("horizontal-timeline/css/reset.css")")>
+<!-- Resource style -->
+<style>
+.row.vdivide [class*='col-']:not (:last-child ):after {
+	background: #e0e0e0;
+	width: 1px;
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.sticky-bottom {
+	position: absolute;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	padding: 1rem;
+	background-color: #efefef;
+	text-align: center;
+}
+
+.btn-circle {
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	padding: 6px 0;
+	font-size: 12px;
+	line-height: 1.428571429;
+	border-radius: 15px;
+}
+
+.btn-circle.btn-md {
+	width: 30px;
+	height: 30px;
+	padding: 6px 0;
+	font-size: 10px;
+	line-height: 1.428571429;
+	border-radius: 25px;
+}
+
+.btn-circle.btn-lg {
+	width: 50px;
+	height: 50px;
+	padding: 10px 16px;
+	font-size: 18px;
+	line-height: 1.33;
+	border-radius: 25px;
+}
+
+.btn-circle.btn-xl {
+	width: 70px;
+	height: 70px;
+	padding: 10px 16px;
+	font-size: 24px;
+	line-height: 1.33;
+	border-radius: 35px;
+}
+
+.tile-stats .count-sm {
+	font-size: 18px !important;
+}
+
+
+.tile-stats h5-sm {
+    font-size: 14px !important;
+    color: #BAB8B8;
+}
+</style>
+
+
+@main{
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6 stats">
+                        <div class="x_panel">
+                          <div class="x_content">
+	                          <div class="row top_tiles">
+	                          		<div class="tile-stats">
+		                          		<div style="font-size: 38px; font-weight: bold; line-height: 1.65857" ></div>
+		                          		<h3 style="color: #BAB8B8;">Equipo (cámaras)</h3>
+	                          			<div style="text-align:center;">
+	                          				<i class="fas fa-video fa-4x"></i>
+	                          			</div>
+	                          			<div style="margin: 4px;">
+											<span class="" id="" style="text-align: center;">
+			                                	 <span class="" id="divTotalEquipo" style="font-size:xx-large;"></span> 
+			                            	</span>
+			                            	<div style="margin-top:1em; margin-bottom:0.5em;">Detalle por estado</div>
+                   							<div id="divDetalleEquipoEdos"></div>	                          			
+	                          			</div>
+		                            </div>
+	                          </div>
+                          </div>
+                         
+                        </div>                
+                </div>
+                  
+                <div class="col-sm-12 col-md-6 col-lg-6 stats">
+                        <div class="x_panel">
+                          <div class="x_content">
+	                          <div class="row top_tiles">
+	                          		<div class="tile-stats">
+		                          		<div style="font-size: 38px; font-weight: bold; line-height: 1.65857" ></div>
+		                          		<h3 style="color: #BAB8B8;">Accesorios</h3>
+	                          			<div style="text-align:center;">
+	                          				<i class="fas fa-microphone fa-4x"></i>
+	                          			</div>
+	                          			<div style="margin: 4px;">
+											<span class="" id="" style="text-align: center;">
+			                                	 <span class="" id="divTotalAccesorios" style="font-size:xx-large;"></span> 
+			                            	</span>
+			                            	<div style="margin-top:1em; margin-bottom:0.5em;">Detalle por estado</div>
+                   							<div id="divDetalleAccesoriosEdos"></div>	                          			
+	                          			</div>
+		                            </div>
+	                          </div>
+                          </div>
+                         
+                        </div>                
+                </div>
+                             
+            </div>
+
+}
+
+<script type="text/javascript">
+	const diassemana=["Sábado", "Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
+
+  $(function() {
+	  moment.locale('es');
+	 
+	  $("#cargando").html("<i class='fas fa-sync-alt fa-spin fa-5x center-block'></i>");
+	  $("#cargando").fadeIn("slow");
+      actualiza();	
+      $.notifyDefaults({
+          type: 'success',
+          newest_on_top: true,
+          z_index: 999000
+      });
+  });
+  
+  
+  function actualiza(){
+	    $.ajax({
+	        url: '/ajaxTableroIng',
+	        method: 'GET',
+	        dataType: "json"
+	    }).success(function(data){
+	    	console.dir(data)
+	    	$("#divTotalEquipo").text(data.equipo.length+" Equipos");
+	    	$("#divTotalAccesorios").text(data.accesorios.length+" Accesorios");
+	    	//var cadena="";
+	    	var cadena="";
+
+	    	for(let i = 0; i < data.equipoEdos.length; i++) {
+	    	    let obj = data.equipoEdos[i];
+	    	    console.log( (i%2)  )
+	    	    if ((i%2)==0){
+	    	    	cadena+="<div class='row d-flex'>";
+	    	    }
+	    		cadena+="<div class='animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12'>"+
+				                "<div class='tile-stats h-100'>"+
+				                	"<div class='row'>"+
+				                		"<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1' style=''>"+
+				                			"<div class='d-flex align-items-center'>"+
+				                  				"<div class='count-sm'><div id='cantidad"+obj.id+"' class='d-flex align-items-center'>"+obj.cantidad+" </div></div>"+
+				                  			"</div>"+	
+				                  		"</div>"+
+				                  		"<div class='col-lg-10 col-md-10 col-sm-10 col-xs-10'>"+
+				                  			"<h5-sm> "+obj.descripcion+"</h5-sm>"+
+			                  			"</div>"+
+			                		"</div>"+
+				                "</div>"+
+				              "</div>";	 
+	    	    if ((i%2)!=0){
+	    	    	cadena+="</div>";
+	    	    }				              
+	    	}
+    	    $("#divDetalleEquipoEdos").html(cadena);	
+    	    cadena="";
+	    	for(let i = 0; i < data.accesoriosEdos.length; i++) {
+	    	    let obj = data.accesoriosEdos[i];
+	    	    console.log( (i%2)  )
+	    	    if ((i%2)==0){
+	    	    	cadena+="<div class='row d-flex'>";
+	    	    }
+	    		cadena+="<div class='animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12'>"+
+				                "<div class='tile-stats h-100'>"+
+				                	"<div class='row'>"+
+				                		"<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1' style=''>"+
+				                			"<div class='d-flex align-items-center'>"+
+				                  				"<div class='count-sm'><div id='cantidad"+obj.id+"' class='d-flex align-items-center'>"+obj.cantidad+" </div></div>"+
+				                  			"</div>"+	
+				                  		"</div>"+
+				                  		"<div class='col-lg-10 col-md-10 col-sm-10 col-xs-10'>"+
+				                  			"<h5-sm> "+obj.descripcion+"</h5-sm>"+
+			                  			"</div>"+
+			                		"</div>"+
+				                "</div>"+
+				              "</div>";	 
+	    	    if ((i%2)!=0){
+	    	    	cadena+="</div>";
+	    	    }				              
+	    	}
+    	    $("#divDetalleAccesoriosEdos").html(cadena);    	    
+	    }).error(function(xhr, status, error) {
+	          alert("error rn ajax -  "+ xhr.responseText );
+	          alert("error rn ajax -  "+ error );
+	          alert("error rn ajax -  "+ xhr);
+	        });
+  }
+  
+  
+  
+  
+  
+</script>
+<script src="@routes.Assets.at("lib/moment/min/moment.min.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("lib/moment/locale/es.js")" type="text/javascript"></script>
+
+<script src="@routes.Assets.at("horizontal-timeline/js/main.js")"></script>
+<!-- Resource jQuery -->
+<script src="@routes.Assets.at("horizontal-timeline/js/modernizr.js")"></script>
+<!-- Modernizr -->
+
+<script src="@routes.Assets.at("bootstrap-notify/bootstrap-notify.min.js")"></script>

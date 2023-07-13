@@ -1,0 +1,276 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET     /                           		controllers.Application.login()
+
+GET    /assets/javascripts/routes      controllers.Application.javascriptRoutes()
+
+GET     /javascriptRoutes     					controllers.Application.javascriptRoutes
+
+GET		/operacionNoPermitida		controllers.Application.operacionNoPermitida()
+GET		/usuarioSinAutorizar		controllers.Application.usuarioSinAutenticar()
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET		/assets/*file    			controllers.Assets.versioned(path="/public", file: Asset)
+
+GET		/login					controllers.Application.login()
+GET		/atentica				controllers.Application.autentica()
+GET     /redirecciona			controllers.Application.redirecciona()
+POST	/cambiarRol				controllers.Application.cambiarRol()
+POST	/rolesUsuario			controllers.Application.rolesUsuario()
+
+
+GET		/urs					controllers.AdminUnidadResponsableController.list()
+GET		/ur						controllers.AdminUnidadResponsableController.create()
+POST	/ur/save				controllers.AdminUnidadResponsableController.save()
+GET     /ur/:id                 controllers.AdminUnidadResponsableController.edit(id:Long)
+POST    /ur/update/:id          controllers.AdminUnidadResponsableController.update(id:Long)
+POST    /ur/delete/:id          controllers.AdminUnidadResponsableController.delete(id:Long)
+GET     /ursDTSS                       controllers.AdminUnidadResponsableController.listDTSS()
+
+
+#GET		/oficios					    	controllers.AdminOficioController.list()
+GET		/oficios					    	controllers.AdminOficioController.list(filtro:String ?="")
+GET		/oficio/:id				        	controllers.AdminOficioController.edit(id:Long)
+POST	/oficio/update/:id					controllers.AdminOficioController.update(id:Long)
+POST	/oficio/update2						controllers.AdminOficioController.update2()
+
+GET		/oficio								controllers.AdminOficioController.create()
+
+POST	/oficio/save						controllers.AdminOficioController.save()
+#POST	/oficio/save2						controllers.AdminOficioController.save2()
+
+POST    /ajaxEliminaOficio                  controllers.AdminOficioController.ajaxEliminaOficio()
+GET     /oficioList                     	controllers.OficioController.ajaxList()
+
+GET	/folio/:idOficio					controllers.AdminFolioController.create(idOficio:Long)
+GET		/folio								controllers.AdminFolioController.createSinOficio()
+POST	/folioSave							controllers.AdminFolioController.save()
+POST	/folioSave2							controllers.AdminFolioController.saveSerializada()
+GET     /folio/edit/:id                     controllers.AdminFolioController.edit(id:Long)
+POST    /folio/update/:id                  controllers.AdminFolioController.update(id:Long)
+POST    /folio/updateAjax                  controllers.AdminFolioController.updateAjax()
+GET		/folios								controllers.AdminFolioController.list()
+GET     /folioBuscarOficioPorId/:id         controllers.FolioController.ajaxBuscarOficioPorId(id:Long)
+GET     /folioBuscarOficio/:numOficio       controllers.FolioController.ajaxBuscarOficio(numOficio:String)
+GET     /folioBuscarFolio/:numFolio         controllers.FolioController.ajaxBuscarFolio(numFolio:String)
+POST    /ajaxBuscaServiciosFolio            controllers.FolioController.ajaxBuscaServiciosFolio()
+POST    /ajaxBuscaDetallesServicio          controllers.FolioController.ajaxBuscaDetallesServicio()
+
+GET		/personal							controllers.AdminPersonalController.list()
+GET		/persona							controllers.AdminPersonalController.create()
+POST	/personal/save						controllers.AdminPersonalController.save()
+GET		/personal/:id						controllers.AdminPersonalController.edit(id:Long)
+POST	/personal/update/:id				controllers.AdminPersonalController.update(id:Long)
+POST    /personal/delete/:id                controllers.AdminPersonalController.delete(id:Long)
+GET     /personalDTSS                       controllers.AdminPersonalController.listDTSS()
+
+#GET		/usuario/misServicios				controllers.UsuarioController.misServicios()
+GET		/usuario/misServicios/:estado/:id	controllers.UsuarioController.misServicios(estado:Long, id: Long)
+GET     /usuario/misServiciosDTSS           controllers.UsuarioController.misServiciosDTSS()
+GET		/usuario/misServiciosAdmin			controllers.UsuarioController.misServiciosAdmin()
+GET		/usuario/misServiciosRespDigi			controllers.UsuarioController.misServiciosRespDigi()
+
+GET		/usuario/misServiciosOperaSala		controllers.UsuarioController.misServiciosOperaSala()
+GET		/usuario/misServiciosOperaSalaDTSS3	controllers.UsuarioController.misServiciosOperaSalaDTSS3()
+
+GET		/ingenieria/misServicios			controllers.IngenieriaController.misServicios()
+GET     /ingenieria/misServiciosDTSS        controllers.IngenieriaController.misServiciosDTSS()
+GET		/adminea/misServicios			    controllers.AdminEAController.misServicios()
+GET     /adminea/misServiciosDTSS           controllers.AdminEAController.misServiciosDTSS()
+
+
+
+GET		/notificaciones						controllers.Application.notificaciones()
+
+
+GET     /equipos                            controllers.AdminEquipoController.list()
+GET     /equipo/create                      controllers.AdminEquipoController.create()
+POST    /equipo/save                        controllers.AdminEquipoController.save()
+GET     /equipo/:id                         controllers.AdminEquipoController.edit(id:Long)
+POST    /equipo/update/:id                  controllers.AdminEquipoController.update(id:Long)
+POST    /equipo/delete/:id                  controllers.AdminEquipoController.delete(id:Long)
+GET     /equiposDTSS                        controllers.AdminEquipoController.listDTSS()
+
+GET     /accesorios                            controllers.AdminAccesorioController.list()
+GET     /accesorio/create                      controllers.AdminAccesorioController.create()
+POST    /accesorio/save                        controllers.AdminAccesorioController.save()
+GET     /accesorio/:id                         controllers.AdminAccesorioController.edit(id:Long)
+POST    /accesorio/update/:id                  controllers.AdminAccesorioController.update(id:Long)
+POST    /accesorio/delete/:id                  controllers.AdminAccesorioController.delete(id:Long)
+GET     /accesoriosDTSS                        controllers.AdminAccesorioController.listDTSS()
+
+GET     /salas                            		controllers.AdminSalaController.list()
+GET     /sala/create                      		controllers.AdminSalaController.create()
+POST    /sala/save                        		controllers.AdminSalaController.save()
+GET     /sala/:id                         		controllers.AdminSalaController.edit(id:Long)
+#POST    /sala/update/:id                  		controllers.AdminSalaController.update(id:Long)
+POST    /salaupdate                  		controllers.AdminSalaController.update()
+POST    /salaupdate2                  		controllers.AdminSalaController.update2()
+POST    /sala/delete/:id                  		controllers.AdminSalaController.delete(id:Long)
+GET     /ajaxSalas                            	controllers.AdminSalaController.ajaxList()
+
+GET     /vehiculos                            controllers.AdminVehiculoController.list()
+GET     /vehiculo/create                      controllers.AdminVehiculoController.create()
+POST    /vehiculo/save                        controllers.AdminVehiculoController.save()
+GET     /vehiculo/:id                         controllers.AdminVehiculoController.edit(id:Long)
+POST    /vehiculo/update/:id                  controllers.AdminVehiculoController.update(id:Long)
+POST    /vehiculo/delete/:id                  controllers.AdminVehiculoController.delete(id:Long)
+
+GET     /formatos                            controllers.AdminFormatoController.list()
+GET     /formato/create                      controllers.AdminFormatoController.create()
+POST    /formato/save                        controllers.AdminFormatoController.save()
+GET     /formato/:id                         controllers.AdminFormatoController.edit(id:Long)
+POST    /formato/update/:id                  controllers.AdminFormatoController.update(id:Long)
+POST    /formato/delete/:id                  controllers.AdminFormatoController.delete(id:Long)
+
+
+#GET		/productorServicios					controllers.ProductorServiciosController.agenda(fecha:String ?= "", eventoId:Long?=0, tipo:String?="")
+POST	/productorServicios					controllers.ProductorServiciosController.agenda()
+
+#GET		/ajaxDatosEventosAnterior			controllers.ProductorServiciosController.ajaxDatosEventosAnterior()
+GET		/ajaxDatosEventos					controllers.ProductorServiciosController.ajaxDatosEventos()
+
+
+
+GET		/adminAgenda/:idRevisar			    controllers.AdministracionController.agenda(idRevisar:Long)
+GET     /tableroAdmin                       controllers.AdministracionController.tablero()
+GET     /ajaxTableroAdmin                   controllers.AdministracionController.ajaxTablero()
+
+GET		/sabana								controllers.ReporteController.sabana()
+POST    /ajaxSabanaNavega                   controllers.ReporteController.ajaxSabanaNavega()
+POST    /ajaxSabana                       	controllers.ReporteController.ajaxSabana()
+
+
+GET     /tablero                            controllers.UsuarioController.tablero()
+GET     /ajaxTablero                        controllers.UsuarioController.ajaxTablero()
+
+POST    /ajaxTableroTerminarEvento          controllers.UsuarioController.ajaxTableroTerminarEvento()
+POST    /ajaxTableroEventosDiaTimeLine      controllers.UsuarioController.ajaxTableroEventosDiaTimeLine()
+
+
+GET     /tableroIng         	            controllers.IngenieriaController.tableroIng()
+GET     /ajaxTableroIng                   	controllers.IngenieriaController.ajaxTableroIng()
+GET     /tableroEA         	                controllers.AdminEAController.tableroEA()
+GET     /ajaxTableroEA                   	controllers.AdminEAController.ajaxTableroEA()
+
+
+
+
+POST	/ajaxDatos							controllers.UsuarioController.ajaxDatos()
+POST    /ajaxTodosLosDatosFolioPA           controllers.UsuarioController.ajaxTodosLosDatosFolioPA()
+
+POST	/ajaxGrabaEvento					controllers.UsuarioController.ajaxGrabaEvento()
+POST	/ajaxActualizaEvento				controllers.UsuarioController.ajaxActualizaEvento()
+POST	/ajaxEliminaEvento					controllers.UsuarioController.ajaxEliminaEvento()
+
+POST	/ajaxAutorizaEvento					controllers.AutorizacionController.ajaxAutorizaEvento()
+POST	/ajaxEliminaEventoAdmin				controllers.AutorizacionController.ajaxEliminaEventoAdmin()
+
+POST	/ajaxAsignaEA					    controllers.AdminEAController.asignaEquipoAccesorios()
+
+POST	/ajaxEliminaEventoAdminOpera		controllers.AutorizacionController.ajaxEliminaEventoAdmin()
+#POST	/ajaxActualizaEventoAdmin			controllers.AdministracionController.ajaxActualizaEventoAdmin()
+
+POST	/ajaxLocutoresActivos				controllers.AdminPersonalController.ajaxLocutoresActivos()
+
+POST	/ajaxLocutoresDisponibles			controllers.UsuarioController.ajaxLocutoresDisponibles()
+POST    /ajaxRDisenioDisponibles            controllers.UsuarioController.ajaxRDisenioDisponibles()
+POST	/ajaxEquiposDisponibles				controllers.UsuarioController.ajaxEquiposDisponibles()
+POST	/ajaxAccesoriosDisponibles			controllers.UsuarioController.ajaxAccesoriosDisponibles()
+POST	/ajaxVehiculosDisponibles			controllers.UsuarioController.ajaxVehiculosDisponibles()
+POST	/ajaxPersonalDisponibles			controllers.UsuarioController.ajaxPersonalDisponibles()
+
+POST	/ajaxProductorDisponible			controllers.UsuarioController.ajaxProductorDisponible()
+POST	/ajaxOperadorSalaDisponible			controllers.UsuarioController.ajaxOperadorSalaDisponible()
+
+POST	/ajaxBuscaFolio						controllers.UsuarioController.ajaxBuscaFolio()
+POST    /ajaxValidaEvento                   controllers.UsuarioController.ajaxValidaEvento()
+
+POST	/ajaxListaProductoresActivos		controllers.UsuarioController.ajaxListaProductoresActivos()
+
+GET		/encabezadoGob						controllers.Application.encabezadoGob()
+
+
+GET     /ajaxContarCantidadTipoPersonal     controllers.UsuarioController.ajaxContarCantidadTipoPersonal()
+
+
+POST	/ajaxSolicitaPerfiles				controllers.AdministracionController.ajaxSolicitaPerfiles()
+
+POST	/ajaxCancelaEvento					controllers.UsuarioController.ajaxCancelaEvento()
+
+GET 	/ajaxOperadoresSalas				controllers.UsuarioController.ajaxOperadoresSalas()
+POST 	/ajaxBuscaPersona					controllers.UsuarioController.ajaxBuscaPersona()
+POST 	/ajaxBuscaTPersonal					controllers.UsuarioController.ajaxBuscaTPersonal()
+#POST 	/ajaxBuscaTPersonal					controllers.UsuarioController.ajaxBuscaTPersonal()
+
+POST	/ajaxValidaPrevioAutorizar			controllers.ValidacionesController.ajaxValidaPrevioAutorizar()
+POST	/ajaxValidaCantidadPerfiles			controllers.ValidacionesController.ajaxValidaCantidadPerfiles()
+
+POST	/colaCorreos.enviar					controllers.AdministracionController.colaCorreosEnviar()
+
+GET		/reportes/productor					controllers.ReporteController.list()
+POST	/reportes/productorAnio				controllers.ReporteController.productorAnio()
+
+POST	/guardaDatosIngesta					controllers.AutorizacionController.guardaDatosIngesta()
+
+POST	/ajaxPersonalBorrable				controllers.AdminPersonalController.ajaxPersonalBorrable()
+POST	/ajaxEsNumEmpleadoDuplicado			controllers.AdminPersonalController.ajaxEsNumEmpleadoDuplicado()
+
+GET		/enviarCorreo						controllers.AdministracionController.enviarCorreo()
+GET		/enviarCorreoG						controllers.AdministracionController.enviarCorreoG()
+
+POST	/enviarPasswordCorreo				controllers.Application.enviarPasswordCorreo()
+POST	/existenciaCorreo					controllers.Application.existenciaCorreo()
+
+POST	/ajaxPersonalPorRol					controllers.UsuarioController.ajaxPersonalPorRol()
+POST	/ajaxPersonalActivoPorRolTurno		controllers.UsuarioController.ajaxPersonalActivoPorRolTurno()
+POST	/ajaxOperadoresDisponiblesPorSalaEvento     controllers.UsuarioController.ajaxOperadoresDisponiblesPorSalaEvento()
+
+POST	/ajaxOperadoresDeSala				controllers.UsuarioController.ajaxOperadoresDeSala()
+
+GET	    /verOficio							controllers.UsuarioController.verOficio(id:Long, sufijo:String)
+#GET		/verOficio2							controllers.UsuarioController.verOficio2(id:Long)
+
+POST	/ajaxPersonalDisponible				controllers.UsuarioController.ajaxPersonalDisponible()
+
+GET		/correosSalida						controllers.AdminCorreoController.correosSalida()
+GET		/correosCreate						controllers.AdminCorreoController.create()
+GET		/correosList						controllers.AdminCorreoController.list()
+GET		/correosSave						controllers.AdminCorreoController.save()
+POST	/correosDelete						controllers.AdminCorreoController.delete()
+GET		/correosEdit/:id					controllers.AdminCorreoController.edit(id:Long)
+POST	/correosUpdate						controllers.AdminCorreoController.update(id:Long)
+GET     /correoDTSS                       	controllers.AdminCorreoController.listDTSS()
+GET		/existeActiva						controllers.AdminCorreoController.existeActiva()
+
+POST	/folioBuscarNumResguardo			controllers.UsuarioController.folioBuscarNumResguardo()
+POST	/infoCuentaRolPorPersona			controllers.UsuarioController.infoCuentaRolPorPersona()
+POST	/oficioArchivos			            controllers.UsuarioController.oficioArchivos()
+
+POST	/envioCorreoPrueba					controllers.AdministracionController.envioCorreoPrueba()
+
+POST    /ajaxEstadoSala                     controllers.UsuarioController.ajaxEstadoSala()
+POST    /validacionesAgenda3                controllers.UsuarioController.validacionesAgenda3()
+POST    /todosIngenieros                    controllers.UsuarioController.todosIngenieros()
+
+#POST    /autorizaEquipoAccesorios           controllers.IngenieriaController.autorizaEquipoAccesorios()
+
+POST    /previoAgendar                      controllers.UsuarioController.previoAgendar()
+POST    /ajaxPersonalNoDisponible           controllers.UsuarioController.ajaxPersonalNoDisponible()
+
+GET     /ssePrueba                          controllers.SSEController.ssePrueba()
+GET     /sse                                controllers.SSEController.stream()
+
+GET     /listaNotificaciones                controllers.SSEController.listaNotificaciones()
+POST    /recargar                           controllers.SSEController.recargar()
+
+GET     /ingesta                            controllers.UsuarioController.ingesta()
+
+POST    /ajaxBuscaFolioProductorAsignado    controllers.AdminFolioController.ajaxBuscaFolioProductorAsignado()
+POST    /eliminaFolio                       controllers.AdminFolioController.eliminaFolio()
+POST    /cancelaFolio                       controllers.AdminFolioController.cancelaFolio()
+
+POST    /rolPorFase                         controllers.UsuarioController.rolPorFase()

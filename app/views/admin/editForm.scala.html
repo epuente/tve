@@ -1,0 +1,103 @@
+@(id:Long, forma: Form[Ctacorreo], activa:Ctacorreo)
+@import helper._
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
+@main {
+	@if(forma.hasGlobalErrors) {
+	    <p class="error">
+	        @forma.globalError.message
+	    </p>
+	}
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+              <li><a href="@routes.AdminCorreoController.correosSalida()">Correo de salida</a></li>
+              <li>Editar</li>
+            </ol>
+        </div>
+    </div>
+    
+    <h1>Edición de cuenta de correo de salida</h1>
+    @form( CSRF(routes.AdminCorreoController.delete()), 'id->"frmAux") {
+    }
+    @form(CSRF(routes.AdminCorreoController.update(id)), 'id->"forma", 'role->"form") {
+        @correoForm(forma, activa)        
+        <br/><br/>
+        <div class="row">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                    <input type="submit" value="Actualizar" class="btn btn-primary btn-block" id="btnCorreoActualizar">
+                </div>
+                
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                    <a href="@routes.AdminCorreoController.list()" class="btn btn-warning btn-block">Cancelar</a>
+                </div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                        <input type="button" class="btn btn-danger btn-block" value="Eliminar" id="btnEliminar">
+                </div>
+            </div>            
+        </div>
+        
+    }
+    
+}
+
+<script type="text/javascript">
+	$(function() {
+		$('#forma').validator();
+		leer();
+	});
+
+	function leer(){
+		console.log("DEsde leer")
+
+	}
+	
+
+    $("#btnEliminar").click(function(){
+    //	var a = $("#frmAux").prop("action");
+    	//var b  = a.substring( a.indexOf("Delete/"), a.indexOf("?")  );
+    	//var id = b.substring( b.indexOf("/")+1  )
+    	var id = $("#id").val();
+    	//console.log(a)
+    	//console.log(b)
+    	console.log(id)
+    	
+    	
+
+    	var $t= LlamadaAjax("/correosDelete","POST", JSON.stringify( {"id":id}));
+    	$.when($t).done(function(data){
+    		console.dir(data);
+    		if (data.estado=="borrado"){
+                swal({
+                        title: "Eliminado",
+                        text: "Se eliminó correctamente la cuenta de correo de salida",
+                        type: "success",
+                        showConfirmButton: false                        
+                });
+                setTimeout(
+                		  function() 
+                		  {
+                			  $("ol.breadcrumb>li>a")[0].click();                      
+                		  }, 2000);    			
+    		}
+    		else {
+	    		swal({
+                    title: "No se puede eliminar al usuario",
+                    text: "El usuario esta relacionado con trabajos de algún folio.",
+                    type: "error",
+                    showConfirmButton: true
+                  });
+    		}
+    	});
+
+    });
+    
+</script>
+
+<script src="@routes.Assets.at("javascripts/general.js")"></script>
+<script src="@routes.Assets.at("javascripts/correoPrueba.js")"></script>

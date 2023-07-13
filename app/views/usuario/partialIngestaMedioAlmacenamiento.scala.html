@@ -1,0 +1,24 @@
+@medios() = @{ models.MedioAlmacenamiento.find.all(); }
+
+@if(session.get("rolActual")=="16"){
+
+
+<div class="row" style="font-size: small;">
+	@for(i <- medios()){
+
+	<div class="col-md-2">
+		<div class="form-group">
+			<form>
+				<div class="checkbox">
+					@i.descripcion <input type="checkbox" value="" name="medio-@i.id"
+						style="margin-left: 5px">
+				</div>
+			</form>
+		</div>
+	</div>
+
+	}
+</div>
+}
+
+

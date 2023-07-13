@@ -1,0 +1,80 @@
+@(forma: Form[Sala], roles:List[Rol], tipo:String)
+
+@import helper._
+
+        <fieldset>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                     <div class="form-group">
+                         @inputText(forma("descripcion"), '_label -> "Descripcion", 'class->"form-control", 'required->true )
+                         <div class="help-block with-errors"></div>
+                     </div>                        
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row block-center">
+                                <div class="col-md-8 col-sm-8 col-xs-8 vbottom"></div>
+                                <div class="col-md-2 col-sm-2 col-xs-2 vbottom" id="filtroOpera"   name="filtroEdo" style="padding-bottom:5px; cursor:pointer; vertical-align:baseline;">Operadores</div>
+                                <div class="col-md-2 col-sm-2 col-xs-2 vbottom" id="filtroMantto"  name="filtroEdo" style="padding-bottom:5px; cursor:pointer">Mantenimiento</div>
+                            </div>
+                            <div class="row">
+                               <br/><br/>
+                            </div>
+                            
+                            <div class="row" id="divOperador">
+                                <div class="col-xs-12">
+                                @if(tipo=="edit"){
+                                        @if(forma.get().operadores.isEmpty == false ){                  
+                                            @for((op, iop) <- forma.get().operadores.zipWithIndex){
+                                              <div class="row">  
+                                                  <div class="col-md-8">
+                                                       <div class="form-group">
+                                                          <select name="operadores[@iop].personal.id" class="form-control">
+                                                                @for((a,b)<-models.Personal.optionsOperadoresSala()){
+                                                                    <option value="@a" @if(Long.parseLong(a)==op.personal.id){selected}  >@b</option>
+                                                                }
+                                                          </select>
+                                                          <div class="help-block with-errors"></div>
+                                                      </div>
+                                                  </div>
+                                                  <div class="col-md-4">
+                                                      <input type="radio" id="operadores_@(iop)_turno_M" name="operadores[@iop].turno" value="M"  required @if(op.turno == "M"){checked}>
+                                                      <label for="operadores_@(iop)_turno_M">Matutino </label>
+                                                      
+                                                      <input type="radio" id="operadores_@(iop)_turno_V" name="operadores[@iop].turno" value="V"  required @if(op.turno == "V"){checked}>
+                                                      <label for="operadores_@(iop)_turno_V">Vespertino </label>
+                                                      
+                 
+                                                      
+                                                      <div class="help-block with-errors">e</div>
+                                                  </div>
+                                              </div>                                         
+                                            }       
+                                          }     
+                                    }           
+                                </div>
+                            </div>  
+                            <div class="row" id="divMantto">
+                                <div class="col-xs-12">
+                                    <h2>Mantenimiento <a id="agregarMantto" href="" data-toggle="popover" data-content="Agregar mantenimiento">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a></h2>
+                                </div>
+                                <div id="divTablaMantto">                                
+
+                               </div> 
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+            
+
+      
+            
+        </fieldset>
+        
+        

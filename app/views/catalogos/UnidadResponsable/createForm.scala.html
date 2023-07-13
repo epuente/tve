@@ -1,0 +1,46 @@
+@(urForm: Form[UnidadResponsable])
+@import helper._
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
+
+@main {
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+              <li><a href="@routes.AdminUnidadResponsableController.list()">Unidades Responsables</a></li>
+              <li>Agregar</li>
+            </ol>
+        </div>
+    </div>    
+    <h1>Agregar Unidad Responsable</h1>
+    @form( CSRF(routes.AdminUnidadResponsableController.save()), 'role->"form") {
+        
+        @UnidadResponsableForm(urForm)
+        
+        <br/><br/>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div style="width: 60%" class="center-block">
+                    <input type="submit" value="Agregar" class="btn btn-primary btn-block">
+                </div>
+                
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div style="width: 60%" class="center-block">
+                    <a href="@routes.AdminUnidadResponsableController.list()" class="btn btn-warning btn-block">Cancelar</a>
+                </div>
+            </div>
+        </div>
+
+        
+    }
+    
+}
+
+<script type="text/javascript">
+    $(function() {
+        $('form').validator();
+    });
+</script>
+<script src="@routes.Assets.at("javascripts/agenda.js")"></script>
+<script src="@routes.Assets.at("javascripts/general.js")"></script>
+

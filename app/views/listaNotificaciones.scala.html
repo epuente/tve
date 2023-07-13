@@ -1,0 +1,56 @@
+@(lista : List[classes.Notificaciones.AuxNotificacion])
+
+<html>
+    <body>
+    <script src="/assets/gentelella/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/javascripts/async.js"></script>
+    Registros: @lista.size()
+    </br></br></br>
+    <button onclick="javascript:recargar()">Recargar</button>
+    </br></br></br>
+    <table border="1px">
+        <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Roles</th>
+                <th>PersonalId</th>
+                <th>Fase</th>
+                <th>Descripcion</th>
+                <th>Liga</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(l<-lista){
+            <tr>
+                <td>@l.tipoNotificacion</td>
+                <td>
+                    @for(r<-l.roles){
+                        @r</br>
+                    }
+                </td>
+                <td>@l.personalId</td>
+                <td>@l.fase</td>
+                <td>@l.descripcion</td>
+                <td>@l.liga</td>
+                <td>@l.fecha</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+
+    <script type="text/javascript">
+        function recargar(){
+                $aux = LlamadaAjax("/recargar", "POST", JSON.stringify({}));
+                $.when ($aux).done(function(){
+                    location.reload();
+                });
+
+                }
+    </script>
+    </body>
+</html>
+
+
+

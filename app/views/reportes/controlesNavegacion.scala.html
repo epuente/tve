@@ -1,0 +1,116 @@
+
+
+
+	<div class="row" >
+		<div class="col-sm-12 col-md-12 col-lg-12" id="divMenuInterno">
+		
+			<div class="row">
+				<div class="col-sm-12 block">
+					<div class="btn-group" role="group" aria-label="...">
+					  <button type="button" class="btn btn-default small" name="btnNavega" id="btnNavegaAnio">Año</button>
+					  <button type="button" class="btn btn-default small" name="btnNavega" id="btnNavegaSemestre"> Semestre</button>
+					  <button type="button" class="btn btn-default small" name="btnNavega" id="btnNavegaTrimestre">Trimestre</button>
+					  <button type="button" class="btn btn-default small" name="btnNavega" id="btnNavegaMes">Mes</button>
+					  <button type="button" class="btn btn-default small" name="btnNavega" id="btnNavegaSemana">Semana</button>
+					</div>
+				</div>				
+			</div>		
+			<hr>		
+		
+		
+			<div class="row" id="controlNavegaAnio">
+				<div class="col-sm-2 tituloControl">
+					Año
+				</div>
+				<div class="col-sm-10">
+					<div class="center-block">
+					<a href="javascript:void(0)" id="sabanaNavegaAnioMenos"><i class="fas fa-chevron-left"></i></a>
+					&nbsp;&nbsp;<span id="divAnio"></span>&nbsp;&nbsp;
+					<a href="javascript:void(0)" id="sabanaNavegaAnioMas"><i class="fas fa-chevron-right"></i></a>
+					</div>				
+				</div>
+			</div>
+			<div class="row" id="controlNavegaSemestre">
+				<div class="col-sm-2 tituloControl">
+				Semestre
+				</div>
+					<div class="col-sm-10">
+						<div class="center-block">
+						<a href="javascript:void(0)" id="sabanaNavegaSemestreMenos"><i class="fas fa-chevron-left"></i></a>&nbsp;&nbsp;<span id="divSemestre"><span data-semestre='0'></span></span>&nbsp;&nbsp;<a href="javascript:void(0)" id="sabanaNavegaSemestreMas"><i class="fas fa-chevron-right"></i></a>
+							
+							
+						</div>				
+					</div>	
+				
+				</div>
+				
+				<!-- 
+				
+				
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-sm-12 block">
+							<div class="btn-group" role="group" aria-label="...">
+							  <button type="button" class="btn btn-default small" name="btnNavegaSem" id="btnNavegaSem1">Enero.Junio</button>
+							  <button type="button" class="btn btn-default small" name="btnNavegaSem" id="btnNavegaSem2">Julio-Diciembre</button>
+							</div>
+						</div>				
+					</div>	
+				</div>
+			</div>			
+			-->
+			
+			
+			
+			
+			
+			<div class="row" id="controlNavegaTrimestre">
+				<div class="col-sm-2 tituloControl">
+					Trimestre
+				</div>
+				<div class="col-sm-10">
+					<a href="javascript:void(0)" id="sabanaNavegaTrimestreMenos"><i class="fas fa-chevron-left"></i></a>
+					&nbsp;<span id="divTrimestre">
+					
+					<span></span>
+					
+					
+					   </span>&nbsp;<a href="javascript:void(0)" id="sabanaNavegaTrimestreMas"><i class="fas fa-chevron-right"></i></a>
+				</div>
+			</div>	
+			<div class="row" id="controlNavegaMes">
+				<div class="col-sm-2 tituloControl">
+				Mes
+				</div>
+				<div class="col-sm-10">
+					<a href="javascript:void(0)" id="sabanaNavegaMesMenos"><i class="fas fa-chevron-left"></i></a>
+					&nbsp;&nbsp;<span id="divMes"><span></span></span>&nbsp;&nbsp;
+					<a href="javascript:void(0)" id="sabanaNavegaMesMas"><i class="fas fa-chevron-right"></i></a>
+				</div>
+			</div>
+			<div class="row" id="controlNavegaSemana">
+				<div class="col-sm-2 tituloControl">
+				Semana
+				</div>
+				<div class="col-sm-10">
+					<a href="javascript:void(0)" id="sabanaNavegaSemanaMenos"><i class="fas fa-chevron-left"></i></a>
+					&nbsp;&nbsp;<span id="divSemana"><span></span></span>&nbsp;&nbsp;
+					<a href="javascript:void(0)" id="sabanaNavegaSemanaMas"><i class="fas fa-chevron-right"></i></a>
+				</div>
+			</div>					
+			<div class="row">
+				<div class="col-sm-12">
+					<a href="javascript:void(0)" id="sabanaNavegaHoy">Hoy</a>
+				</div>
+			</div>					
+			<hr>
+
+
+			<div id="navegacionFechas"></div>	
+			
+			<button type="button" id="btnImprimirDiv" class="btn btn-default">Imprimir</button>		
+		</div>
+		<div class="col-sm-8 col-md-8 col-lg-8">
+			<div id="divSabana"></div>
+		</div>
+	</div>

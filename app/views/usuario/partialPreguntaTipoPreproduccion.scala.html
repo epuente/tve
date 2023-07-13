@@ -1,0 +1,16 @@
+@if( session.get("rolActual")=="100" ||
+session.get("rolActual")=="1" ){
+	<div class="panel panel-default" name="preguntaTipoPreproduccion">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-12">
+					<label class="radio-inline"> <input name="rgTipoPreprod"
+						value="1" type="radio"> Junta de trabajo
+					</label> <label class="radio-inline"> <input name="rgTipoPreprod"
+						value="2" type="radio"> Scouting
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+}

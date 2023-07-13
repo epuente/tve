@@ -1,0 +1,87 @@
+LOS ROLES ORIGINALES ................
+
+
+1	Administrador
+10	Solo consulta
+11	Digitalizador
+14	Prueba
+16	Operador de sala
+100	Productor
+125	Admin Servicios
+126	Ejecutivo
+127	Autoridad
+
+
+
+QUEDAN COMO ................
+
+
+1	Administrador
+10	Ingeniero
+11	Resp. Digitalizado
+12	Resp. Diseño
+13	Guionista
+14	Camarógrafo
+15	Locutor
+16	Operador de sala
+17	Chofer
+100	Productor
+126	Ejecutivo
+127	Jefe Depto
+
+
+AMBITO
+
+1	Administración Depto
+2	Administración
+3	Agendado
+4	Emisión de Reportes
+
+
+ROL_DERECHO
+id	rol_id	ambito_id	lectura	escritura	ejecucion
+1	1		1			1		1			1
+4	10		3			1		0			0
+6	11		3			1		0			0
+7	12		3			1		0			0
+8	13		3			1		0			0
+9	14		3			1		0			0
+10	15		3			1		0			0
+11	16		3			1		0			0
+17	17		3			1		0			0
+3	100		3			1		1			1
+25	126		1			1		0			0
+2	127		2			1		1			1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

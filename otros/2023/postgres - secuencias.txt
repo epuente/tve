@@ -1,0 +1,12 @@
+Por alguna razón al intentar agregar registros en la tabla operador_sala, se generaba un error diciendo de una violacion de unicidad en la llave primaria.
+
+revisé el codigo y estaba correcto, al ejecutar el siguiente comando desde una consola de sql se corrigió.
+
+select setval('operador_sala_seq', (SELECT MAX(id) + 1 FROM operador_sala));
+
+
+select setval('cuenta_rol_seq', (SELECT MAX(id) + 1 FROM cuenta_rol));
+
+select setval('cuenta_seq', (SELECT MAX(id) + 1 FROM cuenta));
+
+

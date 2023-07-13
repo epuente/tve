@@ -1,0 +1,311 @@
+@(id:Long, forma: Form[Sala], roles:List[Rol], tipo:String)
+@import helper._
+
+@main {
+    <div class="row">
+       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+              <li><a href="@routes.AdminSalaController.list()">Salas</a></li>
+              <li>Editar</li>
+            </ol>
+        </div>
+    </div>
+        
+    <h1>Editar Sala</h1>
+    @form( CSRF(routes.AdminSalaController.delete(id)), 'id->"frmAuxSala") {
+    }
+    @form(CSRF(routes.AdminSalaController.list()), 'role->"form", 'id->"frm") {
+        @salaForm(forma, roles, "edit")                
+        <div class="row">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                    <input type="button" value="Actualizar" class="btn btn-primary btn-block" id="btnActualizaSala">
+                </div>
+                
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                    <a href="@routes.AdminSalaController.list()" class="btn btn-warning btn-block">Cancelar</a>
+                </div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                        <input type="button" class="btn btn-danger btn-block" value="Eliminar" id="btnEliminar">
+                </div>
+            </div>            
+        </div>      
+    
+    
+
+    
+    }
+    
+    
+    
+}
+
+<script type="text/javascript">
+    $(function() {
+        $("#filtroOpera").click();
+        $('form').validator();
+        //Ajustar el minDate
+        $("[name='mantenimiento.desde']").each(function(i, e){
+        	$("[name='mantenimiento.hasta'][data-timestamp='"+$(this).data('timestamp')+"']").bootstrapMaterialDatePicker('setMinDate', $(e).val());        	
+        });
+	
+ 		$('select[name="selectLocutoresDisponiblesMat"]').bootstrapDualListbox({
+	   		nonSelectedListLabel: 'Operadores turno matutino disponibles',
+	   	  	selectedListLabel: 'Operadores asignados a la sala',
+	   	  	showFilterInputs: false,
+	   	  	infoText: 'Mostrando {0}',
+	   	  	infoTextEmpty: 'No hay ninguna selección',
+	   	  	removeAllLabel: false,
+	   	 	selectorMinimalHeight: 50
+    	});	
+ 		
+ 		$('select[name="selectLocutoresDisponiblesVesp"]').bootstrapDualListbox({
+	   		nonSelectedListLabel: 'Operadores turno vespertino disponibles',
+	   	  	selectedListLabel: 'Operadores asignados a la sala',
+	   	  	showFilterInputs: false,
+	   	  	infoText: 'Mostrando {0}',
+	   	  	infoTextEmpty: 'No hay ninguna selección',
+	   	  	removeAllLabel: false,
+	   	 	selectorMinimalHeight: 50
+    	});	
+	
+ 		$('.moveall, .removeall').hide();
+	
+		var $opsM = LlamadaAjax("/ajaxPersonalActivoPorRolTurno", "POST", JSON.stringify({id:16, turno:"M"}));
+		var $opsV = LlamadaAjax("/ajaxPersonalActivoPorRolTurno", "POST", JSON.stringify({id:16, turno:"V"}));
+		$.when($opsM, $opsV).done(function(dataM, dataV){
+			console.dir(dataM)
+			console.dir(dataV)
+			$.each(dataM, function(i,e){			
+				$('select[name="selectLocutoresDisponiblesMat"]').append("<option value='"+e.id+"'>"+e.nombre+" "+e.paterno+" "+e.materno+"</option>");
+			});
+			
+			$.each(dataV, function(j,f){			
+				$('select[name="selectLocutoresDisponiblesVesp"]').append("<option value='"+f.id+"'>"+f.nombre+" "+f.paterno+" "+f.materno+"</option>");
+			});
+			
+			$('select[name="selectLocutoresDisponiblesMat"]').bootstrapDualListbox("refresh");
+			$('select[name="selectLocutoresDisponiblesVesp"]').bootstrapDualListbox("refresh");
+            console.log("cantidad options.... "+$("select[name='selectLocutoresDisponiblesMat'] option").length)
+	        leer();
+		});
+    });
+
+	 $("#btnActualizaSala").click(function(){
+        $("#divTablaMantto.row").each(function(i,e){
+            alert("linea "+i);
+        });
+        
+        // Pasar a object y despues enviar como Json
+        var sala = {};
+        var operadores = [];
+        var manttos = [];
+        
+        sala["id"] = $("input[name='id']").val();
+        sala["descripcion"] = $("input[name='descripcion']").val();
+        var ii =0;
+        $.each($('select[name="selectLocutoresDisponiblesMat"] option:selected') , function(i,e){
+        	var personal = {};
+        	personal = {"personal": { "id":$(e).val()}, "turno": "M"};
+        	operadores[ii++] = personal;
+        });
+        $.each($('select[name="selectLocutoresDisponiblesVesp"] option:selected') , function(i,e){
+        	var personal = {};
+        	personal = {"personal": { "id":$(e).val()}, "turno": "V"};
+        	operadores[ii++] = personal;
+        });        
+        
+        $.each($('#divTablaMantto div.row'), function(irenglon, renglon){
+        		var mantto = {};
+        		console.log("-"+$(renglon).find('input[name="mantenimiento.desde"]').val())
+        		mantto = {"desde": moment($(renglon).find('input[name="mantenimiento.desde"]').val(),"DD/MM/YYYY HH:mm").format("YYYY-MM-DD[T]HH:MM:00.000[Z]")
+        				,"hasta": moment($(renglon).find('input[name="mantenimiento.hasta"]').val(),"DD/MM/YYYY hh:mm").format("YYYY-MM-DD[T]HH:MM:00.000[Z]")
+        				,"tipo": {id : $(renglon).find('select[name="mantenimiento.tipo.id"] option:selected').val()}
+        				,"motivo": $(renglon).find('input[name="mantenimiento.motivo"]').val()};
+        		manttos[irenglon] = mantto;
+        });        
+        
+        sala["operadores"] = operadores;
+        sala["mantenimiento"] = manttos;
+        
+        
+        console.dir (sala)
+        
+        
+
+        var $t=LlamadaAjax("/salaupdate2","POST", JSON.stringify(sala));
+        $.when($t).done(function(data){
+        	console.log(data)
+        	if (data.estado!="actualizado"){
+                swal(
+                        'Error',
+                        'Ocurrió un error al inetntar actualizar',
+                        'error'              		
+                      )    
+        	} else {
+                swal(
+                        'Actualizado',
+                        'Se actualizó correctamente la información de la sala',
+                        'success'
+                      )
+                setTimeout(
+                		  function() 
+                		  {
+                              $("#frm").submit();                      
+                		  }, 2000);
+        	}
+        });
+
+    });
+	 
+
+    $("#btnEliminar").click(function(){
+    	console.log("frmAuxSala submit")
+        $("#frmAuxSala").submit();
+    });    
+
+    
+    
+    $("#filtroOpera, #filtroMantto").click(function(){
+        toggleFiltro(this);
+        
+        
+    });    
+    
+    function toggleFiltro(e){       
+    	
+    	$(e).parent().children(":first").css("border-bottom","3px solid #F2F2F2");
+        $("div[name='filtroEdo']").css("font-weight", "normal");
+        $("div[name='filtroEdo']").css("border-bottom","3px solid #F2F2F2");
+        $(e).css("font-weight", "bold");
+        $(e).css("border-bottom","3px solid "+$(e).css("color"));
+        $("#divOperador").toggle( $(e).prop("id")=="filtroOpera"  );
+        $("#divMantto").toggle( $(e).prop("id")=="filtroMantto"  );
+    }
+        
+    
+    $("#agregarMantto").click(function(e){
+        e.preventDefault();
+        var unico = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now();
+        $("#divTablaMantto").append(
+                '<div class="row">'
+                    +'<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">'
+                        +'<input type="hidden" name="mantenimiento.sala" value="">'
+                        //+'<input type="datetime-local" name="mantenimiento.desde" value="" class="form-control">'
+						+'<input type="text" name="mantenimiento.desde" class="form-control floating-label" placeholder="Desde" data-timestamp='+unico+'>'
+					    //+'<input type="datetime-local" name="nada" value="" class="form-control">'
+					    //+'<input type="date" name="mantenimiento.desde" value="" class="form-control">'
+                    +'</div>'
+                    +'<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">'
+                      //  +'<input type="datetime-local" name="mantenimiento.hasta" value="" class="form-control">'
+                      	+'<input type="text" name="mantenimiento.hasta" class="form-control floating-label" placeholder="Hasta"data-timestamp='+unico+'>'
+                    +'</div>'
+                    +'<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">'
+                        +'<select name="mantenimiento.tipo.id" class="form-control">'
+                        +'<option class="blank" value="">-- Seleccione tipo mantto. --</option>'
+                           @for( (a, b)<-models.TipoMantenimiento.options()){
+                               +'<option value=@a>@b </option>'
+                           } 
+                        +'</select>'              
+                    +'</div>'                    
+                    +'<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">'
+                        +'<input type="text" name="mantenimiento.motivo" placeholder="Descipción" class="form-control">'
+                    +'</div>'
+
+                    +'<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">'
+                        +'<h5 id="homeTitle" class="text-danger">Eliminar<a href="javascript:eliminaMantto('+$("#divTablaMantto div.row").length+')" data-toggle="popover" data-content="Eliminar mantenimiento" class="text-danger" id="btnEliminarMantto">  <i class="fa fa-minus-circle" aria-hidden="true"></i> </a></h5>'
+                    +'</div>'                   
+                +'</div>');
+        
+        
+		$('[data-timestamp="'+unico+'"]').bootstrapMaterialDatePicker
+		({
+			format: 'D/M/YYYY HH:mm',
+			//format: 'YYYY-MM-DD HH:mm:ss',
+			lang : 'es',        
+			shortTime: true,
+			nowButton: true,
+			nowText: "Hoy",
+			switchOnClick: true,
+			cancelText: "Cancelar"
+		}).on("change", function(e, date){
+			$("[name='mantenimiento.hasta'][data-timestamp='"+$(this).data('timestamp')+"']").bootstrapMaterialDatePicker('setMinDate', date);
+		});        
+    });
+    
+    
+    function leer(){
+        @if(tipo=="edit"){
+            @if(forma.get().mantenimiento.isEmpty == false ){            	
+                @for((mn, imn) <- forma.get().mantenimiento.zipWithIndex){
+                    $("#agregarMantto").click();
+					$("#divTablaMantto input[name='mantenimiento.desde']:last").val(  "@("%1$td/%1$tm/%1$tY %1$tH:%1$tM".format(mn.desde))"   );                    
+                  	$("#divTablaMantto input[name='mantenimiento.hasta']:last").val(  "@("%1$td/%1$tm/%1$tY %1$tH:%1$tM".format(mn.hasta))"   );                    
+                    $("#divTablaMantto select[name='mantenimiento.tipo.id']:last").val(  "@mn.tipo.id"   );
+                    $("#divTablaMantto input[name='mantenimiento.motivo']:last").val(  "@mn.motivo"   );
+                }       
+              }   
+            
+			// Operadores selecionados turno matutino            
+            @if(forma.get().operadores.isEmpty == false ){            	
+                @for((mn, imn) <- forma.get().operadores.zipWithIndex){
+                	@if(mn.turno=="M"||mn.turno=="A"){
+                		$("select[name='selectLocutoresDisponiblesMat'] option[value='@mn.personal.id']").prop("selected", true);
+                	}
+                }
+                $("select[name='selectLocutoresDisponiblesMat']").bootstrapDualListbox("refresh");
+              }
+			// Operadores selecionados turno vespertino            
+            @if(forma.get().operadores.isEmpty == false ){            	
+                @for((mn, imn) <- forma.get().operadores.zipWithIndex){
+                	@if(mn.turno=="V"||mn.turno=="A"){
+                		$("select[name='selectLocutoresDisponiblesVesp'] option[value='@mn.personal.id']").prop("selected", true);
+                	}
+                }
+                $("select[name='selectLocutoresDisponiblesVesp']").bootstrapDualListbox("refresh");
+              }   			
+        }
+    }
+    
+    
+    function eliminaMantto(op){
+        $("#divTablaMantto div.row:eq("+op+")").remove();
+    }
+    
+
+/*     $(document).on("change", '[name="mantenimiento.desde"], [name="mantenimiento.hasta"]', function(e, date){
+    	alert("aqui");
+		if ( $(this).attr("name")=="mantenimiento.desde"  ){
+			$("[name='mantenimiento.hasta'][data-timestamp='"+$(this).data('timestamp')+"']").bootstrapMaterialDatePicker('setMinDate', date);
+		}
+    }); */
+    	
+    	
+    
+    	
+        
+    
+</script>
+
+
+
+
+
+	<link rel="stylesheet" href="@routes.Assets.at("bootstrap-material-datetimepicker-gh-pages/css/bootstrap-material-datetimepicker.css")" />
+		<link href='http://fonts.googleapis.com/css?family=Roboto:400,500' rel='stylesheet' type='text/css'>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	
+    
+	<script src="@routes.Assets.at("javascripts/async.js")"></script>	
+	<script src="@routes.Assets.at("javascripts/general.js")"></script>
+	<script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.js"></script>
+	<script type="text/javascript" src="@routes.Assets.at("bootstrap-material-datetimepicker-gh-pages/js/bootstrap-material-datetimepicker.js")"></script>     
+    
+	<link type="text/css" href="@routes.Assets.at("bootstrap-duallistbox/bootstrap-duallistbox.min.css")" rel="stylesheet">
+	<script src="@routes.Assets.at("bootstrap-duallistbox/jquery.bootstrap-duallistbox.min.js")"></script>
+

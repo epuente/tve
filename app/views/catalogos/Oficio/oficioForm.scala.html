@@ -1,0 +1,276 @@
+@(forma: Form[Oficio])
+@import helper._        
+        
+<fieldset>
+	<div class="row">
+		<!--Primer columna-->
+		<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+			<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-body">
+				    	<div class="row">
+				    		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 form-group">
+				    			@inputText(forma("oficio"), '_label -> "Número de oficio", '_help -> "", 
+				    			              'class->"form-control validaLongitud", 'required->true,
+				    			              'maxlength->"25",
+				    			              'placeholder->"Ejemplo: DIR/DEV/820/2017"
+				    			              
+				    			)
+				    			<div class="help-block with-errors"></div>
+				    		</div>
+				    		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 form-group">
+					    		@inputText(forma("titulo"), '_label -> "Título", '_help -> "", 'class->"form-control validaLongitud",
+					    			  'maxlength->"150",
+					    		      'placeholder->"Ejemplo: Las matemáticas en el mundo"
+					    		)
+					    		<div class="help-block with-errors"></div>
+				    		</div>					    		
+				    	</div>
+				    	<div class="row">
+				    		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+				    			@inputText(forma("descripcion"), '_label -> "Descripción", '_help -> "", 'class->"form-control validaLongitud", 'required->true,
+				    				  'maxlength->"600",
+				    			      'placeholder->"Ejemplo: Se solicita la grabación de la conferencia magistral que se efectuará en el auditorio principal 'Las matemáticas en el mundo'"
+				    			)
+				    			<div class="help-block with-errors"></div>
+				    		</div>
+		    		
+				    	</div>
+	        			<div class="row">
+	        				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+	     				        @select(
+					                forma("urremitente.id"), 
+					                options(models.UnidadResponsable.options), 
+					                '_label -> "Unidad Responsable que solicita el servicio", '_default -> "-- Seleccione Unidad Responsable solicitante --",
+					                '_showConstraints -> false,
+					                'class->"form-control",
+					                'required->true
+					            )
+					            <div class="help-block with-errors"></div>
+	        				</div>
+	        			</div>
+	            		<div class="row">
+	            			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 form-group">
+	            				@inputDate(forma("fecharemitente"), '_label -> "Fecha del oficio", '_help -> "", 'class->"form-control", 'required->true)
+	            				<div class="help-block with-errors"></div>
+	            			</div>
+	            			<div id="divfecharecibidoupev" class="col-xs-12 col-sm-12 col-md-4 col-lg-4 form-group">
+	            				@inputDate(forma("fecharecibidoupev"), '_label -> "Recibido en la DEV", '_help -> "", 'class->"form-control", 'required->true )
+	            				<div class="help-block with-errors"></div>
+	            			</div>
+	            			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 form-group">
+	            				@inputDate(forma("fecharecibidodtve"), '_label -> "Recibido en DTVE", '_help -> "", 'class->"form-control", 'required->true)
+	            				<div class="help-block with-errors"></div>
+	            			</div>	            			
+	            		</div>      					
+					</div>
+				</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				  <div class="panel panel-default">
+				    <div class="panel-body">
+				    	<h3>Productores solicitados</h3>
+			    		<div class="row">
+					    	@for((key, value) <- models.Personal.optionsProductores()) {
+				    			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+				    				<table>
+				    					<tr>
+				    						<td valign="baseline">
+					    						<input type="checkbox" id="auxProductores_@key" name="auxProductores[]" value="@key" label="Servicios">&nbsp;
+				    						</td>
+				    						<td valign="baseline">
+												<small>@value</small>
+				    						</td>				    						
+				    					</tr>
+				    				</table>
+				    			</div>
+							}
+						</div>						    
+				    </div>
+			      </div>
+			      </div>
+			</div>
+		</div>
+
+		<!--Segunda columna -->
+		<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-body">
+					    	<h3>Servicios solicitados</h3>	      	
+				    	    <div class="form-group">	
+				    	    	<div class="row">
+								    	@for((key, value) <- models.Servicio.options()) {
+								    		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+									    		<table>
+										    		<tr>
+										    			<td valign="baseline">
+										    				<input type="checkbox" id="auxServicios_@key" name="auxServicios[]" value="@key" label="Servicios">&nbsp;
+										    			</td>
+										    			<td valign="baseline">
+										    				@value
+										    			</td>
+									    			</tr>								    			
+									    		</table>
+									    	</div>
+										}
+														    	    		
+				    	    	</div>
+				    	    	<br>	
+				    	    	<div class="help-block with-errors"></div>				    	    	
+				    			<div class="row" id="FechasGrabacion" style="display:none">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						              <div class="panel panel-default">
+						                <div class="panel-body">	
+											<h5>Fechas para grabación<a href="javascript:agregarFechaGrabacion()" data-toggle="popover" data-content="Agregar fecha de grabación" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a></h5>
+						                    <div id="divFechasGrabacion">
+						                    </div>			                
+						                </div>
+						              </div>						
+									</div>
+								</div>									    	
+				    	    	
+				    	    	
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div>		
+	    	<div class="row">
+   				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+ 			  			<div class="panel panel-default">
+		    			<div class="panel-body">
+					    	<h3>Contactos <a href="javascript:agregarContacto()" data-toggle="popover" data-content="Agregar contacto" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a></h3>
+					    	<div id="divContactos">
+					    	</div>
+		    			</div>
+		  			</div>
+       			</div>
+   			</div>
+		</div>
+
+		<!-- Tercer columna -->
+		<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<h3>Archivos</h3>
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5" >
+									<a href="javascript:listaArchTipo(1)"><small>1 Oficio 1</small></a></br>
+									<a href="javascript:listaArchTipo(2)"><small>2 Oficio de respuesta 1</small></a></br>
+									<a href="javascript:listaArchTipo(3)"><small>3 Minuta de acuerdos 3</small></a></br>
+									<a href="javascript:listaArchTipo(4)"><small>4 Guión o escaleta 10</small></a></br>
+									<a href="javascript:listaArchTipo(5)"><small>5 Entrada/salida material 1</small></a></br>
+									<a href="javascript:listaArchTipo(6)"><small>6 Bitácora 10</small></a></br>
+									<a href="javascript:listaArchTipo(7)"><small>7 Evidencia de entrega 1</small></a></br>
+									<a href="javascript:listaArchTipo(8)"><small>8 Encuesta satisfacción 1</small></a></br>
+								</div>
+								<div class="col-xs-12 col-sm-12 col-md-7 col-lg-7" style="border-left: thin double #C0C0C0;">
+									<div id="ajaxEdoInicialArchivos"></div>
+								</div>
+							</div>
+
+
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					@textarea(forma("observacion"), '_label -> "Observaciones", '_help -> "",
+					'class->"form-control validaLongitud",
+					'maxlength->"600",
+					'placeholder->"Ejemplo: En el oficio no se especifica el lugar de grabación."
+
+					)
+					<div class="help-block with-errors"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</fieldset>
+   
+<div hidden="true">
+	<div id="baseContacto">
+		<div class="row" style="padding: 10px;" >
+			<div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 form-group">
+				@inputText(forma("auxContactos"), '_label -> "Nombre", '_help -> "",'id->"",				    
+				    'class->"form-control validaLongitud",	
+				    'maxlength->"150",			    
+				    'placeholder->"Nombre del contacto"
+				)
+				<div class="help-block with-errors"></div>
+			</div>
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 form-group">
+                <br><br>
+                    <a name="aEliminarContacto"  href="javascript:void(0);" class="text-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
+                
+            </div>
+		</div>
+	
+        <div class="row" style="padding: 10px">
+        
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+              <div class="panel panel-default" name="panelTelefonos">
+                <div class="panel-body">
+                    <h5>Teléfono <a href="javascript:void(0);" name="aAgregarTelefono" data-toggle="popover" data-content="Agregar teléfono al contacto" class="text-success validaLongitud" maxlength="25">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a></h5>
+                    <div name="divContactoTelefono">
+                    </div>
+                </div>
+              </div>            
+            </div>
+	        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+	              <div class="panel panel-default" name="panelCorreos">
+	                <div class="panel-body">
+	                    <h5>Correo <a href="javascript:void(0);" name="aAgregarCorreo" data-toggle="popover" data-content="Agregar correo al contacto" class="text-success validaLongitud" maxlength="50">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a></h5>
+	                    <div name="divContactoCorreo">
+	                    </div>                
+	                </div>
+	              </div>         
+	        </div>
+        
+        
+        </div>	
+	</div>
+	
+</div>
+
+<div id="divBaseArchivo">
+	<div id="BaseArchivo">
+		<div class="row">
+			<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9" >
+				<div style="overflow:hidden; display:none" id="txtArchivo-0-0" >
+					<small>nombreDelArchivo.ext</small>
+				</div>
+				<input type="file" id="fileOficioArchivo-0-0" data-error="Seleccione un archivo." style="display:none;">
+			</div>
+			<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 center-block" style="display:none">
+				<a style="cursor:hand"><i class="far fa-eye"></i></a>
+			</div>
+			<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 center-block" style="display:none">
+				<a style="cursor:hand"><i class="fas fa-file-upload"></i></a>
+			</div>
+			<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 center-block" style="display:none">
+				<a style="cursor:hand"><i class="fas fa-minus-circle"></i></a>
+			</div>
+		</div>
+	</div>
+</div>
+
+        
+        
+        

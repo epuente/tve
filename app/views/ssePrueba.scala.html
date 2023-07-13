@@ -1,0 +1,30 @@
+
+
+@main{
+    <script type="text/javascript">
+        console.log("...")
+        if (!!window.EventSource) {
+            console.log("/java/eventSource/sse")
+            //var stringSource = new EventSource("/java/eventSource/sse");
+            //var stringSource = new EventSource("//localhost:9000/java/eventSource/sse");
+
+            var stringSource = new EventSource("/sse");
+
+             stringSource.addEventListener('message', function(  e  ) {
+                console.dir(e)
+                $('#clock').html(e.data.replace(/(\d)/g, '<span>$1</span>'))
+            });
+            stringSource.addEventListener("notice", (e) => {
+              console.log("NOTICE "+e.data);
+            });
+            stringSource.addEventListener("aviso", (e) => {
+              console.log("aviso ")
+              console.dir(e)
+              console.dir(e.data)
+            });
+            } else {
+                $("#clock").html("Sorry. This browser doesn't seem to support Server sent event. Check <a href='http://html5test.com/compare/feature/communication-eventSource.html'>html5test</a> for browser compatibility.");
+            }
+    </script>
+
+}

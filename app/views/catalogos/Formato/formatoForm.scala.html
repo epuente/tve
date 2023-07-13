@@ -1,0 +1,17 @@
+@(forma: Form[Formato], roles:List[Rol], tipo:String)
+
+@import helper._
+
+        <fieldset>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                     <div class="form-group">
+                         @inputText(forma("descripcion"), '_label -> "Descripción", 'class->"form-control", 'required->true )
+                         <div class="help-block with-errors"></div>
+                     </div>                        
+                </div>
+            </div>
+
+        </fieldset>
+        
+        

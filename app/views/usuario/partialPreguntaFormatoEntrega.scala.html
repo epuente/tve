@@ -1,0 +1,36 @@
+@(fase:Long)
+
+@numColumnas() = @{
+	12/fase
+}
+
+@formatos() = @{
+	models.Formato.find.all();
+} 
+
+@if(session.get("rolActual")=="1" || session.get("rolActual")=="100" ){
+	<div class="panel panel-default" name="preguntaFormatoSolicitado">
+		<div class="panel-body">
+			<div class="row">
+                    @for(tpf <- formatos()){
+		                      <div class="col-sm-@(12/formatos().length)">
+		                          <div class="form-group">
+		                         	<div style="display:inline">
+	                                    <label class="control-label">                                                                     
+	                                        @tpf.descripcion 
+	                                    </label>
+	                                    <br>
+										<input name="inp_fmto_@tpf.id" type="text" size="1" maxlength="2" class="soloNumerosCero input-sm form-control">
+		                            </div>
+	                               </div>
+	                          </div>                    
+                     }
+			</div>
+            <div class="row">
+                <div class="col-sm-12">
+                        <div class="help-block with-errors"></div>
+                </div>
+            </div>			
+		  </div>
+	  </div>
+  }                        

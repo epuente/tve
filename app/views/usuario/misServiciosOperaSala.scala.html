@@ -1,0 +1,1191 @@
+@import helper._
+
+@ale() = @{
+	(scala.util.Random).nextInt(1000000);
+}
+
+@main{
+<style>
+.vbottom{
+    position: relative;
+    top: 100%;
+    transform: translateY(-100%); 
+}
+
+.selected {    
+    color: black;
+}
+
+
+.filtrado {
+    background-color:#ffffcc;
+}
+
+
+
+</style>
+
+@ventanasModales()    
+    <div class="row">
+        <div class="col-sm-12"><h1>Servicios operador de sala</h1></div>
+    </div>
+    @views.html.flashes()
+        <div class="row block-center">
+            <div class="col-md-7 col-sm-7 col-xs-7 vbottom"></div>
+            <div class="col-md-1 col-sm-1 col-xs-1 vbottom" id="filtro*"   name="filtroEdo" style="padding-bottom:5px; cursor:pointer; vertical-align:baseline;">Todos</div>
+            @if(session.get("rolActual")=="1" || session.get("rolActual")=="100"  ){
+            	<div class="col-md-1 col-sm-1 col-xs-1 vbottom" id="filtro4"  name="filtroEdo" style="padding-bottom:5px; cursor:pointer">Por atender</div>
+                <div class="col-md-1 col-sm-1 col-xs-1 vbottom" id="filtro5"  name="filtroEdo" style="padding-bottom:5px; cursor:pointer">Solicitudes</div>
+            
+            }
+            @if(session.get("rolActual")=="16"){
+               <div class="col-md-1 col-sm-1 col-xs-1 vbottom" id="filtro5"  name="filtroEdo" style="padding-bottom:5px; cursor:pointer">Por atender</div>
+            
+            }
+         <!--  <div class="col-md-1 col-sm-1 col-xs-1 vbottom" id="filtro5"  name="filtroEdo" style="padding-bottom:5px; cursor:pointer">Solicitudes</div>   -->
+            <div class="col-md-1 col-sm-1 col-xs-1 vbottom" id="filtro7"  name="filtroEdo" style="padding-bottom:5px; cursor:pointer">Autorizados</div>
+            <div class="col-md-1 col-sm-1 col-xs-1 vbottom" id="filtro99" name="filtroEdo" style="padding-bottom:5px; cursor:pointer">Terminados</div>
+        </div>
+    
+        <br><br>
+         @form(routes.ProductorServiciosController.agenda(), 'role->"form", 'id->"frmAux") {
+            @CSRF.formField
+         }
+         
+ 
+         
+         
+         
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <table class="table table-bordered table-striped jambo_table bulk_action order-column" id="tablaMisServicios">               
+                    <thead>
+                        <tr>
+                            <th>Número folio</th>
+                            <th>Remite</th>
+                            <th>Descripcion</th>
+                            
+                            <th>Productores</th>
+                            <th>Estado</th>
+                            <th>Estado3</th>
+                        </tr>
+                    </thead>
+                </table>            
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="min-height:300px;">
+                <h4><div id="tituloDetalle" style="display: inline;"></div></h4>
+                
+                <table class="table table-bordered table-striped jambo_table bulk_action order-column dataTable no-footer" id="tablaMisServiciosDetalle">               
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Salida</th>                            
+                            <th>Desde</th>
+                            <th>Hasta</th>
+                            <th>Fase</th>                            
+                            <th>Estado</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>            
+            </div>            
+        </div>
+    
+
+        
+    
+    
+    
+    
+}
+
+
+
+<script>
+	var aleatorio = @ale();
+    var laTablaDTSS;
+    var laTablaDTSSDetalle;
+    const arrUsosCabina = {C:'Calificación', R:'Revisión', M:'Musicalización', V:'Voz en off', I:'Ingesta'}
+    var rolActual = '@session.get("rolActual")';
+
+    $(function(){
+        $('.popover').popover();
+        $('[data-toggle="popover"]').popover();
+        
+        moment.locale('es');
+        
+
+        $('[data-toggle="popover"], .popover').popover({
+            delay: {show:1000}
+        });
+
+
+        $.notifyDefaults({
+			type: 'success',
+			newest_on_top: true,
+			z_index: 999000
+		});
+
+ 		$('select[name="selectLocutoresDisponibles"]').bootstrapDualListbox({
+	   		nonSelectedListLabel: 'Locutores disponibles',
+	   	  	selectedListLabel: 'Locutores seleccionados',
+	   	  	showFilterInputs: false,
+	   	  	infoText: 'Mostrando {0}',
+	   	  	infoTextEmpty: 'No hay ninguna selección',
+	   	  	removeAllLabel: false
+
+    	});
+
+        $('select[name="selectRDisenioDisponibles"]').bootstrapDualListbox({
+            nonSelectedListLabel: 'Rsponsables diseño disponibles',
+            selectedListLabel: 'R Diseño seleccionados',
+            showFilterInputs: false,
+            infoText: 'Mostrando {0}',
+            infoTextEmpty: 'No hay ninguna selección',
+            removeAllLabel: false
+
+        });
+
+
+ 		$('select[name="selectEquipoAccesoriosDisponibles"]').bootstrapDualListbox({
+	   		nonSelectedListLabel: 'Equipo y accesorios disponibles',
+	   	  	selectedListLabel: 'Equipo y accesorios seleccionados',
+	   	  	showFilterInputs: false,
+	   	  	infoText: 'Mostrando {0}',
+	   	  	infoTextEmpty: 'No hay ninguna selección',
+	   	  	removeAllLabel: false
+    	});
+
+ 		$('select[name="selectVehiculosDisponibles"]').bootstrapDualListbox({
+	   		nonSelectedListLabel: 'Vehículos disponibles',
+	   	  	selectedListLabel: 'Vehículo seleccionado',
+	   	  	showFilterInputs: false,
+	   	  	infoText: 'Mostrando {0}',
+	   	  	infoTextEmpty: 'No hay ninguna selección',
+	   	  	removeAllLabel: false
+    	});
+
+
+ 		$('select[name="selectPersonalDisponibles"]').bootstrapDualListbox({
+	   		nonSelectedListLabel: 'Personal disponible',
+	   	  	selectedListLabel: 'Personal seleccionado',
+	   	  	showFilterInputs: false,
+	   	  	infoText: 'Mostrando {0}',
+	   	  	infoTextEmpty: 'No hay ninguna selección',
+	   	  	removeAllLabel: false
+    	});
+
+		$('.moveall, .removeall').hide();
+
+        swal.setDefaults({
+            confirmButtonText: 'Aceptar',
+            cancelButtonText: 'Cancelar'
+          });
+
+        
+        
+        
+    
+        laTablaDTSS = $('#tablaMisServicios').DataTable( {
+            pageLength: 10,
+            lengthMenu: [  [1,3, 5, 10, 25, 50, -1], [1,3, 5, 10, 25, 50, "Todos"]   ],    
+            language: {
+                url: "@routes.Assets.at("Spanish.json")" 
+            },
+            processing: false,
+            serverSide: true,
+            scrollY: 400,
+            scrollCollapse: false,
+            stateSave: true,
+            scrollX: false,
+            mark: true,
+            ajax: {
+                url:  "/usuario/misServiciosOperaSalaDTSS3",
+                data: { estado: 5 },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            },
+            "columns": [
+                {"data": "folio"},
+                {"data": "ur",          "visible": true,    "searchable": true},
+                {"data": "descripcion"},
+                {"data": "productor",      "visible": true,   "searchable": false,     "sortable":false},
+                {"data": "estado",      "visible": true,   "searchable": false,     "sortable":false},
+                
+                {"data": "id" , "visible": false, "searchable": false},
+                {"data": "estadoId", "visible": false , "searchable": false}
+              ],
+            "initComplete": function(){
+                $("#tablaMisServicios_wrapper div.row div").removeClass("col-sm-6");
+                $("#tablaMisServicios_wrapper div.row div:eq(0)").addClass("col-sm-4");
+                $("#tablaMisServicios_wrapper div.row div:eq(2)").addClass("col-sm-8");
+                $(".dataTables_filter").css("width","auto");  
+                $("input[type='search'].form-control.input-sm").keyup(function(){
+                    if( $(this).val().length >0 ){
+                        $(this).addClass("filtrado");
+                    } else {
+                        $(this).removeClass("filtrado");
+                    }
+                });   
+                seleccionaPrimerRenlon();
+            }
+        } );
+        
+        
+       
+      
+         toggleFiltro( $("#filtro5") );
+         
+         
+         
+         /*
+         $.ajax({
+              url: "@routes.Application.notificaciones",
+              dataType: "json",
+            }).done(function(datos) {
+            		console.log("NOTIFICACION")
+					if (datos!=null)            		
+            			console.dir(datos)
+
+            });
+         */
+         
+         $.notifyDefaults({
+ 			type: 'success',
+ 			newest_on_top: true,
+ 			z_index: 999000
+ 		});         
+         
+    });
+
+    
+    
+
+    
+    $("div [id^='filtro']").click(function(){
+      var estado = $(this).attr('id').substring(6);
+      laTablaDTSS.ajax.url( '/usuario/misServiciosOperaSalaDTSS3?estado='+estado ).load(seleccionaPrimerRenlon);
+      toggleFiltro(this);
+      borrarContenidoDetalle();
+
+  }); 
+    
+
+    function seleccionaPrimerRenlon(){
+    	borrarContenidoDetalle();
+    	if (laTablaDTSS.rows().count()>0){
+	        $("#tablaMisServicios tbody").find("tr:first td:eq(0)").click();  
+	        console.log("seleccionado el primer renglon")
+    	}
+    	
+    } 
+    
+    
+    
+    
+    function toggleFiltro(e){       
+        $("div[name='filtroEdo']").css("font-weight", "normal");
+        $("div[name='filtroEdo']").css("border-bottom","3px solid #F2F2F2");
+        $(e).css("font-weight", "bold");
+        $(e).css("border-bottom","3px solid "+$(e).css("color"));
+
+
+    }
+    
+    
+
+    
+
+    //Al hacer click en la lista de los folios (master) se muestran los servicios agendados (detail) del mismo
+     $("#tablaMisServicios").off("click", "td");
+     $("#tablaMisServicios").on("click", "td", function() {
+    	 
+    	 
+    	 if ( laTablaDTSS.rows().count()==0 )
+    		 return false;
+         $("#tablaMisServicios").find(".selected").removeClass("selected");
+         $(this).parent().hasClass("selected")?$(this).parent().removeClass("selected"):$(this).parent().addClass("selected");
+         $(this).parent().find("td:eq(0)").find("div [id^='fpa_']").css("visibility","visible");
+         var hiddenColumnValue = laTablaDTSS.row( $("#tablaMisServicios").find("tr:eq(2)")  );   
+         var d = laTablaDTSS.rows(   $(this).parent()     ).data();
+         console.log(d)
+         var id = d[0].id
+         var estadoId = d[0].estadoId
+         $.when( LlamadaAjaxBuscaServiciosFolio(id, estadoId)  )
+         .done( function(data){
+        	 console.log(data)
+             if (data.length>0){
+                 if (estadoId == 4){
+                     swal({
+                         title: "¿Que desea hacer?",
+                         html: "<br><input type='button' value='Agendar' class='btn btn-success btn-lg' id='btnSwalAgendar'>"+                       
+                               "<button type='button' class='btn btn-success btn-lg' id='btnSwalDetalle'>Info del Oficio</button>",
+                      //   input: "text",
+                         showCancelButton: true,
+                         cancelButtonText: "Cerrar esta ventana",
+                         showConfirmButton: false,
+                   //    closeOnConfirm: false,
+                         allowOutsideClick: false,
+                         allowEscapeKey: true,
+                         showLoaderOnConfirm: true,
+                         animation: false,
+                         customClass: 'animated bounceInDown',
+                         preConfirm: function () {
+                                return [
+                                  $('#btnSwalAgendar').val(),
+                                  $('#btnSwalInfo').val()
+                                ]
+                              }
+                     });
+                     
+                     $(document).off("click", "#btnSwalAgendar");
+                     $(document).on("click", "#btnSwalAgendar", function(){
+                         swal.close();
+                         $("#frmAux").submit();      
+                     });                     
+                     
+                     
+                     
+                     // Muestra la información detalle del evento
+                     $(document).off("click", "#btnSwalDetalle");
+                     $(document).on("click", "#btnSwalDetalle", function(){
+                         swal.close();
+                         $("#myModalDetalle").modal('show');      
+                         var texto = "";
+                         texto+="<div class='row' style='padding:10px'>";
+                         texto+="    <div class='col-md-3'><strong>Folio:</strong> "+data[0].folio.numfolio+"</div><div class='col-md-9'><strong>Descripcion: </strong>"+data[0].folio.oficio.descripcion+"</div>";
+                         texto+="</div>";
+                         texto+="<div class='row' style='padding:10px'>";
+                         texto+="    <div class='col-md-12'><strong>Oficio:</strong> "+data[0].folio.oficio.oficio+"</div>";
+                         texto+="</div>";                         
+                         texto+="<div class='row' style='padding:10px'>";
+                             if (data[0].folio.oficio.titulo!= null){
+                                   texto+="    <div class='col-md-9'><strong>Título:</strong> "+data[0].folio.oficio.titulo+"</div>";
+                             }
+                         texto+="    <div class='col-md-3'><strong>Fecha entrega:</strong> "+moment(data[0].folio.fechaentrega,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("DD/MM/YYYY")+"</div>";
+                         texto+="</div>";
+
+                         if (data[0].folio.observacion){
+                             texto+="<div class='row' style='padding:10px'>";
+                             texto+="    <div class='col-md-12'><strong>Observación:</strong> "+data[0].folio.observacion+"</div>";
+                             texto+="</div>";                         
+                         }
+                         texto+="<div class='row' style='padding:10px'>";
+                         texto+="    <div class='col-md-9'><strong>Remite/solicita:</strong> "+data[0].folio.oficio.urremitente.nombreLargo+"</div>";
+                         texto+="    <div class='col-md-3'><strong>Fecha oficio:</strong> "+moment(data[0].folio.oficio.fecharemitente,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("DD/MM/YYYY")+"<br><strong>Fecha recibido:</strong> "+moment(data[0].folio.oficio.fecharecibidoupev,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("DD/MM/YYYY")+"</div>";
+                         texto+="</div>";                         
+                         if (data[0].folio.oficio.observacion){
+                             texto+="<div class='row' style='padding:10px'>";
+                             texto+="    <div class='col-md-12'><strong>Observación:</strong> "+data[0].folio.oficio.observacion+"</div>";
+                             texto+="</div>";                         
+                         }
+                         texto+="<div class='row' style='padding:10px'>";
+                         texto+="    <div class='col-md-3'><strong>Servicio(s) solicitado(s):</strong><br>";
+                                          data[0].folio.oficio.servicios.forEach(function(e){ texto+=e.servicio.descripcion+"    "});
+                         texto+="    </div>";
+                         if (data[0].folio.oficio.productoresSolicitados.length>0){
+                             texto+="    <div class='col-md-3'><strong>Productor(es) solicitado(s):</strong><br>";
+                                              data[0].folio.oficio.productoresSolicitados.forEach(function(ps){texto+=ps.personal.nombre+" "+ps.personal.paterno+" "+ps.personal.materno+"<br>"});
+                             texto+="    </div>";
+                         }
+                         if (data[0].folio.productoresAsignados.length>0){
+                             texto+="    <div class='col-md-3'><strong>Productor(es) asignado(s):</strong><br>";
+                                              data[0].folio.productoresAsignados.forEach(function(ps){texto+=ps.personal.nombre+" "+ps.personal.paterno+" "+ps.personal.materno+"<br>"});
+                             texto+="    </div>";
+                         }                 
+                         
+                         
+                         texto+="</div>";
+                         
+                         texto+="<div class='row' style='padding:10px'>";
+                         if (data[0].folio.oficio.fechagrabaciones.length>0){
+                             texto+="    <div class='col-md-3'><strong>Fecha/hora grabacion(es):</strong>";
+                                              data[0].folio.oficio.fechagrabaciones.forEach(function(ps){texto+=moment(ps.fechahora,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("DD/MM/YYYY HH:mm")+"<br>"});
+                             texto+="    </div>";
+                         }
+                         texto+="</div>";
+                         
+                         
+                         if (data[0].folio.oficio.contactos.length>0){
+                               texto+="<div class='row' style='padding:10px 10px 0px 10px'>";                         
+                               texto+="<div class='col-md-12'><strong>Contacto(s)</strong></div>";
+                               texto+="</div>";
+                               texto+="<div class='row' style='padding:0px 10px 0px 10px'>";                         
+                               texto+="<div class='col-md-12'>";
+                                   data[0].folio.oficio.contactos.forEach(function(ps){
+                                            texto+="<br><strong>Nombre: </strong>"+ps.nombre+"  <br>";
+                                            if (ps.telefonos.length>0){
+                                                texto+="<strong>Teléfono(s): </strong>";                                                                                                      
+                                                ps.telefonos.forEach(function(t){
+                                                        texto+=t.telefono+"  ";
+                                                });
+                                                texto+="<br>";
+                                            }                                           
+                                            if (ps.correos.length>0){
+                                                texto+="<strong>Correo(s): </strong>";                                                                                                      
+                                                ps.correos.forEach(function(c){
+                                                        texto+=c.correo+"  ";
+                                                });
+                                                texto+="<br>";
+                                            }                                               
+                                                  
+                               });                                              
+                             texto+="<br></div>";
+                             
+                         }                         
+                         texto+="</div>";
+                         $("#myModalDetalleContenido").html(texto);   
+                         $("#laTablaDTSS").update();
+                     });                     
+                     
+                     
+                     
+                     return false;
+                 }
+                 
+                 borrarContenidoDetalle();
+                 
+               //Mostrrar la info en la tabla de detalle
+
+                 for(f=0; f<=data.length-1;f++){
+                     r = data[f];
+                //     console.log("en el ciclo ",r)
+//alert("i "+f+"\n"+estadoId+"\n"+r.estado.id);                  
+                     $("#tituloDetalle").html(r.folio.oficio.descripcion);
+                     var c = "";
+                     if (estadoId=="*" && r.preagendas.length==0 && r.agenda.length==0)
+                         {
+                             // Se solicita todos los estados y se este en particular no tiene preagenda ni agenda, se trata de una solicitud sin atender
+                             c="<td></td>";                                    
+                             c+="<td></td>";
+                             c+="<td></td>";
+                             c+="<td></td>";
+                             c+="<td></td>";
+                             c+="<td>@models.Estado.find.byId(4).descripcion</td>";
+                             c+="<td>";
+                             c+="   <a href='javascript:glypVerDetalles(null, \"preagenda\", "+r.id+")' style='display:inline-block' > <i class='fa fa-eye fa-lg fa-fw' aria-hidden='true'  title='Ver detalles'></i></a>&nbsp";
+                             c+="   <a href='javascript:irAFechaEvento()' style='display:inline-block' > <i class='fa fa-calendar fa-lg fa-fw' aria-hidden='true'  title='Agendar'></i></a>";
+                             c+="</td>";
+                             $("#tablaMisServiciosDetalle tbody").append("<tr>"+c+"</tr>");
+                             $("#tablaMisServiciosDetalle tfoot").html("<tr><td colspan='9'>Registrosa: "+$("#tablaMisServiciosDetalle tbody tr").length+"</td></tr>");
+                         }                       
+                     
+                     
+                     
+                     var arrAuxEdo = [];
+                     arrAuxEdo.push(r.preagendas);
+                     arrAuxEdo.push(r.agenda);
+                     console.log(arrAuxEdo)
+                     for (h=0; h<arrAuxEdo.length;h++){
+                     Edo = arrAuxEdo[h];
+                     if (Edo.length!=0){
+                         for (i=0;i<Edo.length;i++){
+                               if (  (estadoId>=3  &&  Edo[i].tipo == "preagenda"  &&  estadoId < 7 && Edo[i].estado.id >=3 && Edo[i].estado.id < 7 )
+                                     ||  
+                                     (estadoId==7  &&  Edo[i].tipo == "agenda"  &&  Edo[i].estado.id ==7)
+                                     ||  
+                                     (estadoId==99 &&  Edo[i].tipo == "agenda"  &&  Edo[i].estado.id>7)
+                                     ||  
+                                     (estadoId=="*"  && (
+                                             (Edo[i].tipo == "preagenda"  &&  Edo[i].estado.id >=3 && Edo[i].estado.id < 7 )
+                                             ||
+                                             (Edo[i].tipo == "agenda"  &&  Edo[i].estado.id >=7)
+                                             )
+                                     )
+                                  ){         
+                                 c = "<td>"+moment(Edo[i].inicio,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("DD/MM/YYYY") +"</td>";
+                                 if (Edo[i].salidas.length > 0)
+                                     c+="<td>"+moment(Edo[i].salidas[0].salida,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("HH:mm")+"</td>";
+                                 else
+                                     c+="<td></td>";         
+                                 c+="<td>"+moment(Edo[i].inicio,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("HH:mm")+"</td>";
+                                 c+="<td>"+moment(Edo[i].fin,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("HH:mm")+"</td>";
+                                 c+="<td>"+Edo[i].fase.descripcion;
+                                 if (Edo[i].salas.length >0){
+                                 	c+=" <span class='badge'>"+Edo[i].salas[0].sala.descripcion+"</span>";
+                                 } 
+                                	 c+"<span class='badge'>falta sala</span>";
+                                 
+                                 c+="</td>";
+                                 
+                                 c+="<td>"+Edo[i].estado.descripcion+"</td>";
+                                 if (Edo[i].estado.id > 4){
+                                    c+="<td><div class='center-block'><a href='javascript:verDetalles("+Edo[i].id+", \""+Edo[i].tipo+"\", null)' style='display:inline-block' > <i class='fa fa-eye fa-lg fa-fw' aria-hidden='true'  title='Ver detalles'></i></a>&nbsp;";
+                                    if (!@session.get("rolActual")=="16"){
+                                    	c+="<a href='javascript:eliminarEvento("+Edo[i].id+", \""+Edo[i].tipo+"\")' style='display:inline-block' > <i class='fas fa-trash fa-lg fa-fw' aria-hidden='true'  title='Eliminar'></i></a>&nbsp;";
+                                    }
+                                    if ( (@session.get("rolActual")=="16") && (Edo[i].estado.id < 11) ){
+                                    	c+="<a href='javascript:liberarEvento("+Edo[i].id+", \""+Edo[i].tipo+"\")' style='display:inline-block' > <i class='fas fa-unlink fa-lg fa-fw' aria-hidden='true'  title='Liberar'></i></a>&nbsp;";
+                                    }
+                                    c+="<a href='javascript:irAFechaEvento(\""+moment(Edo[i].inicio,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("YYYY-MM-DD")+"\",\""+Edo[i].id+"\", \""+Edo[i].tipo+"\")' style='display:inline-block' > <i class='fa fa-calendar fa-lg fa-fw' aria-hidden='true'  title='Ver en agenda'></i></a>";
+                                    if(@session.get("rolActual")=="1"){
+                                        c+="<a href='javascript:autorizarEvento("+Edo[i].id+", \""+Edo[i].tipo+"\")' style='display:inline-block; visibility:hidden' > <i class='fas fa-bolt fa-lg fa-fw' aria-hidden='true'  title='Autorizar sin diálogo' id='autorizacionRapida"+Edo[i].id+"'></i></a>";
+                                    }
+                                    if (!@session.get("rolActual")=="16"){
+                                    	c+="<a href='javascript:AbrirMostrarDatos("+Edo[i].id+", \""+Edo[i].tipo+"\")' style='display:inline-block;' > <i class='fas fa-check fa-lg fa-fw' aria-hidden='true'  title='Autorizar' id='autorizacion"+Edo[i].id+"'></i></a>";                                    
+                                    }
+                                    c+="</div></td>";
+                                 }
+                                 
+                                 c+="<td class='hidden'>"+Edo[i].id+"</td>";
+                                 c+="<td class='hidden'>"+Edo[i].estado.id+"</td>";
+                                 $("#tablaMisServiciosDetalle tbody").append("<tr>"+c+"</tr>");
+                                 $("#tablaMisServiciosDetalle tfoot").html("<tr><td colspan='9'>Registros: <div id='contadorDetalle' class='mismaLinea'>"+$("#tablaMisServiciosDetalle tbody tr").length+"</div></td></tr>");
+
+
+                             }
+                         }                   
+                         
+                    //   $("#tablaMisServiciosDetalle tbody").append("<tr>"+r+"</tr>");
+                    //   $("#tablaMisServiciosDetalle tfoot").html("<tr><td>REgsitrosc: "+$("#tablaMisServiciosDetalle tbody tr").length+"</td></tr>");
+                     } 
+                     }
+                 }
+
+
+
+
+             }
+         })
+         .fail(function(){
+                 alert("error 12345");
+             });   
+             
+             
+                 // Es posible la autorizacion directa (sin solicitudes de perfiles de personal)????
+
+
+
+       });
+     
+     
+     
+
+     function borrarContenidoDetalle(){
+          $("#tablaMisServiciosDetalle tbody, #tablaMisServiciosDetalle tfoot").empty();
+             $("#tituloDetalle").html("");
+     }      
+     
+     $('#tablaMisServicios').off( 'page.dt');
+     $('#tablaMisServicios').on( 'page.dt', function () {
+         borrarContenidoDetalle();
+        } );     
+     
+     
+     function verDetalles(servicioId, tipo, fpaId){
+    	 console.log("desde verDetalles")
+         var cadena = "";        
+    	 console.log("antes de LlamadaAjaxBuscaDetallesServicio");
+//         var $t = LlamadaAjaxBuscaDetallesServicio(servicioId, tipo, fpaId); 
+         var $t= LlamadaAjax("/ajaxBuscaDetallesServicio", "POST", JSON.stringify( { "servicioId": servicioId, "tipo":tipo, "fpaId":fpaId}));
+
+         $.when( $t  )
+         .done( function(data){
+        	 console.log("el trtorno de ajax")
+             console.dir(data) 
+             cadena+="";
+             cadena+="<div class='row' style='padding:10px'>";
+             cadena+="    <div class='col-md-3'><strong>Folio: </strong> "+data[0].folio.numfolio+"</div><div class='col-md-9'><strong>Descripcion: </strong>"+data[0].folio.oficio.descripcion+"</div>";
+             cadena+="</div>";
+             cadena+="<div class='row' style='padding:10px'>";
+             cadena+="    <div class='col-md-12'><strong>Oficio: </strong> "+data[0].folio.oficio.oficio+"</div>";
+             cadena+="</div>";                         
+             cadena+="<div class='row' style='padding:10px'>";
+                 if (data[0].folio.oficio.titulo!= null){
+                     cadena+="    <div class='col-md-9'><strong>Título:</strong> "+data[0].folio.oficio.titulo+"</div>";
+                 }
+             cadena+="    <div class='col-md-3'><strong>Fecha entrega: </strong> "+moment(data[0].folio.fechaentrega,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("DD/MM/YYYY")+"</div>";
+             cadena+="</div>";             
+             
+             cadena+="<hr>";
+             
+             
+             var servicios = null;
+             if (data[0].preagendas != null)
+                 servicios = data[0].preagendas;
+             if (data[0].agenda != null)
+                 servicios = data[0].agenda;
+             
+             for(a=0; a<= servicios.length-1;a++){
+                 servicio = servicios[a];
+                 cadena+="<div class='row' style='padding:10px'>";
+                 cadena+="    <div class='col-md-3'><strong>Fase: </strong>"+servicio.fase.descripcion+"</div>";
+                 cadena+="    <div class='col-md-3'><strong>Fecha: </strong>"+moment(servicio.inicio,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("DD/MM/YYYY")+"</div>";
+                 cadena+="    <div class='col-md-2'>";
+                 if (servicio.salidas.length != 0)
+                     cadena+="<strong>Salida: </strong>"+moment(servicio.salidas[0].salida,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("HH:mm");
+                 cadena+="</div>";
+                 cadena+="    <div class='col-md-2'><strong>Desde: </strong>"+moment(servicio.inicio,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("HH:mm")+"</div>";
+                 cadena+="    <div class='col-md-2'><strong>Hasta: </strong>"+moment(servicio.fin,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("HH:mm")+"</div>";
+                 cadena+="</div>";
+                 
+                 if (servicio.juntas.length!=0){
+                     cadena+="<div class='row' style='padding:10px'>";
+                     cadena+="    <div class='col-md-12'><strong>Junta</strong></div>";
+                     cadena+="</div>";                   
+                 }
+                 
+                 
+                 if (servicio.locaciones.length!=0){
+                     cadena+="<div class='row' style='padding:10px'>";
+                     cadena+="    <div class='col-md-12'><strong>Locación: </strong>"+servicio.locaciones[0].locacion+"</div>";
+                     cadena+="</div>";
+                 }
+                 
+                 if (servicio.salas.length!=0){
+                     cadena+="<div class='row' style='padding:10px'>";
+                     cadena+="    <div class='col-md-6'><strong>Sala: </strong>"+servicio.salas[0].sala.descripcion+"</div>";
+                     if (servicio.salas[0].usoscabina.length!=0){
+                         cadena+="    <div class='col-md-6'><strong>Uso: </strong>"+ arrUsosCabina[servicio.salas[0].usoscabina[0].usocabina]+"</div>";
+                     }
+                     cadena+="</div>";
+                 }                 
+                 if (servicio.vehiculos.length!=0){
+                     cadena+="<div class='row' style='padding:10px'>";
+                     cadena+="    <div class='col-md-6'><strong>Vehículo: </strong>";
+                     if (servicio.vehiculos[0].vehiculo!=null)
+                         cadena+=servicio.vehiculos[0].vehiculo.placa+" - "+servicio.vehiculos[0].vehiculo.descripcion;
+                     else
+                         cadena+="Solicitado";
+                     cadena+="</div>";
+
+                     cadena+="</div>";
+                 }   
+                 
+                 if (servicio.tipo == "preagenda" && servicio.personal.length!=0){
+                     cadena+="<div class='row' style='padding:10px'>";
+                     cadena+="    <div class='col-md-12'><strong>Personal solicitado: </strong><br>";
+                            for (x=0;x<=servicio.personal.length-1;x++){
+                                p=servicio.personal[x];
+                                cadena+=p.cantidad+"  "+p.tipopersonal.descripcion+"   <br>";
+                            }
+                     cadena+="</div>";  
+                     cadena+="</div>";
+                 }
+                 
+                 if (servicio.tipo == "agenda" && servicio.personal.length!=0){
+                     cadena+="<div class='row' style='padding:10px'>";
+                     cadena+="    <div class='col-md-12'><strong>Personal asignado: </strong><br>";
+                            for (x=0;x<=servicio.personal.length-1;x++){
+                                p=servicio.personal[x];
+                                cadena+=p.personal.nombre+" "+p.personal.paterno+" "+p.personal.materno+" - "+p.personal.tipo.descripcion+"<br>";
+                            }
+                     cadena+="</div>";  
+                     cadena+="</div>";
+                 }                 
+
+                 if (servicio.tipo == "preagenda" && servicio.locutores!=0){
+                     cadena+="<div class='row' style='padding:10px'>";
+                     cadena+="    <div class='col-md-12'><strong>Locutores solicitados: </strong><br>";
+                            for (x=0;x<=servicio.locutores.length-1;x++){
+                                l=servicio.locutores[x];
+                                cadena+=l.personal.nombre+" "+l.personal.paterno+" "+l.personal.materno+" <br>";
+                            }
+                     cadena+="</div>";  
+                     cadena+="</div>";
+                 }                 
+                 
+                 
+                 if (servicio.equipos!=0  ||  servicio.accesorios!=0  ){
+                     cadena+="<div class='row' style='padding:10px'>";
+                     cadena+="    <div class='col-md-6'><strong>Equipo</strong><br>";
+                            for (x=0;x<=servicio.equipos.length-1;x++){
+                                l=servicio.equipos[x];
+                                cadena+=l.equipo.descripcion+" "+l.equipo.marca+" "+l.equipo.modelo+" "+l.equipo.serie+"<br>";
+                            }
+                     cadena+="   </div>";
+                     cadena+="    <div class='col-md-6'><strong>Accesorios</strong><br>";
+                     for (x=0;x<=servicio.accesorios.length-1;x++){
+                         l=servicio.accesorios[x];
+                         cadena+=l.accesorio.descripcion+" "+l.accesorio.modelo+" "+l.accesorio.serie+"<br>";
+                     }
+                     cadena+="   </div>";       
+                     cadena+="</div>";       
+                 }         
+                 
+                 if (servicio.formatos!=0){
+                     cadena+="<div class='row' style='padding:10px'>";
+                     cadena+="    <div class='col-md-12'><strong>Formatos de entrega: </strong><br>";
+                            for (x=0;x<=servicio.formatos.length-1;x++){
+                                l=servicio.formatos[x];
+                                cadena+=l.cantidad+" "+l.formato.descripcion+" <br>";
+                            }
+                     cadena+="</div>";  
+                     cadena+="</div>";
+                 }                  
+             }
+             $("#myModalDetalleContenido").html(cadena);      
+             $("#myModalDetalle").modal("show");
+         }).fail(function(){
+             alert("Error en ajax  45");
+         });
+     }
+     
+     
+     function eliminarEvento(servicioId, tipo){
+         swal({
+             title: "¿Desea eliminar el evento?",                
+             type: "warning",
+             showCancelButton: true,
+             confirmButtonColor: "#d33",
+             cancelButtonColor: '#3085d6',
+             confirmButtonText: "Si, borrar el evento.",
+             cancelButtonText: "No, cancelar borrado.",
+             preConfirm: function(){
+                 return new Promise(function (resolve, reject) {                 
+                     var evento = new Object();
+                     evento.id = servicioId;
+                     evento.tipo = tipo;
+                     //LLamada al controlador para eliminar evento
+                     $borrado=null;                  
+                     if (@session.get("rolActual")=="1")
+                         $borrado = LlamadaAjaxEliminaEventoAdmin(evento);    
+                     if (@session.get("rolActual")=="100")    
+                         $borrado = LlamadaAjaxEliminaEvento(evento);
+                       
+                     $.when($borrado).done(
+                             function(data){
+                                 if (data.eliminado){
+                                     //swal("Eliminado", "Se eliminó correctamente el evento.", "success");
+                                     $("#btnModalCancelar").click();
+                                     $("#tablaMisServiciosDetalle tr.selected").fadeOut(800, function() {
+                                         $(this).remove();
+                                         $("#contadorDetalle").html(  $("#tablaMisServiciosDetalle tbody tr").length);
+                                     });                                     
+                                     resolve()
+                                 } else {
+                                     reject("No fue posible eliminar el evento.");
+                                 }
+                             }
+                     );                      
+                 });
+             }
+           }).then(function () {
+                 swal(
+                           'Eliminado!',
+                           'Se eliminó correctamente el evento.',
+                           'success'
+                         )
+           }, function (dismiss) {
+                 if (dismiss === 'cancel') {
+                   swal(
+                     'Cancelado',
+                     'Usted canceló la eliminación del evento.<br>Se conserva el evento.',
+                     'error'
+                   )
+                 }
+           });       
+     }
+
+/////////////////////////////////////   FLASH NO SE LLEVA LA INFO DE SALA
+
+
+     function liberarEvento(servicioId, tipo){
+         swal({
+             title: "¿Desea liberar este dia/hora del evento?",                
+             type: "warning",
+             showCancelButton: true,
+             confirmButtonColor: "#d33",
+             cancelButtonColor: '#3085d6',
+             confirmButtonText: "Si, liberar el evento.",
+             cancelButtonText: "No, cancelar la liberación.",
+             preConfirm: function(){
+                 return new Promise(function (resolve, reject) {             
+                     var evento = new Object();
+                     evento.id = servicioId;
+                     evento.tipo = tipo;
+                     //LLamada al controlador para liberar evento
+                     $liberado=null;                  
+                     if (  (@session.get("rolActual")=="1") ||  (@session.get("rolActual")=="16")  ){
+                    	 console.log("uno 1 1")
+                         $liberado = LlamadaAjaxLiberaEvento(evento); 
+                    	 console.log("dos")
+                 	}
+                 	if (@session.get("rolActual")=="100")    {
+                         $liberado = LlamadaAjaxEliminaEvento(evento);
+                 	}
+                     $.when($liberado).done(
+                             function(data){
+                            	 console.log(data)
+                                 if (data.eliminado){
+                                     //swal("Eliminado", "Se eliminó correctamente el evento.", "success");
+                                     $("#btnModalCancelar").click();
+                                     $("#tablaMisServiciosDetalle tr.selected").fadeOut(800, function() {
+                                         $(this).remove();
+                                         $("#contadorDetalle").html(  $("#tablaMisServiciosDetalle tbody tr").length);
+                                     });                                     
+                                     resolve()
+                                 } else {
+                                     reject("No fue posible liberar el evento.");
+                                 }
+                             }
+                     );                      
+                 });
+             }
+           }).then(function () {
+                 swal(
+                           'Liberado!',
+                           'Se liberó correctamente el evento.',
+                           'success'
+                         )
+           }, function (dismiss) {
+                 if (dismiss === 'cancel') {
+                   swal(
+                     'Cancelado',
+                     'Usted canceló la liberación del evento.<br>Se conserva el evento.',
+                     'error'
+                   )
+                 }
+           });       
+     }
+
+
+
+
+	function autorizarEvento(servicioId, tipo){   
+    	 console.log("autorizarEvento recibe: "+servicioId+" y "+tipo)
+    	 var $d = LlamadaAjaxDatos(servicioId, tipo);
+    	 $.when($d).done(function(data){
+    		 console.log("MIS SERVICIOS ADMIN ajaxDatos")
+    		 console.dir(data)
+             var evento = new Object;
+             evento.id = servicioId;
+             evento.folioproductorasignado = {"id": data.folioproductorasignado.id};
+             evento.inicio =  moment(   data.inicio , 'YYYY-MM-DDTHH:mm:ss.SSSSZ');
+             evento.fin =  moment( data.fin, 'YYYY-MM-DDTHH:mm:ss.SSSSZ');
+             evento.estado = {id: data.estado.id   };
+
+             if (data.juntas.length>0){
+            	 evento.juntas = [{}];
+             }             
+             
+             if (data.salidas.length>0){
+            	 evento.salidas = [{salida: data.salidas[0].salida}]
+             }
+             
+             if (data.locaciones.length>0){
+            	 evento.locaciones = [{locacion: data.locaciones[0].locacion}]
+             }             
+
+             if (data.equipos.length>0){
+             	var arrAcc=[]; 
+ 				for(i=0; i<data.equipos.length;i++){
+ 					aux={};
+ 					aux.equipos= {id: data.equipos[i].equipos.id};				
+ 					arrAcc.push(aux);             
+ 				}
+             	 evento.equipos = arrAcc;
+              }
+             
+             if (data.accesorios.length>0){
+            	var arrAcc=[]; 
+				for(i=0; i<data.accesorios.length;i++){
+					aux={};
+					aux.accesorio= {id: data.accesorios[i].accesorio.id};				
+					arrAcc.push(aux);             
+				}
+            	 evento.accesorios = arrAcc;
+             }
+         	 
+             
+             
+             
+             
+             if (data.salas.length>0){
+            	 if (data.salas[0].usoscabina.length>0){
+	            	 evento.salas =   [{	
+	 		 			sala: {id: data.salas[0].sala.id},
+	 	 				usoscabina: [{usocabina: data.salas[0].usoscabina[0].usocabina}]
+	  				  }];
+            	 } else {
+	            	 evento.salas =   [{	
+		 		 			sala: {id: data.salas[0].sala.id}		 	 				
+		  				  }];
+            	 } 
+             }
+             
+             
+             if (data.locutores.length>0){
+             	var arrLoc=[]; 
+ 				for(i=0; i<data.locutores.length;i++){
+ 					var aux={};
+ 					aux.personal= {id: data.locutores[i].personal.id};				
+ 					arrLoc.push(aux);         
+ 				}
+             	 evento.personal = arrLoc;
+              }
+             
+             if (data.formatos.length>0){
+              	var arrFmto=[]; 
+ 				for(i=0; i<data.formatos.length;i++){
+ 					var aux={};
+ 					aux.formato= {id: data.formatos[i].formato.id}
+ 					aux.cantidad= data.formatos[i].cantidad;				
+ 					arrFmto.push(aux);         
+ 				}
+             	 evento.formatos = arrFmto;            	 
+             }
+             
+             
+             evento.fase = {id: data.fase.id }
+             
+             
+    		 var $validos = LlamadaAjaxValidaPrevioAutorizar(evento );
+    		 $.when($validos).done(function(datos){
+    			 console.log(datos)
+        		 if (datos.valido){
+					 console.log("///////////////////////////////////////////////////////////////////////////////////////////")
+        			 console.dir( evento )
+        			 
+        			 // SE AUTORIZA
+   		            $aut = LlamadaAjaxAutorizaEvento(evento);
+		            $.when($aut).done(function(data1){
+		              if (@session.get("rolActual")=="1" && data1.autorizado!=null){		                  
+            				$.notify({
+             					title: "<strong>Correcto:</strong> ",
+             					message: "Se ha autorizado."
+             				});			
+                  			 $("#tablaMisServicios tbody tr.selected td:first").click();              				
+		              }
+		            });          			 
+        		 }    			 
+    		 });
+
+    		 
+    	 }).fail(function(){
+    		 
+    	 });
+    	 
+    	 //LlamadaAjaxValidaPrevioAutorizar    	 
+    	 
+    	 
+/*          var cadena = "";        
+         $.when( LlamadaAjaxAutorizarServicio(servicioId, tipo)  )
+         .done( function(data){
+             console.dir(data) 
+             cadena+="";
+             $("#myModalDetalleContenido").html(cadena);      
+             $("#myModalDetalle").modal("show");
+         }).fail(function(){
+             alert("Error en ajax  autorizarEvento");
+         }); */
+    }
+
+     
+     $("input[type='radio'][name='rgFaseSala']").change(function(){
+         var s={};
+     	$("#myModalLabel2").html("");
+     	var salaid = $(this).closest(".panel-group").attr("id").substr(-1);
+     	
+        @for(sala <- models.Sala.find.all()){
+         	s[@sala.id] = "@sala.descripcion";
+         }
+     	
+     	if ( isNaN(salaid) ){
+             if ( $("#panelesSalaCR").is(":visible") ){
+                 $("#myModalLabel2").html( "<h4>Agenda para "+(($(this).val()=="I" || $(this).val()=="D")?"Preproducción":"Posproducción")+"  en la Sala de Ingesta, Calificación y Revisión...</h4>" );
+             }
+     	} else {
+                 var texto = $("#myModalLabel2").text().substring( $("#myModalLabel2").text().search("en la")   );
+
+
+
+                 $("#myModalLabel2").html( "<h4>Agenda para la >"+s[salaid]+" - "+($(this).val()==3?"Edición":"Posproducción")+" </h4>" );
+                 // Cuando es Sala de edición lineal, en preproducción se oculta la solicitud de cantidad de personal
+                 var elPanel = $(this).closest("[id^='panelesSalaEdicion']");
+                 $(elPanel).find("div[name='preguntaPersonalSolicitado']").toggle(  $(elPanel).find("input[name='rgFaseSala'][value=4]").is(':checked')   );
+                 $("div[id^='panelesSalaEdicion']").find("div[name='preguntaRDisenioSolicitados']").toggle(    ($(this).val()=="4" && @session.get("rolActual")=="1" )  || (($(this).val()=="4" && @session.get("rolActual")=="100"  &&  $("#divIdEstado").text()== 7  ) )       );
+
+
+
+     	}
+     });
+     
+     $("#panelesUsoCabinaAudio input[type='radio'][name='rgUsoCabina']").change(function(){
+     	$("#panelesUsoCabinaAudio div[name='preguntaLocutoresSolicitados']").toggle($(this).val()=='V');
+
+         $("#panelesUsoCabinaAudio div[name='preguntaPersonalSolicitado'], #panelesUsoCabinaAudio div[name='preguntaLocutoresSolicitados']").toggle($(this).val()=="V");
+
+         $("#panelesUsoCabinaAudio div[name='preguntaUsoCabina2'],    #panelesUsoCabinaAudio div[name='preguntaPersonalAsignado']").hide();
+
+         $("#panelesUsoCabinaAudio input[type='radio'][name='rgUsoCabina'][value='"+$(this).val()+"']").prop("checked", true);
+     });     
+     
+     function AbrirMostrarDatos(eventoId, tipo){    	
+    	 alert("aca 202");
+    	 var event = new Object();
+    	 var $d = LlamadaAjaxDatos(eventoId, tipo);
+		 event.tipo=tipo;
+		 event.id = eventoId; 
+		 
+		 $.when($d).done(function(dat){
+			 console.dir(dat)
+			 event.folioNum = dat.folioproductorasignado.folio.numfolio;
+			 event.start = moment(dat.inicio, "YYYY-MM-DDTHH:mm:ss.SSSSZ");
+			 event.end = moment(dat.fin, "YYYY-MM-DDTHH:mm:ss.SSSSZ");
+			 event.faseId = dat.fase.id;
+			 event.descripcion = dat.folioproductorasignado.folio.oficio.descripcion;
+			 event.fpaId = dat.folioproductorasignado.id;
+			 if (dat.salas.length>0)
+			 	event.salaId = dat.salas[0].sala.id;
+			 
+			 if (dat.fase.id==1){
+				 event.resourceId = "a";
+				 if (dat.salas.length>0){
+					 event.resourceId = "c";
+				 }
+			 }
+			 if (dat.fase.id==2){
+				 event.resourceId = "b";
+			 }		
+			 // Edición
+			 if (dat.fase.id==3){
+				 dat.salas.forEach(function (sala) {
+					 // Salas Edición
+					 switch (sala.sala.id){
+					 	case 3:  event.resourceId = "d"; break;
+					 	case 2:  event.resourceId = "e"; break;
+					 	case 7:  event.resourceId = "f"; break;
+					 }
+				 });
+			 }			 
+			 
+			 // Posproducción
+			 if (dat.fase.id==4){
+				 dat.salas.forEach(function (sala) {
+					 // Sala de Ingesta, Calificación y Revisión
+					 if (sala.sala.id == 1){
+						 event.resourceId = "c";
+						 sala.usoscabina.forEach(function(uso){
+							 if (uso.usocabina=="R")
+								 event.resourceId = "c";
+						 });
+					 }
+					 switch (sala.sala.id){
+					 	case 1:  event.resourceId = "c"; break;
+					 	case 3:  event.resourceId = "d"; break;
+					 	case 2:  event.resourceId = "e"; break;
+					 	case 7:  event.resourceId = "f"; break;
+					 	case 4:  event.resourceId = "g"; break;
+					 	
+					 }					 
+				 });
+				 
+			 }
+			 if (dat.fase.id==5){
+				 event.resourceId = "h";
+			 }
+			 if (dat.fase.id==6){
+				 event.resourceId = "c";
+			 }			 
+			 alert("aca x");
+			 mostrarDatosEvento(event);	 
+			 @if(session.get("rolActual")=="16" ){
+				 
+			 }
+			 
+		 });
+		 //event.folioNum = 
+		 
+			
+    	 
+     }
+     
+     
+     $("#tablaMisServiciosDetalle").off("click", "td");
+     $("#tablaMisServiciosDetalle").on("click", "td", function() {
+         $("#tablaMisServiciosDetalle").find(".selected").removeClass("selected");
+         $(this).parent().hasClass("selected")?$(this).parent().removeClass("selected"):$(this).parent().addClass("selected");     
+     });
+     
+function otra(id, tipo){
+    /*
+    
+                                        $.when( LlamadaAjaxConSolicitudPerfiles( id, estadoId  )
+                                            .done( function(data){
+                                                console.dir(data.conSolicitud)
+                                                if (data.conSolicitud==false){
+                                                    console.log("si")
+                                                      auxC="algo";
+                                                } else{
+                                                    auxC="nada";
+                                                }
+
+                                            }).fail(function(){
+                                                alert("eRRor ajax");
+                                            });
+                                           // return auxC;
+                                           */    
+}
+
+
+function irAFechaEvento(fecha, eventoId, tipo){
+	console.log("Desde irAFechaEvento")
+    var extra1 = document.createElement("input");
+    extra1.setAttribute("type", "hidden");
+    extra1.setAttribute("name", "fecha");
+    extra1.setAttribute("value", fecha);
+    
+    var extra2 = document.createElement("input");
+    extra2.setAttribute("type", "hidden");
+    extra2.setAttribute("name", "eventoId");
+    extra2.setAttribute("value", eventoId);
+    
+    var extra3 = document.createElement("input");
+    extra3.setAttribute("type", "hidden");
+    extra3.setAttribute("name", "tipo");
+    extra3.setAttribute("value", tipo);           
+
+    $("#frmAux").append(extra1);
+    $("#frmAux").append(extra2);
+    $("#frmAux").append(extra3);
+
+	 $("#frmAux").attr("action", "/productorServicios");
+	 $("#frmAux").attr("method","POST");
+	 $("#frmAux").submit();
+}
+
+
+</script>
+
+
+
+    <script src="@routes.Assets.at("gentelella/vendors/datatables.net/js/jquery.dataTables.min.js")"></script>
+    <script src="@routes.Assets.at("gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js")"></script>
+    <script src="@routes.Assets.at("gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js")"></script>
+    <script src="@routes.Assets.at("gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js")"></script>
+    <script src="@routes.Assets.at("gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js")"></script>
+    <script src="@routes.Assets.at("gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js")"></script>
+    <script src="@routes.Assets.at("gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js")"></script>
+    <script src="@routes.Assets.at("gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js")"></script>
+    <script src="@routes.Assets.at("gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js")"></script>
+    <script src="@routes.Assets.at("gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js")"></script>
+    <script src="@routes.Assets.at("gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js")"></script>
+    <script src="@routes.Assets.at("gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js")"></script>
+
+    <script src="@routes.Assets.at("javascripts/detalleServiciosAjax.js")"></script>
+    <script src="@routes.Assets.at("javascripts/conSolicitudPerfilesAjax.js")"></script>
+    <script src="@routes.Assets.at("javascripts/agendaAjax.js?version=")@ale()"></script>
+    <script src="@routes.Assets.at("javascripts/agendaAjaxValidacionesReglas.js?version=")@ale()"></script>
+    <script src="@routes.Assets.at("javascripts/agenda.js?version=")@ale()"></script>
+    <script src="@routes.Assets.at("javascripts/general.js?version=")@ale()"></script>
+    <script src="@routes.Assets.at("javascripts/agendaMostrarDatosEvento.js?version=")@ale()"></script>
+    <script src="@routes.Assets.at("lib/moment/min/moment.min.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("lib/moment/locale/es.js")" type="text/javascript"></script>
+    
+    <script src="@routes.Assets.at("mark.js/datatables.mark.min.js")"></script>
+    <script src="@routes.Assets.at("mark.js/jquery.mark.min.js")"></script>    
+	<script src="@routes.Assets.at("bootstrap-notify/bootstrap-notify.min.js")"></script>
+	
+	
+	<script src="@routes.Assets.at("bootstrap-duallistbox/jquery.bootstrap-duallistbox.min.js")"></script>	
+	<link type="text/css" href="@routes.Assets.at("bootstrap-duallistbox/bootstrap-duallistbox.min.css")" rel="stylesheet">	
+	            
+    <!--script src="@routes.Assets.at("fullcalendar-scheduler-1.9.4/lib/moment.min.js")"></script-->
+    <script src="@routes.Assets.at("fullcalendar-scheduler-1.9.4/lib/fullcalendar.min.js")"></script>  	            
+	            
+	            

@@ -1,0 +1,56 @@
+.yamm .nav,
+.yamm .collapse,
+.yamm .dropup,
+.yamm .dropdown {
+  position: static;
+}
+.yamm .container {
+  position: relative;
+}
+.yamm .dropdown-menu {
+  left: auto;
+}
+.yamm .yamm-content {
+  padding: 20px 30px;
+}
+.yamm .dropdown.yamm-fw .dropdown-menu {
+  left: 0;
+  right: 0;
+}	
+
+
+
+.lineaVertical { 
+	border-right:thin solid #DAE1E3; 
+	height: 100%;
+	margin-bottom: -99999px;
+    padding-bottom: 99999px;
+}
+
+
+.division{
+    position:absolute;
+    left:50%;
+    top:10%;
+    bottom:10%;
+    border-left:1px solid white;	
+    min-height: 400px;
+}
+
+
+.demo{
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
+}
+
+
+#equalheight {
+    overflow: hidden; 
+}
+
+
+.ligaMegaMenu{
+	text-decoration: none;
+	font: lighter;
+	color: #5E6466
+}

@@ -1,0 +1,1697 @@
+@(folios:List[Folio],
+  fecha:String,
+  folioNum:Long,
+  eventoId:Long,
+  operadores:List[OperadorSala],
+  losDatosJSON:String
+  )
+@import helper._
+
+<!-- FullCalendar -->
+<link href="@routes.Assets.at("fullcalendar-3.9.0/fullcalendar.min.css")" rel="stylesheet">
+<link href="@routes.Assets.at("fullcalendar-3.9.0/fullcalendar.print.min.css")" rel="stylesheet" media="print">
+<link href="@routes.Assets.at("fullcalendar-scheduler-1.9.4/scheduler.min.css")" rel="stylesheet">
+<link href="@routes.Assets.at("jquery-UI/jquery-ui.min.css")" rel="stylesheet">
+<link type="text/css" href="@routes.Assets.at("bootstrap-duallistbox/bootstrap-duallistbox.min.css")" rel="stylesheet">
+
+
+@laFase(faseId: String) = @{
+  models.Fase.find.byId(faseId.toLong).descripcion;
+}
+
+@laSala(salaId: String) = @{
+	models.Sala.find.byId(salaId.toLong).descripcion;
+}
+
+@ale() = @{
+	var x = scala.util.Random;
+	x.nextInt(10000);
+}
+@main{
+<style>
+	.bs-example-popover .popover {
+	position: relative;
+	display: block;
+	float: left;
+	margin: 20px;
+	}
+	
+		.popover-content {
+			width: 450px;
+			padding:20px;
+		}
+		.popover {
+	 		z-index: 2060 !important;
+	 	}
+	 	
+	.popover {
+	    max-width: 450px;
+	}	 	
+	
+	.tresVeces{
+	    -webkit-animation-iteration-count: 3;
+	}
+	
+	
+	[data-notify="progressbar"] {
+	    margin-bottom: 0px;
+	    position: absolute;
+	    bottom: 0px;
+	    left: 0px;
+	    width: 100%;
+	    height: 5px;
+	}
+	
+	
+	.fc-cell-content{
+		min-height: 1em;
+		max-height: 1em;
+	 	padding-top: 0px !important;
+	 	padding-bottom: 8px !important;
+	}
+	
+	 .fc-cell-text {
+		padding-top: 0px !important;
+	 	padding-bottom: 12px !important;
+	 }
+
+	.fc-divider {
+		background-color: #c0cedb !important;
+		color: #4c5257;
+	}u
+</style>
+	@ventanasModales()
+	<div id="cntlFecha">
+		<input type="hidden" id="auxDtpCalendar" class="form-control floating-label" placeholder="Desde">
+	</div>
+    <div id="calendario"></div>
+    <br><br>
+    <div class="row" style="background-color: #979999;">
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            <div class="center-block" style="color: white;" >Solicitados <i style='color:yellow' class='fa fa-exclamation'></i> </div>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2 ">
+            <div class="center-block" style="color: white;">Autorizados <i style='color:green' class='fa fa-check'></i> </div>
+        </div>
+		<div class="col-lg-4 col-md-4 col-sm-4">
+			<div class="center-block" style="color: white;">Equipo y/o accesorios asignados <i style='color:green' class='fa fa-video'></i> </div>
+		</div>
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            <div class="center-block" style="color: white;">Terminados <i style='color:yellow' class='far fa-star'></i> </div>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            <div class="center-block" style="color: white;">Mantto. sala <i style='color:yellow' class='fa fa-wrench'></i> </div>
+        </div>        
+    </div>
+
+    @if(session.get("rolActual").compareTo("100")==0 && folios.size<=100000 ){
+		<div id='external-events'>
+			<h4>Folios abiertos</h4>
+			<div class="container-fluid">
+				<div class="row">
+						@for(folio<-folios){
+							@if(folio.estado.id>=4 && folio.estado.id<=7){
+								@for(p<-folio.productoresAsignados){
+									@if(p.personal.id==session.get("usuario").toLong){
+
+											<div class="col-sm-4">
+												<div class='fc-event'><a href='javascript:verDetalles(null,"preagenda",@p.id)'><i class='fas fa-eye fa-lg fa-fw' aria-hidden='true'  title='Ver información del folio'></i></a> @folio.numfolio @folio.oficio.titulo </div>
+												<br/>
+												<div name="eventoExterno" style="display: none">
+													<div name="idFPA">@p.id</div>
+													<div name="idFolio">@folio.id</div>
+													<div name="nomFolio">@folio.numfolio</div>
+												</div>
+											</div>
+
+									}
+								}
+							}
+						}
+				</div>
+			</div>
+		</div>
+	}
+}
+
+
+
+
+<script type="text/javascript">	
+	var rolActual = '@session.get("rolActual").toLong';
+	var usuarioActual= '@session.get("usuario")'
+	var atendido=false;
+	var resourceIdAnterior = null;
+	var operadoresSala = [];
+
+
+
+	$(function(){
+        $('[data-toggle="popover"], .popover').popover({
+            delay: {show:1000}
+        });
+        $.notifyDefaults({
+			type: 'success',
+			newest_on_top: true,
+			z_index: 999000
+		});
+
+ 		$('select[name="selectLocutoresDisponibles"]').bootstrapDualListbox({
+	   		nonSelectedListLabel: 'Locutores disponibles',
+	   	  	selectedListLabel: 'Locutores seleccionados',
+	   	  	showFilterInputs: false,
+	   	  	infoText: 'Mostrando {0}',
+	   	  	infoTextEmpty: 'No hay ninguna selección',
+	   	  	removeAllLabel: false
+    	});
+
+ 		$('select[name="selectIngenierosDisponibles"]').bootstrapDualListbox({
+	   		nonSelectedListLabel: 'Ingenieros para admin equipo/accesorios',
+	   	  	selectedListLabel: 'Ingenieros seleccionados',
+	   	  	showFilterInputs: false,
+	   	  	infoText: 'Mostrando {0}',
+	   	  	infoTextEmpty: 'No hay ninguna selección',
+	   	  	removeAllLabel: false
+    	});
+
+        $('select[name="selectRDisenioDisponibles"]').bootstrapDualListbox({
+            nonSelectedListLabel: 'Rsponsables diseño disponibles',
+            selectedListLabel: 'R Diseño seleccionados',
+            showFilterInputs: false,
+            infoText: 'Mostrando {0}',
+            infoTextEmpty: 'No hay ninguna selección',
+            removeAllLabel: false
+        });
+
+
+ 		$('select[name="selectEquipoAccesoriosDisponibles"]').bootstrapDualListbox({
+	   		nonSelectedListLabel: 'Equipo y accesorios disponibles',
+	   	  	selectedListLabel: 'Equipo y accesorios seleccionados',
+	   	  	showFilterInputs: false,
+	   	  	infoText: 'Mostrando {0}',
+	   	  	infoTextEmpty: 'No hay ninguna selección',
+	   	  	removeAllLabel: false
+    	});
+
+ 		$('select[name="selectVehiculosDisponibles"]').bootstrapDualListbox({
+	   		nonSelectedListLabel: 'Vehículos disponibles',
+	   	  	selectedListLabel: 'Vehículo seleccionado',
+	   	  	showFilterInputs: false,
+	   	  	infoText: 'Mostrando {0}',
+	   	  	infoTextEmpty: 'No hay ninguna selección',
+	   	  	removeAllLabel: false
+    	});
+
+ 		$('select[name="selectPersonalDisponibles"]').bootstrapDualListbox({
+	   		nonSelectedListLabel: 'Personal disponible',
+	   	  	selectedListLabel: 'Personal seleccionado',
+	   	  	showFilterInputs: false,
+	   	  	infoText: 'Mostrando {0}',
+	   	  	infoTextEmpty: 'No hay ninguna selección',
+	   	  	removeAllLabel: false
+    	});
+
+		$('.moveall, .removeall').hide();
+
+        swal.setDefaults({
+            confirmButtonText: 'Aceptar',
+            cancelButtonText: 'Cancelar'
+          });
+
+		$('#auxDtpCalendar').bootstrapMaterialDatePicker({
+			time: false,
+			lang: "es",
+			shortTime: true,
+			nowButton: true,
+			nowText: "Hoy",
+			okText: "Aceptar",
+			//switchOnClick: true,
+			cancelText: "Cancelar",
+			triggerEvent: "click"
+		}).on("change", function(e, date){
+		  		console.log("auxDtpCalendar.change")
+				console.log(event)
+				console.log(date)
+				console.log(  moment($("#auxDtpCalendar").val())    )
+				$(elCalendario).fullCalendar('gotoDate',   moment($("#auxDtpCalendar").val())  );
+				tempo2(undefined);
+			});
+
+        // Se pone en el Nav menu el pin
+        $("#mnuNavPin").html('<a href="javascript:;" class="info-number"  aria-expanded="false"><i class="fa fa-thumb-tack" style="color:grey; opacity: 0.2"></i><span class="badge bg-red" id="bgNotificacionPin"></span></a>');
+
+
+		var elCalendario = $('#calendario').fullCalendar({
+			schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+			timeZone: 'UTC',
+		    editable: true,
+		    droppable: true,
+		    selectable: true,
+		    selectHelper: true,
+		    selectOverlap: false,
+		  //  eventOverlap: false,
+		  //  slotEventOverlap: true,
+		    eventLimit: true,
+		    navLinks: true,
+		    dragRevertDuration:0,
+		    minTime: "08:00:00",
+		    maxTime: "21:00:00",
+		    timeFormat: 'H:mm',
+		    slotDuration: '0:10:00',
+		    slotLabelInterval: '0:30:00',
+		 //   slotWidth: 3,
+		    displayEventTime: true,
+		    displayEventEnd: true,
+		    allDaySlot: false,
+			//aspectRatio: 2,
+			contentHeight: 'auto',
+			height: 'auto',
+			//columnHeaderFormat: 'HH:MM am',
+			defaultView: 'timelineDay',
+			weekends: true,
+		    listDayFormat: 'dddd',
+		    listDayAltFormat: 'MMMM D',
+		    groupByDateAndResource: false,
+			resourceAreaWidth: '20%',
+			resourceLabelText: 'Fases / salas',			
+			header: {
+				left: 'btnHoy btnAnterior,btnSiguiente btnIrAFecha',
+				center: 'title',
+				right: 'timelineDay,listDay btnSemana,btnSemanaAgenda btnMes,btnMesAgenda btnComboSingle,btnComboAll'
+			},
+		    views: {
+		    	timelineDay:{
+		        	titleFormat: 'dddd, D [de] MMMM [de] YYYY'
+		        },
+		        listDay:{
+		        	buttonText:"Lista dia"
+		        }		        
+
+			},
+			customButtons: {
+				timelineDay: {
+					  text: "Día",	
+				      click: function() {
+				    	  $('#calendario').fullCalendar('changeView', 'timelineDay');
+					    	$("button:contains('Semana'), button:contains('Mes'), button:contains('Día'), button:contains('Lista semana'),  button:contains('Lista mes'), button:contains('Lista día')").removeClass("fc-state-active");
+				    		$("button:contains('Día')").addClass("fc-state-active");
+				    		tempo();
+					      }					
+				},
+				listDay: {
+					  text: "Lista día",	
+				      click: function() {
+				    	  $('#calendario').fullCalendar('changeView', 'listDay');
+					    	$("button:contains('Semana'), button:contains('Mes'), button:contains('Día'), button:contains('Lista semana'),  button:contains('Lista mes'), button:contains('Lista día')").removeClass("fc-state-active");
+				    		$("button:contains('Lista día')").addClass("fc-state-active");				    	
+					      }					
+				},
+				btnIrAFecha:{
+					text:"Ir a fecha",
+					click: function(){
+						$("#auxDtpCalendar").bootstrapMaterialDatePicker("setDate", moment()  );
+    					$("#auxDtpCalendar").click();
+					}
+				},
+			    btnSiguiente: {
+			      text: "Siguiente",
+			      click: function() {
+			        tempo("+1")
+			      }
+			    },
+			    btnAnterior: {
+				      text: 'Anterior',
+				      click: function() {
+				        tempo("-1")
+				      }
+			    },
+			    btnHoy: {
+				      text: 'Hoy',
+				      click: function() {
+				        tempo("0")
+				      }
+				    },
+			    btnMes: {
+				      text: 'Mes',
+				      click: function() {
+				    	$('#calendario').fullCalendar('changeView', 'timelineMonth');
+				    	tempo();
+				    	$("button:contains('Semana'), button:contains('Mes'), button:contains('Día'), button:contains('Lista semana'),  button:contains('Lista mes'), button:contains('Lista día')").removeClass("fc-state-active");
+			    		$("button:contains('Mes')").addClass("fc-state-active");				    	
+				      }
+				    },
+				btnMesAgenda: {
+					text: 'Lista mes',
+				      click: function() {
+					    	$('#calendario').fullCalendar('changeView', 'listMonth');
+					    	tempo()
+					    	$("button:contains('Semana'), button:contains('Mes'), button:contains('Día'), button:contains('Lista semana'),  button:contains('Lista mes'), button:contains('Lista día')").removeClass("fc-state-active");
+				    		$("button:contains('Lista mes')").addClass("fc-state-active");					    	
+					      }					
+				},				    
+			    btnSemana: {
+				      text: 'Semana',
+				      click: function() {
+				    	$('#calendario').fullCalendar('changeView', 'timelineWeek');
+				    	//tempo2("+1");tempo2("-1");
+				    	tempo();
+			    		$("button:contains('Semana'), button:contains('Mes'), button:contains('Día'), button:contains('Lista semana'),  button:contains('Lista mes'), button:contains('Lista día')").removeClass("fc-state-active");
+			    		$("button:contains('Semana')").addClass("fc-state-active");
+				      }
+				    },		
+				btnSemanaAgenda: {
+					text: 'Lista semana',
+				      click: function() {
+					    	$('#calendario').fullCalendar('changeView', 'listWeek');
+					    	tempo();
+					    	$("button:contains('Semana'), button:contains('Mes'), button:contains('Día'), button:contains('Lista semana'),  button:contains('Lista mes'), button:contains('Lista día')").removeClass("fc-state-active");
+				    		$("button:contains('Lista semana')").addClass("fc-state-active");
+					      }					
+				},
+				btnComboSingle:{
+					text: 'solo yo',					
+				      click: function() {
+				    	console.log(  $('#calendario').fullCalendar('clientEvents').length )
+					    	$('#calendario').fullCalendar('clientEvents').forEach(function(ee){
+					    		console.log(  ee.productorId  )
+					    		console.log(  ee.id  )
+					    		$("#evento-"+ee.id).parent().toggle(ee.id != undefined &&  (ee.productorId == '@session.get("usuario")'));
+					    		//$("div.fc-button-group button.fc-corner-left text:").addClass("fc-state-active");
+					    		$("button:contains('todos')").removeClass("fc-state-active");
+					    		$("button:contains('solo yo')").removeClass("fc-state-active");
+					    		$("button:contains('solo yo')").addClass("fc-state-active");
+					    	});
+					      }						
+				},
+				btnComboAll:{
+				  text: 'todos',
+			      click: function() {
+			    	$('#calendario').fullCalendar('clientEvents').forEach(function(ee){
+			    		console.dir(ee)
+		    			$("#evento-"+ee.id).parent().show();
+		    			
+			    	});
+		    		$("button:contains('solo yo')").removeClass("fc-state-active");
+		    		$("button:contains('todos')").removeClass("fc-state-active");
+		    		$("button:contains('todos')").addClass("fc-state-active");
+			      }							
+				}				
+					
+			},
+			  
+		  navLinkDayClick: function(date, jsEvent) {
+			  $('#calendario').fullCalendar('changeView', 'timelineDay');
+			  $("button:contains('Semana'), button:contains('Mes'), button:contains('Día'), button:contains('Lista semana'),  button:contains('Lista mes'), button:contains('Lista día')").removeClass("fc-state-active");
+			  $("button:contains('Día')").addClass("fc-state-active");
+			  $("#calendario").fullCalendar("gotoDate", date);
+		  },
+			  
+			  
+
+      events: [],
+		    eventDragStop: function(event,jsEvent) {
+		    	var mensajeError="";
+		    	if (@session.get("rolActual").compareTo("100")==0 && event.tipo=='agenda'){
+		    		mensajeError+="Los productores no pueden eliminar eventos autorizados.";
+		    	}
+		    	if (mensajeError.length!=0){
+		    		swal({
+                        title: "¡Error!",
+                        text: mensajeError,
+                        type: "error",
+                        showConfirmButton: true
+                      });
+		    		return false;
+		    	}
+		    },
+		    viewRender: function(view, element){
+		    	//$("#calendario").fullCalendar("removeEvents");
+		    	//tempo("0");
+		    	//$("#calendario").fullCalendar("refetchEvents");
+		    },	
+		    refetchResourcesOnNavigate: true,
+		    eventDragStart: function(event, jsEvent, ui, view){
+		    	console.clear();
+		    	console.log("eventDragStart")
+		    	console.dir(event)
+		    	console.dir(jsEvent)
+		    	console.dir(ui)
+		    	resourceIdAnterior = event.resourceId;	
+		    },
+			eventDrop: function(event, delta, revertFunc, jsEvent, view) {
+				console.log("eventDrop")
+				event.salaId = $('#calendario').fullCalendar( 'getEventResource', event ).sala;
+				event.overlap = ((event.salaId==0)?true:false);
+				event.resourceIdAnterior = resourceIdAnterior;
+				console.log("EVENT")
+	    		console.dir(event)	   
+	    		console.log("DELTA")
+	    		console.dir(delta)
+	    		// Es el dueño del evento o administrador?
+				if ( event.productorId != @session.get("usuario")  &&  (!@session.get("rolActual")=="1")  ){
+	                 swal({
+	                	 	title:"Error",
+                       		text:'Este evento es del productor '+event.productorNombre+', usted no puede modificarlo',
+                       		type:"warning"
+                     })
+		        	revertFunc();	
+	                return false;
+				}
+				console.log("enviando ...   event.resourceId:"+event.resourceId+"  start:"+event.start)
+				// Se envían star y end como objetos moment
+ 				var $extra = validacionesAgenda(event.start, event.end, jsEvent, event.resourceId, event.id, event.salaId);
+				$.when($extra).then(function(ff){
+					console.dir(ff)
+				});	 			
+			},
+			eventResize: function(event, delta, revertFunc, resource, ui, view) {
+				console.clear();
+				console.log("estado: "+event.estadoId)
+				console.dir(event)
+				var $extra = validacionesAgenda(event.start, event.end, event.resourceId, event.id, event.salaId, event.productorId, event.productorNombre, event.estadoId);
+				$.when($extra).then(function(ff){
+					var r = JSON.parse(ff);
+					console.log("r")
+					console.dir(r)
+					console.dir(r.productorDisponible)
+					if (!r.productorDisponible){
+						revertFunc();		
+						swal({
+							title: 'Error',
+							html:  r.error,
+							type:  'error'
+						});
+					}
+					if (r.productorDisponible)  {
+					      	evento = event;
+							//Actualizar con ajax  el evento
+							var evento = new Object;
+							evento.id = event.id;					
+							evento.inicio = event.start;
+							evento.fin = event.end;					
+							evento.tipo = event.tipo;
+							evento.salasSalaId = $('#calendario').fullCalendar( 'getEventResource', event ).sala;
+							$productorD = LlamadaAjaxValidaProductorDisponible(evento.inicio, evento.fin, evento.id);
+							$valida =  LlamadaAjaxValidaEvento(evento);
+							$.when( $productorD, $valida )
+		                    .done( function(data1, data2){
+		                    	console.log("DDOOSS")
+		                    	console.dir(data1)
+		                    	console.dir(data2)
+		                    	if (!data1.includes( @session.get("usuario") )){
+		                            $.notify(
+		                                "Conflicto, ya tiene agendada otra activivdad a la misma hora"
+		                            ,{
+		                            	type:"danger"
+		                            });  
+		                            revertFunc();
+		                    	} else {
+			                        if (data2.valido== true){
+			                        	$.when(LlamadaAjaxActualizaEvento(evento, "resize"))
+			                        	.done ( function(data){
+			                        		if (data.actualizado){
+			                                    $.notify(
+			                                        "Se aplicó el cambio"
+			                                    );
+			                                    console.log("cambios del evento")
+			                                    console.dir(evento)
+			                               		$("#calendario").fullCalendar("updateEvent", evento);
+			                        		} else {
+			                                    $.notify({
+			                                            title:"Cambio No realizado",
+			                                        },{
+			                                        	type:"danger"
+			                                        }
+			                                    );
+			                        		}
+			                        	});
+			                        } else {
+			                        	swal({
+			                        			title: 'Colisiones',
+			                        			html:  'Se encontraron errores en:</br>'+data.servicios.conflictos.map(e=>{return e.numFolio+" "+e.descripcion+'</br>'})+
+			                        			        '</br></br>No se actualiza el cambio.',
+			                        			type:  'error'
+			                        	});
+			                        	$.notify({
+			                        	    title: "<strong>Colisiones:</strong> ",
+			                        	    message: "folios: "+data.servicios.conflictos.map(e=>{return e.numFolio+" "+e.descripcion+'</br>'})
+			                        	}, {type:'danger', showProgressbar:false});
+			                            revertFunc();
+			                        }
+		                    	}
+		                    });
+
+					}
+				});
+			},
+		    selectOverlap: function(event) {
+		    	var retorno = (['c','d','e','f','g','i'].indexOf(event.resourceId.slice(0,1)) == -1);
+		    	console.log("selectOverlap")
+		    	console.dir(event)
+		    	if (!retorno && event.id!="sinOperador"){
+		    		if (event.rendering = "background"){
+						swal({
+							title: 'No disponible',
+							html:  'El recurso que desea no está disponible.',
+							type:  'error'
+						});
+		    		} else
+                    swal({
+                        title: 'Colisiones',
+                        html:  'Aqui no se permiten horarios solapados.',
+                        type:  'error'
+                	});
+                	return ( retorno  );
+		    	}
+			},
+			resourceGroupField: 'aux',
+			resources: [
+				{ id: 'a', title: 'Juntas de trabajo y scoutings' , eventColor: '#4D4D4D', sala:0, aux:'Preproducción'},
+				{ id: 'b', title:  'Portatil', eventColor: '#5DA5DA', sala:0, aux:'Grabación' },
+				{ id: 'b1', title: 'Estudio', eventColor: '#ffca7b', sala:10, aux:'Grabación' },
+				//{ id: 'i', title: 'i Cabina de Ingesta (8)', eventColor: '#FAA43A', sala:8 },
+				//{ id: 'c', title: 'SALA INGESTA Y DIGITALIZACIÓN', eventColor: '#60BD68', sala:1 },
+				// Sala de ingesta
+				@for(op<-operadores){	
+					@if(op.sala.id==1){
+						{ id: 'c@op.personal.id', title: '@op.personal.nombreCompleto() - c@op.personal.id', eventColor: '#60BD68', sala:1, aux:'@laSala("1") 1' },
+					}
+				}
+				// Sala de Edicion
+				@for(op<-operadores){	
+					@if(op.sala.id==3){
+						{ id: 'd@op.personal.id', title: '@op.personal.nombreCompleto() - d@op.personal.id', eventColor: '#F17CB0', sala:3, aux:'@laSala("3") 3' },
+					}
+				}
+				// posproduccion 1
+				@for(op<-operadores){	
+					@if(op.sala.id==2){
+						{ id: 'e@op.personal.id', title: '@op.personal.nombreCompleto() - e@op.personal.id', eventColor: '#B2912F', sala:2, aux:'@laSala("2") 2' },
+					}
+				}
+				//Posproducción 2
+				@for(op<-operadores){	
+					@if(op.sala.id==7){
+						{ id: 'f@op.personal.id', title: '@op.personal.nombreCompleto() - f@op.personal.id', eventColor: '#B276B2', sala:7, aux:'@laSala("7") 7' },
+					}
+				}
+				// Cabina de audio
+				@for(op<-operadores){	
+					@if(op.sala.id==4){
+						{ id: 'g@op.personal.id', title: '@op.personal.nombreCompleto() - g@op.personal.id', eventColor: '#DECF3F', sala:4, aux:'@laSala("4") 4' },
+					}
+				}				
+				
+				{ id: 'h', title: 'Entrega' , eventColor: '#F15854', sala:0, aux:'Entrega'}
+			],
+			eventRender: function(event, element) {
+				//Se excluyen los cancelados
+				if (event.estadoId==100){
+					return false;
+				}
+				console.log("eventRender")
+				console.dir(event)
+
+				console.dir(element)
+				console.log("productorId", event.productorId)
+				console.log("sesion usuario", @session.get("usuario"))
+				console.log("tipo", event.tipo)
+				console.log($("button:contains('solo yo')").hasClass("fc-state-active"))
+				console.log($("button:contains('todos')").hasClass("fc-state-active"))
+				
+				element.find('.fc-content').attr("id", "evento-"+ event.id); // add event id
+		        element.find('.fc-title').prepend("<br/>");
+				
+		        element.find('.fc-list-item-time').attr("id", "evento-"+ event.id); // add event id
+			        
+
+               	if (event.tipo=="mantto")
+					  element.find(".fc-title").prepend("<i style='font-size:x-large; color:yellow; ' class='fa fa-wrench pull-right'></i>");
+
+
+
+				if (event.estadoId==4 || event.estadoId==5)
+					  element.find(".fc-title").prepend("<i style='font-size:x-large; color:yellow; ' class='fa fa-exclamation pull-right'></i>");
+				if (event.estadoId==7){
+					console.log("    event")
+					console.dir(event)
+
+					if (event.faseId==2){
+			    		console.info('%cevent.datos............', 'color: white; background: purple');
+						console.dir(event.datos)
+						console.log(    event.datos.equipo!=null  )
+						if (event.datos.equipo!=null || event.datos.accesorio!=null) {
+							if (event.datos.equipo!=null && event.datos.equipo[0].autorizo!=null)
+								element.find(".fc-title").prepend("<i style='font-size:x-large; color:green' class='fa fa-video pull-right'></i>");
+							else
+								element.find(".fc-title").prepend("<i style='font-size:x-large; color:green' class='fa fa-check pull-right'></i>");
+						} else
+							element.find(".fc-title").prepend("<i style='font-size:x-large; color:green' class='fa fa-check pull-right'></i>");
+					} else
+					  element.find(".fc-title").prepend("<i style='font-size:x-large; color:green' class='fa fa-check pull-right'></i>");
+			    }
+			    if (event.estadoId == 8 )
+	                element.find(".fc-title").prepend("<i style='font-size:x-large; color:green' class='fa fa-video pull-right'></i>");
+	            if (event.estadoId >8 && event.estadoId <= 99 )
+	                element.find(".fc-title").prepend("<i style='font-size:x-large; color:yellow' class='far fa-star pull-right'></i>");
+
+				if (  (  ($("button:contains('solo yo')").hasClass("fc-state-active")) && ('@session.get("usuario")'  == event.productorId ))
+						  ||
+						  ($("button:contains('todos')").hasClass("fc-state-active"))
+						  ||
+						  (event.rendering=="background")
+
+						){
+					
+						} else {
+							element.find("#evento-"+ event.id).parent().hide();
+						}
+			},
+			eventAfterAllRender: function(view){
+				console.log("eventAfterAllRender");
+				if("@fecha"!="" && atendido!=true){
+					console.log("atendido "+atendido)
+						$("#calendario").fullCalendar('gotoDate', moment("@fecha", ["DD-MM-YYYY", "YYYY-MM-DD"]));			
+						console.log("fecha solicitada "+$('#calendario').fullCalendar('getDate')   )
+								console.log("tresVeces 00000000")
+								console.log($("#evento-@eventoId"))
+								if ($("#evento-@eventoId").length  ){
+									$("#evento-@eventoId").parent().addClass("animated bounceIn tresVeces");
+									atendido=true;	
+								}
+				}				
+			},
+
+			// Cuando se arrastran eventos externos y son validos
+			eventReceive: function(event) {
+				console.log("Desde eventReceive")
+				$('#btnModalAceptar').show();
+				switch (event.resourceId.slice(0,1)){
+					case 'a':
+						event.faseId = 1;
+						event.faseDescripcion="Preproducción";
+						break;
+					case 'b':
+						event.faseId = 2;
+						event.faseDescripcion="Grabación";
+						break;
+					case 'i':
+						event.faseId = 6;
+						event.faseDescripcion="Ingesta";
+						break;
+					case 'c':
+						event.faseId = 1;
+						event.faseDescripcion="Preproducción";
+						break;
+					case 'd':
+						event.faseId = 1;
+						event.faseDescripcion="Preproducción";
+						event.salaId = 3;
+						break;
+					case 'e':
+						event.faseId = 1;
+						event.faseDescripcion="Preproducción";
+						event.salaId = 2;
+						break;
+					case 'f':
+						event.faseId = 1;
+						event.faseDescripcion="Preproducción";
+						event.salaId = 7;
+						break;
+					case 'g':
+						event.faseId = 4;
+						event.faseDescripcion="Posproducción";
+						event.usocabina = 'V';
+						break;
+					case 'h':
+						event.faseId = 5;
+						event.faseDescripcion="Entrega";
+						break;
+				}
+				
+				event.estadoId=4;
+				
+			//	**********
+				
+				var evento = new Object;
+				evento.id = event.id;					
+				evento.inicio = event.start;
+				evento.fin = event.end;					
+				evento.tipo = event.tipo;
+				evento.salasSalaId = $('#calendario').fullCalendar( 'getEventResource', event ).sala;
+				$productorD = LlamadaAjaxValidaProductorDisponible(evento.inicio, evento.fin, evento.id);
+				$valida =  LlamadaAjaxValidaEvento(evento); 
+				$.when( $productorD, $valida )
+                .done( function(data1, data2){
+                	console.dir(data2)
+                	if (!data1.includes( @session.get("usuario") )  && event.resourceId.slice(0,1)!="h" ){
+                        $.notify(
+                            "Conflicto, ya tiene agendada otra activivdad a la misma hora"
+                        ,{
+                        	type:"danger"
+                        });  
+                        console.dir(event)
+                        $('#calendario').fullCalendar( 'removeEvents', function(e){
+                        	return e.eventoExterno==true;
+                        } );
+                	} else {
+                        if (data2.valido== true){
+                        	mostrarDatosEvento(event);        	
+                        }
+                    }
+                });
+				
+			}
+		});
+
+
+
+
+		$('#calendario').children('.fc-content').children().append('<div id="Trash" style="float: right; padding-top: 5px; padding-right: 5px; padding-left: 5px;"><span class="ui-icon ui-icon-trash fas fa-trash"></span></div>');
+
+		//  EVENTOS PARA JQUERY FULLCALENDAR
+		var calendar = $('#calendario').fullCalendar('getCalendar');
+		$('#calendario').fullCalendar('option', 'locale', 'es');
+
+
+
+
+		calendar.off('select');
+		calendar.on('select', function(start, end, jsEvent, view, resource ) {
+			console.clear();
+			console.log("--->calendar.on.select")
+			console.log("--->resource")
+			console.dir(resource)
+			$va =validacionesAgenda(start, end, resource.id, null, null, null, null, null);
+			$.when($va).done(function(data){
+				var r = JSON.parse(data);
+				console.log("r")
+				console.dir(r)
+				console.dir(r.productorDisponible)
+				if (!r.productorDisponible){
+					revertFunc();
+					swal({
+						title: 'Error',
+						html:  r.error,
+						type:  'error'
+					});
+				}
+				if (r.productorDisponible)  {
+					console.log("start   -   end   "+  moment(start).format("DD/MM/YYYY kk:mm")+"    -    "+moment(end).format("DD/MM/YYYY kk:mm"))
+					console.log("jsEvent")
+					console.dir(jsEvent)
+					console.log("resource")
+					console.dir(resource)
+
+					var resourceSala = resource.id.slice(0,1);
+					var operadorId = resource.id.slice(1);
+
+					// VALIDAR QUE LOCUTORES, INGENIEROS ENCARGADOS DE LA ADMIN. DE EQUIPO Y ACCESORIOS NO ESTEN OCUPADOS (EN PREAGENDA O AGENDA)
+					// LO ANTERIOR PORQUE PUEDE HABER CASOS EN LOS QUE PERSONAL OPERADOR DE SALA PUEDE ESTAR EN PREAGENDA O AGENDA DE OTRO EVENTO.
+
+					var $previoAgendar = LlamadaAjax("\previoAgendar", "POST",
+						JSON.stringify({
+							inicio: start,
+							fin: end,
+							resourceid: resource.id
+							}));
+
+					$.when($previoAgendar).done(function(data){
+						console.dir(data)
+						var t="<ul style='list-style-type: circle; text-align: left;'>";
+						if (data.disponible==false){
+							for(x=0; x<data.mensajes.length;x++){
+								t+="<li>"+data.mensajes[x]+"</li>";
+							}
+							t+="</ul>";
+							swal({
+								title: "No es posible agendar el servicio",
+								html: t,
+								type: "error",
+								showConfirmButton: true
+							  });
+							return false;
+						} else {
+							var $extra = LlamadaAjax("/validacionesAgenda3","POST", JSON.stringify({inicio:start, fin:end, resourceId:resource.id, evento:0, salaId:resource.sala}));
+							$.when($extra).then(function(ff){
+								console.log("validacionesAgenda3 regresa ")
+								console.dir(ff)
+								console.log(ff.length)
+								if (ff.productorDisponible==true && ff.operadorSalaDisponible==undefined){
+										dialogosCreacion(start, end, jsEvent, view, resource);
+								}
+								if (ff.productorDisponible==false && ff.operadorSalaDisponible==undefined){
+																	swal({
+												title: 'Error',
+												html:  "No esta disponible el productor. Tiene otra actividad dentro del horario en cuestión.",
+												type:  'error'
+											});
+								}
+								console.log("ff.operadorSalaDisponible "+ff.operadorSalaDisponible)
+								if (ff.operadorSalaDisponible!=undefined){
+									console.log("10")
+									if (ff.productorDisponible==true && ff.operadorSalaDisponible==true){
+										dialogosCreacion(start, end, jsEvent, view, resource);
+									} else {
+										var mensaje =   (ff.productorDisponible==false)?"El productor esta atendiendo otro servicio.<br>":"El productor esta disponible.<br>";
+										mensaje +=   (ff.operadorSalaDisponible==false)?"El operador de sala esta atendiendo otra sala en ese horario. ":"El operador de sala esta disponible. ";
+											swal({
+												title: 'Error',
+												html:  mensaje,
+												type:  'error'
+											});
+									}
+								}
+							});
+						}
+					});
+				} // fin del if r.productorDisponible
+			});  // fin del $.when($va)
+		}); // fin del calendar on select
+
+
+		// Los parámetros start y end son de tipo moment.js
+		// Valida que: No se pueden alterar eventos en la vista 'Mes'
+		// Valida que: No se pueden agendar eventos en días no laborales (excepto grabación portatil)
+		// Llama a validacionesAgenda3
+
+		function validacionesAgenda(start, end, resourceId, eventoId, salaId, productorId, productorNombre, estadoId){
+			var resourceSala;
+			var operadorId;
+			var d = $.Deferred();
+			var conErrorres = false;
+			console.log("desde validacionesAgenda............")
+			console.log("resourceId")
+
+			if (@session.get("rolActual")!="100"){
+				d.resolve( JSON.stringify( {error: "Solo los productores pueden hacer solicitudes"}) )
+			}
+			if ( $('#calendario').fullCalendar('getView').name == 'timelineMonth'){
+            	d.resolve( JSON.stringify( {error: "En la vista <strong>Mes</strong> no es posible crear ni modificar eventos ya existentes."}) )
+            }
+			if ( $('#calendario').fullCalendar('getView').name == 'timelineWeek'){
+            	d.resolve( JSON.stringify( {error: "En la vista <strong>Semana</strong> no es posible crear ni modificar eventos ya existentes."}) )
+            }
+			//Validar que sea día laborable cuando se trate de salas (incluso las que no requieren operador), entrega y preproducción
+			//es decir; solo se permite grabación en días no laborales
+			if (resourceId.substring(0,1)!="b" && (start.day()==6 || start.day()== 0 )){
+				d.resolve( JSON.stringify( {error: "En días no laborales no esta permitida esta operación, sólo las grabaciones portátiles se pueden agendar en sábado o domingo"}) )
+			}
+
+
+			// Aplicables a calendar.resize
+			if (estadoId != null && productorId!=null){
+				resourceSala = resourceId.slice(0,1);
+				operadorId = resourceId.slice(1);
+				if (estadoId >=7 && !@session.get("rolActual")=="1"){
+					d.resolve( JSON.stringify( {error: "Los eventos autorizados no pueden modificarse"}) )
+				}
+				if (productorId != @session.get("usuario") &&  (@session.get("rolActual")!="1") ){
+					d.resolve( JSON.stringify( {error: "Este evento es del productor <strong>"+productorNombre+"</strong>, usted no puede modificarlo"}) )
+				}
+				if (estadoId >=7 && @session.get("rolActual")!="1"){
+					d.resolve( JSON.stringify( {error: "No se puede cambiar la duración a los eventos autorizados"}) )
+				}
+			}
+			console.log(    JSON.stringify({inicio:start, fin:end, resourceId: resourceId, evento: eventoId, salaId:salaId})    );
+			var $x = LlamadaAjax("/validacionesAgenda3","POST", JSON.stringify({inicio:start, fin:end, resourceId: resourceId, evento: eventoId, salaId:salaId, productorId:productorId }));
+			$.when($x).then(function(ff){
+				console.dir(ff)
+				if (ff.productorDisponible==false){
+					d.resolve( JSON.stringify({error:"El productor no esta disponible. Tiene otra actividad en el día-horario en cuestión"}));
+				}
+				if (ff.productorDisponible==true){
+					console.log("preparado para modificar")
+					evento = event;
+					//Actualizar con ajax  el evento
+					var evento = new Object;
+					evento.id = event.id;
+					evento.inicio = event.start;
+					evento.fin = event.end;
+					evento.tipo = event.tipo;
+					d.resolve( JSON.stringify({productorDisponible:true})   );
+				}
+				console.log("fin de validacionesAgenda............")
+			});//fin del $.when
+            return  d.promise();
+		}
+		
+
+		
+		calendar.off('eventOverlap');
+		calendar.on('eventOverlap', function(stillEvent, movingEvent ) {
+	        return !stillEvent.faseId == 1;
+	    });
+
+
+
+		
+		function dialogosCreacion(start, end, jsEvent, view, resource){
+			console.log("abrindo dialogosCreacion")
+			console.log("@folioNum")
+    		var encontrado = false;
+			var numFolio = "";
+			swal({
+				  title: "Folio",
+				  html: "Escriba el número de folio a agendar"+"<div id=auxfolioDescripcion></div><br><br><select id='elSelecto' data-live-search='true'></select><br><br><div style='text-align:left; padding-left:2em; padding-right:2em;'>En la lista aparecerán sólo aquellos folios cuya fecha de entrega sea posterior a la fecha de hoy.<br><br>Si desea agendar un evento relacionado a un folio que ya superó la fecha de entrega o que ya esta terminado, contacte al administrador.</div>"+
+				         "<div id='divSelectFolio' style='height:5em'></div>",
+				  showCancelButton: true,
+			      allowOutsideClick: false,
+			      allowEscapeKey: false,
+			      showLoaderOnConfirm: true,
+				  animation: false,
+				  customClass: 'animated bounceInDown',
+				  inputPlaceholder: "Folio",
+				  width:"90%",
+				  onOpen: function(){
+					  $('.popover').popover('hide');
+					    @if(session.get("rolActual")=="100"){
+		                        @for(folio<-folios){
+		                            @if(folio.estado.id>=4 && folio.estado.id<=7){
+		                                @for(p<-folio.productoresAsignados){
+		                                    @if(p.personal.id==session.get("usuario").toLong){
+		                                            $("#elSelecto").append("<option value=@folio.numfolio>@folio.numfolio"+" -  "+"@folio.oficio.descripcion</option>");
+		                                    }
+		                                }
+		                            }
+		                        }
+					    }
+                        @if(session.get("rolActual")=="1"){
+                            @for(folio<-models.Folio.find.all()){
+                                @if(folio.estado.id>=4 && folio.estado.id<=7){
+                                    @for(p<-folio.productoresAsignados){
+                                             $("#elSelecto").append("<option value=@folio.numfolio>@folio.numfolio"+" -  "+"@folio.oficio.descripcion</option>");
+                                    }
+                                }
+                            }
+                    }
+					  $("#elSelecto").selectpicker({
+						  width:"90%",
+						  title:"Escriba, seleccione o busque un número de folio o descripción del oficio",
+						  size: 5,
+						  liveSearchNormalize: true
+						});
+					  @if(folioNum!=null && folioNum!=0){
+						  //$("#elSelecto option[value=@folioNum]").prop("selected", true);
+						  console.log(@folioNum)
+						  $('#elSelecto').selectpicker('val', @folioNum);
+						  $("#elSelecto").selectpicker('refresh');
+					  }
+				  },
+					  preConfirm: function (  ) {
+				    return new Promise(function (resolve, reject) {
+                          numFolio = $("#elSelecto") .val();
+                          inputValue = numFolio;
+                          if (inputValue === false  || inputValue === ""){
+                        	  reject('Debe ingresar un número de folio.');
+                          } else{
+                        	  $.when( LlamadaAjaxBuscaFolio(numFolio)  )
+                              .done( function(data){
+                                  if (data.encontrado){
+                                	  console.log("///////////////////////////////////////////")
+                                	  console.dir(data)
+                                      var eventData = {
+                                              fpaId: data.fpaId,
+                                              title: numFolio+" "+data.title,
+                                              descripcion: data.descripcion,
+                                              tipo:'preagenda',
+                                              folioId: data.folioId,
+                                              folioNum: data.folioNum,
+                                              estadoId: 4,
+                                              estadoDescripcion: 'Solicitud',
+                                              productorId: data.productorId,
+                                              productorNombre: data.productorNombre,
+                                              start: start,
+                                              end:  end,
+                                              resourceId: resource.id,
+                                              _id:  new Date().getTime()
+                                          };
+                                	  console.log("--------------------------------");
+                                	  console.log("-------switch con "+eventData.resourceId+"-------");
+                                	  console.log("--------------------------------");                                        
+                                      
+                                          switch (eventData.resourceId.substring(0,1)){
+                                              case 'a':
+                                                  eventData.faseId = 1;
+                                                  eventData.faseDescripcion="Preproducción";
+                                                  break;
+                                              case 'b':
+                                                  eventData.faseId = 2;
+                                                  eventData.faseDescripcion="Grabación";
+                                                  break;
+                                              case 'i':
+                                                  eventData.faseId = 6;
+                                                  eventData.faseDescripcion="Ingesta";
+                                                  break;
+                                              case 'c':
+                                            	  console.log("--------------------------------");
+                                            	  console.log("-------inicia con c-------------");
+                                            	  console.log("--------------------------------");  
+                                                  eventData.faseId = 1;
+                                                  eventData.faseDescripcion="Preproducción";
+                                                  eventData.salaId = 1;
+                                                  break;
+                                              case 'd':
+                                                  eventData.faseId = 1;
+                                                  eventData.faseDescripcion="Preproducción";
+                                                  eventData.salaId = 3;
+                                                  break;
+                                              case 'e':
+                                                  eventData.faseId = 1;
+                                                  eventData.faseDescripcion="Preproducción";
+                                                  eventData.salaId = 2;
+                                                  break;
+                                              case 'f':
+                                                  eventData.faseId = 1;
+                                                  eventData.faseDescripcion="Preproducción";
+                                                  eventData.salaId = 7;
+                                                  break;
+                                              case 'g':
+                                                  eventData.faseId = 4;
+                                                  eventData.faseDescripcion="Posproducción";
+                                                  eventData.salaId = 4;
+                                                  eventData.usocabina = 'V';
+                                                  break;
+                                              case 'h':
+                                                  eventData.faseId = 5;
+                                                  eventData.faseDescripcion="Entrega";
+                                                  break;
+                                          }
+                                          eventData.start = moment(eventData.start);
+                                          eventData.end = moment(eventData.end);
+                                          eventData.estadoId=4;
+                                          if (eventData.id == undefined){
+                                              var t = Math.floor((Math.random() * 30000)+500);
+                                              eventData.id = 0;
+      										  console.log("despues de que fue indefinido ",eventData);
+                                              $("#divIdTemporal").html( 0 );
+                                         }
+
+											console.log("eventData00", eventData);
+                                          // *** Una vez encontrado el folio validar que no haya colisiones en esta posición
+                                          var aux ;
+                                          aux = {eventoId: eventData.id,
+                                        		 tipo: eventData.tipo,
+                                        		 inicio: eventData.start,
+                                        		 fin: eventData.end,
+                                        		 salasSalaId: eventData.salaId,
+                                        		 faseId: eventData.faseId,
+                                        		 folio: eventData.folioNum
+                                                 }
+                                           $.when( LlamadaAjaxValidaEvento(aux)  )
+                                            .done( function(data){
+                                                if (data.valido== true){
+                                                	$('#btnModalAceptar').show();
+                                                    $('#calendario').fullCalendar('renderEvent', eventData, true);
+                                                    console.log(eventData.id);
+                                                    //Obtener el evento del calendario
+                                                    var eventos = $('#calendario').fullCalendar('clientEvents', function(evt) {
+                                                                return (evt.id == eventData.id &&  evt.tipo == "preagenda"   );
+                                                    });
+                                                    var e = eventos[0];
+                                                    $("#evento-"+e.id).parent().click();
+                                                } else {
+                                                    swal({
+                                                        type: 'error',
+                                                        title: 'Error',
+                                                        html: 'Se localizó el folio <strong>' + aux.numfolio+'</strong> pero no esta permitido el empalme de horarios.'
+                                                      })
+                                                	return false;
+                                                }
+                                            });
+                                          resolve();
+                                  } else {
+                                	  swal('Error','El número de folio no existe o no esta asignado a usted.','error');
+                                  }
+
+                                  $('#calendario').fullCalendar('unselect');
+                                  });
+                          }
+				    })
+				  }
+		   }).then(function(resultado){
+                $.notify({
+                    title: "<strong>Correcto:</strong> ",
+                    message: "Se localizó el folio "
+                },{
+                    type: 'success'
+                });
+		   }).catch(swal.noop);
+        }
+		
+
+
+		// BORRAR EVENTO
+		$('#btnModalBorrar').off('click');
+		$('#btnModalBorrar').on('click',function(){
+			console.log("tempo  "+$('#divIdTemporal').text().trim())
+            var eventos = $('#calendario').fullCalendar('clientEvents', function(evt) {
+                return (evt.id == $('#divIdTemporal').text().trim()  );
+            });
+            var e = eventos[0];
+            console.dir(e)
+            console.log('el rol: @session.get("rolActual")');
+            console.log('el usuario: @session.get("usuario")');
+            console.log('el id del productor:'+e.productorId);
+            if ( @session.get("rolActual")=="100" &&  @session.get("usuario") != e.productorId  ){
+			    swal(
+					      'Error',
+					      'El evento esta asignado al productor '+e.productorNombre+', usted no puede eliminarlo.',
+					      'error'
+					    )            	
+			    return false;
+            }
+            if (  	(@session.get("rolActual")=="100" &&  @session.get("usuario") == e.productorId)
+            		||
+            		( @session.get("rolActual")=="1")
+               ){
+    			swal({
+  				  title: "¿Desea eliminar el evento?",
+  				  type: "warning",
+  				  showCancelButton: true,
+  				  confirmButtonColor: "#d33",
+  				  cancelButtonColor: '#3085d6',
+  				  confirmButtonText: "Si, borrar el evento.",
+  				  cancelButtonText: "No, cancelar borrado.",
+  				  preConfirm: function(){
+  					  return new Promise(function (resolve, reject) {
+  		                  var evento = new Object();
+  		                  evento.id = e.id;
+  		                  evento.tipo = e.tipo;
+  		                  //LLamada al controlador para eliminar evento
+  		                  $borrado=null;
+  		                  if (@session.get("rolActual")=="1"){
+  		                	  console.log("borrar como admin")
+  		                      $borrado = LlamadaAjaxEliminaEventoAdmin(evento);
+  		                  }
+  		                  if (@session.get("rolActual")=="100"){
+  		                	console.log("borrar como productor")
+  		                	  if ( @session.get("usuario") == evento  ){
+  		                	  }
+  		                	  $borrado = LlamadaAjaxEliminaEventoProd(evento);
+  		                  }
+  		                      
+
+  		                  $.when($borrado).done(
+  		                          function(data){
+  		                              if (data.eliminado){
+  		                                  //swal("Eliminado", "Se eliminó correctamente el evento.", "success");
+  		                                  $("#btnModalCancelar").click();
+  		                                  resolve()
+  		                              } else {
+  		                                  reject("No fue posible eliminar el evento.");
+  		                              }
+  		                          }
+  		                  );
+  					  });
+  				  }
+  				}).then(function () {
+  					  swal(
+  							    'Eliminado!',
+  							    'Se eliminó correctamente el evento.',
+  							    'success'
+  							  )
+  				}, function (dismiss) {
+  					  if (dismiss === 'cancel') {
+  					    swal(
+  					      'Cancelado',
+  					      'Usted canceló la eliminación del evento.<br>Se conserva el evento.',
+  					      'error'
+  					    )
+  					  }
+  				}).catch(swal.noop);            	
+            }			
+            if (   !(@session.get("rolActual")=="100" ||  @session.get("rolActual")=="1")){
+            	swal("Error", "Usted no puede hacer modificaciones", "error");
+            	return false;
+            }
+		});
+
+
+		 //Cancelar
+		$('#btnModalCancelar').off('click');
+        $('#btnModalCancelar').on('click',function(){        	
+            var eventos = $('#calendario').fullCalendar('clientEvents', function(evt) {
+                return (evt.id == 0  );
+        	});        	
+            console.dir(eventos)
+            if (eventos.length > 0){
+                $('#calendario').fullCalendar('removeEvents', eventos[0]._id);
+            	  $('#calendario').fullCalendar('removeEvents', eventos[0].id);
+            }
+        });
+
+
+        calendar.off('eventMouseover');
+		calendar.on('eventMouseover', function(  event, jsEvent, view ){
+			var t = $(this);			
+			$(this).attr("data-toggle","popover")
+					.attr("data-title", '<h3 class="popover-title">'+event.title+'<a href="#" class="close" data-dismiss="alert">×</a></h3>')
+					.attr("data-html",true)
+					.attr("data-popoverdelay", true)
+					.attr("data-trigger","hover")
+					.attr("data-placement","auto")
+					.attr("data-width","600px")
+					.attr('data-delay',    2000 );
+			
+			
+			if (event.tipo=="mantto"){
+				t.attr("data-content",  "<span style='font-weight:bold'>Mantenimiento de la sala</span>");
+				t.attr("data-container", 'body');
+				t.css("z-index", 3000);
+			     t.popover();
+			     return false;
+			}
+			if (event.id!="mantto"){
+				console.dir(event)
+				console.log("bbbbbbbbbbbbbbbbbbb")
+				 if (event.datos!=null){
+					 var data = event.datos;
+					 console.dir(data)
+					 var cad = "";
+					 if (data.fase.id ==1){
+						 cad=" (";
+						 if (data.junta!=undefined)
+							 cad+="Junta de trabajo";
+						 if (data.locacion!=undefined)
+							 cad+="Scouting";
+						 if (data.sala !=undefined && data.sala.usocabina!=undefined && data.sala.usocabina.descripcion!=null){
+							 cad+= nombreUsoCabina(  data.sala.usocabina.descripcion  );
+						 }
+						 cad+=")  ";
+					 }
+					 //Salas
+					 if (data.sala!=undefined && data.sala.length>0){
+						 //Uso de sala
+						 if (data.sala.id ==4){
+							 if (data.sala.usocabina!=undefined){
+								 cad=" ("+nombreUsoCabina(data.sala.usocabina.descripcion)+")  ";
+							 }
+						 }
+					 }
+					var cadena = "<span style='font-weight:bold'>"+(data.tipo=='preagenda'?'Sin autorizar':'Autorizado')+   "</span><br>Folio: "+data.folio.numfolio+"<br>Fase.: "+data.fase.descripcion+cad+"<br>Estado: "+data.folio.estado.descripcion+"<br><br>"+moment(event.inicio).format('DD/MM/YYYY   HH:mm')+" - "+moment(event.fin).format('HH:mm')
+					+"<hr>"+"Productor: "+data.productor.nombre+"</br>";
+					if (data.operadorsala!=undefined){
+						cadena+="Operador de sala: "+data.operadorsala.descripcion+"</br>";
+					}
+					cadena+="<hr>"
+							+"<div class='pull-right'>"
+							+"<a href='javascript:verDetalles("+event.id+",\""+event.tipo+"\", "+data.fpa.id+")'><i class='fas fa-eye fa-lg fa-fw' aria-hidden='true'  title='Ver información del folio y sus eventos'></i></a>"
+							+"<a href='javascript:glypEliminarEvento("+event.id+")'><i class='fas fa-trash fa-lg fa-fw' aria-hidden='true'  title='Elimina este evento'></i></a>"
+							+"</div>"
+					t.attr("data-content",  cadena);
+				 } else {
+					 t.attr("data-content",  "El evento ha sido eliminado o ha cambiado de estado</br></br><a href='javascript:tempo(\"+1\");tempo(\"-1\")'>Actualizar la vista");
+				 }
+				t.attr("data-container", 'body');
+				t.css("z-index", 3000);
+
+				 t.popover();
+			}
+		});
+
+		$(document).off("mouseenter", "[data-toggle='popover']");
+		$(document).off("mouseleave", "[data-toggle='popover']");
+		$(document).on("mouseenter", "[data-toggle='popover']", function(e){
+	         var c = $(this);
+	         if (c.data('popoverdelay') == true){
+		        var timer = setTimeout(function(){
+		            c.popover("show");
+		        },  1000);
+		        $(this).data('myTimer', timer);
+	         }
+	    }).on('mouseleave', "[data-toggle='popover']", function(e){
+	        clearTimeout($(this).data('myTimer'));
+	    });
+
+		//Cuando pasa el mouse sobre un área que no tiene operador de sala
+		$(document).off("mouseenter", ".fc-bgevent");
+		$(document).on("mouseenter", ".fc-bgevent", function(e){
+	         console.log("sinOperador")
+				$(this).attr("data-toggle","popover")
+				.attr("data-title", "Sin operador")
+				.attr("data-html",true)
+				.attr("data-trigger","hover")
+				.attr("data-placement","auto")				
+				.attr("data-content", "En este horario no hay operador de sala")
+      			.attr("data-container", 'body')
+				.css("z-index", 3000);
+				var t = $(this);             
+			    t.popover("show");		         
+	    });
+
+		calendar.off('eventClick');
+		calendar.on('eventClick', function(  event, jsEvent, view ){
+			console.log("desde eventClick")
+			console.dir(event)			
+			if (event.estadoId == 4 || event.estadoId == 5)
+				event.tipo="preagenda";
+			if (event.estadoId >= 7)
+				event.tipo="agenda";
+			if (event.tipo=="mantto"){
+				swal({
+					title: 'Mantenimiento',
+					html:  'Sala en mantenimiento.',
+					type:  'error'
+				});
+				return ( true  );
+			}
+			if (event.tipo!="mantto"){
+				//alert("desde calendar.on eventClick");
+				mostrarDatosEvento(event);
+			}
+		});
+
+		
+
+
+		$('#external-events .fc-event').each(function() {
+			$(this).data('event', {
+				fpaId: $(this).parent().find("div[name='eventoExterno']").find("div[name='idFPA']").text(),
+				title: $.trim($(this).text()),
+				stick: true,
+				descripcion: $(this).text().substr($(this).text().indexOf(" ")+1),
+				tipo:'preagenda',
+				folioId: $(this).parent().find("div[name='eventoExterno']").find("div[name='idFolio']").text(),
+				folioNum: $(this).parent().find("div[name='eventoExterno']").find("div[name='nomFolio']").text(),
+				estadoId: 4,
+				estadoDescripcion: 'Solicitud',
+				productorId: @session.get("usuario"), productorNombre:'@session.get("nombre")',
+				duration:'03:00',
+				eventoExterno: true
+			});
+			$(this).draggable({
+				zIndex: 999,
+				revert: true,
+				revertDuration: 0
+			});
+		});
+
+
+
+        swal.setDefaults({
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showLoaderOnConfirm: true,
+            animation: false,
+            customClass: 'animated bounceInDown'
+        });
+        
+        $(".fc-btnSiguiente-button").addClass("fc-icon fc-icon-right-single-arrow");
+        $(".fc-btnAnterior-button").addClass("fc-icon fc-icon-left-single-arrow");
+        
+        $('.fc-btnCombo-button').wrap('<div class="btn-group"></div>');
+        $('.fc-btnCombo-button').addClass("btn btn-default dropdown-toggle");
+        $('.fc-btnCombo-button').attr("data-toggle","dropdown");
+        $('.fc-btnCombo-button').append('<span class="caret"></span>');
+        $('.fc-btnCombo-button').parent().append('<ul class="dropdown-menu"><li><a href="#">Action</a></li><li><a href="#">Another action</a></li><li><a href="#">Something else here</a></li><li role="separator" class="divider"></li>        <li><a href="#">Separated link</a></li>      </ul>');
+        
+  
+        
+        $("button:contains('todos')").click();
+        $(".fc-btnHoy-button").click();
+        
+        
+	});    //  fin de function()
+
+
+    <!-- FullCalendar -->
+
+
+ 	$("input[type='radio'][name='rgTipoPreprod']").change(function(){
+ 		if ($(this).val()==1){
+ 			$("#panelesFase1 input[type='text'][name='locacion']").parent().hide();
+ 			$("#panelesFase1 div[name='preguntaPersonalSolicitado']").hide();
+ 			$("#panelesFase1 div[name='preguntaPersonal']").hide();
+
+ 			$("#panelesFase1 input[type='text'][name='locacion']").val("");
+ 			if (@session.get("rolActual")=="100"){
+ 				$("input[name^='inp_preprod_']").val("");
+ 			}
+ 			$("#myModalLabel2").html("<h3>Agenda para Preproducción (junta de trabajo)</h3>");
+ 		}
+ 		if ($(this).val()==2){
+ 			$("#panelesFase1 input[type='text'][name='locacion']").parent().show();
+ 			$("#panelesFase1 div[name='preguntaPersonalSolicitado']").toggle(  $("#divIdEstado").text()=="4" ||  $("#divIdEstado").text()=="5"  );
+ 			$("#panelesFase1 div[name='preguntaPersonal'],  #panelesFase1 div[name='preguntaVehiculo']").toggle(@session.get("rolActual")=="1");
+
+ 			$("#myModalLabel2").html("<h3>Agenda para Preproducción (scouting)</h3>");
+ 		}
+ 	});
+
+
+
+    $("#panelesUsoCabinaAudio input[type='radio'][name='rgUsoCabina']").change(function(){
+    	$("#panelesUsoCabinaAudio div[name='preguntaLocutoresSolicitados']").toggle($(this).val()=='V');
+        $("#panelesUsoCabinaAudio div[name='preguntaPersonalSolicitado'], #panelesUsoCabinaAudio div[name='preguntaLocutoresSolicitados']").toggle($(this).val()=="V");
+        $("#panelesUsoCabinaAudio div[name='preguntaUsoCabina2'],    #panelesUsoCabinaAudio div[name='preguntaPersonalAsignado']").hide();
+        $("#panelesUsoCabinaAudio input[type='radio'][name='rgUsoCabina'][value='"+$(this).val()+"']").prop("checked", true);
+    });
+
+
+    $("input[type='radio'][name='rgFaseSala']").change(function(){
+    	console.log($(this).val()   )
+
+        var s={};
+    	$("#myModalLabel2").html("");
+    	var salaid = $(this).closest(".panel-group").attr("id").substr(-1);
+
+                var texto = $("#myModalLabel2").text().substring( $("#myModalLabel2").text().search("en la")   );
+
+                @for(sala <- models.Sala.find.all()){
+                	s[@sala.id] = "@sala.descripcion";
+                }
+
+                $("#myModalLabel2").html( "<h4>Agenda para la "+s[salaid]+" - "+($(this).val()==3?"Edición":"Posproducción")+" </h4>" );
+                // Cuando es Sala de edición lineal, en preproducción se oculta la solicitud de cantidad de personal
+                var elPanel = $(this).closest("[id^='panelesSalaEdicion']");
+                $(elPanel).find("div[name='preguntaPersonalSolicitado']").toggle(  $(elPanel).find("input[name='rgFaseSala'][value=4]").is(':checked')   );
+                $("div[id^='panelesSalaEdicion']").find("div[name='preguntaRDisenioSolicitados']").toggle(    ($(this).val()=="4" && @session.get("rolActual")=="1" )  || (($(this).val()=="4" && @session.get("rolActual")=="100"  &&  $("#divIdEstado").text()== 7  ) )       );
+
+
+
+  		$("#panelesSiNoOtro").toggle(  $("input[type='radio'][name='rgFaseSala']:checked").val()=="I"  );
+    	
+    });
+
+
+    function glypEliminarEvento(eventoId){
+        $("#divIdTemporal").html(eventoId);
+        $("#btnModalBorrar").click();
+    }
+
+    function cerrarPopover(){
+    	$("[data-toggle='popover'], .popover").popover("hide");
+    }
+
+	function tempo(direccion){
+		 $('.popover [data-toggle="popover"]').popover('hide');
+		//console.clear();
+		var d = $.Deferred();  
+		$losDatos=tempo2(direccion);
+		$losOperadores = operadores();
+		$.when($losDatos, $losOperadores).done(
+				function(dato){
+					d.resolve(dato);
+				}
+		);
+		d.promise();
+	}
+	
+	
+	// Obtiene los eventos de la DB y los pone en la agenda (calendar renderEvents)
+    function tempo2(direccion){
+        var d = $.Deferred();    	
+	    var object = new Object();  
+	    $('.popover [data-toggle="popover"]').popover('hide');
+	    $('#calendario').fullCalendar( "removeEvents");
+     	if ("@fecha"!="" && atendido==false){
+			console.log("CON FECHA")    		
+    	} else {    	
+    		console.log("SIN FECHA")
+    		if (direccion!=undefined){
+			      if (direccion == "-1")
+			      	$('#calendario').fullCalendar('prev');
+			      if (direccion == "0")
+			        	$('#calendario').fullCalendar('today');      
+			      if (direccion == "+1")
+			        	$('#calendario').fullCalendar('next');
+    		}
+    	}
+		object.start=$('#calendario').fullCalendar('getView').start.format();
+		object.end=$('#calendario').fullCalendar('getView').end.format();
+		object.view=$('#calendario').fullCalendar('getView').type ;    	
+		var moment = $('#calendario').fullCalendar('getDate');
+		$.ajax({
+			url: '/ajaxDatosEventos',
+			method: 'GET',
+		    data: object,
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "json"	
+	    }).success(function(data){
+	    	console.info('%csuccess de ajaxDatosEventos............', 'color: white; background: green');
+			console.dir(data)
+			console.log("fecha: @fecha atendido: "+atendido+"   eventoId: @eventoId")
+			$('#calendario').fullCalendar('renderEvents', data, true);
+			d.resolve(data);
+	    }).error(function(xhr, status, error) {
+		  alert("error en ajax 001 -  "+ error );
+		  d.reject;
+		});
+    	return d.promise();    	
+    }
+    
+    function operadores(){
+    	var $r=LlamadaAjax("\ajaxOperadoresSalas", "GET", null);
+    	$.when($r).done(function(data){
+	    	console.log("AAAAAAA")
+	    	console.log(data)
+			for ( let operadorsala of data){				
+					switch (operadorsala.sala.id){
+						case 1: r = "c"; break;
+						case 3: r = "d"; break; 
+						case 2: r = "e"; break;
+						case 7: r = "f"; break;
+						case 4: r = "g"; break;
+					}
+				//	$("tr[data-resource-id="+r+operadorsala.personal.id+"]").find("span.fc-cell-text").parent().append( "<div id='resourceOperaSala-"+operadorsala.sala.id+"-"+operadorsala.personal.turno+"' data-operadorId="+operadorsala.personal.id+" style='display:inline-block; padding:3px;' data-toggle='popover'  data-trigger='hover'  title='Operador de sala' data-content='0' 	data-popoverdelay=false data-html=true 	data-placement=auto data-container=body><i class='fas fa-user'></i></div>" );
+			}
+    	});
+    }
+    
+    
+    
+    
+    
+	//Cuando pasa el mouse sobre el icono de operador de sala (en resource de la agenda)
+	$(document).off("mouseenter", "[id^='resourceOperaSala-']");
+	$(document).on("mouseenter", "[id^='resourceOperaSala-']", function(e){
+         var t = $(this);
+         var turno="";
+         var fechaCalendario = $('#calendario').fullCalendar('getDate');
+         var listaH="";
+         $dt = LlamadaAjaxBuscaPersona( $(this).data("operadorid"));
+         $.when($dt).done(function(data){
+        	 console.log("LlamadaAjaxBuscaPersona.done")
+        	 console.dir(data)
+        	 if (data.turno=="M")
+        		 turno="Matutino";
+        	 if (data.turno=="V")
+        		 turno="Vespertino";
+        	 if (data.turno=="A")
+        		 turno="Ambos";
+        	 if (data.horarios.length>0){
+        		 for ( let h of data.horarios  ){
+        			 var dia =""
+        			 switch (h.diasemana){
+        			 	case 2: dia="Lunes"; break; 
+        			 	case 3: dia="Martes"; break;
+        			 	case 4: dia="Miércoles"; break;
+        			 	case 5: dia="Jueves"; break;
+        			 	case 6: dia="Viernes"; break;
+        			 }
+        			 listaH+="<div class='row'>";
+        			 listaH+="<div class='col-sm-6'>";
+        		 	 listaH+= dia;
+        		 	 listaH+="</div>";
+        		 	 listaH+="<div class='col-sm-3'>";
+        		 	 listaH+=moment(h.desde).format('HH:mm');
+        		 	 listaH+="</div>";
+       		 	     listaH+="<div class='col-sm-3'>";
+        		 	 listaH+=moment(h.hasta).format('HH:mm');
+        		 	 listaH+="</div>";
+        		 	 listaH+="</div>";
+        		 }        		 
+        	 }
+			 t.attr("data-content", "Turno "+turno+"<br>"+data.nombre+" "+data.paterno+" "+data.materno+"<br><br>Horario<br>"+listaH)
+			 t.attr("data-container", 'body');
+			 t.attr("title",'Operador de sala <a href="#" class="close" data-dismiss="alert">&times;</a>');
+			 t.css("z-index", 3000);
+			t.popover("show");
+         });
+   });
+
+
+	  function cancelarEvento(servicioId){
+			// Genera las opciones para motivo de cancelación
+			  var inputOptionsPromise = new Promise(function(resolve) {
+					  resolve({
+						  @for(m <-models.MotivoCancelacion.find.all()){
+							  @m.id : "@m.descripcion",
+						  }
+					  });
+				})	  
+				swal({
+					  type: 'question',
+				      title: '¿Motivo de cancelación?',
+				      input: 'select',
+				      inputOptions: inputOptionsPromise,
+				      inputPlaceholder: 'Seleccione motivo',
+				      showCancelButton: true,
+				      inputValidator: function(value) {
+				        return new Promise(function(resolve, reject) {
+				          if (value != '') {
+				            resolve();
+				          } else {
+				            reject('Seleccione un motivo')
+				          }
+				        })
+				      }
+				    }).then(function(result) {
+				   	  $cancela =  LlamadaAjaxCancelaEvento(servicioId, result); 
+				  	  $.when($cancela).done(function(datac){
+				  		  console.dir(datac)
+				  		  if (datac.cancelado){
+				  			$.notify("Se canceló el evento");
+				  			  actualiza();
+				  		  } else {
+		                      $.notify(
+		                              "No se pudo cancelar el evento"
+		                          ,{
+		                          	type:"danger"
+		                          }); 
+				  		  }
+				  	  });
+				    })	  
+			}   	
+	    $(document).off("click", ".popover .close");
+	    $(document).on("click", ".popover .close" , function(){
+	        $(this).parents(".popover").popover('hide');
+	    });
+  
+    
+</script>
+<script src="@routes.Assets.at("lib/moment/min/moment.min.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("fullcalendar-scheduler-1.9.4/lib/fullcalendar.min.js")"></script>
+<script src="@routes.Assets.at("fullcalendar-3.9.0/locale/es.js")"></script>
+<script src="@routes.Assets.at("fullcalendar-scheduler-1.9.4/scheduler.min.js")"></script>
+
+
+<script src="@routes.Assets.at("jquery-UI/jquery-ui.min.js")"></script>
+<script src="@routes.Assets.at("bootstrap-notify/bootstrap-notify.min.js")"></script>
+
+<script src="@routes.Assets.at("bootstrap-duallistbox/jquery.bootstrap-duallistbox.min.js")"></script>
+
+<script src="@routes.Assets.at("javascripts/agenda.js?version=")@ale()"></script>
+<script src="@routes.Assets.at("javascripts/general.js?version=")@ale()"></script>
+<script src="@routes.Assets.at("javascripts/agendaAjax.js?version=")@ale()"></script>
+<script src="@routes.Assets.at("javascripts/agendaMostrarDatosEvento.js?version=")@ale()"></script>
+
+<script src="@routes.Assets.at("bootstrap-select/js/bootstrap-select.min.js")"></script>
+<script src="@routes.Assets.at("bootstrap-select/js/i18n/defaults-es_ES.min.js")"></script>
+
+<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("lib/animate.css/animate.min.css")">
+<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("bootstrap-select/css/bootstrap-select.min.css")">
+
+<script src="@routes.Assets.at("javascripts/misServicios.js?version=")@ale()"></script>
+<script src="@routes.Assets.at("javascripts/detalleServiciosAjax.js?version=")@ale()"></script>
+<script src="@routes.Assets.at("javascripts/agendaAjaxValidacionesReglas.js?version=")@ale()"></script>
+<script src="@routes.Assets.at("javascripts/async.js?version=")@ale()"></script>
+
+<script type="text/javascript" src="@routes.Assets.at("bootstrap-material-datetimepicker-gh-pages/js/bootstrap-material-datetimepicker.js")"></script>
+<link rel="stylesheet" href="@routes.Assets.at("bootstrap-material-datetimepicker-gh-pages/css/bootstrap-material-datetimepicker.css")" />
+<link rel="stylesheet" href="@routes.Assets.at("bootstrap-material-datetimepicker-gh-pages/css/googleApisMaterial.css")" />
+<link rel="stylesheet" href="@routes.Assets.at("bootstrap-material-datetimepicker-gh-pages/css/googleApisRoboto.css")" />
+
+
+

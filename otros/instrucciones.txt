@@ -1,0 +1,11 @@
+Opciones para corren en producción:
+
+-J-server
+
+
+
+editar el archivo /etc/mysql/my.cnf
+y agregar
+default_authentication_plugin= mysql_native_password
+
+

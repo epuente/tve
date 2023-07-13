@@ -1,0 +1,3 @@
+En el apartado de usuario, validar que solo se agregue un email por cada input
+
+Que los productores puedan ver el pdf del oficio

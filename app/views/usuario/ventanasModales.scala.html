@@ -1,0 +1,513 @@
+<style>
+	.nav>li>a { font-size: 0.8em;}
+	.nav-tabs>li>a {margin-right: -0.8em;}
+</style>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog-lg" role="document" style="width: 95%; height: 95%">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Agenda de servicios para el folio </h4>
+      </div>
+      <div class="modal-body">
+        <div style="width: 100%">
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document" style="width: 75%">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="myModalLabel2"></div>
+      </div>
+      <div class="modal-body ">
+        <div class="hidden">
+	      	idFpa<div id="divFolioProductorAsignadoId">???</div>
+	      	idPas  / idAs<div id="divIdTemporal">¿¿¿¿¿</div>
+	      	idEstado <div id="divIdEstado"></div>
+	      	tipoOperacion <div id="divIdTipoOperacion"></div>
+      	</div>
+        <div style="width: 100%">
+			<div class="center-block">
+
+		      <div id="General" class="panel panel-default">
+			  	<div class="panel-body">
+			  	<div class="row">
+			  		<div class="col-sm-10">
+						<div class="row">
+				      		<div class="col-sm-3">
+				      			<div id='divConfirmarFolio'></div>
+				      		</div>
+				      		<div class="col-sm-9">
+				      			<div id="divConfirmarDescripcion"></div>
+				      		</div>
+			  			</div>
+			  			<div class="row">
+					      	<div class="col-sm-12">
+					      		<div id='divProductorAsignado'></div>
+					      	</div>			  			
+			  			</div>
+				    <div class="row">
+				      	<div class="col-sm-6">
+				      		<div class="mismaLinea"><label>Fecha:</label> </div> <div id="divConfirmarFecha" class="mismaLinea"></div>
+				      	</div>
+				      	<div class="col-sm-3">
+				      		<div id="divConfirmarHoraInicial" class="mismaLinea"></div>
+				      	</div>
+				      	<div class="col-sm-3">
+				      		<div id="divConfirmarHoraFinal"></div>
+				      	</div>
+				  	</div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="divConfirmarFechaEntrega" class="mismaLinea"></div>
+                        </div>
+                    </div>				  			
+			  		</div>
+			  		<div class="col-sm-2">
+			  			<div id='divConfirmarEstado'></div>
+			  		</div>
+		  		</div>
+			  		
+				    
+
+			  	
+			  	
+			  	</div>
+		  	</div>
+
+
+				<div id="panelesFase1" class="panel-group">
+					<form data-toggle="validator" role="form" class="form-inline">
+							@partialPreguntaTipoPreproduccion()
+							<div class="row">
+								<div class="col-sm-6">
+									@partialPreguntaSalida()
+								</div>
+								<div class="col-sm-6">
+									@partialPreguntaTipoPersonal(1)
+								</div>	
+							</div>							
+							@partialSeleccionPersonal()
+							@partialSeleccionVehiculo()
+					  </form>
+				</div>
+
+				<div id="panelesFase2" class="panel-group">
+					<form data-toggle="validator" role="form" class="form-inline5">
+							<div class="row">
+								<div class="col-sm-6">
+									@partialPreguntaSalida()
+								</div>
+								<div class="col-sm-6">
+									@partialPreguntaTipoPersonal(2)
+								</div>	
+							</div>	
+							@partialSeleccionLocutor()
+							@partialPersonalAsignado()
+                            @partialSeleccionPersonal()
+                            @partialSeleccionVehiculo()
+              				@partialSeleccionEquipoAccesorio()
+							@partialSeleccionIngenieroGrabacion()
+					</form>
+				</div>
+				
+				
+
+				
+
+
+				<div id="panelesFase6" class="panel-group">
+					<form data-toggle="validator" role="form" class="form-inline">
+						<div class="panel panel-default" name="preguntaFormatoIngesta">
+							<div class="panel-body">
+								<div class="row">
+										<div class="col-md-4">
+											Formato de salida<br>
+										</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+
+
+				<div id="panelesSalaCR" class="panel-group">
+					<form>
+				      <div class="panel panel-default">
+						  	<div class="panel-body">
+								<div class="row">
+										<div class="col-md-12">
+                                            <label class="radio-inline">
+                                              <input name="rgFaseSala" value="I" type="radio"> Ingesta (preproducción)
+                                            </label>
+									        <label class="radio-inline">
+									          <input name="rgFaseSala" value="D" type="radio"> Digitalizacion (preproducción)
+									        </label>
+                                            <!-- 
+									        <label class="radio-inline">
+									          <input name="rgFaseSala" value="C" type="radio"> Calificación (preproducción)
+									        </label>
+                                            <label class="radio-inline">
+                                              <input name="rgFaseSala" value="R" type="radio"> Revisión (posproducción)
+                                            </label>
+                                             -->									        
+										</div>
+						      	</div>
+					      	</div>
+			      		</div>
+			      		
+			      		
+			      		@if(session.get("rolActual")=="16"){
+	      				<div class="panel panel-default" id="panelesSiNoOtro" style="display: none5;">
+							<div class="panel-body">
+							
+								<div>
+								
+								  <!-- Nav tabs -->
+								  <ul class="nav nav-tabs" role="tablist">
+								    <li role="presentation" class="active"><a href="#tabFormatos" aria-controls="tabFormatos" role="tab" data-toggle="tab">Formato ingesta</a></li>
+								    <li role="presentation"><a href="#tabCambio" aria-controls="tabCambio" role="tab" data-toggle="tab">Cambio formato</a></li>
+								    <li role="presentation"><a href="#tabEdoCalificacion" aria-controls="tabEdoCalificacion" role="tab" data-toggle="tab">Estado y calificación</a></li>
+								    <li role="presentation"><a href="#tabDetalles" aria-controls="tabDetalles" role="tab" data-toggle="tab">Detalles</a></li>
+								    <li role="presentation"><a href="#tabIdioma" aria-controls="tabIdioma" role="tab" data-toggle="tab">Idioma y subtitulos</a></li>
+								    <li role="presentation"><a href="#tabPresencia" aria-controls="tabPresencia" role="tab" data-toggle="tab">Presencia</a></li>
+								    <li role="presentation"><a href="#tabAlmacenamiento" aria-controls="tabAlmacenamiento" role="tab" data-toggle="tab">Almacenamiento</a></li>
+								    <li role="presentation"><a href="#tabConclusion" aria-controls="tabConclusion" role="tab" data-toggle="tab">Conclusion</a></li>
+									<li role="presentation"><a href="#tabObservaciones" aria-controls="tabConclusiones" role="tab" data-toggle="tab">Observaciones</a></li>
+						
+								  </ul>
+								
+								  <!-- Tab panes -->
+								  <div class="tab-content">
+								    <div role="tabpanel" class="tab-pane fade in active" id="tabFormatos" style="height: 15em; padding: 3em;">
+								    	@partialIngestaFormatoIngesta()
+								    </div>
+								    <div role="tabpanel" class="tab-pane fade" id="tabCambio" style="height: 15em; padding: 3em;">
+								    	@partialIngestaCambioFormato()
+								    </div>
+								    <div role="tabpanel" class="tab-pane fade" id="tabEdoCalificacion" style="height: 15em; padding: 3em;">
+								    	<div style="padding-bottom: 2em;">@partialIngestaEstadoMaterial()</div>
+								    	<div>@partialIngestaCalificacionAnt()</div>
+								    </div>
+								    <div role="tabpanel" class="tab-pane fade" id="tabDetalles" style="height: 15em; padding: 3em;">
+										<div class="row">
+											<div class="col-md-6">
+												@partialIngestaDetalleVideo()
+											</div>
+											<div class="col-md-6">
+												@partialIngestaDetalleAudio()
+											</div>
+										</div>
+									</div>
+								    <div role="tabpanel" class="tab-pane fade" id="tabIdioma" style="height: 15em; padding: 3em;">
+												@partialIngestaIdioma()
+												@partialIngestaSubtitulo()
+								    </div>
+								    <div role="tabpanel" class="tab-pane fade" id="tabPresencia" style="height: 15em; padding: 3em;">
+												<div style="padding-bottom: 2em;">@partialIngestaPresencia()</div>
+												<div>@partialIngestaProblema()</div>
+								    </div>
+								    <div role="tabpanel" class="tab-pane fade" id="tabAlmacenamiento" style="height: 15em; padding: 3em;">
+												@partialIngestaAlmacenamiento()
+								    </div>
+								    <div role="tabpanel" class="tab-pane fade" id="tabConclusion" style="height: 15em; padding: 3em;">
+												@partialIngestaConclusion()
+								    </div>
+
+								    <div role="tabpanel" class="tab-pane fade" id="tabObservaciones" style="height: 15em; padding: 3em;">
+												@partialIngestaObservaciones()
+								    </div>
+
+								  </div>
+								
+								</div>
+							</div>
+						</div>
+						}
+							
+										      		
+			      		
+      				</form>
+  				</div>
+
+
+                @for( a <- scala.List(3,2,7)){
+					<div id="panelesSalaEdicion@a" class="panel-group">
+						<form data-toggle="validator" role="form">
+								@partialPreguntaTipoEdicionPosproduccion()
+	                            @partialPreguntaTipoPersonal(4)
+                                @partialSeleccionRDisenio()
+						</form>
+					</div>
+                }
+                
+				<div id="panelesUsoCabinaAudio" class="panel-group">
+					<form data-toggle="validator" role="form">
+	                    <div class="panel panel-default" name="preguntaUsoCabina">
+    					  	<div class="panel-body">
+       							<div class="row">
+    									<div class="col-md-12 small">
+    								  		<label class="radio-inline">
+    								          <input name="rgUsoCabina"  value="V" type="radio"> Voz
+    								        </label>
+    								        <label class="radio-inline">
+    								          <input name="rgUsoCabina" value="M" type="radio"> Musicalización
+    								        </label>
+    									</div>
+   	                            </div>
+      	                    </div>
+      	                </div>
+						@partialSeleccionLocutor()
+                        <div class="panel panel-default" name="preguntaUsoCabina2">
+                          <div class="panel-body">
+                            <div class="row">
+                            </div>
+                          </div>
+                        </div>      
+                        @*                 
+                        <div class="panel panel-default" name="preguntaPersonalAsignado">
+                          <div class="panel-body">
+                            <div class="row">
+                            </div>
+                          </div>
+                        </div>
+                        *@
+      	</form>
+    	</div>
+
+
+
+        <div id="panelesFase5" class="panel-group">
+            <form data-toggle="validator" role="form">
+              @if(session.get("rolActual")=="1" ||  session.get("rolActual")=="100"){
+	              <div class="panel panel-default" id="preguntaFormatoSolicitado">
+	                  <div class="panel-body">
+	                      <div id="" class="row">
+									@for(fmto <- models.Formato.find.all()){
+		                              	<div class="col-md-2">
+		                                  <div style="display:inline">
+		                                      <input type="text" name='losFormatos' id="fmto@fmto.id" size='2' maxlength="3" type="number" max="999" class="soloNumerosCero"/>
+		                                      @fmto.descripcion
+		                                  </div>
+		                              	</div>
+									}
+	                      </div>
+				            <div class="row">
+				                <div class="col-sm-12">
+				                        <div class="help-block with-errors"></div>
+				                </div>
+				            </div>		                      
+	                  </div>
+	              </div>
+              }
+              <div class="panel panel-default" id="preguntaFormatosAsignados">
+                  <div class="panel-body">
+                      <div class="row"  id="rowFormatosAsignados">
+                      	                      		
+                   		
+                      </div>
+                  </div>
+              </div>              
+              </form>
+          </div>
+          
+          
+				<div id="panelInfoOperadoresSala" class="panel-group">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<div class="row">
+										Aqui van los operadores
+								</div>
+							</div>
+						</div>
+				</div>          
+          
+          
+	      </div>
+      </div>
+     </div>
+
+
+      <div class="modal-footer">
+		        @if(session.get("rolActual")=="1" ||  session.get("rolActual")=="10" ){
+		            <button type="button" class="btn btn-success" id="btnModalAutorizar">Autorizar</button>
+		        } 
+		        	
+				@if(session.get("rolActual")=="16"){
+				
+					<button type="button" class="btn btn-success" id="btnModalGuardar" style="display: none">Guardar</button>
+				
+		            <button type="button" class="btn btn-success" id="btnModalLiberar" style="display: none">Liberar</button>
+		        }		        
+		        
+		        
+		        @if(session.get("rolActual")=="100"){
+		            <button type="button" class="btn btn-success" id="btnModalAceptar">Aceptar</button>          
+		        }
+                <button type="button" class="btn btn-warning" id="btnModalCancelar" data-dismiss="modal">Cerrar ventana</button>		        
+		        @if(session.get("rolActual")=="100"){
+		        	<button type="button" class="btn btn-danger"  id="btnModalBorrar" >Borrar</button>            
+				}
+      </div>
+    </div>
+  </div>
+</div>
+<div id="fc_myModal2" data-toggle="modal" data-target="#myModal2"></div>
+
+
+
+<!-- Modal para confirmar eliminación de eventos-->
+<div class="modal fade" id="myModalConfirmar" tabindex="-1" role="dialog" aria-labelledby="myModalLabelConfirmar" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document" style="width: 50%; height: 50%" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabelConfirmar">Confirmar</h4>
+      </div>
+      <div class="modal-body">
+        <div style="width: 100%">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>¿Desea eliminar el evento?</h3>
+                </div>
+                <div class="col-sm-12">
+                    <h4 id="datosEliminar"></h4>
+                </div>
+            </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        	<button type="button" class="btn btn-danger" id="btnBorrarEvento">Si, deseo eliminarlo</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">No, cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="fc_myModalConfirmar" data-toggle="modal" data-target="#myModalConfirmar"></div>
+
+
+<!-- Modal para esperar mientras se hace la carga-->
+<div class="modal fade" id="myModalAviso" tabindex="-1" role="dialog" aria-labelledby="myModalLabelConfirmar">
+  <div class="modal-dialog" role="document" style="width: 50%; height: 50%" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Espere</h4>
+      </div>
+      <div class="modal-body">
+        <div style="width: 100%">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Espere un momento, cargando información</h3>
+                </div>
+            </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Modal para mostrar info en detalle del oficio/folio-->
+<div class="modal fade" id="myModalDetalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabelConfirmar">
+  <div class="modal-dialog modal-lg" role="document" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1>Detalle</h1>
+      </div>
+      <div class="modal-body">
+        <div style="width: 100%">
+            <div class="row">
+                <div class="col-sm-12" id="myModalDetalleContenido">
+                    <h3>Espere un momento, cargando información</h3>
+                </div>
+            </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar ventana</button>        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal usado como visor de archivos/documentos-->
+<div class="modal fade" id="myModalVisorArchivo" tabindex="-1" role="dialog" aria-labelledby="myModalVisorArchivoLabel" style="height: 95vh;">
+  <div class="modal-dialog" role="document" style="width: 95%; height: 100%;" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Visor de archivo</h3>
+      </div>
+      <div class="modal-body">
+        <div style="width: 100%; height: 75%;">
+            <div class="row">
+                <div class="col-sm-12" id="myModalVisor">
+                	<div id="divMsgModal">
+                    	<h3>Espere un momento, cargando información</h3>
+                   	</div>                    
+                </div>
+            </div>
+            <iframe name="visoriFrame" titñe="jejeje" width="100%" height="100%">Este navegador no soport iframes</iframe>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar ventana</button>        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Visor para los multiples archivos del oficio -->
+<div class="modal fade" id="myModalLosVisores" tabindex="-1" role="dialog" aria-labelledby="myModalLosVisores" style="height: 95%;">
+	<div class="modal-dialog" role="document" style="width: 95%; height: 100%;" >
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3>Visor de archivos del oficio</h3>
+			</div>
+			<div class="modal-body">
+				<div style="width: 100%; height: 75%;">
+					<div class="row">
+						<div class="col-sm-12 col-md-12 col-lg-12" id="myModalVisor2">
+							<div id="divMsgModal2">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-3 col-md-3 col-lg-3">
+							<div id="tiposArchivos"></div>
+						</div>
+						<div class="col-sm-9 col-md-9 col-lg-9">
+							<iframe name="visoriFrame2" style='display: block;'  width="100%"  height="90%" ></iframe>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar ventana</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+

@@ -1,0 +1,146 @@
+@(forma:  Form[Folio], oficio:Oficio, existeCC:Boolean)
+@import helper._
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
+
+<style>
+    .panel{
+    margin-bottom:-5px;
+    }
+</style>
+
+@main {
+	@views.html.usuario.ventanasModales()
+    <div class="row">
+       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+              <li><a href="@routes.AdminFolioController.list()">Folios</a></li>
+              <li>Agregar</li>
+            </ol>
+        </div>
+    </div>
+    
+    <h1>Nuevo folio</h1>
+    @if(!existeCC){
+        <div class="panel panel-danger">
+            <div class="panel-heading">No hay una cuenta de correo de salida <strong>activa</strong>. No serán notificados los productores de sus asignaciones.</div>
+        </div>
+    }
+    @form(CSRF(routes.AdminFolioController.save()), 'role->"form", 'id->"formaFolio") {        
+		@folioForm(forma, oficio)
+        <br/>
+        <div class="row" name="conOficio" style="display: none;">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div style="width: 80%" class="center-block">
+                    <input type="button" value="Agregar" class="btn btn-primary btn-block" onclick="javascript:validar()">
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div style="width: 80%" class="center-block">
+                    <a href="@routes.AdminFolioController.list()" class="btn btn-warning btn-block">Cancelar</a>
+                </div>
+            </div>
+        </div>        
+    }
+    
+}
+
+<script type="text/javascript">
+    var varId= -1;
+    var varRequiereProductor = false;
+	$(function() {	    	
+		$('form').validator();		
+        $.notifyDefaults({
+            type: 'success',
+            newest_on_top: true,
+            z_index: 999000
+        });
+        
+        @if(oficio != null){
+                $("#oficio_id").val(@oficio.id);
+                varRequiereProductor =true;
+                $("#oficio\\.oficio").html("@oficio.oficio");
+                $("#oficio\\.titulo").html("@oficio.titulo");
+				$("#oficio\\.descripcion").html("@oficio.descripcion");
+				$("#oficio\\.urremitente\\.nombreLargo").html("@oficio.urremitente.nombreLargo");
+				if("@oficio.observacion"!=null){
+				    $("#oficio\\.observacion").html("@oficio.observacion");
+				}				
+				var cadServicios="";
+				@for(s<-oficio.servicios){
+				    cadServicios+='<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">@s.servicio.descripcion</div>';
+				}
+				$("#oficio\\.servicios").html(cadServicios);
+				var cadProd="";
+				@for(ps<-oficio.productoresSolicitados){
+				    cadProd+='<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">@ps.personal.nombreCompleto()</div>';
+				    $("input[name='auxProductores[]'][value=@ps.personal.id]").prop("checked", true);
+				}
+				$("#oficio\\.productores").html(cadProd);				
+				var cadFolios="";
+				@if(oficio.folios.length>0){
+				    cadFolios+='<div class="row">'+                     
+				        '  <div class="col-12"><strong>Folios asignados a este oficio:</strong></div>'+
+				        '</div>'+
+				        '<div class="row">'+
+				        '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">'+
+				        '<div id="oficio.folios.personal" class="">'+
+				                '<table class="table table-bordered">';
+				                @for(f<-oficio.folios){
+									cadFolios+='<tr><td>@f.numfolio</td><td>';
+				                            @for(p<-f.productoresAsignados){
+				                                cadFolios+='@p.personal.nombre @p.personal.paterno @p.personal.materno';                                
+				                            }                                                
+				                        cadFolios+='</td>';
+				                    cadFolios+='</tr>';
+				                }                                    
+				                cadFolios+='</table>';
+				         cadFolios+='</div>';
+				        cadFolios+='</div>';
+				    cadFolios+='</div>';      
+				    $("#divOficiosAsignados").html(cadFolios);
+				}
+				
+				var numarchivos = @oficio.imagenes.size;
+				if (numarchivos>0){
+					$("#btnVerArchivo").css("display","block");
+				}else{
+					$("#btnVerArchivo").css("display","none");
+				}
+				
+				
+        	  $("[name='conOficio']").show();
+        }
+        
+        $("#busquedaOficio").selectpicker({
+            width:"90%", 
+            title:"Escriba, seleccione o busque un número de oficio o descripción del oficio",
+            size: 10,
+            liveSearchNormalize: true
+          });   
+        
+        $('#busquedaOficio').off('changed.bs.select');
+        $('#busquedaOficio').on('changed.bs.select', function (e) {
+        	$("#btnBuscar").click();
+        	});        
+	});
+	
+    // Tecla enter en busqueda 
+	$("#busquedaOficio").keydown(function(e) {
+		if (e.keyCode == 13) {
+	    	$("#btnBuscar").click();
+	    	return false;
+	    }
+	});	
+	
+</script>
+
+<script src="@routes.Assets.at("javascripts/agenda.js")"></script>
+<script src="@routes.Assets.at("javascripts/general.js")"></script>
+<script src="@routes.Assets.at("javascripts/folio.js")"></script>
+<script src="@routes.Assets.at("javascripts/folioAjax.js")"></script>
+<script src="@routes.Assets.at("bootstrap-notify/bootstrap-notify.min.js")"></script>
+
+<script src="@routes.Assets.at("jquery-UI/jquery-ui.min.js")"></script>
+<script src="@routes.Assets.at("bootstrap-select/js/bootstrap-select.min.js")"></script>
+<script src="@routes.Assets.at("bootstrap-select/js/i18n/defaults-es_ES.min.js")"></script>        
+<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("bootstrap-select/css/bootstrap-select.min.css")">

@@ -1,0 +1,274 @@
+@(forma: Form[Personal], roles:List[Rol])
+
+@import helper._
+
+
+        <fieldset>
+	    	<div class="row">
+	    		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				  <div class="panel panel-default">
+				    <div class="panel-body">
+				    	<div class="row">
+				    		<div class="col-sm-2">
+				    		    <div class="form-group" style="padding-right:40px;">
+							    	@inputText(forma("numEmpleado"), '_label -> "Número de empleado", 'class->"form-control validaLongitud", 'required->true, 'maxlength->13 )
+							    	<div class="help-block with-errors"></div>
+						        </div>
+				    		</div>
+				    		<div class="col-sm-2">
+				    		    <div class="form-group">
+            					   @inputText(forma("paterno"), '_label -> "Paterno", 'class->"form-control validaLongitud", 'required->true, 'maxlength->25)
+            					   <div class="help-block with-errors"></div>
+           					    </div>				    		
+				    		</div>       
+							<div class="col-sm-2">
+								<div class="form-group">
+								    @inputText(forma("materno"), '_label -> "Materno", 'class->"form-control validaLongitud", 'required->true, 'maxlength->25)
+								    <div class="help-block with-errors"></div>
+							    </div>
+						    </div>
+						    <div class="col-sm-2">
+							    <div class="form-group">
+						            @inputText(forma("nombre"), '_label -> "Nombre", 'class->"form-control validaLongitud", 'required->true, 'maxlength->25)
+						            <div class="help-block with-errors"></div>
+					            </div>
+					        </div>
+
+							<div class="col-sm-1 form-group"></div>
+						            
+				    		<div class="col-sm-1 form-group">
+					            @select(
+								                forma("tipocontrato.id"), 
+								                options(models.TipoContrato.options), 
+								                '_label -> "Contratación", '_default -> "-- Seleccione --",
+								                '_showConstraints -> false,
+								                'class->"form-control",
+								                'required->true
+								            )
+					            <div class="help-block with-errors"></div>  				    		
+				    		</div>	
+				    		<div class="col-sm-2 form-group">
+	                             @inputRadioGroup(
+                                  forma("activo"),
+                                  options = options("S"->"Si","N"->"No"),
+                                  '_label -> "Activo",
+                                  '_error -> forma("activo").error.map(_.withMessage("Seleccione un valor para activo")),
+                                  'required->true
+                                  )
+                                  <div class="help-block with-errors"></div>
+				    		</div>
+			    		</div>
+
+				            
+		            </div>
+	            </div>
+            </div>
+           </div>
+           
+           <div class="row">
+           	<div class="col-sm-6">
+           		<div class="row" id="apartadoHorarios">
+           			<div class="col-md-12">
+                  		<div class="panel panel-default">
+                  			<div class="panel-body">
+		                        <div class="row">
+		                            <div class="col-sm-4 col-md-4 col-lg-4">
+		                            
+		                            		<label>Turno</label>
+		                            
+											<form class="form-horizontal">
+											 <fieldset>
+											  <div class="form-group">
+											
+											   <div class="col-xs-12">
+											    <div class="radio">
+											     <label>
+											      <input id="turno_M" name="turno" value="M" type="radio" required>
+											      Matutino</label>
+											    </div>
+											    <div class="radio">
+											     <label>
+											      <input id="turno_V" name="turno" value="V" type="radio" required>
+											      Vespertino</label>
+											    </div>
+											    <div class="radio">
+											     <label>
+											      <input id="turno_A" name="turno" value="A" type="radio" required>
+											      Ambos</label>
+											    </div>
+											   </div>
+											  </div>
+											 </fieldset>
+											</form>
+		                            </div>
+		                            <div class="col-sm-8 col-md-8 col-lg-8" style="border-left: 1px solid lightgrey; padding-left: 40px">
+		                            	<label>Horario</label>
+		                                <div class="row">
+		                                    <div class="col-sm-4">
+		                                        @inputText(forma("auxHorarios[0].diasemana").copy(value=Some("2")), '_label -> "Lunes", 'class->"form-control", 'style->"display:none")
+		                                    </div>
+		                                    <div class="col-sm-4">                                        
+		                                        <input type="text" id="auxHorarios_0_desde" name="auxHorarios[0].desde" class="form-control soloHora validaLongitud" placeholder="Desde" maxlength=5>
+		                                    </div>
+		                                    <div class="col-sm-4">
+		                                        <input type="text" id="auxHorarios_0_hasta" name="auxHorarios[0].hasta" value="" class="form-control soloHora validaLongitud" placeholder="Hasta" maxlength=5>
+		                                    </div>
+		                                </div>
+		                                <div class="row">
+		                                    <div class="col-sm-4">
+		                                        @inputText(forma("auxHorarios[1].diasemana").copy(value=Some("3")), '_label -> "Martes", 'class->"form-control", 'style->"display:none")
+		                                    </div>
+		                                    <div class="col-sm-4">
+		                                        <input type="text" id="auxHorarios_1_desde" name="auxHorarios[1].desde" value="" class="form-control soloHora validaLongitud" placeholder="Desde" maxlength=5>
+		                                    </div>
+		                                    <div class="col-sm-4">
+		                                        <input type="text" id="auxHorarios_1_hasta" name="auxHorarios[1].hasta" value="" class="form-control soloHora validaLongitud" placeholder="Hasta" maxlength=5>
+		                                    </div>
+		                                </div> 
+		                                
+		                                <div class="row">
+		                                    <div class="col-sm-4">
+		                                        @inputText(forma("auxHorarios[2].diasemana").copy(value=Some("4")), '_label -> "Miércoles", 'class->"form-control", 'style->"display:none")
+		                                    </div>
+		                                    <div class="col-sm-4">
+		                                        <input type="text" id="auxHorarios_2_desde" name="auxHorarios[2].desde" value="" class="form-control soloHora validaLongitud" placeholder="Desde" maxlength=5>
+		                                    </div>
+		                                    <div class="col-sm-4">
+		                                        <input type="text" id="auxHorarios_2_hasta" name="auxHorarios[2].hasta" value="" class="form-control soloHora validaLongitud" placeholder="Hasta" maxlength=5>
+		                                    </div>
+		                                </div>
+		                                <div class="row">
+		                                    <div class="col-sm-4">
+		                                        @inputText(forma("auxHorarios[3].diasemana").copy(value=Some("5")), '_label -> "Jueves", 'class->"form-control", 'style->"display:none")
+		                                    </div>
+		                                    <div class="col-sm-4">
+		                                        <input type="text" id="auxHorarios_3_desde" name="auxHorarios[3].desde" value="" class="form-control soloHora validaLongitud" placeholder="Desde" maxlength=5>
+		                                    </div>
+		                                    <div class="col-sm-4">
+		                                        <input type="text" id="auxHorarios_3_hasta" name="auxHorarios[3].hasta" value="" class="form-control soloHora validaLongitud" placeholder="Hasta" maxlength=5>
+		                                    </div>
+		                                </div>  
+		                                <div class="row">
+		                                    <div class="col-sm-4">
+		                                        @inputText(forma("auxHorarios[4].diasemana").copy(value=Some("6")), '_label -> "Viernes", 'class->"form-control", 'style->"display:none")
+		                                    </div>
+		                                    <div class="col-sm-4">
+		                                        
+		                                        <input type="text" id="auxHorarios_4_desde" name="auxHorarios[4].desde" value="" class="form-control soloHora validaLongitud" placeholder="Desde" maxlength=5>
+		                                    </div>
+		                                    <div class="col-sm-4">
+		                                        <input type="text" id="auxHorarios_4_hasta" name="auxHorarios[4].hasta" value="" class="form-control soloHora validaLongitud" placeholder="Hasta" maxlength=5>
+		                                    </div>
+		                                </div>
+		
+		
+		                                
+		                            </div>                            
+		                        </div>                  			
+                  			</div>
+               			</div>
+                  	</div>
+           		</div>
+           		<div class="row">
+           			<div class="col-md-12">
+                  		<div class="panel panel-default">
+                  			<div class="panel-body">
+		                        <div class="row">
+		                        	<div class="col-md-12">
+		                        		<h3>Correo electrónico <a href="javascript:agregarCorreo()" data-toggle="popover" data-content="Agregar correo" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a></h3>
+		                        		<div id="divCorreos">
+					    				</div>
+
+		                        	</div>
+		                        </div>
+	                        </div>
+                        </div>
+                    </div>
+                </div>           		
+           	</div>
+           	<div class="col-sm-6">
+           		<div class="row">
+           			<div class="col-md-12">
+                  		<div class="panel panel-default">
+                  			<div class="panel-body">
+						    	<div class="row">
+						    		<div class="col-sm-6 col-md-6 col-lg-6">
+						    		  <div class="form-group">
+								    	@inputText(forma("cuentas.username"), '_label -> "Nombre de usuario", 'class->"form-control validaLongitud", 'maxlength->"15", 'required->"" )
+								    	<div class="help-block with-errors"></div>
+							    	  </div>
+							    	  <div class="form-group">
+										<label for="cuentas_username">Clave de acceso</label>		    		
+									 	<div class="input-group">
+									      <input type="password" id="cuentas_password" name="cuentas.password" class="form-control validaLongitud" maxlength="15" required>
+									      <span class="input-group-btn">
+									        <button class="btn btn-default" type="button" id="btnPassword"><i class="fa fa-eye" aria-hidden="true"></i></button>
+									      </span>
+									    </div>
+						    			<div class="help-block with-errors"></div>
+		           					  </div>
+						    		</div> 
+
+								</div>
+						    	<div class="row">
+
+						    		  <div class="form-group">
+						    		  						    			
+						    		  <div class="col-sm-6 col-md-6 col-lg-6">
+						    		  	<br>
+						    		  	<label>Roles</label>				    		  
+									    	@for((rol, index) <- roles.zipWithIndex) {
+									    	
+									    	@if(index==7){
+									    		</div>
+									    		<div class="col-sm-6 col-md-6 col-lg-6">
+									    		<br><br>
+									    	}
+									    	
+									    	
+									    	<div class="checkbox">
+												<input type="text" size="2"  name="auxRolesId[]" >
+										      <label>
+										        <input type="checkbox" id="auxRoles_@rol.id" name="auxRoles[]" value="@rol.id">
+										        @rol.descripcion
+										      </label>
+										    </div>
+											}
+											<div class="help-block with-errors"></div>
+									  </div>
+
+
+						    		</div>
+
+
+								</div>
+			    		
+					    		</div>     
+					    		
+					    		
+					    		
+					    		
+					    		
+					    		
+					    		
+					    		             			
+                  			</div>
+               			</div>
+                  	</div>
+           		</div>
+           	</div>         	
+           </div>
+        </fieldset>
+
+        
+<div id="baseCorreo" hidden="true">
+	<div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 form-group">
+		<input type="email" name="auxCorreos" class="form-control" placeholder="Correo electrónico">
+		<div class="help-block with-errors"></div>
+	</div>
+	<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+	<a name="aEliminarCorreo"  href="javascript:void(0);" class="text-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
+	</div>		                        			
+</div>        
+        
+

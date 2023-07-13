@@ -1,0 +1,112 @@
+@(forma: Form[Folio])
+@import helper._
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
+
+
+
+
+@main {
+    @views.html.usuario.ventanasModales()
+    <div class="row">
+       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+              <li><a href="@routes.AdminFolioController.list()">Folios</a></li>
+              <li>Editar</li>
+            </ol>
+        </div>
+    </div>
+    
+    <h1>Editar folio</h1>
+    
+
+	<div id="operacionFormulario" data-operacion="edit" data-idedicion=@forma("id").value()></div>
+    @form(CSRF(routes.AdminFolioController.update(forma.get().id)), 'role->"form", 'id->"formaFolio") {    	
+		@folioForm(forma, forma.get().oficio)
+        <br/><br/>
+        <div class="row">
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <div style="width: 80%" class="center-block">
+                    <input type="button" value="Actualizar folio" id="btnActualizaFolio" class="btn btn-primary btn-block">
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <div style="width: 80%" class="center-block">
+                    <input type="button" value="Cancelar folio" id="btnCancelaFolio" class="btn btn-info btn-block">
+                </div>
+            </div>            
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <div style="width: 80%" class="center-block">
+                    <input type="button" value="Eliminar folio" id="btnEliminaFolio" class="btn btn-danger btn-block">
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <div style="width: 80%" class="center-block">
+                    <a href="@routes.AdminFolioController.list()" class="btn btn-warning btn-block">Cancelar operación</a>
+                </div>
+            </div>
+        </div>           
+    }
+    
+
+    
+}
+
+<script type="text/javascript">
+    var varId= @forma.get().id;
+    var varRequiereProductor = false;    
+	$(function() {
+		$('form').validator();		
+        $.notifyDefaults({
+            type: 'success',
+            newest_on_top: true,
+            z_index: 999000
+        });		
+        leer();
+        
+	});
+
+	
+	
+    
+    function leer(){
+    	var cadenaServicios="";
+    	var cadenaProductores="";
+    	console.log("desde leer")
+    	$("#oficio\\.oficio").html("@forma.get().oficio.oficio");
+    	$("#oficio\\.descripcion").html("@forma.get().oficio.descripcion");
+    	$("#oficio\\.titulo").html("@forma.get().oficio.titulo");
+    	$("#oficio\\.urremitente\\.nombreLargo").html("@forma.get().oficio.urremitente.nombreLargo");
+    	$("#oficio\\.observacion").html("@forma.get().oficio.observacion");
+    	
+    	
+    	@if(forma.get().oficio.imagenes!=null){
+    		$("#btnVerArchivo").css("display","block");
+    	}
+    	
+    	
+    	@for(p<-forma.get().oficio.servicios){
+    		cadenaServicios += "<div class='col-sm-6'>@p.servicio.descripcion</div>";
+        }
+    	$("#oficio\\.servicios").html(cadenaServicios+"</div>");
+
+    	@for(p<-forma.get().oficio.productoresSolicitados){
+    		cadenaProductores += "<div class='col-sm-6'>@p.personal.nombreCompleto</div>";
+        }
+    	$("#oficio\\.productores").html(cadenaProductores+"</div>");    	
+    	
+        @for(p<-forma.get().productoresAsignados){
+            $("[name='auxProductores[]'][value="+@p.personal.id+"]").prop("checked", true);
+            $("[name='auxProductores[]'][value="+@p.personal.id+"]").attr("data-folioproductorasignado", "@p.id");
+        }
+        $("[name=conOficio]").show();
+    }	
+        
+
+</script>
+
+<script src="@routes.Assets.at("javascripts/agenda.js")"></script>
+<script src="@routes.Assets.at("javascripts/general.js")"></script>
+<script src="@routes.Assets.at("javascripts/folio.js")"></script>
+<script src="@routes.Assets.at("javascripts/folioAjax.js")"></script>
+<script src="@routes.Assets.at("bootstrap-notify/bootstrap-notify.min.js")"></script>
+<script src="@routes.Assets.at("javascripts/jquery.serializejson.js")"></script>

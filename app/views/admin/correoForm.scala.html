@@ -1,0 +1,123 @@
+@(forma: Form[Ctacorreo], activa:Ctacorreo)
+@import helper._
+        <fieldset>
+	    	<div class="row">
+	    		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+				  <div class="panel panel-default">
+				    <div class="panel-body">
+				    	<div class="row">
+					    	@inputText(forma("id"), '_label -> "", 'type->"hidden")
+				    		<div class="col-sm-8">
+				    		    <div class="form-group">
+							    	@inputText(forma("hostname"), '_label -> "Nombre de host", 'class->"form-control validaLongitud", 'required->true, 'maxlength->50, 'placeholder->"Ejemplo: SMTP.Office365.com" )
+							    	<div class="help-block with-errors"></div>
+						        </div>
+				    		</div>
+				    		<div class="col-sm-4">
+				    		    <div class="form-group">
+            					   @inputText(forma("puerto"), '_label -> "Puerto", 'class->"form-control validaLongitud soloNumerosCero", 'required->true, 'maxlength->5, 'placeholder->"Ejemplo: 587")
+            					   <div class="help-block with-errors"></div>
+           					    </div>				    		
+				    		</div>  
+			    		</div>
+			    		<div class="row">     
+							<div class="col-sm-6">
+								<div class="form-group">
+								    @inputText(forma("cuenta"), '_label -> "Cuenta", 'class->"form-control validaLongitud", 'required->true, 'maxlength->150, 'placeholder->"Ejemplo: juanperez@algo.com")
+								    <div class="help-block with-errors"></div>
+							    </div>
+						    </div>
+						    
+						    
+						    <div class="col-sm-6">
+							    <div class="form-group">
+						            @inputText(forma("contrasenia"), '_label -> "Clave", 'class->"form-control validaLongitud", 'required->true, 'maxlength->150, 'type->"password")
+						            <div class="help-block with-errors"></div>
+					            </div>
+					        </div>
+			    		</div>
+			    		<div class="row" style="margin-top: 1.2em;">
+			    			<div class="col-sm-12">
+			    				 <!--  <button class="btn btn-primary" id="btnPruebaCorreo" onclick="javascript:void(0);" >Enviar correo de prueba </button> -->
+			    				 <div id=txtPruebaCorreo class="text-muted"> <a href="javascript:void(0);"> Prueba de correo</a></div>
+			    			</div>
+		    			</div>
+		    			<div class="row" style="margin-top: 1.2em; display: none;" id="divPruebaCorreo">
+			    			<div class="col-sm-6">			    				
+			    				<div>
+			    					<label>Destinatario</label>
+									<input type="text" id="txtPara" value="" class="form-control validaLongitud" maxlength="100" placeholder="Ejemplo: jperez@@correo.com">			    				
+			    				</div>
+			    				<div style="margin-top: 10px;">
+					  				<button class="btn btn-primary btn-sm" id="btnPruebaCorreo" onclick="javascript:void(0);" >Enviar correo de prueba </button>
+			    				</div>
+			    			</div>	
+			    			<div class="col-sm-6">
+			    				<div id="msgPruebaCorreo" class="small"></div>
+			    			</div>
+			    		</div>
+		            </div>
+	            </div>
+            </div>
+	    		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+				  <div class="panel panel-default">
+				    <div class="panel-body">
+				    	<div class="row">  
+						    <div class="col-sm-12">
+						    	<div>
+						    		<dl>
+						    			<dt>
+						    				<label for="activo">Activa</label>
+						    			</dt>
+						    			@if(models.Ctacorreo.find.all.size()!=0){
+							    			<dd>
+							    				@if(models.Ctacorreo.find.all.size()>1){
+							    					<p>De las @models.Ctacorreo.find.all.size() cuentas de correo de salida registradas, elija cual de ellas se establecerá como activa.</p>
+							    				}
+							    				<p>¿Desea que esta sea la cuenta de salida activa? 
+								              <div class="radio">
+											    <label for="activo">
+											      <input type="radio"  id="activa" name="activa" value=true 
+									      					@if(activa==null){
+																checked				
+									      					} > Si, quiero que esta sea la cuenta de salida de correos del sistema. 
+											    </label>
+											    
+											    <label for="noactiva">
+											    	<input type="radio" id="noactiva" name="activa" value=false  
+											    	@if(activa!=null){
+											      		checked> No, quiero que la cuenta <strong>@activa.cuenta</strong> siga siendo la cuenta de salida de correos del sistema.
+											      	} else {
+											      		> No, quiero que la cuenta de salida sea otra.
+											      	}	 
+											    </label>
+											    
+											  </div>						    			
+							    			</dd>
+						    			} else {
+						    				<dd>
+						    					  <p>Esta será la cuenta de correo de salida activa.</p>
+									              <div class="checkbox">
+												    <label for="activo">
+												      <input type="radio" id="activa" name="activa" value=true checked="checked"> Si, quiero que esta sea la cuenta de salida de correos del sistema. 
+												    </label>						    					
+												  </div>											    
+						    				</dd>
+						    			}
+						    			
+						    		</dl>
+
+								</div>
+					        </div>	 
+						</div>
+					</div>
+				  </div>
+				</div>        
+            
+           </div>
+        </fieldset>
+
+        
+       
+        
+        

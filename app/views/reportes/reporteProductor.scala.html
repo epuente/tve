@@ -1,0 +1,785 @@
+
+@main {
+
+	<style>
+		.seleccionado {background-color: rgba(38,185,154,.07);}	
+		.tituloControl {padding-right: 40px;}
+		
+		.renglonPar {background-color: rgb(240, 240, 240);}
+		
+		
+@@media print {
+  *,
+  *:before,
+  *:after {
+    color: #000 !important;
+    text-shadow: none !important;
+    background: transparent !important;
+    -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+  }
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+  pre,
+  blockquote {
+    border: 1px solid #999;
+
+    page-break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+  }
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+  img {
+    max-width: 100% !important;
+  }
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+  select {
+    background: #fff !important;
+  }
+  .navbar {
+    display: none;
+  }
+  .btn > .caret,
+  .dropup > .btn > .caret {
+    border-top-color: #000 !important;
+  }
+  .label {
+    border: 1px solid #000;
+  }
+  .table {
+    border-collapse: collapse !important;
+  }
+  .table td,
+  .table th {
+    background-color: #fff !important;
+  }
+  .table-bordered th,
+  .table-bordered td {
+    border: 1px solid #ddd !important;
+  }
+  
+  body {
+  	font-size: 12pt;
+  }
+}
+	</style>
+
+
+<div class="container-fluid">
+
+	<div class="row">
+		<div class="col-lg-2">
+			<div class="row">
+				@controlesNavegacion()
+			</div>
+			
+			<div class="row">
+				<div class="col-lg-12">
+					<label for="listaProductores">lista</label><br>
+					<select id="listaProductoresActivos">
+					</select>					
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+							<button type="button" id="btnGenerarReporte" class="btn btn-default">Generar reporte</button>
+				</div>
+			</div>			
+		</div>
+		<div class="col-lg-10">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div id="idTextoInfo"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div id="divCuerpoReporte"></div>
+				</div>
+			</div>
+		</div>
+	</div>	
+	
+	</div>
+}
+
+
+<script type="text/javascript">
+	const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+	const dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viérnes", "Sábado", "Domingo"];
+	const semestres = ["Enero - Junio", "Julio - Diciembre"];
+	const trimestres = ["Enero - Marzo", "Abril-Junio", "Julio-Septiembre", "Octubre-Diciembre"];
+	const usosCabina = {"M":"Musicalización","V":"Voz en off","I":"Ingesta", "C":"Calificación", "R":"Revisión"};
+	$(function(){
+		navegar("hoy", 0);
+	//	$("[name='btnNavega']").eq(3).addClass("active");
+		$("[name='btnNavega']").eq(3).click();
+		
+		$.when(LlamadaListaProductoresActivos()).done(function(data){
+			console.log(data);
+			var cadena="<option value='*'>Todos</option>";
+			data.forEach(function(p){
+				console.log(p.nombre)
+				cadena+= "<option value="+p.id+">"+ p.paterno+" "+p.materno+" "+p.nombre+"</option>";
+			});
+			$("#listaProductoresActivos").append(cadena);
+		});
+		
+	});
+	
+
+	function LlamadaListaProductoresActivos(){
+		var d = $.Deferred();
+		$.ajax({
+			url: '/ajaxListaProductoresActivos',
+			method: 'POST',
+		    dataType: "json"
+		}).success(function(data){
+			d.resolve(data);
+		}).error(function(xhr, status, error) {
+			  alert("error en ajax (LlamadaListaProductores) -  "+ xhr.responseText );
+			  d.reject;
+			});	
+		return d.promise();	
+	}	
+
+	function LlamadaProductorAnio(id, anio, alcanceConsulta, alcanceParmetro){
+		var d = $.Deferred();
+		var este = new Object();
+		este.personalId = id;
+		console.log(este);
+		$.ajax({
+			url: '/reportes/productorAnio',
+			method: 'POST',
+			data: JSON.stringify({personalId: id, anio: anio, alcanceConsulta:alcanceConsulta, parametro:alcanceParmetro}),
+			contentType: "application/json; charset=utf-8",	    
+		    dataType: "json"
+		}).success(function(data){
+			d.resolve(data);
+		}).error(function(xhr, status, error) {
+			  alert("error en ajax (LlamadaProductorAnio) -  "+ xhr.responseText );
+			  d.reject;
+			});	
+		return d.promise();	
+	}		
+	
+	
+	$("#btnGenerarReporte").click(function(){
+		console.log("btnGenerarReporte");
+		var prodId =  $("#listaProductoresActivos option:selected").val();
+	//	var data= $(this).val();
+	
+		var b=$("[name='btnNavega'].active");
+		console.log(prodId);
+		console.log( $(b).attr("id"));    
+		console.log( $(b).index(        $("[name='btnNavega']")  )         );
+		
+		var pos =  $(b).index("[name='btnNavega']" );
+		
+		var pos2 = null;
+		if (pos==1){
+			var p = $("[name='btnNavegaSem'].active");
+			console.log(  $(p).attr("id")  );
+			if ( $(p).attr("id")=="btnNavegaSem1" ){ pos2 = 0;}
+			if ( $(p).attr("id")=="btnNavegaSem2" ){ pos2 = 1;}
+			
+		}
+		if (pos==2){
+			var rotuloTrim = $("#divTrimestre");
+			console.log("trimestre: " + $(rotuloTrim).html());
+
+			pos2 =  trimestres.findIndex(  f=>f===$(rotuloTrim).html());
+			
+		}
+		if (pos==3){
+			var rotuloMes = $("#divMes");
+			console.log("mes: " + $(rotuloMes).html());
+
+			pos2 =  meses.findIndex(  f=>f===$(rotuloMes).html());
+			
+		}
+		console.log("pos "+pos);
+		console.log("pos2 "+pos2);
+		
+		var $r = LlamadaProductorAnio(prodId, $("#divAnio").html(), pos, pos2);
+		
+		$.when($r).done(function(data2){
+			console.log(data2);
+			var salida ="<table class='table table-striped' id='tablaReporte'>";	
+			$("#idTextoInfo").html("El productor tiene "+data2.length+" asignaciones");
+			if (data2.length>0){
+				
+				salida += "<thead><tr>";
+				salida +=   "<th>";				
+				salida +=   "<strong>Folio</strong>";
+				salida +=   '</th>';	
+				salida +=   "<th>";				
+				salida +=   "<strong>Oficio</strong>";
+				salida +=   '</th>';		
+				salida +=   "<th>";				
+				salida +=   "<strong>Fecha Asignación</strong>";
+				salida +=   '</th>';
+				salida +=   "<th>";				
+				salida +=   "<strong>Servicios</strong>  <a href='javascript:void(0);' name	='btnExpandirDetalles'><i class='far fa-plus-square'></i></a>";
+				salida +=   '</th>';
+				salida +=   '</tr>';
+				salida +=   '</thead>';
+				
+			} 
+				
+			for(var i = 0; i < data2.length; i++) {
+			    var obj = data2[i];
+				salida += "<tr>";
+				salida +=   "<td>";
+				salida +=     obj.folio.numfolio;
+				salida +=   '</td>';
+				salida +=   "<td>";
+						salida+="<table><tr><td>"+obj.folio.oficio.numoficio+"  "+obj.folio.oficio.descripcion+"</td></tr><tr style='display:none'><td>este</td></tr></table>";
+				salida +=   '</td>';
+				salida +=   "<td>";
+				salida +=    moment( obj.auditInsert, 'YYYY-MM-DDTHH:mm:ss-HH:mm').format("DD/MM/YYYY");
+				salida +=   '</td>';					
+				salida +=   "<td>";
+				
+				
+				
+				
+				if (obj.preagendas.length>0 || obj.agenda.length>0){
+					salida +='<button type="button" name="btnDetalle" id="'+obj.id+'" class="btn btn-info btn-sm">ver detalle</button>';
+					salida+="";				
+				}
+					
+				salida += "</td>";	
+				
+				if (obj.preagendas.length>0 || obj.agenda.length>0){
+				
+					salida+="</tr>";
+					salida+="<tr id ='trDetalle-"+obj.id+"' style='display:none'><td></td><td colspan='3'>";
+		
+					if (obj.preagendas.length>0){
+						salida += "<strong>Solicitudes</strong>";
+						salida+="<table class='table'>";
+									// Preagenda (solicitudes)
+									for (var d1=0; d1<obj.preagendas.length; d1++){
+										salida+=    "<tr>";
+										var pas1 =  obj.preagendas[d1];
+										salida += "<td>"+pas1.fase.descripcion;
+										if (pas1.juntas.length>0){
+											salida+="<br>Junta";
+										}
+										if (pas1.locaciones.length>0){
+											salida+="<br>Locación: "+pas1.locaciones[0].locacion;
+										}
+										if (pas1.salas.length>0){
+											salida+="<br>"+pas1.salas[0].sala.descripcion;
+											if (pas1.salas[0].usoscabina.length>0){
+												salida+="<br>Uso de sala/cabina: "+ usosCabina[pas1.salas[0].usoscabina[0].usocabina]
+											}
+										}
+										if (pas1.vehiculos.length>0){
+											salida+="<br>Vehículo solicitado";
+										}
+										salida+="</td>";
+										
+										
+										
+										salida+="<td>";
+										salida +=  moment(pas1.inicio, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("DD/MM/YYYY") +" de "+
+												   moment(pas1.inicio, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm")+ " a "+
+												   moment(pas1.fin, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm");
+										if (pas1.salidas.length>0){
+											salida+= " Salida DEV "+moment(pas1.salidas[0].salida, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm");
+										}
+										if (pas1.equipos.length>0){
+											for (var ieq=0; ieq<pas1.equipos.length; ieq++){
+												salida+= "<br>Equipo:"+pas1.equipos[ieq].equipo.descripcion	
+											}
+										}
+										if (pas1.accesorios.length>0){
+											for (var iacc=0; iacc<pas1.accesorios.length; iacc++){
+												salida+= "<br>Accesorio:"+pas1.accesorios[iacc].accesorio.descripcion	
+											}
+										}
+										if (pas1.formatos.length>0){
+											for (var ifm=0; iacc<pas1.accesorios.length; ifm++){
+												salida+= "<br>Formato:"+pas1.formatos[ifm].formato.descripcion	
+											}
+										}					
+										salida += "</td>";
+										
+										
+										
+										salida += "<td>";
+										salida +=  pas1.estado.descripcion;
+										if (pas1.personal.length>0){
+											for (var ip=0; ip<pas1.personal.length; ip++){
+												salida+= "<br>Solicitud: "+pas1.personal[ip].cantidad+" "+pas1.personal[ip].tipopersonal.descripcion;	
+											}
+										}
+										if (pas1.locutores.length>0){
+											for (var il=0; il<pas1.locutores.length; il++){
+												salida+= "<br>Locutor: "+pas1.locutores[il].personal.nombre+" "+pas1.locutores[il].personal.paterno+pas1.locutores[il].personal.materno;	
+											}
+										}
+										if (pas1.cancelaciones.length>0){
+											for (var ican=0; ican<pas1.personal.length; ican++){
+												salida+= "<br>Cancelado<br>Motivo: "+pas1.cancelaciones[ican].cancelacion.motivo;	
+											}
+										}
+										salida+="</td>";
+										
+										salida+="</tr>";
+									}
+						
+									
+									
+
+									
+									
+									
+									
+						salida+="</table>";		
+						
+					}					
+					
+					
+					// Agenda (Autorizados)
+					if (obj.agenda.length>0){
+						salida += "<strong>Autorizaciones</strong>";
+						salida+="<table class='table'>";
+									// Agenda (autorizaciones)
+									for (var d1=0; d1<obj.agenda.length; d1++){
+										salida+=    "<tr>";
+										var pas1 =  obj.agenda[d1];
+										salida += "<td>"+pas1.fase.descripcion;
+										if (pas1.juntas.length>0){
+											salida+="<br>Junta";
+										}
+										if (pas1.locaciones.length>0){
+											salida+="<br>Locación: "+pas1.locaciones[0].locacion;
+										}
+										if (pas1.salas.length>0){
+											salida+="<br>"+pas1.salas[0].sala.descripcion;
+											if (pas1.salas[0].usoscabina.length>0){
+												salida+="<br>Uso de sala/cabina: "+ usosCabina[pas1.salas[0].usoscabina[0].usocabina]
+											}
+										}
+										if (pas1.vehiculos.length>0){
+											for (var iv=0; iv<pas1.vehiculos.length;iv++){
+												salida+="<br>Vehículo asignado: "+pas1.vehiculos[iv].vehiculo.placa+" "+pas1.vehiculos[iv].vehiculo.descripcion;	
+											}
+											
+										}
+										salida+="</td>";
+										
+										
+										
+										salida+="<td>";
+										salida +=  moment(pas1.inicio, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("DD/MM/YYYY") +" de "+
+												   moment(pas1.inicio, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm")+ " a "+
+												   moment(pas1.fin, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm");
+										if (pas1.salidas.length>0){
+											salida+= ", salida DEV "+moment(pas1.salidas[0].salida, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm");
+										}
+										if (pas1.equipos.length>0){
+											for (var ieq=0; ieq<pas1.equipos.length; ieq++){
+												salida+= "<br>Equipo: "+pas1.equipos[ieq].equipo.descripcion	
+											}
+										}
+										if (pas1.accesorios.length>0){
+											for (var iacc=0; iacc<pas1.accesorios.length; iacc++){
+												salida+= "<br>Accesorio: "+pas1.accesorios[iacc].accesorio.descripcion	
+											}
+										}
+										if (pas1.formatos.length>0){
+											for (var ifm=0; iacc<pas1.accesorios.length; ifm++){
+												salida+= "<br>formato: "+pas1.formatos[ifm].formato.descripcion	
+											}
+										}					
+										salida += "</td>";
+										
+										
+										
+										salida += "<td>";
+										salida +=  pas1.estado.descripcion;
+										if (pas1.personal.length>0){
+											for (var ip=0; ip<pas1.personal.length; ip++){
+												salida+= "<br>"+pas1.personal[ip].personal.tipo.descripcion+": "+pas1.personal[ip].personal.nombre+" "+pas1.personal[ip].personal.paterno+" "+pas1.personal[ip].personal.materno;	
+											}
+										}
+
+										if (pas1.cancelaciones.length>0){
+											for (var ican=0; ican<pas1.personal.length; ican++){
+												salida+= "<br>Cancelado<br>Motivo: "+pas1.cancelaciones[ican].cancelacion.motivo;	
+											}
+										}
+										salida+="</td>";
+										
+										salida+="</tr>";
+									}
+						
+									
+									
+
+									
+									
+									
+									
+						salida+="</table>";		
+						
+					}						
+					
+					
+					
+					
+					salida+="</td></tr>";
+				}
+			//	salida += "<tr>";
+				/*
+				salida +=   "<div class='col-lg-1 col-md-1 col-sm-12 col-xs-12'>";
+				salida +=   '</div>';
+				salida +=   "<div class='col-lg-11 col-md-11 col-sm-11 col-xs-11'>";					
+				salida +=     "<div id='divDetalle-"+obj.id+"' style='display:none'>";
+				if (obj.preagendas.length>0){
+						salida += "<strong>Solicitudes</strong>";
+									for (var d1=0; d1<obj.preagendas.length; d1++){
+										var pas1 =  obj.preagendas[d1];
+										salida += "<div class='row'>";
+										salida += "<div class='col-lg-4'>";
+										salida += pas1.fase.descripcion;
+										salida +=   '</div>';
+										salida += "<div class='col-lg-4'>";
+										salida +=  moment(pas1.inicio, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("DD/MM/YYYY") +" de "+
+												   moment(pas1.inicio, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm")+ " a "+
+												   moment(pas1.fin, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm");
+										salida +=   '</div>';
+										salida += "<div class='col-lg-4'>";
+										salida +=  pas1.estado.descripcion;
+										salida +=   '</div>';
+										salida +=   '</div>';
+									}
+					}
+					if (obj.agenda.length>0){
+						salida += "<br><strong>Autorizaciones</strong>";
+									for (var d1=0; d1<obj.agenda.length; d1++){
+										var as1 =  obj.agenda[d1];
+										salida += "<div class='row'>";
+										salida += "<div class='col-lg-4'>";
+										salida += "<em>Fase:</em> "+as1.fase.descripcion;
+										if (as1.juntas.length>0){
+											for(var ij=0; ij< as1.accesorios.length;ij++){
+												salida+="junta";
+											}
+										}
+										salida +=   '<br></div>';
+										
+										salida += "<div class='col-lg-4'>";
+										salida +=  "<em>Del </em>"+moment(as1.inicio, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("DD/MM/YYYY") +" <em>de</em> "+
+										   moment(as1.inicio, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm")+ " <em>a</em> "+
+										   moment(as1.fin, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm");
+										
+										if (as1.salidas.length>0)
+											salida += " <em>Salida DEV:</em> "+moment(as1.salidas[0].salida, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm");
+										salida +=   '</div>';
+										
+										salida += "<div class='col-lg-4'>";
+										salida +=  "<em>Estado:</em> "+as1.estado.descripcion;
+										salida +=   '</div>';						
+										salida +=   '</div>';
+										
+										salida += "<div class='row'>";
+
+										salida += "<div class='col-lg-4'>";
+										if (as1.salas.length>0){
+											salida+="<em>Sala:</em> "+as1.salas[0].sala.descripcion;
+										}
+										
+										if (as1.locaciones.length>0){
+											salida+="<em>Locación:</em> "+as1.locaciones[0].locacion;
+										}
+										salida +=   '</div>';						
+										salida += "<div class='col-lg-4'>";
+										if (as1.equipos.length>0){
+											for(var ie=0; ie< as1.equipos.length;ie++){
+												salida+="<em>Equipo:</em> "+ as1.equipos[ie].equipo.descripcion+"<br>";
+											}
+										}
+										if (as1.accesorios.length>0){
+											for(var ia=0; ia< as1.accesorios.length;ia++){
+												salida+="<em>Accesorio</em>: "+ as1.accesorios[ia].accesorio.descripcion+"<br>";
+											}
+										}
+										if (as1.formatos.length>0){
+											for(var ifm=0; ifm< as1.formatos.length;ifm++){
+												salida+="<em>formato</em>: "+ as1.formatos[ifm].formato.descripcion+" cantidad: "+as1.formatos[ifm].cantidad+"<br>";
+											}
+										}
+										
+										if (as1.vehiculos.length>0){
+											for(var iv=0; ifm< as1.vehiculos.length;iv++){
+												salida+="<em>vehiculo</em>: "+ as1.vehiculos[iv].vehiculo.placa+" "+as1.vehiculos[iv].vehiculo.placa+"<br>";
+											}
+										}
+
+										if (as1.salas.length>0){
+											if (as1.salas[0].usoscabina.length>0){
+													salida+="<em>uso sala/cabina</em>: "+ as1.salas[0].usoscabina[0].usocabina+"<br>";
+											}
+										}
+										
+										salida +=   '</div>';
+										salida += "<div class='col-lg-4'>";
+										if (as1.personal.length>0){
+											for(var ip=0; ip< as1.personal.length;ip++){
+												salida+=as1.personal[ip].personal.tipo.descripcion+": "+as1.personal[ip].personal.nombre+" "+as1.personal[ip].personal.paterno+" "+as1.personal[ip].personal.materno+
+												"<br>";
+											}
+										}
+
+										salida +=   '</div>';											
+										
+										
+										
+										salida +=   '</div>';
+										
+									}
+
+					}
+*/				
+			//	salida +=   '<br></div>';   // del div oculto
+			//	salida +=   '</td>';   // de la columna	
+				salida +=   '</tr>';   // del renglon
+
+			}
+					
+			salida +=   '</table>';					
+				$("#divCuerpoReporte").html(salida);	
+	
+				
+				
+			
+		});	
+		
+	});
+	
+/*	
+	$("#btnGenerarReporteAnterior").click(function(){
+		console.log("btnGenerarReporte");
+		var prodId =  $("#listaProductoresActivos option:selected").val();
+	//	var data= $(this).val();
+		console.log(prodId);
+		
+		var $r = LlamadaProductorAnio(prodId, $("#divAnio").html(), $("[name='btnNavega']").index("[name='btnNavega'].active"));
+		
+		$.when($r).done(function(data2){
+			console.log(data2);
+			var salida="";
+			$("#idTextoInfo").html("El productor tiene "+data2.length+" asignaciones");
+			if (data2.length>0){
+				salida +="<hr>";	
+				salida += "<div class='row'>";
+				salida +=   "<div class='col-lg-1 col-md-1 col-sm-12 col-xs-12'>";				
+				salida +=   "<strong>Folio</strong>";
+				salida +=   '</div>';	
+				salida +=   "<div class='col-lg-7 col-md-7 col-sm-12 col-xs-12'>";				
+				salida +=   "<strong>Oficio</strong>";
+				salida +=   '</div>';		
+				salida +=   "<div class='col-lg-2 col-md-2 col-sm-12 col-xs-12'>";				
+				salida +=   "<strong>Fecha Asignación</strong>";
+				salida +=   '</div>';
+				salida +=   "<div class='col-lg-2 col-md-2 col-sm-12 col-xs-12'>";				
+				salida +=   "<strong>Servicios</strong>";
+				salida +=   '</div>';
+				salida +=   '</div>';
+			} 
+				
+				for(var i = 0; i < data2.length; i++) {
+				    var obj = data2[i];
+					salida += "<div class='row ";
+					if (i%2==0)
+						salida+=" renglonPar";
+					salida+="'>";
+					salida +=   "<div class='col-lg-1 col-md-1 col-sm-12 col-xs-12'>";
+					salida +=     obj.folio.folio;
+					salida +=   '</div>';
+					salida +=   "<div class='col-lg-7 col-md-7 col-sm-12 col-xs-12'>";
+					salida +=     obj.folio.oficio.oficio+"  "+obj.folio.oficio.descripcion;
+					salida +=   '</div>';
+					salida +=   "<div class='col-lg-2 col-md-2 col-sm-12 col-xs-12'>";
+					salida +=    moment( obj.auditInsert, 'YYYY-MM-DDTHH:mm:ss-HH:mm').format("DD/MM/YYYY");
+					salida +=   '</div>';					
+					salida +=   "<div class='col-lg-2 col-md-2 col-sm-12 col-xs-12'>";
+					
+					
+					
+					
+					if (obj.preagendas.length>0 || obj.agenda.length>0){
+						salida +='<button type="button" name="btnDetalle" id="'+obj.id+'" class="btn btn-info">Detalle</button>';
+					}
+						
+					salida += "</div>";	
+					salida += "<div class='row'>";
+					salida +=   "<div class='col-lg-1 col-md-1 col-sm-12 col-xs-12'>";
+					salida +=   '</div>';
+					salida +=   "<div class='col-lg-11 col-md-11 col-sm-11 col-xs-11'>";					
+					salida +=     "<div id='divDetalle-"+obj.id+"' style='display:none'>";
+					if (obj.preagendas.length>0){
+							salida += "<strong>Solicitudes</strong>";
+										for (var d1=0; d1<obj.preagendas.length; d1++){
+											var pas1 =  obj.preagendas[d1];
+											salida += "<div class='row'>";
+											salida += "<div class='col-lg-4'>";
+											salida += pas1.fase.descripcion;
+											salida +=   '</div>';
+											salida += "<div class='col-lg-4'>";
+											salida +=  moment(pas1.inicio, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("DD/MM/YYYY") +" de "+
+													   moment(pas1.inicio, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm")+ " a "+
+													   moment(pas1.fin, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm");
+											salida +=   '</div>';
+											salida += "<div class='col-lg-4'>";
+											salida +=  pas1.estado.descripcion;
+											salida +=   '</div>';
+											salida +=   '</div>';
+										}
+						}
+						if (obj.agenda.length>0){
+							salida += "<br><strong>Autorizaciones</strong>";
+										for (var d1=0; d1<obj.agenda.length; d1++){
+											var as1 =  obj.agenda[d1];
+											salida += "<div class='row'>";
+											salida += "<div class='col-lg-4'>";
+											salida += "<em>Fase:</em> "+as1.fase.descripcion;
+											if (as1.juntas.length>0){
+												for(var ij=0; ij< as1.accesorios.length;ij++){
+													salida+="junta";
+												}
+											}
+											salida +=   '<br></div>';
+											
+											salida += "<div class='col-lg-4'>";
+											salida +=  "<em>Del </em>"+moment(as1.inicio, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("DD/MM/YYYY") +" <em>de</em> "+
+											   moment(as1.inicio, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm")+ " <em>a</em> "+
+											   moment(as1.fin, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm");
+											
+											if (as1.salidas.length>0)
+												salida += " <em>Salida DEV:</em> "+moment(as1.salidas[0].salida, 'YYYY-MM-DDTHH:mm:ss.SSSZ').format("HH:mm");
+											salida +=   '</div>';
+											
+											salida += "<div class='col-lg-4'>";
+											salida +=  "<em>Estado:</em> "+as1.estado.descripcion;
+											salida +=   '</div>';						
+											salida +=   '</div>';
+											
+											salida += "<div class='row'>";
+
+											salida += "<div class='col-lg-4'>";
+											if (as1.salas.length>0){
+												salida+="<em>Sala:</em> "+as1.salas[0].sala.descripcion;
+											}
+											
+											if (as1.locaciones.length>0){
+												salida+="<em>Locación:</em> "+as1.locaciones[0].locacion;
+											}
+											salida +=   '</div>';						
+											salida += "<div class='col-lg-4'>";
+											if (as1.equipos.length>0){
+												for(var ie=0; ie< as1.equipos.length;ie++){
+													salida+="<em>Equipo:</em> "+ as1.equipos[ie].equipo.descripcion+"<br>";
+												}
+											}
+											if (as1.accesorios.length>0){
+												for(var ia=0; ia< as1.accesorios.length;ia++){
+													salida+="<em>Accesorio</em>: "+ as1.accesorios[ia].accesorio.descripcion+"<br>";
+												}
+											}
+											if (as1.formatos.length>0){
+												for(var ifm=0; ifm< as1.formatos.length;ifm++){
+													salida+="<em>formato</em>: "+ as1.formatos[ifm].formato.descripcion+" cantidad: "+as1.formatos[ifm].cantidad+"<br>";
+												}
+											}
+											
+											if (as1.vehiculos.length>0){
+												for(var iv=0; ifm< as1.vehiculos.length;iv++){
+													salida+="<em>vehiculo</em>: "+ as1.vehiculos[iv].vehiculo.placa+" "+as1.vehiculos[iv].vehiculo.placa+"<br>";
+												}
+											}
+
+											if (as1.salas.length>0){
+												if (as1.salas[0].usoscabina.length>0){
+														salida+="<em>uso sala/cabina</em>: "+ as1.salas[0].usoscabina[0].usocabina+"<br>";
+												}
+											}
+											
+											salida +=   '</div>';
+											salida += "<div class='col-lg-4'>";
+											if (as1.personal.length>0){
+												for(var ip=0; ip< as1.personal.length;ip++){
+													salida+=as1.personal[ip].personal.tipo.descripcion+": "+as1.personal[ip].personal.nombre+" "+as1.personal[ip].personal.paterno+" "+as1.personal[ip].personal.materno+
+													"<br>";
+												}
+											}
+
+											salida +=   '</div>';											
+											
+											
+											
+											salida +=   '</div>';											
+										}
+	
+						}
+					
+					salida +=   '<br></div>';   // del div oculto
+					salida +=   '</div>';   // de la columna	
+					salida +=   '</div>';   // del renglon
+					salida +=   '</div>'; 
+				}
+					
+					
+				$("#divCuerpoReporte").html(salida);	
+	
+				  //  console.log(obj.id);
+				
+			
+		});	
+		
+	});	
+	*/
+	
+	$(document).off("click","[name='btnExpandirDetalles']");
+	$(document).on("click","[name='btnExpandirDetalles']", function(){
+		console.log("expandir");
+		$("tr[id*='trDetalle-']").css("display","");
+		$("[name='btnDetalle']").html("menos detalle");
+	});
+	
+		
+</script>
+	
+<script src="@routes.Assets.at("javascripts/controlesReportes.js")"></script>
+<script src="@routes.Assets.at("lib/moment/moment.js")" type="text/javascript"></script>    	
+	

@@ -1,0 +1,1178 @@
+Despues de crear las funciones, ejecutar estos selects
+Con el usuario SYS ejecutar:
+select sys.migracion() from dual;
+select sys.migracion001() from dual;
+select sys.migracion002Oficio() from dual;
+select sys.migracion003HisFolios() from dual;
+select sys.migracion004Preagenda() from dual;
+select sys.migracion005Agenda() from dual;
+
+
+
+
+
+
+
+
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `sys`.`migracion`() RETURNS int(11)
+BEGIN
+   
+    DECLARE nempleado, numEmpleado, paterno, materno, nombre, turno, tipopersonal, activo, usu, pass CHAR(100);
+    DECLARE peraudit_insert, cat_insert, craudit_insert DATE;
+    DECLARE maxPersonal int;
+    DECLARE done INT DEFAULT 0;
+    
+   
+    declare curPersonal  cursor for 
+		select pernumempleado_pk, perpaterno, permaterno, pernombre, perturno, pertipopersonal_fk, peractivo, peraudit_insert from tveserviciosRemota.cat_personal; 
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+/*
+    delete from tveservicios2021_dev.cuenta_rol;
+    delete from tveservicios2021_dev.cuenta;
+    delete from tveservicios2021_dev.personal;
+    
+  */  
+    open curPersonal;
+	loopPersonal: loop    
+		fetch curPersonal into nempleado, paterno, materno, nombre, turno, tipopersonal, activo, peraudit_insert;		
+        if done then
+			leave loopPersonal;
+		end if;
+        select  ifnull(max(id),0) into maxPersonal from tveservicios2021_dev.personal;
+		insert into tveservicios2021_dev.personal values (maxPersonal+1,nempleado, paterno, materno, nombre, tipopersonal, 1,  turno, activo, nvl(peraudit_insert, now()), nvl(peraudit_insert, now()));
+        bloqueCuentas: begin        
+			DECLARE done2 INT DEFAULT 0;
+            declare maxCuenta int;
+			declare cur1 cursor for 
+				SELECT ctapersonal_pf, ctausername_pk, ctapassword, tveserviciosRemota.cuentas.ctaaudit_insert 
+				FROM tveserviciosRemota.cat_personal, tveserviciosRemota.cuentas 
+				where pernumempleado_pk  =  nempleado and pernumempleado_pk = ctapersonal_pf;             
+        	DECLARE CONTINUE HANDLER FOR not found SET done2 = 1;
+			OPEN cur1;
+			loopCuenta: loop
+				FETCH cur1 INTO numEmpleado, usu, pass, cat_insert;
+                if done2 then
+					leave loopCuenta;
+				end if;
+                if numEmpleado = nempleado then
+					select ifnull(max(id),0) into maxCuenta from tveservicios2021_dev.cuenta;
+					insert into tveservicios2021_dev.cuenta values (maxCuenta+1, maxPersonal+1,  usu, pass, nvl(cat_insert,now()), nvl(cat_insert,now()));
+				end if;
+				
+		        bloqueCuentasRoles: begin        
+					DECLARE done3 INT DEFAULT 0;
+                    declare rolid int;
+                    declare crEmpleado char(100);
+					declare cur3 cursor for select clrpersonal_pf, clrrol_fk, audit_insert from tveserviciosRemota.cuentasroles where clrpersonal_pf = numempleado;            
+		        	DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET done3 = 1;
+					OPEN cur3;
+					loopCuentaRol: loop
+						FETCH cur3 INTO crEmpleado, rolid, craudit_insert;
+                        if done3 then
+							leave loopCuentaRol;
+						end if;
+		                if nempleado = crEmpleado and nempleado = numEmpleado then
+							insert into tveservicios2021_dev.cuenta_rol values (null, maxCuenta+1,  if(rolid=0,1, rolid), '2019-07-04 13:10:19', '2019-07-04 13:10:19');
+						end if;
+					end loop;
+					CLOSE cur3;        
+				end bloqueCuentasRoles;				
+				
+			end loop;
+			CLOSE cur1;        
+		end bloqueCuentas;  
+        
+    end loop;
+
+    close curPersonal;
+   
+   update tveservicios2021_dev.cuenta set audit_insert = now() where audit_insert IS null;
+  
+   update tveservicios2021_dev.cuenta set audit_update = now() where audit_update IS null;
+  
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(297, 42, 2, '2000-01-01 08:00', '2000-01-01 15:00', '2018-12-14 13:53:51.000', '2018-12-14 13:53:51.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(298, 42, 3, '2000-01-01 08:00', '2000-01-01 15:00', '2018-12-14 13:53:51.000', '2018-12-14 13:53:51.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(299, 42, 4, '2000-01-01 08:00', '2000-01-01 15:00', '2018-12-14 13:53:51.000', '2018-12-14 13:53:51.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(300, 42, 5, '2000-01-01 08:00', '2000-01-01 15:00', '2018-12-14 13:53:51.000', '2018-12-14 13:53:51.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(301, 42, 6, '2000-01-01 08:00', '2000-01-01 15:00', '2018-12-14 13:53:51.000', '2018-12-14 13:53:51.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(307, 51, 2, '2000-01-01 08:00', '2000-01-01 15:00', '2018-12-17 10:28:39.000', '2018-12-17 10:28:39.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(308, 51, 3, '2000-01-01 08:00', '2000-01-01 15:00', '2018-12-17 10:28:39.000', '2018-12-17 10:28:39.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(309, 51, 4, '2000-01-01 08:00', '2000-01-01 15:00', '2018-12-17 10:28:39.000', '2018-12-17 10:28:39.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(310, 51, 5, '2000-01-01 08:00', '2000-01-01 15:00', '2018-12-17 10:28:39.000', '2018-12-17 10:28:39.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(311, 51, 6, '2000-01-01 08:00', '2000-01-01 15:00', '2018-12-17 10:28:39.000', '2018-12-17 10:28:39.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(312, 46, 2, '2000-01-01 16:00', '2000-01-01 21:00', '2018-12-17 10:31:05.000', '2018-12-17 10:31:05.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(313, 46, 3, '2000-01-01 16:00', '2000-01-01 21:00', '2018-12-17 10:31:05.000', '2018-12-17 10:31:05.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(314, 46, 4, '2000-01-01 16:00', '2000-01-01 21:00', '2018-12-17 10:31:05.000', '2018-12-17 10:31:05.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(315, 46, 5, '2000-01-01 16:00', '2000-01-01 21:00', '2018-12-17 10:31:05.000', '2018-12-17 10:31:05.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(316, 46, 6, '2000-01-01 16:00', '2000-01-01 21:00', '2018-12-17 10:31:05.000', '2018-12-17 10:31:05.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(322, 74, 2, '2000-01-01 15:00', '2000-01-01 21:00', '2018-12-17 10:34:31.000', '2018-12-17 10:34:31.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(323, 74, 3, '2000-01-01 15:00', '2000-01-01 21:00', '2018-12-17 10:34:31.000', '2018-12-17 10:34:31.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(324, 74, 4, '2000-01-01 15:00', '2000-01-01 21:00', '2018-12-17 10:34:31.000', '2018-12-17 10:34:31.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(325, 74, 5, '2000-01-01 15:00', '2000-01-01 21:00', '2018-12-17 10:34:31.000', '2018-12-17 10:34:31.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(326, 74, 6, '2000-01-01 15:00', '2000-01-01 21:00', '2018-12-17 10:34:31.000', '2018-12-17 10:34:31.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(329, 1, 2, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-06 09:04:12.000', '2019-02-06 09:04:12.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(330, 43, 2, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:00:23.000', '2019-02-28 11:00:23.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(331, 43, 3, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:00:23.000', '2019-02-28 11:00:23.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(332, 43, 4, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:00:23.000', '2019-02-28 11:00:23.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(333, 43, 5, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:00:23.000', '2019-02-28 11:00:23.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(334, 43, 6, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:00:23.000', '2019-02-28 11:00:23.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(335, 62, 2, '2000-01-01 16:00', '2000-01-01 21:00', '2019-02-28 11:01:19.000', '2019-02-28 11:01:19.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(336, 62, 3, '2000-01-01 16:00', '2000-01-01 21:00', '2019-02-28 11:01:19.000', '2019-02-28 11:01:19.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(337, 62, 4, '2000-01-01 16:00', '2000-01-01 21:00', '2019-02-28 11:01:19.000', '2019-02-28 11:01:19.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(338, 62, 5, '2000-01-01 16:00', '2000-01-01 21:00', '2019-02-28 11:01:19.000', '2019-02-28 11:01:19.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(339, 62, 6, '2000-01-01 16:00', '2000-01-01 21:00', '2019-02-28 11:01:19.000', '2019-02-28 11:01:19.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(340, 30, 2, '2000-01-01 15:00', '2000-01-01 21:00', '2019-02-28 11:01:41.000', '2019-02-28 11:01:41.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(341, 30, 3, '2000-01-01 15:00', '2000-01-01 21:00', '2019-02-28 11:01:41.000', '2019-02-28 11:01:41.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(342, 30, 4, '2000-01-01 15:00', '2000-01-01 21:00', '2019-02-28 11:01:41.000', '2019-02-28 11:01:41.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(343, 30, 5, '2000-01-01 15:00', '2000-01-01 21:00', '2019-02-28 11:01:41.000', '2019-02-28 11:01:41.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(344, 30, 6, '2000-01-01 15:00', '2000-01-01 21:00', '2019-02-28 11:01:41.000', '2019-02-28 11:01:41.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(345, 52, 2, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:02:17.000', '2019-02-28 11:02:17.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(346, 52, 3, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:02:17.000', '2019-02-28 11:02:17.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(347, 52, 4, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:02:17.000', '2019-02-28 11:02:17.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(348, 52, 5, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:02:17.000', '2019-02-28 11:02:17.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(349, 52, 6, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:02:17.000', '2019-02-28 11:02:17.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(350, 47, 2, '2000-01-01 16:00', '2000-01-01 21:00', '2019-02-28 11:03:39.000', '2019-02-28 11:03:39.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(351, 47, 3, '2000-01-01 16:00', '2000-01-01 21:00', '2019-02-28 11:03:39.000', '2019-02-28 11:03:39.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(352, 47, 4, '2000-01-01 16:00', '2000-01-01 21:00', '2019-02-28 11:03:39.000', '2019-02-28 11:03:39.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(353, 47, 5, '2000-01-01 16:00', '2000-01-01 21:00', '2019-02-28 11:03:39.000', '2019-02-28 11:03:39.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(354, 47, 6, '2000-01-01 16:00', '2000-01-01 21:00', '2019-02-28 11:03:39.000', '2019-02-28 11:03:39.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(355, 33, 2, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:03:58.000', '2019-02-28 11:03:58.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(356, 33, 3, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:03:58.000', '2019-02-28 11:03:58.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(357, 33, 4, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:03:58.000', '2019-02-28 11:03:58.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(358, 33, 5, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:03:58.000', '2019-02-28 11:03:58.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(359, 33, 6, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:03:58.000', '2019-02-28 11:03:58.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(360, 75, 2, '2000-01-01 15:00', '2000-01-01 21:00', '2019-02-28 11:04:48.000', '2019-02-28 11:04:48.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(361, 75, 3, '2000-01-01 15:00', '2000-01-01 21:00', '2019-02-28 11:04:48.000', '2019-02-28 11:04:48.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(362, 75, 4, '2000-01-01 15:00', '2000-01-01 21:00', '2019-02-28 11:04:48.000', '2019-02-28 11:04:48.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(363, 75, 5, '2000-01-01 15:00', '2000-01-01 21:00', '2019-02-28 11:04:48.000', '2019-02-28 11:04:48.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(364, 75, 6, '2000-01-01 15:00', '2000-01-01 21:00', '2019-02-28 11:04:48.000', '2019-02-28 11:04:48.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(365, 31, 2, '2000-01-01 15:00', '2000-01-01 21:00', '2019-02-28 11:06:39.000', '2019-02-28 11:06:39.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(366, 31, 3, '2000-01-01 15:00', '2000-01-01 21:00', '2019-02-28 11:06:39.000', '2019-02-28 11:06:39.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(367, 31, 4, '2000-01-01 15:00', '2000-01-01 21:00', '2019-02-28 11:06:39.000', '2019-02-28 11:06:39.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(368, 31, 5, '2000-01-01 15:00', '2000-01-01 21:00', '2019-02-28 11:06:39.000', '2019-02-28 11:06:39.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(369, 31, 6, '2000-01-01 15:00', '2000-01-01 21:00', '2019-02-28 11:06:39.000', '2019-02-28 11:06:39.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(370, 63, 2, '2000-01-01 09:00', '2000-01-01 16:00', '2019-02-28 11:07:28.000', '2019-02-28 11:07:28.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(371, 63, 3, '2000-01-01 09:00', '2000-01-01 16:00', '2019-02-28 11:07:28.000', '2019-02-28 11:07:28.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(372, 63, 4, '2000-01-01 09:00', '2000-01-01 16:00', '2019-02-28 11:07:28.000', '2019-02-28 11:07:28.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(373, 63, 5, '2000-01-01 09:00', '2000-01-01 16:00', '2019-02-28 11:07:28.000', '2019-02-28 11:07:28.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(374, 63, 6, '2000-01-01 09:00', '2000-01-01 16:00', '2019-02-28 11:07:28.000', '2019-02-28 11:07:28.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(375, 40, 2, '2000-01-01 09:00', '2000-01-01 16:00', '2019-02-28 11:09:19.000', '2019-02-28 11:09:19.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(376, 40, 3, '2000-01-01 09:00', '2000-01-01 16:00', '2019-02-28 11:09:19.000', '2019-02-28 11:09:19.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(377, 40, 4, '2000-01-01 09:00', '2000-01-01 16:00', '2019-02-28 11:09:19.000', '2019-02-28 11:09:19.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(378, 40, 5, '2000-01-01 09:00', '2000-01-01 16:00', '2019-02-28 11:09:19.000', '2019-02-28 11:09:19.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(379, 40, 6, '2000-01-01 09:00', '2000-01-01 16:00', '2019-02-28 11:09:19.000', '2019-02-28 11:09:19.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(380, 5, 2, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:10:30.000', '2019-02-28 11:10:30.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(381, 5, 3, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:10:30.000', '2019-02-28 11:10:30.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(382, 5, 4, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:10:30.000', '2019-02-28 11:10:30.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(383, 5, 5, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:10:30.000', '2019-02-28 11:10:30.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(384, 5, 6, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:10:30.000', '2019-02-28 11:10:30.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(385, 8, 2, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:12:48.000', '2019-02-28 11:12:48.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(386, 8, 3, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:12:48.000', '2019-02-28 11:12:48.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(387, 8, 4, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:12:48.000', '2019-02-28 11:12:48.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(388, 8, 5, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:12:48.000', '2019-02-28 11:12:48.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(389, 8, 6, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:12:48.000', '2019-02-28 11:12:48.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(390, 34, 2, '2000-01-01 08:00', '2000-01-01 21:00', '2019-02-28 11:13:53.000', '2019-02-28 11:13:53.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(391, 34, 3, '2000-01-01 08:00', '2000-01-01 21:00', '2019-02-28 11:13:53.000', '2019-02-28 11:13:53.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(392, 34, 4, '2000-01-01 08:00', '2000-01-01 21:00', '2019-02-28 11:13:53.000', '2019-02-28 11:13:53.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(393, 34, 5, '2000-01-01 08:00', '2000-01-01 21:00', '2019-02-28 11:13:53.000', '2019-02-28 11:13:53.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(394, 34, 6, '2000-01-01 08:00', '2000-01-01 21:00', '2019-02-28 11:13:53.000', '2019-02-28 11:13:53.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(395, 56, 2, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:15:19.000', '2019-02-28 11:15:19.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(396, 56, 3, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:15:19.000', '2019-02-28 11:15:19.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(397, 56, 4, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:15:19.000', '2019-02-28 11:15:19.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(398, 56, 5, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:15:19.000', '2019-02-28 11:15:19.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(399, 56, 6, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:15:19.000', '2019-02-28 11:15:19.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(400, 37, 2, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:25:41.000', '2019-02-28 11:25:41.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(401, 37, 3, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:25:41.000', '2019-02-28 11:25:41.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(402, 37, 4, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:25:41.000', '2019-02-28 11:25:41.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(403, 37, 5, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:25:41.000', '2019-02-28 11:25:41.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(404, 37, 6, '2000-01-01 08:00', '2000-01-01 15:00', '2019-02-28 11:25:41.000', '2019-02-28 11:25:41.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(410, 59, 2, '2000-01-01 08:00', '2000-01-01 15:00', '2019-03-19 12:49:31.000', '2019-03-19 12:49:31.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(411, 59, 3, NULL, NULL, '2019-03-19 12:49:31.000', '2019-03-19 12:49:31.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(412, 59, 4, NULL, NULL, '2019-03-19 12:49:31.000', '2019-03-19 12:49:31.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(413, 59, 5, NULL, NULL, '2019-03-19 12:49:31.000', '2019-03-19 12:49:31.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(414, 59, 6, NULL, NULL, '2019-03-19 12:49:31.000', '2019-03-19 12:49:31.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(420, 41, 2, '2000-01-01 08:00', '2000-01-01 21:00', '2020-09-24 13:23:38.000', '2020-09-24 13:23:38.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(421, 41, 3, NULL, NULL, '2020-09-24 13:23:38.000', '2020-09-24 13:23:38.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(422, 41, 4, NULL, NULL, '2020-09-24 13:23:38.000', '2020-09-24 13:23:38.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(423, 41, 5, NULL, NULL, '2020-09-24 13:23:38.000', '2020-09-24 13:23:38.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(424, 41, 6, NULL, NULL, '2020-09-24 13:23:38.000', '2020-09-24 13:23:38.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(435, 82, 2, '2000-01-01 08:00', '2000-01-01 21:00', '2020-11-30 09:45:32.000', '2020-11-30 09:45:32.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(436, 82, 3, '2000-01-01 08:00', '2000-01-01 21:00', '2020-11-30 09:45:32.000', '2020-11-30 09:45:32.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(437, 82, 4, '2000-01-01 08:00', '2000-01-01 21:00', '2020-11-30 09:45:32.000', '2020-11-30 09:45:32.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(438, 82, 5, '2000-01-01 08:00', '2000-01-01 21:00', '2020-11-30 09:45:32.000', '2020-11-30 09:45:32.000');
+	INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(439, 82, 6, '2000-01-01 08:00', '2000-01-01 21:00', '2020-11-30 09:45:32.000', '2020-11-30 09:45:32.000');
+
+   
+
+RETURN 1;
+END
+
+
+
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `sys`.`migracion001`() RETURNS int(11)
+BEGIN
+    DECLARE nempleado, numEmpleado, paterno, materno, nombre, turno, tipopersonal, activo, usu, pass CHAR(100);
+    DECLARE maxPersonal int;
+    DECLARE done INT DEFAULT 0;
+    /*
+    declare curPersonal  cursor for 
+		select pernumempleado_pk, perpaterno, permaterno, pernombre, perturno, pertipopersonal_fk, peractivo from tveserviciosRemota.cat_personal; 
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+    
+    */
+
+  /*  
+    delete from tveservicios2021_dev.cuenta_rol;
+    delete from tveservicios2021_dev.cuenta;
+    
+    
+	delete from tveservicios2021_dev.personal_horario;
+	delete from tveservicios2021_dev.personal;
+ 
+  
+    delete from tveservicios2021_dev.operador_sala;
+    delete from tveservicios2021_dev.personal;
+    
+    
+    delete from tveservicios2021_dev.oficio_contacto_telefono;
+    delete from tveservicios2021_dev.oficio_contacto_correo;
+    delete from tveservicios2021_dev.oficio_contacto;
+    delete from tveservicios2021_dev.oficio_fecha_grabacion;
+
+*/    
+    /*
+    
+    open curPersonal;
+	loopPersonal: loop    
+		fetch curPersonal into nempleado, paterno, materno, nombre, turno, tipopersonal, activo;		
+        if done then
+			leave loopPersonal;
+		end if;
+        select  ifnull(max(id),0) into maxPersonal from tveservicios2021_dev.personal;
+		insert into tveservicios2021_dev.personal values (maxPersonal+1,nempleado, paterno, materno, nombre, tipopersonal, 1, turno,  activo,  nvl(audit_insert, now()), nvl(audit_update, now())  );     
+	
+       
+        bloqueCuentas: begin        
+			DECLARE done2 INT DEFAULT 0;
+            declare maxCuenta int;
+			declare cur1 cursor for 
+				SELECT ctapersonal_pf, ctausername_pk, ctapassword 
+				FROM tveserviciosRemota.cat_personal, tveserviciosRemota.cuentas 
+				where pernumempleado_pk  =  nempleado and pernumempleado_pk = ctapersonal_pf;             
+        	DECLARE CONTINUE HANDLER FOR not found SET done2 = 1;
+			OPEN cur1;
+			loopCuenta: loop
+				FETCH cur1 INTO numEmpleado, usu, pass;
+                if done2 then
+					leave loopCuenta;
+				end if;
+                if numEmpleado = nempleado then
+					select ifnull(max(id),0) into maxCuenta from tveservicios2021_dev.cuenta;
+					insert into tveservicios2021_dev.cuenta values (maxCuenta+1, maxPersonal+1,  usu, pass, if(audit_insert is null, now(), audit_insert), if(audit_update is null, now(), audit_update));
+				end if;
+				
+		        bloqueCuentasRoles: begin        
+					DECLARE done3 INT DEFAULT 0;
+                    declare rolid int;
+                    declare crEmpleado char(100);
+					declare cur3 cursor for select clrpersonal_pf, clrrol_fk from tveserviciosRemota.cuentasroles where clrpersonal_pf = numempleado;            
+		        	DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET done3 = 1;
+					OPEN cur3;
+					loopCuentaRol: loop
+						FETCH cur3 INTO crEmpleado, rolid;
+                        if done3 then
+							leave loopCuentaRol;
+						end if;
+		                if nempleado = crEmpleado and nempleado = numEmpleado then
+							insert into tveservicios2021_dev.cuenta_rol values (null, maxCuenta+1,  if(rolid=0,1, rolid), if(audit_insert is null, now(), audit_insert), if(audit_update is null, now(), audit_update));
+						end if;
+					end loop;
+					CLOSE cur3;        
+				end bloqueCuentasRoles;				
+				
+				
+				
+			end loop;
+			CLOSE cur1;        
+		end bloqueCuentas;  
+        
+    end loop;
+        
+
+    close curPersonal;
+    */
+	insert into tveservicios2021_dev.operador_sala (id, personal_id, sala_id, turno, audit_insert, audit_update) 
+	select null, personal.id, sala.id,  atsturno_pk, '2013-02-07 11:38:58', '2013-02-07 11:38:58'
+	from tveserviciosRemota.atencionsala inner join tveservicios2021_dev.personal on atspersonal_pf = personal.num_empleado
+	inner join tveservicios2021_dev.sala on atssala_pf = sala.id;     
+
+
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(1, 1, 'Porta filtro', 1, '', '', '', '2019-02-28 10:57:13.000', '2019-02-28 10:57:13.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(2, 1, 'Filtro', 1, '', '', '', '2019-02-28 10:57:13.000', '2019-02-28 10:57:13.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(3, 2, 'Lámpara', 1, '', '', '', '2019-02-28 10:57:13.000', '2019-02-28 10:57:13.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(4, 3, 'Cable coaxial', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(5, 1, 'Fuente de Poder IDX', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(7, 1, 'Fuente de Poder IDX', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(8, 5, 'Cinturón de Baterías', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(9, 1, 'Fuente de Poder con cargador de Baterías SONY', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(10, 1, 'Fuente de Poder con Cargador de Baterías SONY', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(11, 1, 'Monitor SONY 8''', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(12, 1, 'Monitor SONY 8''', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(13, 5, 'Pila SONY Amarilla', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(14, 5, 'Pila SONY Amarilla', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(15, 5, 'Pila SONY Amarilla', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(16, 5, 'Pila SONY Azul', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(17, 5, 'Pila SONY Azul', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(18, 5, 'Pilas IDX', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(19, 5, 'Pilas IDX', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(20, 5, 'Pilas IDX', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(21, 5, 'Pilas IDX', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(22, 5, 'Pilas IDX', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(23, 5, 'Pilas IDX', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(24, 5, 'Pilas IDX', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(25, 5, 'Pilas IDX', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(26, 5, 'Pilas IDX', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(27, 5, 'Pilas IDX', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(28, 5, 'Tripié Sachtler Mediano', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(29, 5, 'Tripié Sachtler Mediano', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(30, 5, 'Tripié Sachtler Grande', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(31, 5, 'Tripié Libec Chico', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(32, 2, 'Kit de Iluminación Kinoflow', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(33, 2, 'Kit de Iluminación Kinoflow', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(34, 2, 'Kit de Iluminación Lowel', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(35, 2, 'Kit de Iluminación Lowel', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(36, 4, 'Micrófono Tipo Maraca Shure', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(37, 4, 'Micrófono Tipo Maraca Shure', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(38, 4, 'Micrófono Lavalier SONY', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(39, 4, 'Micrófono Lavalier Inalámbrico SONY', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(40, 4, 'Micrófono Lavalier Inalámbrico SONY', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(41, 4, 'Micrófono Tipo Maraca Inalámbrico SONY', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(42, 4, 'Micrófono Tipo Maraca Inalámbrico SONY', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(43, 5, 'Chaleco', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(44, 5, 'Chaleco', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(45, 5, 'Chaleco', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(46, 2, 'Espejo de sol', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(47, 2, 'Espejo de sol', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(48, 1, 'Teleprompter', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+INSERT INTO tveservicios2021_dev.accesorio  (id, tipo_id, descripcion, estado_id, serie, modelo, observacion, audit_insert, audit_update) VALUES(49, 2, 'Seguidor de Luz', 1, '', '', '', '2019-02-28 10:57:14.000', '2019-02-28 10:57:14.000');
+
+INSERT INTO tveservicios2021_dev.equipo (id, descripcion, estado_id, serie, marca, modelo, observacion, audit_insert, audit_update) VALUES(1, 'Cámara XDCAM', 1, '', 'SONY', 'PDW-510', 'También se utiliza para transmisiones de estudio. Se alimenta con fuente de poder para su uso continuo. Requiere dos pilas modelo BP-L60A y BPGL95 para aspectos o testimonios. El dispositivo de grabación es de disco óptico con duración de 85 minutos, mismo que es regrabable. Requiere tripié modelo DV 12SB. Se recomienda llevar buena iluminación. ', '2018-01-01 00:00:00.000', '2018-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.equipo (id, descripcion, estado_id, serie, marca, modelo, observacion, audit_insert, audit_update) VALUES(2, 'Cámara DVCAM', 1, '', 'Sony', 'DSR-250', '', '2018-01-01 00:00:00.000', '2018-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.equipo (id, descripcion, estado_id, serie, marca, modelo, observacion, audit_insert, audit_update) VALUES(3, 'Cámara DVCAM', 3, '', 'Sony', 'DSR-250', '', '2018-01-01 00:00:00.000', '2018-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.equipo (id, descripcion, estado_id, serie, marca, modelo, observacion, audit_insert, audit_update) VALUES(4, 'Cámara DVCAM', 3, '', 'Sony', 'DSR-250', 'Le falta el viewfinder', '2018-01-01 00:00:00.000', '2018-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.equipo (id, descripcion, estado_id, serie, marca, modelo, observacion, audit_insert, audit_update) VALUES(5, 'Cámara Betacam', 3, '', 'Sony', 'UVM-100B', '', '2018-01-01 00:00:00.000', '2018-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.equipo (id, descripcion, estado_id, serie, marca, modelo, observacion, audit_insert, audit_update) VALUES(6, 'Cámara Betacam', 3, '', 'Sony', 'UVM-100B', '', '2018-01-01 00:00:00.000', '2018-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.equipo (id, descripcion, estado_id, serie, marca, modelo, observacion, audit_insert, audit_update) VALUES(7, 'Cámara DVCAM', 3, '', 'Sony', 'DSR-200', 'Sólo cuenta con dos pilas y hay que pedir prestado el cargador', '2018-01-01 00:00:00.000', '2018-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.equipo (id, descripcion, estado_id, serie, marca, modelo, observacion, audit_insert, audit_update) VALUES(8, 'Cámara HD', 1, '', 'Panasonic', 'AJ-PX270', '', '2018-01-01 00:00:00.000', '2018-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.equipo (id, descripcion, estado_id, serie, marca, modelo, observacion, audit_insert, audit_update) VALUES(9, 'Cámara HD', 1, '', 'Panasonic', 'AJ-PX270', '', '2018-01-01 00:00:00.000', '2018-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.equipo (id, descripcion, estado_id, serie, marca, modelo, observacion, audit_insert, audit_update) VALUES(10, 'CAMARA XDCAM 530', 1, '', 'SONY', 'PDW530', '', '2018-01-01 00:00:00.000', '2018-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.equipo (id, descripcion, estado_id, serie, marca, modelo, observacion, audit_insert, audit_update) VALUES(11, 'CAMARA XDCAM ', 1, '', 'SONY', 'PDW-530', '', '2018-01-01 00:00:00.000', '2018-01-01 00:00:00.000');
+
+
+
+RETURN 1;
+END
+
+
+
+
+
+
+
+
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `sys`.`migracion002Oficio`() RETURNS int(11)
+BEGIN
+    DECLARE nOficio, remitente, titulo, connombre, contel, concorreo CHAR(255);
+    DECLARE descripcion, observaciones  VARCHAR(600);
+    DECLARE fecharemitente, fecharecepcion, auditInsert, fechagrabacion, fechaentrega DATE;
+    DECLARE maxOficio, maxOficioContacto, maxFolio, servicio, productorsol   int;
+    DECLARE done INT DEFAULT 0;
+    
+    DECLARE folio, estado  int(20);
+    
+    declare curOficio  cursor for 
+		select folnumoficio, unidad_responsable.id ur,  foldescripcion, foltitulo, folfecharemitente, folrecepcion, folobservaciones, folaudit_insert,
+        folserviciosolicitado_fk,
+        folfechagrabacion,    folfechaentrega, cat_folios.folaudit_insert,
+        folcontactonombre, folcontactotel, folcontactocorreo,
+        personal.id,
+        folnumfolio_pk, if(folestado_fk!=99,folestado_fk+1, 99)
+        from  ( 
+                (tveserviciosRemota.cat_folios inner join tveservicios2021_dev.unidad_responsable on folurremitente_fk = clave) 
+                left join tveservicios2021_dev.personal on folproductorsol_fk = num_empleado
+			 );
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+    
+    delete from tveservicios2021_dev.folio_productor_asignado;
+	delete from tveservicios2021_dev.folio;
+    
+    delete from tveservicios2021_dev.oficio_contacto_telefono;
+    delete from tveservicios2021_dev.oficio_contacto_correo;
+    delete from tveservicios2021_dev.oficio_contacto;
+    delete from tveservicios2021_dev.oficio_fecha_grabacion;
+    delete from tveservicios2021_dev.oficio_productor_solicitado;
+    delete from tveservicios2021_dev.oficio_servicio_solicitado;
+
+    delete from tveservicios2021_dev.oficio;  
+    
+    
+    open curOficio;
+	loopOficio: loop    
+		fetch curOficio into nOficio, remitente, descripcion, titulo, fecharemitente, fecharecepcion, observaciones, auditInsert,
+        servicio,         
+        fechagrabacion,  fechaentrega, auditInsert,
+        connombre, contel, concorreo,
+        productorsol,
+	    folio, estado;	
+        if done then
+			leave loopOficio;
+		end if;
+        select  ifnull(max(id),0) into maxOficio from tveservicios2021_dev.oficio;
+		insert into tveservicios2021_dev.oficio values (maxOficio+1, nOficio, remitente, descripcion, titulo, fecharemitente, fecharecepcion, observaciones, auditInsert, ifnull(auditInsert,now()));
+        if length(connombre) != 0 then
+			select  ifnull(max(id),0) into maxOficioContacto from tveservicios2021_dev.oficio_contacto;
+			insert into tveservicios2021_dev.oficio_contacto values(maxOficioContacto+1, maxOficio+1, connombre, auditInsert, ifnull(auditInsert,now()));
+			if length(contel) != 0 then
+				insert into tveservicios2021_dev.oficio_contacto_telefono values(null, maxOficioContacto+1, contel, auditInsert, ifnull(auditInsert,now()));
+            end if;
+			if length(concorreo) != 0 then
+				insert into tveservicios2021_dev.oficio_contacto_correo values(null, maxOficioContacto+1, concorreo, ifnull(auditInsert,now()), ifnull(auditInsert,now()));
+            end if;            
+		end if;
+        if length(fechagrabacion) != 0 then
+			insert into tveservicios2021_dev.oficio_fecha_grabacion values(null, maxOficio+1, fechagrabacion, fechagrabacion, auditInsert, ifnull(auditInsert,now()));
+		end if;
+        if productorsol is not null then
+			insert into tveservicios2021_dev.oficio_productor_solicitado values(null, maxOficio+1, productorsol, auditInsert, ifnull(auditInsert,now()));
+		end if;        
+        if servicio is not null then
+			insert into tveservicios2021_dev.oficio_servicio_solicitado values(null, maxOficio+1, servicio, auditInsert, ifnull(auditInsert,now()));
+		end if;   
+        
+        
+        select  ifnull(max(id),0) into maxFolio from tveservicios2021_dev.folio;
+        insert into tveservicios2021_dev.folio values (maxFolio+1, folio, maxOficio+1, estado, fechaentrega, observaciones, auditInsert, ifnull(auditInsert,now()));
+        
+        
+		bloqueProductorAsignado: begin	
+			DECLARE donePA INT DEFAULT 0;			
+			DECLARE productorAsignado, maxFolioProductor bigint(20);
+			declare curPA  cursor for 
+					select personal.id from tveserviciosRemota.productorasignado inner join tveservicios2021_dev.personal on pprnumfolio_pf = folio and pprnumempleado_pf = personal.num_empleado;
+			DECLARE CONTINUE HANDLER FOR NOT FOUND SET donePA = 1;        
+			open curPA;
+			loopPA: loop    
+				fetch curPA into productorAsignado;	
+				if donePA then
+					leave loopPa;
+				end if;
+				if productorAsignado is not null then	
+					select  ifnull(max(id),0) into maxFolioProductor from tveservicios2021_dev.folio_productor_asignado;
+					insert into tveservicios2021_dev.folio_productor_asignado values (maxFolioProductor+1, maxFolio+1,  productorAsignado, auditInsert, ifnull(auditInsert,now()) );
+				end if;
+			end loop loopPA;
+			close curPA;	
+        end bloqueProductorAsignado;
+        
+
+        
+    end loop;
+        
+
+    close curOficio;
+RETURN 1;
+END
+
+
+
+
+
+
+
+
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `sys`.`migracion003HisFolios`() RETURNS int(11)
+BEGIN
+    DECLARE auditInsert DATE;
+    DECLARE folioid, estado bigint(20);
+    DECLARE done INT DEFAULT 0;  
+
+    
+    declare curHisto cursor for 
+		select folio.id, if(hfoestado_pf!=99,hfoestado_pf+1, 99), audit_insert from tveserviciosRemota.his_folios inner join tveservicios2021_dev.folio on hfonumfolio_pf = folio.folio;
+
+
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+    
+    delete from tveservicios2021_dev.his_folio;
+    
+    open curHisto;
+	loopH: loop    
+		fetch curHisto into folioid, estado, auditInsert;	
+        if done then
+			leave loopH;
+		end if;
+		insert into tveservicios2021_dev.his_folio values (null, folioid, estado, auditInsert, auditInsert);
+        
+    end loop;
+    close curHisto;
+    update tveservicios2021_dev.his_folio set estado_id=7 where estado_id=6;
+RETURN 1;
+END
+
+
+
+
+
+
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `sys`.`migracion004Preagenda`() RETURNS int(11)
+BEGIN	
+			DECLARE donePAServicio INT DEFAULT 0;			
+			DECLARE nomfolio, folio, folioproductor, fase, secuencial, estado, maxPAS bigint(20);
+            DECLARE inicio, fin, auditInsertPAS DATETIME; 
+            DECLARE salida, lugar, observacion varchar(255);
+            DECLARE monitor varchar(255);
+			declare curPAS  cursor for 
+select pagnumfolio_pf, folio.id, folio_productor_asignado.id, fase.id, pagsecuencial_pk,
+	concat(pagfechainicial," ", paghorasalida), 
+    concat(if(pagfechainicial='0000-00-00', pagfechafinal, pagfechainicial)," ",if(paghorainicial='00:00:00',date_format(now(),'%H:%m:%s'), paghorainicial)), 
+    concat(if(pagfechafinal='0000-00-00', pagfechainicial, pagfechafinal)," ",if(paghorafinal='00:00:00',date_format(now(),'%H:%m:%s'), paghorafinal)), 
+		if(pagestado_fk!=99,pagestado_fk+1, pagestado_fk), paglugar, pagobservaciones, ageaudit_insert
+from tveservicios2021_dev.oficio 	inner join tveservicios2021_dev.folio on oficio.id = folio.oficio_id 
+					inner join tveservicios2021_dev.folio_productor_asignado on folio.id = folio_productor_asignado.folio_id
+                    inner join tveserviciosRemota.preagenda on pagnumfolio_pf = tveservicios2021_dev.folio.folio
+                    inner join tveservicios2021_dev.fase on pagfase_pf = fase.id;
+
+			DECLARE CONTINUE HANDLER FOR NOT FOUND SET donePAServicio = 1; 
+            
+            delete from tveservicios2021_dev.pre_agenda_vehiculo;
+            delete from tveservicios2021_dev.pre_agenda_tipo_personal;
+            delete from tveservicios2021_dev.pre_agenda_formato_entrega;
+			delete from tveservicios2021_dev.pre_agenda_accesorio;
+            delete from tveservicios2021_dev.pre_agenda_equipo;
+            delete from tveservicios2021_dev.pre_agenda_locacion;
+            delete from tveservicios2021_dev.pre_agenda_salida;
+            delete from tveservicios2021_dev.pre_agenda_sala_uso_cabina;
+            delete from tveservicios2021_dev.pre_agenda_sala;
+            delete from tveservicios2021_dev.pre_agenda;
+			open curPAS;
+			loopPAS: loop    
+				fetch curPAS into nomfolio, folio, folioproductor, fase, secuencial, salida, inicio, fin, estado, lugar, observacion, auditInsertPAS;	
+				if donePAServicio then
+					leave loopPaS;
+				end if;
+				select  ifnull(max(id),0) into maxPAS from tveservicios2021_dev.pre_agenda;
+				insert into tveservicios2021_dev.pre_agenda values (maxPAS+1, folioproductor,  fase, inicio, fin, estado, observacion, ifnull(auditInsertPAS,now()), ifnull(auditInsertPAS,now()));
+                if salida != null or ( length(salida)!=0 and  substr(salida, 12)!='00:00:00')      then
+					insert into tveservicios2021_dev.pre_agenda_salida values (null, maxPAS+1, salida, ifnull(auditInsertPAS,now()), ifnull(auditInsertPAS,now()));
+				end if;
+                if lugar!= null or (length(lugar)!=0 and lugar!='' and lugar!='na' and lugar!='no definido') then
+					insert into tveservicios2021_dev.pre_agenda_locacion values (null, maxPAS+1, lugar, ifnull(auditInsertPAS,now()), ifnull(auditInsertPAS,now()));
+                end if;
+
+				
+                if ((fase=3) or (fase=4) )then
+                    bloqueSalas: begin
+						DECLARE doneSala INT DEFAULT 0;
+                        DECLARE sala, maxPASSala  bigint(20);
+                        DECLARE auditInsertSala DATETIME;
+                        DECLARE usoCabina char(1);
+						DECLARE curSalas cursor for 
+							select psssala_fk, pssusosala_fk, pssaudit_insert
+							from tveserviciosRemota.preserviciosala inner join tveserviciosRemota.preagenda on pssnumfolio_pf = pagnumfolio_pf and pssfase_pf = pagfase_pf and psssecuencial_pf = pagsecuencial_pk
+							where pagnumfolio_pf = nomfolio and pagfase_pf = fase and pagsecuencial_pk = secuencial; 						
+						DECLARE CONTINUE HANDLER FOR NOT FOUND SET doneSala = 1;  
+						open curSalas;
+						loopSalas: loop
+							fetch curSalas into sala, usoCabina, auditInsertSala;
+							if doneSala then
+								leave loopSalas;
+							end if;							
+                            select  ifnull(max(id),0) into maxPASSala from tveservicios2021_dev.pre_agenda_sala;
+							insert into tveservicios2021_dev.pre_agenda_sala values (maxPASSala+1, maxPAS+1, sala, auditInsertSala, auditInsertSala);
+							if usoCabina != null or (length(usoCabina)!=0 ) then
+								insert into tveservicios2021_dev.pre_agenda_sala_uso_cabina values (null, maxPASSala+1, usoCabina, ifnull(auditInsertSala,now()), ifnull(auditInsertSala,now()));
+                            end if;
+						end loop loopSalas;
+						close curSalas;						
+                    end bloqueSalas;
+                
+                end if;
+                
+                
+                if (fase=2) then
+					
+					bloqueAccesorios: begin
+						DECLARE doneAccesorio INT DEFAULT 0;
+						DECLARE accesorio bigint(20);
+						DECLARE auditInsertAcc DATETIME;
+
+						DECLARE curAccesorios cursor for 
+							select psaaccesorio_pf, if (psaaudit_insert='0000-00-00 00:00:00', now(), psaaudit_insert)
+							from tveserviciosRemota.preservicioaccesorios inner join tveserviciosRemota.preagenda on preservicioaccesorios.psanumfolio_pf = pagnumfolio_pf and psafase_pf = pagfase_pf and psasecuencial_pf = pagsecuencial_pk
+							where pagnumfolio_pf = nomfolio and pagfase_pf = fase and pagsecuencial_pk = secuencial;  						
+						DECLARE CONTINUE HANDLER FOR NOT FOUND SET doneAccesorio = 1;  				
+						open curAccesorios;
+						loopAccesorios: loop
+							fetch curAccesorios into accesorio, auditInsertAcc;
+							if doneAccesorio then
+								leave loopAccesorios;
+							end if;
+							
+							insert into tveservicios2021_dev.pre_agenda_accesorio values (null, maxPAS+1,  accesorio, auditInsertAcc, auditInsertAcc);
+						end loop loopAccesorios;
+						close curAccesorios;
+					end bloqueAccesorios;
+                    
+					
+					bloqueEquipo: begin
+						DECLARE doneEquipo INT DEFAULT 0;
+						DECLARE equipo bigint(20);
+						DECLARE auditInsertEq DATETIME;
+
+						DECLARE curEquipos cursor for 
+								select pseequipo_pf, ifnull(auditInsertPAS,now())
+								from tveserviciosRemota.preservicioequipo inner join tveserviciosRemota.preagenda on preservicioequipo.psenumfolio_pf = pagnumfolio_pf and psefase_pf = pagfase_pf and psesecuencial_pf = pagsecuencial_pk
+								where pagnumfolio_pf = nomfolio and pagfase_pf = fase and pagsecuencial_pk = secuencial;  						
+						DECLARE CONTINUE HANDLER FOR NOT FOUND SET doneEquipo = 1;  				
+						open curEquipos;
+						loopEquipos: loop
+							fetch curEquipos into equipo, auditInsertEq;
+							if doneEquipo then
+								leave loopEquipos;
+							end if;		
+							insert into tveservicios2021_dev.pre_agenda_equipo values (null, maxPAS+1,  equipo, auditInsertEq, auditInsertEq);
+						end loop loopEquipos;
+						close curEquipos;
+					end bloqueEquipo;                    
+                end if;
+                if (fase = 5) then
+					
+					bloqueFmto: begin
+						DECLARE doneFmto INT DEFAULT 0;
+						DECLARE formato, cantidad bigint(20);
+						DECLARE auditInsertFmto DATETIME;
+
+						DECLARE curFmtos cursor for 								
+                                select  pefformato_pf, pefcopias, pefaudit_insert
+								from tveserviciosRemota.preentregaformato inner join tveservicios2021_dev.folio on pefnumfolio_pf = folio.folio
+                                where pefnumfolio_pf = nomfolio;
+						DECLARE CONTINUE HANDLER FOR NOT FOUND SET doneFmto = 1;  				
+						open curFmtos;
+						loopFmtos: loop
+							fetch curFmtos into formato, cantidad, auditInsertFmto;
+							if doneFmto then
+								leave loopFmtos;
+							end if;		
+							insert into tveservicios2021_dev.pre_agenda_formato_entrega values (null, maxPAS+1,  formato, cantidad, auditInsertFmto, auditInsertFmto);
+						end loop loopFmtos;
+						close curFmtos;
+					end bloqueFmto; 					
+                end if;
+
+				
+				bloqueTP: begin
+					DECLARE doneTP INT DEFAULT 0;
+					DECLARE tipo, cantidad bigint(20);
+					DECLARE auditInsertTP DATETIME;
+
+					DECLARE curTP cursor for 								
+								select prstipopersonal_pf, prscantpersonal, prsaudit_insert
+								from tveserviciosRemota.preservicio  
+                                where prsnumfolio_pf = nomfolio and prsfase_pf = fase;
+                            
+                            
+					DECLARE CONTINUE HANDLER FOR NOT FOUND SET doneTP = 1;  				
+					open curTP;
+					loopTP: loop
+						fetch curTP into tipo, cantidad, auditInsertTP;
+						if doneTP then
+							leave loopTP;
+						end if;		
+						insert into tveservicios2021_dev.pre_agenda_tipo_personal values (null, maxPAS+1,  tipo, cantidad, auditInsertTP, auditInsertTP);
+					end loop loopTP;
+					close curTP;
+				end bloqueTP;                 
+                
+                
+				
+				bloqueV: begin
+					DECLARE doneV INT DEFAULT 0;
+					DECLARE vehiculo char(1);
+					DECLARE auditInsertV DATETIME;
+
+					DECLARE curV cursor for 								
+								select psvvehiculo, psvaudit_insert
+								from tveserviciosRemota.preservehiculos
+                                where psvnumfolio_pf = nomfolio and psvfase_pf = fase and psvsecuencial_pf = secuencial;
+                            
+                            
+					DECLARE CONTINUE HANDLER FOR NOT FOUND SET doneV = 1;  				
+					open curV;
+					loopV: loop
+						fetch curV into vehiculo, auditInsertV;
+						if doneV then
+							leave loopV;
+						end if;		
+						insert into tveservicios2021_dev.pre_agenda_vehiculo values (null, maxPAS+1,  auditInsertV, auditInsertV);
+					end loop loopV;
+					close curV;
+				end bloqueV;                  
+                
+			end loop loopPAS;
+			close curPAS;
+            update tveservicios2021_dev.folio set estado_id = 7 where estado_id = 6;
+			update tveservicios2021_dev.pre_agenda set estado_id = 7 where estado_id = 6;
+        /*   
+		
+		
+		INSERT INTO tveservicios2021_dev.pre_agenda_formato_entrega (id, preagenda_id, formato_id, cantidad, audit_insert, audit_update) VALUES(1, 9105, 1, 1, '2019-04-04 12:59:22.000', '2019-04-04 12:59:22.000');
+INSERT INTO tveservicios2021_dev.pre_agenda_formato_entrega (id, preagenda_id, formato_id, cantidad, audit_insert, audit_update) VALUES(2, 9105, 2, 2, '2019-04-04 12:59:22.000', '2019-04-04 12:59:22.000');
+INSERT INTO tveservicios2021_dev.pre_agenda_formato_entrega (id, preagenda_id, formato_id, cantidad, audit_insert, audit_update) VALUES(3, 9105, 3, 3, '2019-04-04 12:59:22.000', '2019-04-04 12:59:22.000');
+INSERT INTO tveservicios2021_dev.pre_agenda_formato_entrega (id, preagenda_id, formato_id, cantidad, audit_insert, audit_update) VALUES(4, 9105, 4, 4, '2019-04-04 12:59:22.000', '2019-04-04 12:59:22.000');
+
+INSERT INTO pre_agenda_junta (id, preagenda_id, audit_insert, audit_update) VALUES(9, 9091, '2019-03-14 11:42:23.000', '2019-03-14 11:42:23.000');
+INSERT INTO pre_agenda_junta (id, preagenda_id, audit_insert, audit_update) VALUES(10, 9095, '2019-04-04 12:56:23.000', '2019-04-04 12:56:23.000');
+INSERT INTO pre_agenda_junta (id, preagenda_id, audit_insert, audit_update) VALUES(11, 9107, '2020-09-18 13:48:56.000', '2020-09-18 13:48:56.000');
+
+INSERT INTO pre_agenda_locutor (id, preagenda_id, personal_id, audit_insert, audit_update) VALUES(1, 9097, 4, '2019-04-04 12:57:33.000', '2019-04-04 12:57:33.000');
+INSERT INTO pre_agenda_locutor (id, preagenda_id, personal_id, audit_insert, audit_update) VALUES(2, 9103, 4, '2019-04-04 12:58:56.000', '2019-04-04 12:58:56.000');
+INSERT INTO pre_agenda_locutor (id, preagenda_id, personal_id, audit_insert, audit_update) VALUES(6, 9108, 38, '2020-09-18 14:15:09.000', '2020-09-18 14:15:09.000');
+
+          */  
+            
+RETURN 1;
+END
+
+
+
+
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `sys`.`migracion005Agenda`() RETURNS int(11)
+BEGIN	
+			DECLARE doneAServicio INT DEFAULT 0;			
+			DECLARE nomfolio, folio, folioproductor, fase, secuencial, estado, sala, maxAS, maxASSala bigint(20);
+            DECLARE inicio, fin, auditInsertAS DATETIME; 
+            DECLARE salida, lugar, usocabina, observacion varchar(255);
+			declare curAS  cursor for 
+select agenumfolio_pf, folio.id, folio_productor_asignado.id, fase.id, agesecuencial_pf,
+	concat(agefechainicial," ", agehorasalida), 
+    concat(if(agefechainicial='0000-00-00', agefechafinal, agefechainicial)," ",if(agehorainicial='00:00:00',date_format(now(),'%H:%m:%s'), agehorainicial)), 
+    concat(if(agefechafinal='0000-00-00', agefechainicial, agefechafinal)," ",if(agehorafinal='00:00:00',date_format(now(),'%H:%m:%s'), agehorafinal)), 
+		if(ageestado_fk!=99,ageestado_fk+1, ageestado_fk), agelugar, ageobservaciones, ageaudit_insert
+from tveservicios2021_dev.oficio 	inner join tveservicios2021_dev.folio on oficio.id = folio.oficio_id 
+					inner join tveservicios2021_dev.folio_productor_asignado on folio.id = folio_productor_asignado.folio_id
+                    inner join tveserviciosRemota.agendaservicio on agenumfolio_pf = tveservicios2021_dev.folio.folio
+                    inner join tveservicios2021_dev.fase on agenfase_pf = fase.id;
+
+			DECLARE CONTINUE HANDLER FOR NOT FOUND SET doneAServicio = 1; 
+            
+            delete from tveservicios2021_dev.agenda_servicio_vehiculo;
+            delete from tveservicios2021_dev.agenda_servicio_personal;
+            delete from tveservicios2021_dev.agenda_servicio_formato_entrega;
+			delete from tveservicios2021_dev.agenda_servicio_accesorio;
+            delete from tveservicios2021_dev.agenda_servicio_equipo;
+            delete from tveservicios2021_dev.agenda_servicio_locacion;
+            delete from tveservicios2021_dev.agenda_servicio_salida;
+            delete from tveservicios2021_dev.agenda_servicio_sala_uso_cabina;
+            delete from tveservicios2021_dev.agenda_servicio_sala;
+            delete from tveservicios2021_dev.agenda_servicio;
+			open curAS;
+			loopAS: loop    
+				fetch curAS into nomfolio, folio, folioproductor, fase, secuencial, salida, inicio, fin, estado, lugar,  observacion, auditInsertAS;	
+				if doneAServicio then
+					leave loopAS;
+				end if;
+				select  ifnull(max(id),0) into maxAS from tveservicios2021_dev.agenda_servicio;
+				insert into tveservicios2021_dev.agenda_servicio values (maxAS+1, folioproductor,  fase, inicio, fin, estado, observacion, ifnull(auditInsertAS,now()), ifnull(auditInsertAS,now()), ifnull(auditInsertAS,now()));
+
+                if ( (fase=1) or (fase=2)) then
+					if salida != null or ( length(salida)!=0 and  substr(salida, 12)!='00:00:00')      then
+						insert into tveservicios2021_dev.agenda_servicio_salida values (null, maxAS+1, salida, ifnull(auditInsertAS,now()), ifnull(auditInsertAS,now()));
+					end if;
+					if lugar!= null or (length(lugar)>1 and lugar!='na' and lugar!='no definido') then
+						insert into tveservicios2021_dev.agenda_servicio_locacion values (null, maxAS+1, lugar, ifnull(auditInsertAS,now()), ifnull(auditInsertAS,now()));
+					end if;   
+
+					
+					bloqueV: begin
+						DECLARE doneV INT DEFAULT 0;
+						DECLARE vehiculo bigint(20);
+						DECLARE auditInsertV DATETIME;
+
+						DECLARE curV cursor for 
+							select vehiculo.id,  if (vesaudit_insert='0000-00-00 00:00:00', now(), vesaudit_insert)
+							from tveserviciosRemota.vehiculoservicio inner join tveserviciosRemota.agendaservicio on vesnumfolio_pf = agenumfolio_pf and vesfase_pf = agenfase_pf and vessecuencial_pf = agesecuencial_pf
+                            inner join tveservicios2021_dev.vehiculo on vesvehiculo_fk = vehiculo.placa
+							where agenumfolio_pf = nomfolio and agenfase_pf = fase and agesecuencial_pf = secuencial;
+						
+						DECLARE CONTINUE HANDLER FOR NOT FOUND SET doneV = 1;  
+				
+						open curV;
+						loopV: loop
+							fetch curV into vehiculo, auditInsertV;
+							if doneV then
+								leave loopV;
+							end if;
+							
+							insert into tveservicios2021_dev.agenda_servicio_vehiculo values (null, maxAS+1,  vehiculo, auditInsertV, auditInsertV, auditInsertV);
+						end loop loopV;
+						close curV;
+					end bloqueV;                    
+
+
+
+					if (fase=2) then
+						
+						bloqueAccesorios: begin
+							DECLARE doneAccesorio INT DEFAULT 0;
+							DECLARE accesorio bigint(20);
+							DECLARE auditInsertAcc DATETIME;
+
+							DECLARE curAccesorios cursor for 
+								select acsaccesorio_pf, if (acsaudit_insert='0000-00-00 00:00:00', now(), acsaudit_insert)
+								from tveserviciosRemota.accesoriosservicio inner join tveserviciosRemota.agendaservicio on acsnumfolio_pf = agenumfolio_pf and acsfase_pf = agenfase_pf and acssecuencial_pf = agesecuencial_pf
+								where agenumfolio_pf = nomfolio and agenfase_pf = fase and agesecuencial_pf = secuencial;  
+							
+							DECLARE CONTINUE HANDLER FOR NOT FOUND SET doneAccesorio = 1;  
+					
+							open curAccesorios;
+							loopAccesorios: loop
+								fetch curAccesorios into accesorio, auditInsertAcc;
+								if doneAccesorio then
+									leave loopAccesorios;
+								end if;
+								
+								insert into tveservicios2021_dev.agenda_servicio_accesorio values (null, maxAS+1,  accesorio, auditInsertAcc, auditInsertAcc);
+							end loop loopAccesorios;
+							close curAccesorios;
+						end bloqueAccesorios;
+						
+						bloqueEquipo: begin
+							DECLARE doneEquipo INT DEFAULT 0;
+							DECLARE equipo bigint(20);
+							DECLARE auditInsertEq DATETIME;
+
+							DECLARE curEquipos cursor for 
+									select eqsequipo_pf, ifnull(auditInsertAS,now())
+									from tveserviciosRemota.equiposervicio inner join tveserviciosRemota.agendaservicio on equiposervicio.eqsnumfolio_pf = agenumfolio_pf and eqsfase_pf = agenfase_pf and eqssecuencial_pf = agesecuencial_pf
+									where agenumfolio_pf = nomfolio and agenfase_pf = fase and agesecuencial_pf = secuencial;  						
+							DECLARE CONTINUE HANDLER FOR NOT FOUND SET doneEquipo = 1;  				
+							open curEquipos;
+							loopEquipos: loop
+								fetch curEquipos into equipo, auditInsertEq;
+								if doneEquipo then
+									leave loopEquipos;
+								end if;		
+								insert into tveservicios2021_dev.agenda_servicio_equipo values (null, maxAS+1,  equipo, auditInsertEq, auditInsertEq);
+							end loop loopEquipos;
+							close curEquipos;
+						end bloqueEquipo;                                            
+					end if;   
+				end if;
+                if (fase = 5) then
+					
+					bloqueFmto: begin
+						DECLARE doneFmto INT DEFAULT 0;
+						DECLARE formato, cantidad bigint(20);
+						DECLARE auditInsertFmto DATETIME;
+
+						DECLARE curFmtos cursor for 								
+                                select  enfformato_pf, enfcopias, entaudit_insert
+								from tveserviciosRemota.entregaformato inner join tveservicios2021_dev.folio on enfnumfolio_pf = folio.folio
+                                where enfnumfolio_pf = nomfolio;
+						DECLARE CONTINUE HANDLER FOR NOT FOUND SET doneFmto = 1;  				
+						open curFmtos;
+						loopFmtos: loop
+							fetch curFmtos into formato, cantidad, auditInsertFmto;
+							if doneFmto then
+								leave loopFmtos;
+							end if;	
+                            if cantidad >0 then
+								insert into tveservicios2021_dev.agenda_servicio_formato_entrega values (null, maxAS+1,  formato, cantidad, auditInsertFmto, auditInsertFmto);
+							end if;
+						end loop loopFmtos;
+						close curFmtos;
+					end bloqueFmto; 					
+                end if;         
+                
+                
+				
+				bloqueP: begin
+					DECLARE doneP INT DEFAULT 0;
+					DECLARE personal bigint(20);
+					DECLARE auditInsertP DATETIME;
+
+					DECLARE curP cursor for 								
+								select personal.id, pesaudit_insert
+								from tveserviciosRemota.personalservicio  inner join tveservicios2021_dev.personal on pespersonal_pf = personal.num_empleado
+                                where pesnumfolio_pf = nomfolio and pesfase_pf = fase and pessecuencial_pf = secuencial;
+                            
+                            
+					DECLARE CONTINUE HANDLER FOR NOT FOUND SET doneP = 1;  				
+					open curP;
+					loopP: loop
+						fetch curP into personal, auditInsertP;
+						if doneP then
+							leave loopP;
+						end if;		
+						insert into tveservicios2021_dev.agenda_servicio_personal values (null, maxAS+1,  personal, auditInsertP, auditInsertP);
+					end loop loopP;
+					close curP;
+				end bloqueP;                 
+                
+				
+                if ((fase=3) or (fase=4) )then
+                    bloqueSalas: begin
+						DECLARE doneSala INT DEFAULT 0;
+                        DECLARE sala, maxASSala  bigint(20);
+                        DECLARE auditInsertSala DATETIME;
+                        DECLARE usoCabina char(1);
+						DECLARE curSalas cursor for 
+							select osasala_fk, osausosala_fk, osaaudit_insert
+							from tveserviciosRemota.salaservicio inner join tveserviciosRemota.agendaservicio on osanumfolio_pf = agenumfolio_pf and osafase_pf = agenfase_pf and osasecuencial_pf = agesecuencial_pf
+							where agenumfolio_pf = nomfolio and agenfase_pf = fase and agesecuencial_pf = secuencial; 						
+						DECLARE CONTINUE HANDLER FOR NOT FOUND SET doneSala = 1;  
+						open curSalas;
+						loopSalas: loop
+							fetch curSalas into sala, usoCabina, auditInsertSala;
+							if doneSala then
+								leave loopSalas;
+							end if;							
+                            select  ifnull(max(id),0) into maxASSala from tveservicios2021_dev.agenda_servicio_sala;
+							insert into tveservicios2021_dev.agenda_servicio_sala values (maxASSala+1, maxAS+1, sala, auditInsertSala, auditInsertSala);                             
+							if usoCabina != null or (length(usoCabina)!=0 ) then
+								insert into tveservicios2021_dev.agenda_servicio_sala_uso_cabina values (null, maxASSala+1, usoCabina, ifnull(auditInsertSala,now()), ifnull(auditInsertSala,now()));						
+                            end if;
+						end loop loopSalas;
+						close curSalas;						
+                    end bloqueSalas;                
+                end if;
+                
+                
+			end loop loopAS;
+			close curAS;
+            
+			update tveservicios2021_dev.agenda_servicio set estado_id = 7 where estado_id = 6;
+
+/*
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(329, 1, 2, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2019-02-06 09:04:12.000', '2019-02-06 09:04:12.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(328, 5, 2, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2019-02-06 09:03:15.000', '2019-02-06 09:03:15.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(322, 74, 2, '1970-01-01 15:00:00.000', '1970-01-01 21:00:00.000', '2018-12-17 10:34:31.000', '2018-12-17 10:34:31.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(323, 74, 3, '1970-01-01 15:00:00.000', '1970-01-01 21:00:00.000', '2018-12-17 10:34:31.000', '2018-12-17 10:34:31.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(324, 74, 4, '1970-01-01 15:00:00.000', '1970-01-01 21:00:00.000', '2018-12-17 10:34:31.000', '2018-12-17 10:34:31.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(325, 74, 5, '1970-01-01 15:00:00.000', '1970-01-01 21:00:00.000', '2018-12-17 10:34:31.000', '2018-12-17 10:34:31.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(326, 74, 6, '1970-01-01 15:00:00.000', '1970-01-01 21:00:00.000', '2018-12-17 10:34:31.000', '2018-12-17 10:34:31.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(317, 33, 2, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2018-12-17 10:32:46.000', '2018-12-17 10:32:46.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(318, 33, 3, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2018-12-17 10:32:46.000', '2018-12-17 10:32:46.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(319, 33, 4, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2018-12-17 10:32:46.000', '2018-12-17 10:32:46.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(320, 33, 5, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2018-12-17 10:32:46.000', '2018-12-17 10:32:46.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(321, 33, 6, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2018-12-17 10:32:46.000', '2018-12-17 10:32:46.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(312, 46, 2, '1970-01-01 16:00:00.000', '1970-01-01 21:00:00.000', '2018-12-17 10:31:05.000', '2018-12-17 10:31:05.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(313, 46, 3, '1970-01-01 16:00:00.000', '1970-01-01 21:00:00.000', '2018-12-17 10:31:05.000', '2018-12-17 10:31:05.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(314, 46, 4, '1970-01-01 16:00:00.000', '1970-01-01 21:00:00.000', '2018-12-17 10:31:05.000', '2018-12-17 10:31:05.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(315, 46, 5, '1970-01-01 16:00:00.000', '1970-01-01 21:00:00.000', '2018-12-17 10:31:05.000', '2018-12-17 10:31:05.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(316, 46, 6, '1970-01-01 16:00:00.000', '1970-01-01 21:00:00.000', '2018-12-17 10:31:05.000', '2018-12-17 10:31:05.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(307, 51, 2, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2018-12-17 10:28:39.000', '2018-12-17 10:28:39.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(308, 51, 3, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2018-12-17 10:28:39.000', '2018-12-17 10:28:39.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(309, 51, 4, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2018-12-17 10:28:39.000', '2018-12-17 10:28:39.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(310, 51, 5, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2018-12-17 10:28:39.000', '2018-12-17 10:28:39.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(311, 51, 6, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2018-12-17 10:28:39.000', '2018-12-17 10:28:39.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(302, 30, 2, '1970-01-01 15:00:00.000', '1970-01-01 21:00:00.000', '2018-12-14 13:55:11.000', '2018-12-14 13:55:11.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(303, 30, 3, '1970-01-01 15:00:00.000', '1970-01-01 21:00:00.000', '2018-12-14 13:55:11.000', '2018-12-14 13:55:11.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(304, 30, 4, '1970-01-01 15:00:00.000', '1970-01-01 21:00:00.000', '2018-12-14 13:55:11.000', '2018-12-14 13:55:11.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(305, 30, 5, '1970-01-01 15:00:00.000', '1970-01-01 21:00:00.000', '2018-12-14 13:55:11.000', '2018-12-14 13:55:11.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(306, 30, 6, '1970-01-01 15:00:00.000', '1970-01-01 21:00:00.000', '2018-12-14 13:55:11.000', '2018-12-14 13:55:11.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(297, 42, 2, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2018-12-14 13:53:51.000', '2018-12-14 13:53:51.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(298, 42, 3, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2018-12-14 13:53:51.000', '2018-12-14 13:53:51.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(299, 42, 4, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2018-12-14 13:53:51.000', '2018-12-14 13:53:51.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(300, 42, 5, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2018-12-14 13:53:51.000', '2018-12-14 13:53:51.000');
+INSERT INTO tveservicios2021_dev.personal_horario (id, personal_id, diasemana, desde, hasta, audit_insert, audit_update) VALUES(301, 42, 6, '1970-01-01 08:00:00.000', '1970-01-01 15:00:00.000', '2018-12-14 13:53:51.000', '2018-12-14 13:53:51.000');
+		
+		
+INSERT INTO tveservicios2021_dev.ambito (id, descripcion, audit_insert, audit_update) VALUES(1, 'Administración Depto', '2019-01-01 00:00:00.000', '2019-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.ambito (id, descripcion, audit_insert, audit_update) VALUES(2, 'Administración', '2019-01-01 00:00:00.000', '2019-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.ambito (id, descripcion, audit_insert, audit_update) VALUES(3, 'Agendado', '2019-01-01 00:00:00.000', '2019-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.ambito (id, descripcion, audit_insert, audit_update) VALUES(4, 'Emisión de Reportes', '2019-01-01 00:00:00.000', '2019-01-01 00:00:00.000');
+
+
+INSERT INTO tveservicios2021_dev.rol_derecho (id, rol_id, ambito_id, lectura, escritura, ejecucion, audit_insert, audit_update) VALUES(1, 1, 1, 1, 1, 1, '2019-01-01', '2019-01-01');
+INSERT INTO tveservicios2021_dev.rol_derecho (id, rol_id, ambito_id, lectura, escritura, ejecucion, audit_insert, audit_update) VALUES(4, 10, 3, 1, 0, 0, '2019-01-01', '2019-01-01');
+INSERT INTO tveservicios2021_dev.rol_derecho (id, rol_id, ambito_id, lectura, escritura, ejecucion, audit_insert, audit_update) VALUES(6, 11, 3, 1, 0, 0, '2019-01-01', '2019-01-01');
+INSERT INTO tveservicios2021_dev.rol_derecho (id, rol_id, ambito_id, lectura, escritura, ejecucion, audit_insert, audit_update) VALUES(7, 12, 3, 1, 0, 0, '2019-01-01 00:00:00.000', '2019-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.rol_derecho (id, rol_id, ambito_id, lectura, escritura, ejecucion, audit_insert, audit_update) VALUES(8, 13, 3, 1, 0, 0, '2019-01-01 00:00:00.000', '2019-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.rol_derecho (id, rol_id, ambito_id, lectura, escritura, ejecucion, audit_insert, audit_update) VALUES(9, 14, 3, 1, 0, 0, '2019-01-01 00:00:00.000', '2019-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.rol_derecho (id, rol_id, ambito_id, lectura, escritura, ejecucion, audit_insert, audit_update) VALUES(10, 15, 3, 1, 0, 0, '2019-01-01 00:00:00.000', '2019-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.rol_derecho (id, rol_id, ambito_id, lectura, escritura, ejecucion, audit_insert, audit_update) VALUES(11, 16, 3, 1, 0, 0, '2019-01-01 00:00:00.000', '2019-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.rol_derecho (id, rol_id, ambito_id, lectura, escritura, ejecucion, audit_insert, audit_update) VALUES(17, 17, 3, 1, 0, 0, '2019-01-01 00:00:00.000', '2019-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.rol_derecho (id, rol_id, ambito_id, lectura, escritura, ejecucion, audit_insert, audit_update) VALUES(3, 100, 3, 1, 1, 1, '2019-01-01 00:00:00.000', '2019-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.rol_derecho (id, rol_id, ambito_id, lectura, escritura, ejecucion, audit_insert, audit_update) VALUES(25, 126, 1, 1, 0, 0, '2019-01-01 00:00:00.000', '2019-01-01 00:00:00.000');
+INSERT INTO tveservicios2021_dev.rol_derecho (id, rol_id, ambito_id, lectura, escritura, ejecucion, audit_insert, audit_update) VALUES(2, 127, 2, 1, 1, 1, '2019-01-01 00:00:00.000', '2019-01-01 00:00:00.000');
+*/
+INSERT INTO tveservicios2021_dev.ctacorreo (id, hostname, puerto, cuenta, contrasenia, audit_insert, audit_update) VALUES(1, 'correo.ipn.mx', '587', 'epuente@ipn.mx', '', '2016-04-05 13:21:22.000', '2018-10-03 12:15:11.000');
+
+update tveservicios2021_dev.accesorio set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.agenda_servicio set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.agenda_servicio_accesorio set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.agenda_servicio_cancelacion set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.agenda_servicio_equipo set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.agenda_servicio_formato_entrega set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.agenda_servicio_junta set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.agenda_servicio_locacion set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.agenda_servicio_personal set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.agenda_servicio_sala set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.agenda_servicio_sala_uso_cabina set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.agenda_servicio_salida set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.agenda_servicio_vehiculo set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.ambito set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.cola_correos set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.ctacorreo set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.cuenta set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.cuenta_rol set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.equipo set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.estado set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.estado_equipo_accesorio_vehiculo set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.fase set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.folio set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.folio_productor_asignado set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.formato set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.his_folio set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.motivo_cancelacion set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.oficio set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.oficio_contacto set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.oficio_contacto_correo set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.oficio_contacto_telefono set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.oficio_fecha_grabacion set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.oficio_productor_solicitado set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.oficio_respuesta set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.oficio_servicio_solicitado set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.operador_sala set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.personal set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.personal_avatar set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.personal_cambio_horario set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.personal_correo set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.personal_horario set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.pre_agenda set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.pre_agenda_accesorio set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.pre_agenda_cancelacion set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.pre_agenda_equipo set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.pre_agenda_formato_entrega set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.pre_agenda_junta set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.pre_agenda_locacion set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.pre_agenda_locutor set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.pre_agenda_sala set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.pre_agenda_sala_uso_cabina set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.pre_agenda_salida set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.pre_agenda_tipo_personal set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.pre_agenda_vehiculo set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.rol set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.rol_derecho set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.sala set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.sala_mantenimiento set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.servicio set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.tipo_contrato set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.tipo_equipo_accesorio set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.tipo_mantenimiento set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.tipo_personal set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.tipo_personal_fase set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.unidad_responsable set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.vehiculo set audit_insert='2018-01-01 00:00:00' where audit_insert is null;
+update tveservicios2021_dev.accesorio set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.agenda_servicio set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.agenda_servicio_accesorio set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.agenda_servicio_cancelacion set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.agenda_servicio_equipo set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.agenda_servicio_formato_entrega set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.agenda_servicio_junta set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.agenda_servicio_locacion set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.agenda_servicio_personal set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.agenda_servicio_sala set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.agenda_servicio_sala_uso_cabina set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.agenda_servicio_salida set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.agenda_servicio_vehiculo set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.ambito set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.cola_correos set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.ctacorreo set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.cuenta set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.cuenta_rol set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.equipo set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.estado set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.estado_equipo_accesorio_vehiculo set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.fase set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.folio set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.folio_productor_asignado set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.formato set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.his_folio set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.motivo_cancelacion set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.oficio set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.oficio_contacto set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.oficio_contacto_correo set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.oficio_contacto_telefono set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.oficio_fecha_grabacion set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.oficio_productor_solicitado set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.oficio_respuesta set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.oficio_servicio_solicitado set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.operador_sala set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.personal set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.personal_avatar set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.personal_cambio_horario set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.personal_correo set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.personal_horario set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.pre_agenda set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.pre_agenda_accesorio set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.pre_agenda_cancelacion set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.pre_agenda_equipo set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.pre_agenda_formato_entrega set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.pre_agenda_junta set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.pre_agenda_locacion set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.pre_agenda_locutor set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.pre_agenda_sala set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.pre_agenda_sala_uso_cabina set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.pre_agenda_salida set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.pre_agenda_tipo_personal set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.pre_agenda_vehiculo set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.rol set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.rol_derecho set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.sala set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.sala_mantenimiento set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.servicio set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.tipo_contrato set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.tipo_equipo_accesorio set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.tipo_mantenimiento set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.tipo_personal set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.tipo_personal_fase set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.unidad_responsable set audit_update='2018-01-01 00:00:00' where audit_update is null;
+update tveservicios2021_dev.vehiculo set audit_update='2018-01-01 00:00:00' where audit_update is null;
+
+RETURN 1;
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

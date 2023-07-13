@@ -1,0 +1,55 @@
+Funciones de sys para migracion
+
+
+migracion
+	cuenta
+	cuentaRol
+	personal
+	
+	
+migracion001
+	operador_sala
+	accesorio
+	equipo
+	
+migracion002Oficio
+	oficio
+	oficio_contacto
+	oficio_contacto_telefono
+	oficio_contacto_correo
+	oficio_fecha_grabacion
+	oficio_productor_solicitado
+	oficio_servicio_solicitado
+	folio
+	folio_productor_asignado
+	
+	
+migracion003HisFolios
+	his_folio
+	
+
+migracion004Preagenda
+	pre_agenda
+	pre_agenda_salida
+	pre_agenda_locacion
+	pre_agenda_sala
+	pre_agenda_sala_uso_cabina
+	pre_agenda_accesorio
+	pre_agenda_equipo
+	pre_agenda_formato_entrega
+	pre_agenda_tipo_personal
+	pre_agenda_vehiculo
+	
+	
+migracion005Agenda
+	agenda
+	agenda_servicio_salida
+	agenda_servicio_locacion
+	agenda_servicio_vehiculo
+	agenda_servicio_accesorio
+	agenda_servicio_equipo
+	agenda_servicio_formato_entrega
+	agenda_servicio_personal
+	agenda_servicio_sala
+	agenda_servicio_sala_uso_cabina
+	

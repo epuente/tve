@@ -1,0 +1,81 @@
+@(forma: Form[Equipo], roles:List[Rol])
+
+@import helper._
+
+
+        <fieldset>
+            <div class="row">
+                <div class="col-xs-12   col-md-8 ">
+	                <div class="row">
+	                    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+	                        <div class="form-group">
+	                            @inputText(forma("descripcion"), '_label -> "Descripción", 'class->"form-control validaLongitud", 'required->true, 'maxlength->"100" )
+	                            <div class="help-block with-errors"></div>
+	                        </div>
+	                    </div>
+	                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+	                        <div class="form-group">
+	                            @inputText(forma("serie"), '_label -> "Número de serie", 'class->"form-control validaLongitud", 'maxlength->"50")
+	                            <div class="help-block with-errors"></div>
+	                        </div>
+	                    </div>
+	                </div>   
+	                             
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                            <div class="form-group">
+                                @inputText(forma("modelo"), '_label -> "Modelo", 'class->"form-control validaLongitud", 'required->true, 'maxlength->"100")                                
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <div class="form-group">
+                                @inputText(forma("marca"), '_label -> "Marca", 'class->"form-control validaLongitud", 'required->true, 'maxlength->"100")
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xs-12   col-md-4">
+                    <div class="row">
+                          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                            @select(
+                                                forma("estado.id"), 
+                                                options(models.EstadoEquipoAccesorioVehiculo.options), 
+                                                '_label -> "Estado", '_default -> "-- Seleccione --",
+                                                '_showConstraints -> false,
+                                                '_error -> forma("turno").error.map(_.withMessage("Seleccione un estado")),
+                                                'required->true,
+                                                'size->12
+                                                
+                                            )
+                          
+                                              <div class="help-block with-errors"></div>
+                                </div>
+                                                   
+                          </div>
+                    </div>
+                </div>                
+            </div>
+
+
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    @textarea(forma("observacion"), '_label -> "Observación", 'class->"form-control validaLongitud" ,'maxlength->"600")
+                                    <div class="help-block with-errors"></div>
+                                </div>                            
+                            </div>
+                        </div>
+
+
+			    		</div>
+
+				            
+
+         
+
+        </fieldset>

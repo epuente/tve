@@ -1,0 +1,28 @@
+@if(session.get("rolActual")=="100"  || session.get("rolActual")=="1"    ){
+		<div class="panel panel-default" name="preguntaSalida">
+			<div class="panel-body">
+				<div  class="row">
+					<div class="col-md-3">
+							<div class="form-group">
+								<label class="control-label">Hora de salida</label>
+								<input type="text" name="hSalida" class="soloHora input-sm form-control" placeholder="hh:mm" size="5">
+								<div class="help-block with-errors"></div>
+							</div>
+					</div>
+					<div class="col-md-2">
+							<div class="form-group">
+								<label class="control-label">Vehículo</label>
+								<br>
+							   <input type="checkbox" name="vehiculo">
+							</div>
+					</div>
+					<div class="col-md-7">
+							<div class="form-group" style="width: 100%">
+								<label class="control-label">Locación</label>
+								<input type="text" name="locacion" class="form-control input-sm" placeholder="¿Lugar de scouting o grabación?">
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+}

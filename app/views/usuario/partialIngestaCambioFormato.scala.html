@@ -1,0 +1,57 @@
+@formatos() = @{
+	models.FormatoIngesta.find.all();
+} 
+
+
+@if(session.get("rolActual")=="16"){
+	<div class="row">
+		<div class="col-md-3">
+			¿Se cambió de formato?
+		</div>
+		<div class="col-md-2">
+			<div class="row">
+				<div style="display: inline-block;">
+					<label class="radio radio-inline">
+           				<input name="radiocambioFormato" value="true" type="radio"> Si
+               		</label>
+				</div>
+				<div style="display: inline-block;">
+					&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				<div style="display: inline-block;">
+					<label class="radio radio-inline">
+                      			<input name="radiocambioFormato" value="false" type="radio"> No
+                    </label>
+          		</div>				
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2">
+			¿A cual formato?
+		</div>
+			    @for(i <- formatos()){
+					<div class="col-md-2">
+						<div class="form-group">
+                        		<form>
+	                         		<div class="checkbox">
+	                         				@i.descripcion
+											<input type="checkbox" name="cambioFormato" id="cambioFormato-@i.id" value="@i.id" style="margin-left: 5px">
+									</div>
+								</form>
+
+						</div>
+					</div>
+				}
+		</div>
+	<div class="row">
+		<div class="col-md-3">
+		</div>
+		<div class="col-md-9">
+										¿A que otro formato?
+										<input type="text" name="otroCambioFormato" placeholder="Escriba el otro formato">											
+									</div>
+	</div>	
+}
+
+

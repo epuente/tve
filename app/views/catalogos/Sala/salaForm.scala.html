@@ -1,0 +1,72 @@
+@(forma: Form[Sala], roles:List[Rol], tipo:String)
+
+@import helper._
+        @inputText(forma("id"), '_label -> "", 'class->"form-control", 'type->"hidden" )
+
+        <fieldset>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                     <div class="form-group">
+                         @inputText(forma("descripcion"), '_label -> "Descripción", 'class->"form-control", 'required->true )
+                         <div class="help-block with-errors"></div>
+                     </div>                        
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row block-center">
+                                <div class="col-xs-4 col-sm-8 col-md-8 col-lg-8 vbottom" style="padding-bottom:5px; cursor:pointer; vertical-align:baseline;">&nbsp;</div>
+                                <div class="col-xs-4 col-sm-4 col-md-2 col-lg-2 vbottom" id="filtroOpera"   name="filtroEdo" style="padding-bottom:5px; cursor:pointer; vertical-align:baseline;">Operadores</div>
+                                <div class="col-xs-4 col-sm-4 col-md-2 col-lg-2 vbottom" id="filtroMantto"  name="filtroEdo" style="padding-bottom:5px; cursor:pointer">Mantenimiento</div>
+                            </div>
+                            <div class="row">
+                               <br/>
+                            </div>
+                            
+                            <div id="divOperador">
+						    	<div class="row">
+						    		<div class="col-12">
+									  <div class="panel panel-default">
+									    <div class="panel-body">
+									    
+						                   <div style="display:inline">
+						                       <select multiple="multiple" size="10" name="selectLocutoresDisponiblesMat" style="min-width:100%; height: 100px;" disabled>
+						                       </select>
+						                   </div>			    
+									    </div> 
+								    </div>    		
+						    		</div>
+						    	</div>
+						    	<div class="row">
+						    		<div class="col-12">
+									  <div class="panel panel-default">
+									    <div class="panel-body">
+									    
+						                   <div style="display:inline">
+						                       <select multiple="multiple" size="10" name="selectLocutoresDisponiblesVesp" style="min-width:100%; height: 100px;" disabled>
+						                       </select>
+						                   </div>			    
+									    </div> 
+								    </div>    		
+						    		</div>
+						    	</div>
+                            </div>  
+                            <div class="row" id="divMantto">
+                                <div class="col-xs-12">
+                                    <h2>Mantenimiento <a id="agregarMantto" href="" data-toggle="popover" data-content="Agregar mantenimiento" class="">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a></h2>
+                                </div>
+                                <div id="divTablaMantto">                                
+
+                               </div> 
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+        </fieldset>
+        
+        

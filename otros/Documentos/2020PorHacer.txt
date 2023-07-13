@@ -1,0 +1,14 @@
+Añadir un control para agenda en que se pueda desplazar más facilmente a otros meses o años.
+
+Cuando un folio tiene asignados mas de un productor; antes de autorizar por el administrador, en la agenda el productor X puede modificar las solicitudes del productor Y.
+
+Quitar la oportunidad que tiene el administrador de hacer solicitudes
+
+Rol Administrador.
+* Cuando el evento ya esté autorizado quitar el botón de "Autorizar", poner uno de "Actualizar".
+* Dado que ahora el personal de tveducativa puede tener mas de un perfil, varios operadores para las diferentes salas es posible. Tambien es posible que una misma persona pueda atender mas de una sala.
+Falta agregar una validación para evitar que se le asigne un evento a un operador de sala que esta ocupado en otra sala o en otro evento.
+
+
+
+

@@ -1,0 +1,54 @@
+@(forma: Form[Accesorio], roles:List[Rol])
+
+@import helper._
+
+ 
+
+@main {
+    <div class="row">
+       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+              <li><a href="@routes.AdminAccesorioController.list()">Accesorios</a></li>
+              <li>Agregar</li>
+            </ol>
+        </div>
+    </div>
+        
+    <h1>Agregar Accesorio</h1>
+    
+    @form(CSRF(routes.AdminAccesorioController.save()), 'role->"form") {
+        @accesorioForm(forma, roles)                
+        <br/><br/>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div style="width: 80%" class="center-block">
+                    <input type="submit" value="Agregar" class="btn btn-primary btn-block">
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div style="width: 80%" class="center-block">
+                    <a href="@routes.AdminAccesorioController.list()" class="btn btn-warning btn-block">Cancelar</a>
+                </div>
+            </div>
+        </div>        
+    }
+}
+
+<script type="text/javascript">
+    $(function() {
+        $('form').validator();
+    });
+
+    $("form").submit(function(){
+
+    //  event.preventDefault();
+        $("#cuentas_username").attr('name', 'cuentas[0].username');
+        $("#cuentas_password").attr('name', 'cuentas[0].password');
+        
+        $("[type='checkbox'][id^='auxRoles_']:checked").each(function(i,e){
+            $(this).attr("name","cuentas[0].roles["+i+"].rol.id");
+        });         
+    });
+    
+
+</script>
