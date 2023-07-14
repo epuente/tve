@@ -62,7 +62,6 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 		FilePart picture2 = body.getFile("file2");
 		if (picture != null) {
 			File file = picture.getFile();
-			if (picture != null) {
 				OficioImagen ima = new OficioImagen();
 				Path p = Paths.get(file.getPath());
 				byte[] byteFile = null;
@@ -76,12 +75,10 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 				ima.nombrearchivo = picture.getFilename();
 				ima.contenttype = picture.getContentType();
 				aux.imagenes.add(ima);
-			}
 		}
 
 		if (picture2 != null) {
 			File file2 = picture2.getFile();
-			if (picture2 != null) {
 				OficioRespuesta ima = new OficioRespuesta();
 				Path p = Paths.get(file2.getPath());
 				byte[] byteFile = null;
@@ -95,7 +92,6 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 				ima.nombrearchivo = picture2.getFilename();
 				ima.contenttype = picture2.getContentType();
 				aux.oficiosrespuestas.add(ima);
-			}
 		}
 
 
