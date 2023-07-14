@@ -22,5 +22,6 @@ echo "Se ha respaldado en la ruta ~/respaldosRemotos con el nombre $fecha-resp-$
 git init
 git add *
 git branch -M main
+git commit -m 'Actualización'
 git remote add origin https://github.com/epuente/tve.git
 git push https://github.com/epuente/tve.git
