@@ -22,8 +22,7 @@ play.PlayImport.PlayKeys.playDefaultPort := 8087
 
 doc in Compile <<= target.map(_ / "none")
 
-javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation", "-Werror")
+javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation", "-Werror", "-J-Xms128M", "-J-Xmx512m", "-J-server")
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
-
 
 
