@@ -24,12 +24,12 @@ else
     #Dado lo anterior, se optó por usar Git con GitHub
 
     # SINO ES POSIBLE HACER EL LOGIN REMOTO EN GITHUB,EJECUTAR gh auth login
-   if [ -d ".git" ]; then
+   if [ -d !".git" ]; then
         git init
    fi
     git add *
     #git branch -M $1
-    git commit -m $1
+    git commit -m "$1"
     git remote add origin https://github.com/epuente/tve.git
     git push https://github.com/epuente/tve.git
     echo "Se ha respaldado el proyecto en el repositorio https://github.com/epuente/tve.git"
