@@ -6,6 +6,7 @@ else
       if [ -z "$2" ]; then
           echo "No se ha suminstrado el segundo argumento 'comentario del push' ";
       else
+          echo "comentario = $2";
           #Borrar compilado
           sbt clean
           if [ -d "bin" ]; then rm -Rf bin; fi
@@ -27,7 +28,7 @@ else
           #Dado lo anterior, se optó por usar Git con GitHub
 
 
-          echo "comentario = $2";
+
           git init
           git add *
           git branch -M $1
