@@ -33,6 +33,7 @@ else
     if  [[ -z $(git remote) ]]; then
       git remote add origin https://github.com/epuente/tve.git
     fi
+    git push
     git push https://github.com/epuente/tve.git
     echo "Se ha respaldado el proyecto en el repositorio https://github.com/epuente/tve.git"
 fi
