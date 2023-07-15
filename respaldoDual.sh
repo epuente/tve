@@ -1,6 +1,6 @@
 #!/bin/sh
 if [ -z "$1" ]; then
-    echo "No se ha suministrado el argumento 'comentario del commit'   (ejemplo:  'Actualización del controlador UsuarioController.java' )    ";
+    echo "No se ha suministrado el argumento \"comentario del commit\"   (ejemplo: respaldoDual.sh \"Actualización del controlador UsuarioController.java\" )    ";
 else
     echo "comentario = $1";
     #Borrar compilado
