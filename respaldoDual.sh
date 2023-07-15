@@ -30,7 +30,7 @@ else
     git add *
     #git branch -M $1
     git commit -m "$1"
-    if [git remote != '']; then
+    if [ git remote != '' ]; then
       git remote add origin https://github.com/epuente/tve.git
     fi
     git push https://github.com/epuente/tve.git
