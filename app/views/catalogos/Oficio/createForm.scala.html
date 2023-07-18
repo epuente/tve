@@ -52,6 +52,11 @@
         $("#btnVerArchivo").css("display","none");
         $('[data-toggle="popover"]').popover();
         $("#oficioArchivoOficio").click();
+
+        // Archivos del Oficio
+        $.when(edoInicialArchivos(0)).done(function(data){
+            $("#ajaxEdoInicialArchivos").html(data);
+        });
 	});
 
 	

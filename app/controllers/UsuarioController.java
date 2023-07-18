@@ -3561,7 +3561,7 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
         JSONArray jaVacios = new JSONArray();
         try {
             //imagenes
-            if (o.imagenes.size()>0) {
+            if (o !=null  &&  o.imagenes.size()>0) {
                 for (OficioImagen ima : o.imagenes) {
                     JSONObject jo = new JSONObject();
                     jo.put("tipo", "Oficio");
@@ -3575,7 +3575,7 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
             } else
                 jaVacios.put(1);
             //oficiosrespuestas
-            if (o.oficiosrespuestas.size()>0) {
+            if (o !=null  &&  o.oficiosrespuestas.size()>0) {
                 for (OficioRespuesta a : o.oficiosrespuestas) {
                     JSONObject jo = new JSONObject();
                     jo.put("tipo", "Oficio de respuesta");
@@ -3589,7 +3589,7 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
             } else
                 jaVacios.put(2);
             // minutas
-            if (o.minutas.size()>0) {
+            if (o !=null  &&  o.minutas.size()>0) {
                 for (OficioMinuta a : o.minutas) {
                     JSONObject jo = new JSONObject();
                     jo.put("tipo", "Minuta de acuerdos");
@@ -3603,7 +3603,7 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
             } else
                 jaVacios.put(3);
             // guiones
-            if (o.guiones.size()>0) {
+            if (o !=null  &&  o.guiones.size()>0) {
                 for (OficioGuion a : o.guiones) {
                     JSONObject jo = new JSONObject();
                     jo.put("tipo", "Guión o escaleta");
@@ -3617,7 +3617,7 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
             } else
                 jaVacios.put(4);
             // entradassalida
-            if (o.entradassalida != null) {
+            if (o !=null  &&  o.entradassalida != null) {
                 JSONObject jo = new JSONObject();
                 jo.put("tipo", "Entradas y salidas");
                 jo.put("id", o.entradassalida.id);
@@ -3629,7 +3629,7 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
             } else
                 jaVacios.put(5);
             // bitacoras
-            if (o.bitacoras.size()>0) {
+            if (o !=null  &&  o.bitacoras.size()>0) {
                 for (OficioBitacora a : o.bitacoras) {
                     JSONObject jo = new JSONObject();
                     jo.put("tipo", "Bitácoras");
@@ -3643,7 +3643,7 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
             } else
                 jaVacios.put(6);
             // evidenciaentrega
-            if (o.evidenciaentrega != null) {
+            if (o !=null  &&  o.evidenciaentrega != null) {
                 JSONObject jo = new JSONObject();
                 jo.put("tipo", "Evidencia de entrega");
                 jo.put("id", o.evidenciaentrega.id);
@@ -3655,7 +3655,7 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
             } else
                 jaVacios.put(7);
             // encuesta
-            if (o.encuesta != null) {
+            if (o !=null  &&  o.encuesta != null) {
                 JSONObject jo = new JSONObject();
                 jo.put("tipo", "Encuesta de servicio");
                 jo.put("id", o.encuesta.id);

@@ -900,6 +900,8 @@ function listaArchTipo(tipo){
     $("[id^='archivos']").fadeOut("slow","swing");
     $("[id^='archivos']").css("display","none");
     $("#archivos"+tipo).fadeIn("slow","swing");
+    $("#listaTiposArchivos strong>a").unwrap();
+    $("#listaTiposArchivos a:eq("+(tipo-1)+")").wrap("<strong></strong>");
 }
 
 
@@ -911,6 +913,7 @@ function edoInicialArchivos(oficioId){
         var retorno="";
         var nomTipoArchivo;
         var numTipoArchivo;
+        console.debug("regresando oficioArchivos ...." )
         console.dir(data)
 
         // imagen (oficio digitalizado) - oneToMany
