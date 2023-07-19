@@ -360,7 +360,7 @@
                                     if(@session.get("rolActual")=="1"){
                                         c+="<a href='javascript:autorizarEvento("+Edo[i].id+", \""+Edo[i].tipo+"\")' style='display:inline-block; visibility:hidden' > <i class='fas fa-bolt fa-lg fa-fw' aria-hidden='true'  title='Autorizar sin diálogo' id='autorizacionRapida"+Edo[i].id+"'></i></a>";
                                     }
-                                    
+
                                     c+="<a href='javascript:AbrirMostrarDatos("+Edo[i].id+", \""+Edo[i].tipo+"\")' style='display:inline-block;' > <i class='fas fa-check fa-lg fa-fw' aria-hidden='true'  title='Autorizar' id='autorizacion"+Edo[i].id+"'></i></a>";                                    
                                     
                                     c+="</div></td>";
@@ -984,6 +984,8 @@ function irAFechaEvento(fecha, eventoId, tipo){
 	<link type="text/css" href="@routes.Assets.at("bootstrap-duallistbox/bootstrap-duallistbox.min.css")" rel="stylesheet">	
 	            
     <!--script src="@routes.Assets.at("fullcalendar-scheduler-1.9.4/lib/moment.min.js")"></script-->
-    <script src="@routes.Assets.at("fullcalendar-scheduler-1.9.4/lib/fullcalendar.min.js")"></script>  	            
+    <script src="@routes.Assets.at("fullcalendar-scheduler-1.9.4/lib/fullcalendar.min.js")"></script>
+
+
 	            
 	            

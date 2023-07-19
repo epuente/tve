@@ -175,7 +175,58 @@ $("iframe[name='visoriFrame']").on("load",  function(){
 
 });
 
-        
+
+     function modalVerArchivosOficio(oficioId){
+        console.log("Se recibió en ... "+oficioId)
+        $("#tiposArchivos").html("");
+        $archs = LlamadaAjax("/oficioArchivos", "POST", JSON.stringify({"oficioId":oficioId}));
+        $.when($archs).done(function(data){
+            console.dir(data)
+            if (data.imagen!=undefined){
+                $("#tiposArchivos").append("<h3>Oficio</h3>");
+                data.imagen.forEach( function(i){
+                    $("#tiposArchivos").append("&nbsp;&nbsp;<a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-imagen\"> <i class=\"far fa-eye\"></i>     <small>"+ i.nombrearchivo+"</small>");
+                });
+            }
+
+            if (data.respuesta!=undefined){
+                $("#tiposArchivos").append("<br><h3>Oficio de respuesta</h3>");
+                data.respuesta.forEach( function(i){
+                    $("#tiposArchivos").append("&nbsp;&nbsp;<a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-Respuesta\"> <i class=\"far fa-eye\"></i>     <small>"+ i.nombrearchivo+"</small>");
+                });
+            }
+
+            if (data.minuta!=undefined){
+                $("#tiposArchivos").append("<br><h3>Minutas de acuerdos</h3>");
+                data.minuta.forEach( function(i){
+                    $("#tiposArchivos").append("&nbsp;&nbsp;<a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-Minuta\"> <i class=\"far fa-eye\"></i>     <small>"+ i.nombrearchivo+"</small>");
+                });
+            }
+
+        });
+        $('#myModalLosVisores').modal('show');
+     }
+
+
+
+    $(document).off("click", "[id^='verOficioArchivo']");
+    $(document).on("click", "[id^='verOficioArchivo']", function(){
+        console.debug("desde ^=verOficioArchivo click")
+        var aux = this.id.split("-");
+        var sufijo = aux[2];
+        var id = aux[1];
+        console.debug("sufijo: "+ sufijo)
+        console.debug("id: "+ id)
+        $("iframe[name='visoriFrame2']").attr("src", "/verOficio?id="+id+"&sufijo="+sufijo);
+
+    });
+
+
+    $(document).on("iframe[name='visoriFrame2']", "load", function(){
+        console.debug("...cargando archivo en el iframe");
+    });
+
+
         
         
         

@@ -216,9 +216,13 @@ $('#frmAux').validator().on('submit', function (e) {
                             !key.startsWith("contactos") &&
                             !key.startsWith("fechagrabaciones") &&
                             !key.startsWith("daterangepicker")
-                            )
+                            ){
 
                                 formDataObj[key] = value;
+                               console.debug("se agregó "+key)
+                            }
+                               else
+                               console.debug("se descartó "+key)
                     });
 
                 formDataObj["urremitente"] ={id: remitenteId};
@@ -250,7 +254,9 @@ $('#frmAux').validator().on('submit', function (e) {
                     console.log ("... agregando "+id)
                 });
 
-                //return false;
+                console.debug("  sfilefileOficioArchivo-1-1 "+formData.get("sfilefileOficioArchivo-1-1"))
+
+                //  return false;
 
                 $.each($("#frmAux:input"), function(i, componente) {
                   var nombreCampo = $(componente).prop("name");
@@ -270,63 +276,64 @@ $('#frmAux').validator().on('submit', function (e) {
 
 
 
-if ( $("#operacionFormulario").data("operacion")=="create" ){
-     $.ajax({
-           url: '/oficio/save',
-           data: formData,
-           type: 'POST',
-           enctype: 'multipart/form-data',
-           contentType: false,
-           processData: false,
-           cache: false,
-           dataType: "json",
-           beforeSend: function () {
+                if ( $("#operacionFormulario").data("operacion")=="create" ){
+                     $.ajax({
+                           url: '/oficio/save',
+                           data: formData,
+                           type: 'POST',
+                           enctype: 'multipart/form-data',
+                           contentType: false,
+                           processData: false,
+                           cache: false,
+                           dataType: "json",
+                           beforeSend: function () {
 
-           },
-           success: function (  data) {
-             console.dir(data)
-             console.log(data.estado=="ok")
-             if (data.estado=="ok"){
-                    $.notify({
-                        title: "<strong>Correcto:</strong> ",
-                        message: "Se creó el oficio "+formDataObj["oficio"]
-                    },{
-                        type: 'success'
+                           },
+                           success: function (  data) {
+                             console.dir(data)
+                             console.log(data.estado=="ok")
+                             if (data.estado=="ok"){
+                                    $.notify({
+                                        title: "<strong>Correcto:</strong> ",
+                                        message: "Se creó el oficio "+formDataObj["oficio"]
+                                    },{
+                                        type: 'success'
+                                    });
+                                    swal({
+                                        title: "¿Asignar folio al oficio "+formDataObj["oficio"]+"?",
+                                        title: "¿Asignar folio al oficio "+formDataObj["oficio"]+"?",
+                                        html: "El oficio ya ha sido guardado.</br><div style='margin:5px;'>¿Desea asignarle un folio?</dir></br></br> "+
+                                                "<a href='/folio/"+data.id+"' class='btn btn-primary' role='button'>Si, asignar folio</a>"+
+                                                "<a href='/oficios' class='btn btn-warning' role='button'>No, continuar con oficios</a>",
+                                        icon: "question",
+                                        showCancelButton: false,
+                                        showConfirmButton: false,
+                                        confirmButtonColor: "#d33",
+                                        cancelButtonColor: '#3085d6',
+                                        confirmButtonText: "Si",
+                                        cancelButtonText: "No",
+                                        focusConfirm: false,
+                                        preConfirm: ()=>{
+                                                console.log("------------------------------------------- ")
+
+                                        },
+                                        preDeny: ()=>{
+
+                                                console.log("* * * * * ");
+                                            }
+                                      }), function (dismiss) {
+                                            if (dismiss === 'cancel') {
+                                                console.log(".....................");
+                                            }
+                                        }
+                             }
+
+                           },
+                           error: function (jqXHR, textStatus, errorThrown) {
+                             alert(textStatus + ': ' + errorThrown);
+                           }
                     });
-                    swal({
-                        title: "¿Asignar folio al oficio "+formDataObj["oficio"]+"?",
-                        html: "El oficio ya ha sido guardado.</br><div style='margin:5px;'>¿Desea asignarle un folio?</dir></br></br> "+
-                                "<a href='/folio/"+data.id+"' class='btn btn-primary' role='button'>Si, asignar folio</a>"+
-                                "<a href='/oficios' class='btn btn-warning' role='button'>No, continuar con oficios</a>",
-                        icon: "question",
-                        showCancelButton: false,
-                        showConfirmButton: false,
-                        confirmButtonColor: "#d33",
-                        cancelButtonColor: '#3085d6',
-                        confirmButtonText: "Si",
-                        cancelButtonText: "No",
-                        focusConfirm: false,
-                        preConfirm: ()=>{
-                                console.log("------------------------------------------- ")
-
-                        },
-                        preDeny: ()=>{
-
-                                console.log("* * * * * ");
-                            }
-                      }), function (dismiss) {
-                            if (dismiss === 'cancel') {
-                                console.log(".....................");
-                            }
-                        }
-             }
-
-           },
-           error: function (jqXHR, textStatus, errorThrown) {
-             alert(textStatus + ': ' + errorThrown);
-           }
-        });
-    }
+                }
 //return false;
 
                 //console.dir(  JSON.stringify(formDataObj)  )
@@ -410,38 +417,41 @@ if ( $("#operacionFormulario").data("operacion")=="create" ){
                         });
                         */
 
-     $.ajax({
-           url: '/oficio/update/'+$("#operacionFormulario").data("idedicion"),
-           data: formData,
-           type: 'POST',
-           enctype: 'multipart/form-data',
-           contentType: false,
-           processData: false,
-           cache: false,
-           dataType: "json",
-           beforeSend: function () {
 
-           },
-           success: function (  data) {
-                console.dir(data);
-                if (data.estado=="ok"){
-                        $.notify({
-                            title: "<strong>Correcto:</strong> ",
-                            message: "Se actualizó el oficio "+formDataObj["oficio"]
-                        },{
-                            type: 'success'
-                        });
-                        setTimeout(
-                          function()
-                          {
-                              $("ol.breadcrumb>li>a")[0].click();
-                          }, 2000);
-                }
-                }
+                    console.debug(formData);
+                    return false;
+                    $.ajax({
+                           url: '/oficio/update/'+$("#operacionFormulario").data("idedicion"),
+                           data: formData,
+                           type: 'POST',
+                           enctype: 'multipart/form-data',
+                           contentType: false,
+                           processData: false,
+                           cache: false,
+                           dataType: "json",
+                           beforeSend: function () {
 
-        });
+                           },
+                           success: function (  data) {
+                                console.dir(data);
+                                if (data.estado=="ok"){
+                                        $.notify({
+                                            title: "<strong>Correcto:</strong> ",
+                                            message: "Se actualizó el oficio "+formDataObj["oficio"]
+                                        },{
+                                            type: 'success'
+                                        });
+                                        setTimeout(
+                                          function()
+                                          {
+                                              $("ol.breadcrumb>li>a")[0].click();
+                                          }, 2000);
+                                }
+                            }
+
+                    });
+                }
     }
-        }
 });
 
 
@@ -674,9 +684,11 @@ function subirArchivo2(c){
     $("#file"+c).click();
 }
 
-function clonarBaseArchivo(tipo, filename){
+function clonarBaseArchivo(tipo, filename, id){
+    if ( $("#ajaxEdoInicialArchivos").find("div[name='copiaBaseArchivo']").length==0)
+        $("#ajaxEdoInicialArchivos").html("");
     var copia = $("#divBaseArchivo").clone(false);
-    var secuencial = $("input[type='file'][id^='fileOficioArchivo-"+tipo+"']").length+1
+    var secuencial = ($("input[type='file'][id^='fileOficioArchivo-"+tipo+"']").length)+1
 
     // Cambia el id del input file
     $(copia).find("input[type='file']").attr("id", "fileOficioArchivo-"+tipo+"-"+secuencial);
@@ -692,8 +704,6 @@ function clonarBaseArchivo(tipo, filename){
     $(copia).find(".fa-minus-circle").closest("a").attr("href", "javascript:eliminaArchivo("+tipo+","+secuencial+");"  );
     $(copia).find(".fa-minus-circle").closest("div").css("display","block")
 
-
-
     $(copia).find("#BaseArchivo").attr("name", "copiaBaseArchivo");
     $(copia).find("#BaseArchivo").removeAttr("id");
 //alert("filename "+filename)
@@ -701,18 +711,33 @@ function clonarBaseArchivo(tipo, filename){
         $(copia).find("#txtArchivo-"+tipo+"-"+secuencial).html("<small>"+filename+"</small>");
     }
     //console.debug("clonado....   "+$(copia).html())
-    return  {renglon: $(copia), secuencial: secuencial};
+    // return  {renglon: $(copia), secuencial: secuencial};
+    $(copia).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\"bitacora\")");
+    $(copia).find(".fa-eye").closest("div").css("display", "block");
+
+    if (  $("#archivos"+tipo).length==0 ){
+        $("#ajaxEdoInicialArchivos").append( "<div id='archivos"+tipo+"' style='display:block'>       <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[tipo-1]+"</div></div></div>"  );
+    }
+    var agregados = $("#archivos"+tipo).find("div[name='copiaBaseArchivo']").lenght+1;
+    //$(copia).append(  botonAgregarMas(tipo, agregados)  );
+    $("#archivos"+tipo).append($(copia).html());
+    $("#archivos"+tipo).append(botonAgregarMas(tipo, agregados));
+
+    return secuencial;
 }
 
 
 function subirArchivoNuevo(tipo){
     console.debug("Desde subirArchivoNuevo "+tipo);
-    //var copia = $("#BaseArchivo").clone(false);
+    /*
     var aux = clonarBaseArchivo(tipo);
     var copia = aux.renglon.html();
     var sec = aux.secuencial;
     $(copia).appendTo("#archivos"+tipo);
     $("#fileOficioArchivo-"+tipo+"-"+sec).click();
+    */
+    s = clonarBaseArchivo(tipo);
+    $("#fileOficioArchivo-"+tipo+"-"+s).click();
 }
 
 // Despues de que seleccionó el archivo
@@ -906,7 +931,6 @@ function listaArchTipo(tipo){
 
 
 function edoInicialArchivos(oficioId){
-    var d = $.Deferred();
     var $archs = LlamadaAjax("/oficioArchivos", "POST",  JSON.stringify({"oficioId":oficioId}) );
     var auxRetorno = "";
     $.when($archs).done(function(data){
@@ -915,7 +939,7 @@ function edoInicialArchivos(oficioId){
         var numTipoArchivo;
         console.debug("regresando oficioArchivos ...." )
         console.dir(data)
-
+/*
         // imagen (oficio digitalizado) - oneToMany
         numTipoArchivo = 1;
         retorno +="<div id='archivos"+numTipoArchivo+"' style='display:none'>";
@@ -962,34 +986,39 @@ function edoInicialArchivos(oficioId){
         }
         retorno +="</div>";
         retorno +="</div>";
-
+*/
         // minuta - OneToMany
         numTipoArchivo = 3;
-        retorno +="<div id='archivos"+numTipoArchivo+"' style='display:none'>";
-        retorno +="    <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div>";
+        //retorno +="<div id='archivos"+numTipoArchivo+"' style='display:none'>";
+        //retorno +="    <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div>";
+        console.debug("data.minuta "+data.minuta)
+        //console.debug("data.minuta.length "+data.minuta.length)
         if (data.minuta!=undefined && data.minuta.length>0){
             var agregados = 0;
             data.minuta.forEach(function(a){
                 console.dir(a)
                 var id = a.id;
                 var nomArchivo = a.nombrearchivo;
-                var r = clonarBaseArchivo(numTipoArchivo, nomArchivo).renglon;
-                $(r).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\"minuta\")");
-                $(r).find(".fa-eye").closest("div").css("display", "block");
+                clonarBaseArchivo(numTipoArchivo, nomArchivo,id);
+                //$(r).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\"minuta\")");
+                //$(r).find(".fa-eye").closest("div").css("display", "block");
                 agregados++;
-                retorno += $(r).html();
+                //retorno += $(r).html();
             });
             retorno+= botonAgregarMas(numTipoArchivo, agregados);
         }
         if (data.minuta==undefined){
-             retorno+="<div class='row'>"+
-                            "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div>";
-             retorno +="</div>";
+             retorno+=""+
+                            "";
+             retorno +="";
+             $("#ajaxEdoInicialArchivos").append( "<div id='archivos"+numTipoArchivo+"' style='display:none'>       <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div></div>"  );
+             $("#archivos"+numTipoArchivo).append("<div class='row'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div></div>");
+
         }
-        retorno +="</div>";
-        retorno +="</div>";
+        //retorno +="</div>";
+        //retorno +="</div>";
 
-
+/*
         // guion o escaleta - OneToMany
         numTipoArchivo = 4;
         retorno +="<div id='archivos"+numTipoArchivo+"' style='display:none'>";
@@ -1020,6 +1049,7 @@ function edoInicialArchivos(oficioId){
         numTipoArchivo = 5;
         retorno +="<div id='archivos"+numTipoArchivo+"' style='display:none'>";
         retorno +="    <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div>";
+
         if (data.entrada!=undefined){
                 console.dir(data.entrada)
                 var id = data.entrada.id;
@@ -1047,19 +1077,21 @@ function edoInicialArchivos(oficioId){
                 console.dir(a)
                 var id = a.id;
                 var nomArchivo = a.nombrearchivo;
-                var r = clonarBaseArchivo(numTipoArchivo, nomArchivo).renglon;
-                $(r).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\"bitacora\")");
-                $(r).find(".fa-eye").closest("div").css("display", "block");
+                // var r = clonarBaseArchivo(numTipoArchivo, nomArchivo).renglon;
+                clonarBaseArchivo(numTipoArchivo, nomArchivo, id);
+                //$(r).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\"bitacora\")");
+                //$(r).find(".fa-eye").closest("div").css("display", "block");
                 agregados++;
-                retorno += $(r).html();
+               // retorno += $(r).html();
             });
-            retorno+= botonAgregarMas(numTipoArchivo, agregados);
+            //retorno+= botonAgregarMas(numTipoArchivo, agregados);
         }
         if (data.bitacora==undefined){
              retorno+="<div class='row'>"+
                             "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div>";
              retorno +="</div>";
         }
+        /*
         retorno +="</div>";
         retorno +="</div>";
 
@@ -1114,9 +1146,11 @@ function edoInicialArchivos(oficioId){
         }
         retorno +="</div>";
         retorno +="</div>";
-        d.resolve(retorno);
+        */
+        //d.resolve(retorno);
+      //  $("#ajaxEdoInicialArchivos").html(retorno);
     }); // fin del when
-    return d.promise();
+
 }
 
 
@@ -1155,5 +1189,6 @@ function botonAgregarMas(tipo, cantidad){
                 //$("#archivos"+numTipoArchivo).append(boton);
 
               }
+              console.log("botonAgregarMas regresa.... "+retorno)
     return retorno;
 }

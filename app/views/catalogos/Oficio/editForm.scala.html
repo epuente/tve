@@ -69,10 +69,11 @@
 
 
         // Archivos del Oficio
-        $.when(edoInicialArchivos(@forma.get().id)).done(function(data){
-            $("#ajaxEdoInicialArchivos").html(data);
-        });
+        //$.when(edoInicialArchivos(@forma.get().id)).done(function(data){
+        //    $("#ajaxEdoInicialArchivos").html(data);
+        //});
 
+        edoInicialArchivos(@forma.get().id);
 
 	});
 	

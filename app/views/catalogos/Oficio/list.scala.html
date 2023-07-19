@@ -1,6 +1,11 @@
 @(filtro: String)
 
 @main {
+    <style>
+        .columnaCentrada {text-align: center;}
+    </style>
+
+    @views.html.usuario.ventanasModales()
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <ol class="breadcrumb">
@@ -30,7 +35,7 @@
 						<td>Descripción</td>
 						<td>Título</td>
 						<td>Folios</td>
-						<td></td>
+						<td style="text-align: center;"></td>
 						<td></td>
 	                </tr>
 	            </thead>
@@ -87,7 +92,6 @@
 	              "url":  "/oficioList",
 	              "contentType": "application/json; charset=utf-8",
 	              "dataType": "json"
-              
 	          },
 	          "columns": [
 	              {"data": "oficio"},
@@ -110,9 +114,16 @@
 //	            		 cadena+='   <div name="btnVerDetallesOficio_'+data+'" style="cursor:pointer"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></div>';
 	            		 cadena+='   <a href="/oficio/'+data+'" alt="Editar" style="text-decoration: none;"><i class="fas fa-pencil-alt fa-lg" aria-hidden="true"></i></a>';
 	            		 cadena+='   <div name="btnEliminarOficio_'+data+'" style="cursor:pointer"><i class="far fa-trash-alt fa-lg" aria-hidden="true"></i></div>';
+//	            		 cadena+='   <div> <button type="button" class="btn btn-primary pull-right" onclick="javascript:modalVerArchivosOficio('+data+')"  ><small>Ver archivos</small></button></div>';
+	            		 cadena+='   <div class="fa-stack fa-lg" style="cursor:pointer" onclick="javascript:modalVerArchivosOficio('+data+')">'
+	            		 +'<i class="fas fa-eye fa-stack-1x fa-lg" style="font-size: 1em;"></i>'
+                         +'<i class="far fa-file fa-stack-1x fa-lg"></i>'
+                         +'</div>  ';
 	            		 cadena+='</u>';
+
 	            		 return cadena;
-	                 }
+	                 },
+	                 "className" : "columnaCentrada"
 	              }
 	            ],    
 	            "initComplete": function(){
@@ -120,6 +131,7 @@
 	                $("#tablaOficios_wrapper div.row div:eq(0)").addClass("col-sm-4");
 	                $("#tablaOficios_wrapper div.row div:eq(2)").addClass("col-sm-8");
 	                $(".dataTables_filter").css("width","auto");
+                    $("tr td:eq(5)").css("textAlign", "center");
 	            }
 	       });      		 
 		 
@@ -244,6 +256,7 @@
     
     <script src="@routes.Assets.at("bootstrap-notify/bootstrap-notify.min.js")"></script>    
 <script src="@routes.Assets.at("mark.js/datatables.mark.min.js")"></script>
-<script src="@routes.Assets.at("mark.js/jquery.mark.min.js")"></script>    
+<script src="@routes.Assets.at("mark.js/jquery.mark.min.js")"></script>
+<script src="@routes.Assets.at("javascripts/general.js")"></script>
 
             

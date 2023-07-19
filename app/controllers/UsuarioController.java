@@ -3487,22 +3487,14 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
 
     // Regresa el archivo relacionado al oficio
     public static Result verOficio(Long id, String sufijo) throws SQLException {
-        DataSource ds = DB.getDataSource();
-
-
-        PGConnection pgConnection = DB.getConnection().unwrap(PGConnection.class);
-
-
-
-
-//                DB.setProtocolMessageSizeMax(30000);
         System.out.println("Desde verOficio.......  id "+id);
-        //System.out.println("id: "+id+"   sufijo: "+sufijo);
+        System.out.println("id: "+id+"   sufijo: "+sufijo);
         PlantillaArchivo pa = new PlantillaArchivo();
         String ct = null;
         byte[] contenido = new byte[0];
         switch (sufijo.toLowerCase()) {
             case "":
+            case "imagen":
                 OficioImagen ima = OficioImagen.find.ref(id);
                 pa.contenttype = ima.contenttype;
                 pa.contenido = ima.contenido;

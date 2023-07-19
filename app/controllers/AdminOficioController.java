@@ -50,9 +50,10 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 		Oficio aux = oficiorForm.get();
 
 		MultipartFormData body = request().body().asMultipartFormData();
+
 		System.out.println("\nMultipartFormData body: "+body);
 		System.out.println("\nMultipartFormData body.getFiles size: "+body.getFiles().size());
-
+/*
 		for ( FilePart f : body.getFiles()){
 			System.out.println("    key: " +f.getKey() );
 		}
@@ -93,9 +94,75 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 				ima.contenttype = picture2.getContentType();
 				aux.oficiosrespuestas.add(ima);
 		}
-
+*/
 
 		//	aux.id=1931L;
+		// ARCHIVOS DEL OFICIO
+	//	MultipartFormData body = request().body().asMultipartFormData();
+		Logger.debug("body "+body.getFiles());
+		List<FilePart> archs = body.getFiles();
+		Logger.debug("body, num file: "+archs.size());
+
+		for (FilePart arch : archs) {
+			Logger.debug("   "+arch.getKey()+ " -> "+ arch.getFilename());
+			String[] aux1 = arch.getKey().split("-");
+			int tipo = Integer.parseInt(aux1[1]);
+			int sec = Integer.parseInt(aux1[2]);
+			PlantillaArchivo pa = new PlantillaArchivo();
+			Path p = Paths.get(arch.getFile().getPath());
+			byte[] byteFile = null;
+			try {
+				byteFile = Files.readAllBytes(p);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			pa.nombrearchivo = arch.getFilename();
+			pa.contenttype = arch.getContentType();
+			pa.contenido = byteFile;
+			if (tipo==1){
+				OficioImagen ofIma = new OficioImagen(pa.nombrearchivo, pa.contenttype, pa.contenido);
+				aux.imagenes.add(ofIma);
+			}
+			if (tipo==2){
+				OficioRespuesta a = new OficioRespuesta(pa.nombrearchivo, pa.contenttype, pa.contenido);
+				aux.oficiosrespuestas.add(a);
+			}
+
+			if (tipo==3){
+				OficioMinuta a = new OficioMinuta(pa.nombrearchivo, pa.contenttype, pa.contenido);
+				aux.minutas.add(a);
+			}
+
+			if (tipo==4){
+				OficioGuion a = new OficioGuion(pa.nombrearchivo, pa.contenttype, pa.contenido);
+				aux.guiones.add(a);
+			}
+
+			if (tipo==5){
+				OficioEntradaSalida a = new OficioEntradaSalida(pa.nombrearchivo, pa.contenttype, pa.contenido);
+				aux.entradassalida = a;
+				aux.entradassalida.oficio = aux;
+			}
+
+			if (tipo==6){
+				OficioBitacora a = new OficioBitacora(pa.nombrearchivo, pa.contenttype, pa.contenido);
+				aux.bitacoras.add(a);
+			}
+
+			if (tipo==7){
+				OficioEvidenciaEntrega a = new OficioEvidenciaEntrega(pa.nombrearchivo, pa.contenttype, pa.contenido);
+				aux.evidenciaentrega = a;
+				aux.evidenciaentrega.oficio = aux;
+			}
+
+			if (tipo==8){
+				OficioEncuesta a = new OficioEncuesta(pa.nombrearchivo, pa.contenttype, pa.contenido);
+				aux.encuesta = a;
+				aux.encuesta.oficio = aux;
+			}
+		}
+
 
 		aux.save();
 		aux.refresh();
@@ -112,7 +179,7 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 	public static Result update(Long id) throws JSONException {
 		JSONObject retorno = new JSONObject();
 		retorno.put("estado", "error");
-		System.out.println("Desde AdminOficioController.update");
+		System.out.println("Desde AdminOficioController.update-..........................................");
 		Form<Oficio> oficiorForm = form(Oficio.class).bindFromRequest();
 		Oficio o = oficiorForm.get();
 		System.out.println("oficiorForm: "+oficiorForm);
@@ -141,9 +208,9 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 		*/
 
 		MultipartFormData body = request().body().asMultipartFormData();
-		Logger.debug("body "+body.getFiles());
+		//Logger.debug("body "+body.getFiles());
 		List<FilePart> archs = body.getFiles();
-		Logger.debug("body, num file: "+archs.size());
+		Logger.debug("body, numero de archivos: "+archs.size());
 
 	    for (FilePart arch : archs) {
 			Logger.debug("   "+arch.getKey()+ " -> "+ arch.getFilename());
