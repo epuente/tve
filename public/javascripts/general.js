@@ -183,23 +183,23 @@ $("iframe[name='visoriFrame']").on("load",  function(){
         $.when($archs).done(function(data){
             console.dir(data)
             if (data.imagen!=undefined){
-                $("#tiposArchivos").append("<h3>Oficio</h3>");
+                $("#tiposArchivos").append("<div style='margin-bottom:-0.7em; '><h4>Oficio</h4></div>");
                 data.imagen.forEach( function(i){
-                    $("#tiposArchivos").append("&nbsp;&nbsp;<a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-imagen\"> <i class=\"far fa-eye\"></i>     <small>"+ i.nombrearchivo+"</small>");
+                    $("#tiposArchivos").append("<div style='margin-left:1em; margin-bottom:-0.3em; '><a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-imagen\">      <small>"+ i.nombrearchivo+"</small></div>");
                 });
             }
 
             if (data.respuesta!=undefined){
-                $("#tiposArchivos").append("<br><h3>Oficio de respuesta</h3>");
+                $("#tiposArchivos").append("<div style='margin-bottom:-0.7em; '><h4>Oficio de respuesta</h4></div>");
                 data.respuesta.forEach( function(i){
-                    $("#tiposArchivos").append("&nbsp;&nbsp;<a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-Respuesta\"> <i class=\"far fa-eye\"></i>     <small>"+ i.nombrearchivo+"</small>");
+                    $("#tiposArchivos").append("<div style='margin-left:1em; margin-bottom:-0.3em; '><a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-Respuesta\">      <small>"+ i.nombrearchivo+"</small></a>");
                 });
             }
 
             if (data.minuta!=undefined){
-                $("#tiposArchivos").append("<br><h3>Minutas de acuerdos</h3>");
+                $("#tiposArchivos").append("<div style='margin-bottom:-0.7em; '><h4>Minutas de acuerdos</h4></div>");
                 data.minuta.forEach( function(i){
-                    $("#tiposArchivos").append("&nbsp;&nbsp;<a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-Minuta\"> <i class=\"far fa-eye\"></i>     <small>"+ i.nombrearchivo+"</small>");
+                    $("#tiposArchivos").append("<div style='margin-left:1em; margin-bottom:-0.3em; '><a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-Minuta\">      <small>"+ i.nombrearchivo+"</small></div>");
                 });
             }
 

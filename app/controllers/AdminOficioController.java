@@ -2,8 +2,8 @@ package controllers;
 
 import static play.data.Form.form;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -237,15 +237,24 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 				OficioRespuesta a = new OficioRespuesta(pa.nombrearchivo, pa.contenttype, pa.contenido);
 				o.oficiosrespuestas.add(a);
 			}
-
+			// One To Many
 			if (tipo==3){
 				OficioMinuta a = new OficioMinuta(pa.nombrearchivo, pa.contenttype, pa.contenido);
-				o.minutas.add(a);
+				// Archivos preexistentes
+				List<OficioMinuta> minutas = Oficio.find.byId(o.id).minutas;
+				minutas.add(a);
+				//o.minutas.add(minutas);
+				o.minutas.addAll(minutas);
 			}
 
+			// OneToMany
 			if (tipo==4){
 				OficioGuion a = new OficioGuion(pa.nombrearchivo, pa.contenttype, pa.contenido);
-				o.guiones.add(a);
+				// Archivos preexistentes
+				List<OficioGuion> guiones = Oficio.find.byId(o.id).guiones;
+				guiones.add(a);
+				o.guiones.addAll(guiones);
+
 			}
 
 			if (tipo==5){
@@ -254,9 +263,13 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 				o.entradassalida.oficio = o;
 			}
 
+			// OneToMany
 			if (tipo==6){
 				OficioBitacora a = new OficioBitacora(pa.nombrearchivo, pa.contenttype, pa.contenido);
-				o.bitacoras.add(a);
+				// Archivos preexistentes
+				List<OficioBitacora> bitas = Oficio.find.byId(o.id).bitacoras;
+				bitas.add(a);
+				o.bitacoras.addAll(bitas);
 			}
 
 			if (tipo==7){
@@ -397,6 +410,42 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 			e.printStackTrace();
 			return ok (   "{\"estado\": \"error\"}"   );
 		}
+	}
+
+
+	// Elimina archivos relacionados al oficio (imagen, respuesta, minuta, etc...)
+	public static Result eliminaArchivoOficio() throws JSONException {
+		System.out.println("\n\nDesde AdminOficio.eliminaArchivoOficio");
+		JsonNode json = request().body().asJson();
+		System.out.println(json);
+		int tipo = json.findValue("tipo").asInt();
+		Long idArchivo = json.findValue("idArchivo").asLong();
+		JSONObject retorno = new JSONObject();
+
+		// Usando generics
+
+		try {
+			if (tipo == 1)
+				OficioImagen.find.byId(idArchivo).delete();
+			if (tipo == 2)
+				OficioRespuesta.find.byId(idArchivo).delete();
+			if (tipo == 3)
+				OficioMinuta.find.byId(idArchivo).delete();
+			if (tipo == 4)
+				OficioGuion.find.byId(idArchivo).delete();
+			if (tipo == 5)
+				OficioEntradaSalida.find.byId(idArchivo).delete();
+			if (tipo == 6)
+				OficioBitacora.find.byId(idArchivo).delete();
+			if (tipo == 7)
+				OficioEvidenciaEntrega.find.byId(idArchivo).delete();
+			if (tipo == 8)
+				OficioEncuesta.find.byId(idArchivo).delete();
+			retorno.put("eliminado", true);
+		}catch (Exception e){
+			retorno.put("eliminado", false);
+		}
+		return ok(retorno.toString());
 	}
 
 }

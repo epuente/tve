@@ -53,22 +53,22 @@ public class Oficio  extends models.utils.PlantillaModelo{
 	@OneToMany(mappedBy = "oficio", cascade = CascadeType.ALL)
 	public List<OficioGuion> guiones;
 
-	@OneToOne(mappedBy = "oficio", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "oficio", cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
 	public OficioEntradaSalida entradassalida;
 
 	@OneToMany(mappedBy = "oficio", cascade = CascadeType.ALL)
 	public List<OficioBitacora> bitacoras;
 
-	@OneToOne(mappedBy = "oficio", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "oficio", cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
 	public OficioEvidenciaEntrega evidenciaentrega;
 
-	@OneToOne(mappedBy = "oficio", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "oficio", cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
 	public OficioEncuesta encuesta;
 	
 	@Column(length=600)
 	public String observacion;
 
-	
+
 	@OneToMany(mappedBy="oficio", cascade=CascadeType.ALL)
 	public List<OficioFechaGrabacion> fechagrabaciones;	
 	
@@ -95,6 +95,21 @@ public class Oficio  extends models.utils.PlantillaModelo{
             options.put(c.id.toString(), c.descripcion);
         }
         return options;
-    }   
-	
+    }
+
+	public boolean tieneArchivos() {
+		boolean retorno =false;
+		if ( !this.imagenes.isEmpty()
+				|| !this.oficiosrespuestas.isEmpty()
+				|| !this.minutas.isEmpty()
+				|| !this.guiones.isEmpty()
+				|| this.entradassalida != null
+				|| !this.bitacoras.isEmpty()
+				|| this.evidenciaentrega!=null
+				|| this.encuesta!=null
+			)
+			retorno = true;
+
+		return retorno;
+	}
 }

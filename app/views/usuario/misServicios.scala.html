@@ -1,7 +1,7 @@
 @(estado:Long, numFolio:Long)
 @import helper._
 
-@estado  @numFolio
+..
 @main{
 	<style>
 	.vbottom{
@@ -172,7 +172,15 @@
             },
             deferRender: true,
             "columns": [
-                {"data": "folio"},
+                {"data": "folio",
+                    "render": function(data, type, row, meta){
+                        var r = data;
+                        if ( row["tieneArchs"]==true )
+                            r+= "<div style=\"cursor:pointer; text-align:center;\"><a onclick='javascript:modalVerArchivosOficio("+row["oficioId"]+")'><i class=\"fa fa-eye fa-lg\" aria-hidden=\"true\"></i></a></div>";
+                        return r;
+                    }
+
+                },
                 {"data": "ur",          "visible": true,    "searchable": true},
                 {"data": "descripcion"},
                 {"data": "estado",      "visible": true,   "searchable": false,     "sortable":false},

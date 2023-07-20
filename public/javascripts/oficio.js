@@ -1,4 +1,5 @@
 const tiposArchivos = ["Oficio", "Oficio de respuesta", "Minuta de acuerdo", "Guión o escaleta", "Entrada/salida material", "Bitácora", "Evidencia de entrega", "Encuesta satisfacción"];
+const descripcion = ["", "respuesta", "minuta", "guion", "entrada", "bitacora", "evidencia", "encuesta"]
 const tiposArchivosCardinalidad = [1,1, 3,10, 1,10, 1,1];
 
 
@@ -69,17 +70,7 @@ $('#frmAux').validator().on('submit', function (e) {
                             var fechaString =  moment($(this).find("input[name='fechagrabaciones.fecha']").val(),"DD/MM/YYYY").format("YYYY-MM-DD");
                             var inicioString = moment(fechaString+" "+$(this).find("input[name='fechagrabaciones.inicio']").val()).format("YYYY-MM-DD HH:mm:ss");
                             var finString =    moment(fechaString+" "+$(this).find("input[name='fechagrabaciones.fin']").val()).format("YYYY-MM-DD HH:mm:ss");
-                            //var finString =    fechaString+" "+$(this).find("input[name='fechagrabaciones.fin']").val()+":00";
 
-                            /*
-                            if (inicioString.length>0){
-                                $(this).find("input[name='fechagrabaciones.inicio']" ).attr("name", "fechagrabaciones["+ifg+"].inicio").val( inicioString );
-                                if (finString.length>0){
-                                    $(this).find("input[name='fechagrabaciones.fin']").attr("name", "fechagrabaciones["+ifg+"].fin").val( finString );
-                                }
-                                ifg++;
-                            }
-                            */
                         });
                     }
                 });
@@ -136,127 +127,21 @@ $('#frmAux').validator().on('submit', function (e) {
 
 
                 e.preventDefault();
-                var fdata = new FormData( $("form")[0]  );
-                $.each($(":input"), function(i, componente) {
-                  var nombreCampo = $(componente).prop("name");
-                  var valorCampo = $(componente).val();
-                  var tipoComponente = $(componente).prop("type");
-                  if (nombreCampo!=""){
-                    if (tipoComponente=="checkbox"){
-                            if ($(componente).is(":checked")) {
-                                fdata.append(nombreCampo, valorCampo);
-                                //console.log( "nombre "+tipoComponente+" - "+(tipoComponente=="checkbox")+"  "+  nombreCampo+" -> "+valorCampo )
-                            }
-                    } else {
-                        fdata.append(nombreCampo, valorCampo);
-                    }
-                  }
-                });
-
-
-                /////{"productoressolicitados":[{"personal":{"id":45}},{"personal":{"id":21}}]}
-
-                var remitenteId = fdata.get("urremitente.id");
-                var arr1 = [];
-                var arr2 = [];
-                var arr3 = [];
-
-                // Productores solicitados
-                $("[type='checkbox'][name^='productoresSolicitados']").each(function(i,c){
-                    var aux1 = {};
-                    aux1={"personal":{"id":$(c).val()}};
-                    arr1[i]=aux1;
-                });
-
-                // Servicios solicitados
-                $("[type='checkbox'][name^='servicios[']").each(function(is,cs){
-                    var aux2 = {};
-                    aux2={"servicio":{"id":$(cs).val()}};
-                    arr2[is]=aux2;
-                });
-
-
-                // Fechas de grabacion
-                console.log("antede del loop divFechasGrabacion.row")
-                $("#divFechasGrabacion").find(".row").each(function(ifg, fg){
-                    var aux3={};
-                    var fechaString =  moment($(this).find("input[name='fechagrabaciones.fecha']").val(),"DD/MM/YYYY").format("YYYY-MM-DD");
-                    var inicioString = fechaString+"T"+$(this).find("input[name='fechagrabaciones.inicio']").val()+":00.000-06:00";
-                    var finString =    fechaString+"T"+$(this).find("input[name='fechagrabaciones.fin']").val()+":00.000-06:00";
-
-
-
-//						moment($(this).find("input[name='fechagrabaciones.fecha']").val(),"DD/MM/YYYY").format("YYYY-MM-DD");
-
-                //	var dia = moment($(fg).find("input[name='fechagrabaciones.fecha']").val(), "DD/MM/YYYY").format("YYYY-MM-DD")+"'T'";
-                    console.log("   en el loop divFechasGrabacion.row")
-                    aux3 = {
-                            //"inicio": dia+$(fg).find("input[name='fechagrabaciones.inicio']").val()+":00.000'Z'",
-                            //"fin": dia+$(fg).find("input[name='fechagrabaciones.fin']").val()+":00.000'Z'"
-                            "inicio": inicioString, "fin":finString
-                            }
-                    arr3[ifg]=aux3;
-
-                });
-
-
-
-                console.dir(fdata);
-                for (const pair of fdata.entries()) {
-                      console.log(`${pair[0]}, ${pair[1]}`);
-                    }
-
-                const formDataObj = {};
-                fdata.forEach((value, key) => {
-                        if (!key.startsWith("csrfToken") &&
-                            !key.startsWith("urremitente.id") &&
-                            !key.startsWith("servicios[") &&
-                            !key.startsWith("productoresSolicitados[") &&
-                            !key.startsWith("auxContactos") &&
-                            !key.startsWith("contactos") &&
-                            !key.startsWith("fechagrabaciones") &&
-                            !key.startsWith("daterangepicker")
-                            ){
-
-                                formDataObj[key] = value;
-                               console.debug("se agregó "+key)
-                            }
-                               else
-                               console.debug("se descartó "+key)
-                    });
-
-                formDataObj["urremitente"] ={id: remitenteId};
-                formDataObj["productoresSolicitados"] = arr1;
-                formDataObj["servicios"] = arr2;
-                formDataObj["contactos"] = arrAuxC;
-                formDataObj["fechagrabaciones"] =arr3;
-                console.dir(formDataObj);
-
-
-                //var file = $('#oficioArchivo').get(0).files[0];
-                //var file2 = $('#oficioArchivoRespuesta').get(0).files[0];
-
-
-
-
-                var formData = new FormData($("#frmAux")[0]);
-                //formData.append('file', file);
-                //formData.append('file2', file2);
-
 
                 // Archivos del Oficio
+                var formData = new FormData($("#frmAux")[0]);
+                console.debug("num input file "+$("div[name='copiaBaseArchivo']").find("input[type='file']").length)
                 $("div[name='copiaBaseArchivo']").find("input[type='file']").each(function(i,e){
                     var id = $(e).attr("id");
                     var aux = id.split("-");
                     var tipo = aux[1];
                     var secuencia = aux[2];
                     formData.append('file'+id, $(e).get(0).files[0]);
-                    console.log ("... agregando "+id)
+                   // fdata.append('file'+id, $(e).get(0).files[0]);
+                    console.log ("  ... agregando "+id)
                 });
 
-                console.debug("  sfilefileOficioArchivo-1-1 "+formData.get("sfilefileOficioArchivo-1-1"))
-
-                //  return false;
+                //return false;
 
                 $.each($("#frmAux:input"), function(i, componente) {
                   var nombreCampo = $(componente).prop("name");
@@ -334,92 +219,13 @@ $('#frmAux').validator().on('submit', function (e) {
                            }
                     });
                 }
-//return false;
 
-                //console.dir(  JSON.stringify(formDataObj)  )
-
-
-/*	            	
-                if ( $("#operacionFormulario").data("operacion")=="create" ){
-                        //var $x=LlamadaAjax("/oficio/save2","POST", JSON.stringify(formDataObj));
-
-
-                           var file = $('#oficioArchivo').get(0).files[0];
-                           var formData = new FormData();
-                           formData.append('file', file);
-                        var $x=LlamadaAjaxSerialize("/oficio/save","POST", formData);
-                        $.when($x).done(function(d){
-                            console.log(d);
-                            if (d.estado=="ok"){
-                                $.notify({
-                                    title: "<strong>Correcto:</strong> ",
-                                    message: "Se creó el oficio "+formDataObj["oficio"]
-                                },{
-                                    type: 'success'
-                                });
-
-
-                                swal({
-                                    title: "¿Asignar folio al oficio "+formDataObj["oficio"]+"?",
-                                    html: "El oficio ya ha sido guardado.</br><div style='margin:5px;'>¿Desea asignarle un folio?</dir></br></br> "+
-                                            "<a href='/folio/"+d.id+"' class='btn btn-primary' role='button'>Si, asignar folio</a>"+
-                                            "<a href='/oficios' class='btn btn-warning' role='button'>No, continuar con oficios</a>",
-                                    icon: "question",
-                                    showCancelButton: false,
-                                    showConfirmButton: false,
-                                    confirmButtonColor: "#d33",
-                                    cancelButtonColor: '#3085d6',
-                                    confirmButtonText: "Si",
-                                    cancelButtonText: "No",
-                                    focusConfirm: false,
-                                    preConfirm: ()=>{
-                                            console.log("------------------------------------------- ")
-
-                                    },
-                                    preDeny: ()=>{
-
-                                            console.log("* * * * * ");
-                                        }
-                                  }), function (dismiss) {
-                                        if (dismiss === 'cancel') {
-                                            console.log(".....................");
-                                        }
-                                    }
-
-
-
-                            }
-                        });
-                }
-                */
                 if ( $("#operacionFormulario").data("operacion")=="edit" ){
-                    /*
-                        var $x=LlamadaAjax("/oficio/update2","POST", JSON.stringify(formDataObj));
-                        $.when($x).done(function(d){
-                            console.log(d);
-                            if (d.estado=="ok"){
-                                $.notify({
-                                    title: "<strong>Correcto:</strong> ",
-                                    message: "Se actualizó el oficio "+formDataObj["oficio"]
-                                },{
-                                    type: 'success'
-                                });
-                            }
-                            if (d.estado=="error"){
-                                $.notify({
-                                    title: "<strong>Error:</strong> ",
-                                    message: "No fue posible actualizar el oficio "+formDataObj["oficio"]
-                                },{
-                                    type: 'error'
-                                });
 
-                            }
-                        });
-                        */
 
 
                     console.debug(formData);
-                    return false;
+                    //return false;
                     $.ajax({
                            url: '/oficio/update/'+$("#operacionFormulario").data("idedicion"),
                            data: formData,
@@ -437,14 +243,14 @@ $('#frmAux').validator().on('submit', function (e) {
                                 if (data.estado=="ok"){
                                         $.notify({
                                             title: "<strong>Correcto:</strong> ",
-                                            message: "Se actualizó el oficio "+formDataObj["oficio"]
+                                            message: "Se actualizó el oficio "+$("#oficio").val()
                                         },{
                                             type: 'success'
                                         });
                                         setTimeout(
                                           function()
                                           {
-                                              $("ol.breadcrumb>li>a")[0].click();
+                                             $("ol.breadcrumb>li>a")[0].click();
                                           }, 2000);
                                 }
                             }
@@ -685,8 +491,8 @@ function subirArchivo2(c){
 }
 
 function clonarBaseArchivo(tipo, filename, id){
-    if ( $("#ajaxEdoInicialArchivos").find("div[name='copiaBaseArchivo']").length==0)
-        $("#ajaxEdoInicialArchivos").html("");
+    // if ( $("#ajaxEdoInicialArchivos").find("div[name='copiaBaseArchivo']").length==0)
+    //     $("#ajaxEdoInicialArchivos").html("");
     var copia = $("#divBaseArchivo").clone(false);
     var secuencial = ($("input[type='file'][id^='fileOficioArchivo-"+tipo+"']").length)+1
 
@@ -697,22 +503,24 @@ function clonarBaseArchivo(tipo, filename, id){
     $(copia).find("div[id='txtArchivo-0-0']").attr("id", "txtArchivo-"+tipo+"-"+secuencial).css("display","block");
 
     // Asigna el botón upload al input file
+    /*
     $(copia).find(".fa-file-upload").closest("a").attr("href", "javascript:$(\"#fileOficioArchivo-"+tipo+"-"+secuencial+"\").click()"  );
     $(copia).find(".fa-file-upload").closest("div").css("display","block")
+    */
 
     // Asigna funcion al boton de eliminar archivo
-    $(copia).find(".fa-minus-circle").closest("a").attr("href", "javascript:eliminaArchivo("+tipo+","+secuencial+");"  );
+    $(copia).find(".fa-minus-circle").closest("a").attr("href", "javascript:eliminaArchivo("+tipo+","+secuencial+", "+id+")"  );
     $(copia).find(".fa-minus-circle").closest("div").css("display","block")
 
     $(copia).find("#BaseArchivo").attr("name", "copiaBaseArchivo");
     $(copia).find("#BaseArchivo").removeAttr("id");
-//alert("filename "+filename)
+
     if (filename!=undefined){
         $(copia).find("#txtArchivo-"+tipo+"-"+secuencial).html("<small>"+filename+"</small>");
+        $((copia).find("#txtArchivo-"+tipo+"-"+secuencial)).attr("data-arch", id);
     }
-    //console.debug("clonado....   "+$(copia).html())
-    // return  {renglon: $(copia), secuencial: secuencial};
-    $(copia).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\"bitacora\")");
+
+    $(copia).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\""+descripcion[tipo-1]+"\")");
     $(copia).find(".fa-eye").closest("div").css("display", "block");
 
     if (  $("#archivos"+tipo).length==0 ){
@@ -729,6 +537,7 @@ function clonarBaseArchivo(tipo, filename, id){
 
 function subirArchivoNuevo(tipo){
     console.debug("Desde subirArchivoNuevo "+tipo);
+
     /*
     var aux = clonarBaseArchivo(tipo);
     var copia = aux.renglon.html();
@@ -939,239 +748,197 @@ function edoInicialArchivos(oficioId){
         var numTipoArchivo;
         console.debug("regresando oficioArchivos ...." )
         console.dir(data)
-/*
+
         // imagen (oficio digitalizado) - oneToMany
         numTipoArchivo = 1;
-        retorno +="<div id='archivos"+numTipoArchivo+"' style='display:none'>";
-        retorno +="    <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div>";
+        var agregados = 0;
         if (data.imagen!=undefined && data.imagen.length>0){
+            $("#archivos"+numTipoArchivo).css("display","none");
             data.imagen.forEach(function(a){
-                console.dir(a)
                 var id = a.id;
                 var nomArchivo = a.nombrearchivo;
-                var r = clonarBaseArchivo(numTipoArchivo, nomArchivo).renglon;
-                $(r).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\"\")");
-                $(r).find(".fa-eye").closest("div").css("display", "block");
-                retorno += $(r).html();
+                clonarBaseArchivo(numTipoArchivo, nomArchivo, id);
+                agregados++;
             });
         }
         if (data.imagen==undefined){
-             retorno+="<div class='row'>"+
-                            "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div>";
-             retorno +="</div>";
+             $("#ajaxEdoInicialArchivos").append( "<div id='archivos"+numTipoArchivo+"' style='display:none'>       <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div></div>"  );
+             $("#archivos"+numTipoArchivo).append("<div class='row'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div></div>");
         }
-        retorno +="</div>";
-        retorno +="</div>";
+        $("#archivos"+numTipoArchivo).append(botonAgregarMas(numTipoArchivo, agregados));
+
+
 
         // respuesta (oficio de respuesta) - oneToMany
         numTipoArchivo = 2;
-        retorno +="<div id='archivos"+numTipoArchivo+"' style='display:none'>";
-        retorno +="    <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div>";
+        var agregados = 0;
         if (data.respuesta!=undefined && data.respuesta.length>0){
+            $("#archivos"+numTipoArchivo).css("display","none");
             data.respuesta.forEach(function(a){
                 console.dir(a)
                 var id = a.id;
                 var nomArchivo = a.nombrearchivo;
-                var r = clonarBaseArchivo(numTipoArchivo, nomArchivo).renglon;
-                $(r).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\"respuesta\")");
-                $(r).find(".fa-eye").closest("div").css("display", "block");
-                //subirArchivoNuevo(numTipoArchivo);
-                retorno += $(r).html();
+                clonarBaseArchivo(numTipoArchivo, nomArchivo, id);
+                agregados++;
             });
         }
         if (data.respuesta==undefined){
-             retorno+="<div class='row'>"+
-                            "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div>";
-             retorno +="</div>";
+             $("#ajaxEdoInicialArchivos").append( "<div id='archivos"+numTipoArchivo+"' style='display:none'>       <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div></div>"  );
+             $("#archivos"+numTipoArchivo).append("<div class='row'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div></div>");
         }
-        retorno +="</div>";
-        retorno +="</div>";
-*/
+        $("#archivos"+numTipoArchivo).append(botonAgregarMas(numTipoArchivo, agregados));
+
+
         // minuta - OneToMany
         numTipoArchivo = 3;
-        //retorno +="<div id='archivos"+numTipoArchivo+"' style='display:none'>";
-        //retorno +="    <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div>";
+        var agregados = 0;
         console.debug("data.minuta "+data.minuta)
-        //console.debug("data.minuta.length "+data.minuta.length)
         if (data.minuta!=undefined && data.minuta.length>0){
-            var agregados = 0;
             data.minuta.forEach(function(a){
                 console.dir(a)
                 var id = a.id;
                 var nomArchivo = a.nombrearchivo;
                 clonarBaseArchivo(numTipoArchivo, nomArchivo,id);
-                //$(r).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\"minuta\")");
-                //$(r).find(".fa-eye").closest("div").css("display", "block");
                 agregados++;
-                //retorno += $(r).html();
             });
-            retorno+= botonAgregarMas(numTipoArchivo, agregados);
         }
         if (data.minuta==undefined){
-             retorno+=""+
-                            "";
-             retorno +="";
              $("#ajaxEdoInicialArchivos").append( "<div id='archivos"+numTipoArchivo+"' style='display:none'>       <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div></div>"  );
              $("#archivos"+numTipoArchivo).append("<div class='row'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div></div>");
-
         }
-        //retorno +="</div>";
-        //retorno +="</div>";
+        $("#archivos"+numTipoArchivo).append(botonAgregarMas(numTipoArchivo, agregados));
 
-/*
+
+
         // guion o escaleta - OneToMany
         numTipoArchivo = 4;
-        retorno +="<div id='archivos"+numTipoArchivo+"' style='display:none'>";
-        retorno +="    <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div>";
+        var agregados = 0;
         if (data.guion!=undefined && data.guion.length>0){
-            var agregados = 0;
             data.guion.forEach(function(a){
-                console.dir(a)
                 var id = a.id;
                 var nomArchivo = a.nombrearchivo;
-                var r = clonarBaseArchivo(numTipoArchivo, nomArchivo).renglon;
-                $(r).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\"guion\")");
-                $(r).find(".fa-eye").closest("div").css("display", "block");
+                clonarBaseArchivo(numTipoArchivo, nomArchivo, id);
                 agregados++;
-                retorno += $(r).html();
             });
-            retorno+= botonAgregarMas(numTipoArchivo, agregados);
         }
         if (data.guion==undefined){
-             retorno+="<div class='row'>"+
-                            "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div>";
-             retorno +="</div>";
+             $("#ajaxEdoInicialArchivos").append( "<div id='archivos"+numTipoArchivo+"' style='display:none'>       <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div></div>"  );
+             $("#archivos"+numTipoArchivo).append("<div class='row'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div></div>");
         }
-        retorno +="</div>";
-        retorno +="</div>";
+        $("#archivos"+numTipoArchivo).append(botonAgregarMas(numTipoArchivo, agregados));
 
         // entrada y salida de materiales - OneToOne
         numTipoArchivo = 5;
-        retorno +="<div id='archivos"+numTipoArchivo+"' style='display:none'>";
-        retorno +="    <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div>";
-
+        var agregados = 0;
         if (data.entrada!=undefined){
+            data.entrada.forEach(function(a){
+                console.debug("   -> "+data.entrada[0].nombrearchivo)
                 console.dir(data.entrada)
-                var id = data.entrada.id;
-                var nomArchivo = data.entrada.nombrearchivo;
-                var r = clonarBaseArchivo(numTipoArchivo, nomArchivo).renglon;
-                $(r).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\"entrada\")");
-                $(r).find(".fa-eye").closest("div").css("display", "block");
-                retorno += $(r).html();
+                var id = a.id;
+                var nomArchivo = a.nombrearchivo;
+                clonarBaseArchivo(numTipoArchivo, nomArchivo, id);
+                agregados++;
+            });
         }
         if (data.entrada==undefined){
-             retorno+="<div class='row'>"+
-                            "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div>";
-             retorno +="</div>";
+             $("#ajaxEdoInicialArchivos").append( "<div id='archivos"+numTipoArchivo+"' style='display:none'>       <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div></div>"  );
+             $("#archivos"+numTipoArchivo).append("<div class='row'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div></div>");
         }
-        retorno +="</div>";
-        retorno +="</div>";
+        $("#archivos"+numTipoArchivo).append(botonAgregarMas(numTipoArchivo, agregados));
 
-        // bitacora - OneToMany
+        // 6 bitacora - OneToMany
         numTipoArchivo =6;
-        retorno +="<div id='archivos"+numTipoArchivo+"' style='display:none'>";
-        retorno +="    <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div>";
+        var agregados = 0;
+        console.debug("BITACORA "+data.bitacora)
         if (data.bitacora!=undefined && data.bitacora.length>0){
-            var agregados = 0;
             data.bitacora.forEach(function(a){
-                console.dir(a)
                 var id = a.id;
                 var nomArchivo = a.nombrearchivo;
-                // var r = clonarBaseArchivo(numTipoArchivo, nomArchivo).renglon;
                 clonarBaseArchivo(numTipoArchivo, nomArchivo, id);
-                //$(r).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\"bitacora\")");
-                //$(r).find(".fa-eye").closest("div").css("display", "block");
                 agregados++;
-               // retorno += $(r).html();
             });
-            //retorno+= botonAgregarMas(numTipoArchivo, agregados);
         }
         if (data.bitacora==undefined){
-             retorno+="<div class='row'>"+
-                            "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div>";
-             retorno +="</div>";
+             $("#ajaxEdoInicialArchivos").append( "<div id='archivos"+numTipoArchivo+"' style='display:none'>       <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div></div>"  );
+             $("#archivos"+numTipoArchivo).append("<div class='row'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div></div>");
         }
-        /*
-        retorno +="</div>";
-        retorno +="</div>";
+        $("#archivos"+numTipoArchivo).append(botonAgregarMas(numTipoArchivo, agregados));
 
-        // evidencia de entrega - OneToMany
+
+        // 7 evidencia de entrega - OneToMany
         numTipoArchivo =7;
-        retorno +="<div id='archivos"+numTipoArchivo+"' style='display:none'>";
-        retorno +="    <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div>";
+        var agregados = 0;
         if (data.evidencia!=undefined && data.evidencia.length>0){
-            var agregados =0;
-            data.bitacora.forEach(function(a){
-                console.dir(a)
+            data.evidencia.forEach(function(a){
                 var id = a.id;
                 var nomArchivo = a.nombrearchivo;
-                var r = clonarBaseArchivo(numTipoArchivo, nomArchivo).renglon;
-                $(r).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\"evidencia\")");
-                $(r).find(".fa-eye").closest("div").css("display", "block");
+                clonarBaseArchivo(numTipoArchivo, nomArchivo, id);
                 agregados++;
-                retorno += $(r).html();
             });
-            retorno+= botonAgregarMas(numTipoArchivo, agregados);
         }
         if (data.evidencia==undefined){
-             retorno+="<div class='row'>"+
-                            "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div>";
-             retorno +="</div>";
+            $("#ajaxEdoInicialArchivos").append( "<div id='archivos"+numTipoArchivo+"' style='display:none'>       <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div></div>"  );
+             $("#archivos"+numTipoArchivo).append("<div class='row'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div></div>");
         }
-        retorno +="</div>";
-        retorno +="</div>";
+        $("#archivos"+numTipoArchivo).append(botonAgregarMas(numTipoArchivo, agregados));
 
-        // encuesta de satisfacción - OneToMany
+        // 8 encuesta de satisfacción - OneToMany
         numTipoArchivo =8;
-        retorno +="<div id='archivos"+numTipoArchivo+"' style='display:none'>";
-        retorno +="    <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div>";
+        var agregados = 0;
         if (data.encuesta!=undefined && data.encuesta.length>0){
-            var agregados=0;
-            data.bitacora.forEach(function(a){
-                console.dir(a)
+            data.encuesta.forEach(function(a){
                 var id = a.id;
                 var nomArchivo = a.nombrearchivo;
-                var r = clonarBaseArchivo(numTipoArchivo, nomArchivo).renglon;
-                $(r).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\"encuesta\")");
-                $(r).find(".fa-eye").closest("div").css("display", "block");
+                clonarBaseArchivo(numTipoArchivo, nomArchivo, id);
                 agregados++;
-                retorno += $(r).html();
             });
-            retorno+= botonAgregarMas(numTipoArchivo, agregados);
         }
         if (data.encuesta==undefined){
-             retorno+="<div class='row'>"+
-                            "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div>";
-             retorno +="</div>";
+             $("#ajaxEdoInicialArchivos").append( "<div id='archivos"+numTipoArchivo+"' style='display:none'>       <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[numTipoArchivo-1]+"</div></div></div>"  );
+             $("#archivos"+numTipoArchivo).append("<div class='row'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+numTipoArchivo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div></div>");
         }
-        retorno +="</div>";
-        retorno +="</div>";
-        */
-        //d.resolve(retorno);
-      //  $("#ajaxEdoInicialArchivos").html(retorno);
-    }); // fin del when
+        $("#archivos"+numTipoArchivo).append(botonAgregarMas(numTipoArchivo, agregados));
 
+        $("div[id^='archivos']").css("display","none");
+
+    }); // fin del when
 }
 
 
-function eliminaArchivo(tipo, secuencia){
+function eliminaArchivo(tipo, secuencia, idArchivo){
     console.debug("Desde eliminaArchivo "+tipo+"-"+secuencia)
-    e = $("#fileOficioArchivo-"+tipo+"-"+secuencia).closest("div.row");
-    console.debug("e tam "+e.length)
-    e.remove();
-    var contador = $("input[type='file'][id^='fileOficioArchivo-"+tipo+"']").length;
-    console.debug("contador "+contador)
-    var auxTipo = tiposArchivos[tipo-1];
-    if (contador ==0 ){
-         retorno="<div class='row'>"+
-                        "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+tipo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div>" +
-                    "</div>";
-         console.debug(retorno)
-         $("#archivos"+tipo).find("row:gt(1)").remove();
-         $("#archivos"+tipo).append(retorno);
-     } else {
-        $("#archivos"+tipo).append(  botonAgregarMas(tipo, contador)  );
-     }
+    // Eliminar de la tabla
+    $b = LlamadaAjax("/eliminaArchivoOficio", "POST", JSON.stringify({"tipo":tipo, "idArchivo": idArchivo}));
+    $.when($b).done(function(data){
+        console.dir(data)
+        if (data.eliminado){
+            e = $("#fileOficioArchivo-"+tipo+"-"+secuencia).closest("div.row");
+            console.debug("e tam "+e.length)
+            e.remove();
+            var contador = $("input[type='file'][id^='fileOficioArchivo-"+tipo+"']").length;
+            console.debug("contador "+contador)
+            var auxTipo = tiposArchivos[tipo-1];
+            // Elimina botón de agregar otro archivo
+             $("#archivos"+tipo).find("button[name='btnAgregarOtroArchivo']").remove();
+            if (contador ==0 ){
+                 retorno="<div class='row'>"+
+                                "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+tipo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div>" +
+                            "</div>";
+                 console.debug(retorno)
+                 $("#archivos"+tipo).find("row:gt(1)").remove();
+                 $("#archivos"+tipo).append(retorno);
+             } else {
+                $("#archivos"+tipo).append(  botonAgregarMas(tipo, contador)  );
+             }
+        } else {
+                swal(
+                        'Error',
+                        'nO FUE POSIBLE ELIMINAR EL ARCHIVO',
+                        'error'
+                      )
+        }
+
+    });
 
 
 }
@@ -1179,16 +946,14 @@ function eliminaArchivo(tipo, secuencia){
 
 function botonAgregarMas(tipo, cantidad){
     var retorno = "";
-            console.debug("cantidad de file "+tipo+":"+cantidad)
-            console.debug("tiposArchivosCardinalidad[tipo-1] "+tiposArchivosCardinalidad[tipo-1])
-              if ( tiposArchivosCardinalidad[tipo-1]>1 && cantidad < tiposArchivosCardinalidad[tipo-1]){
-
-                if (cantidad <= tiposArchivosCardinalidad[tipo-1]){
-                    retorno = "<div class='center-block'><button name='btnAgregarOtroArchivo' class='btn btn-sm btn-primary btn-block' type='button' style='margin-top:0.8em;' onclick='subirArchivoNuevo("+tipo+")'>Agregar otro archivo</button></div>";
-                }
-                //$("#archivos"+numTipoArchivo).append(boton);
-
-              }
-              console.log("botonAgregarMas regresa.... "+retorno)
+    console.debug("cantidad de file "+tipo+":"+cantidad)
+    console.debug("tiposArchivosCardinalidad[tipo-1] "+tiposArchivosCardinalidad[tipo-1])
+      if ( cantidad >0 && tiposArchivosCardinalidad[tipo-1]>1 && cantidad < tiposArchivosCardinalidad[tipo-1]){
+        if (cantidad <= tiposArchivosCardinalidad[tipo-1]){
+            retorno = "<div class='center-block'><button name='btnAgregarOtroArchivo' class='btn btn-sm btn-primary btn-block' type='button' style='margin-top:0.8em;' onclick='subirArchivoNuevo("+tipo+")'>Agregar otro archivo</button></div>";
+        }
+        //$("#archivos"+numTipoArchivo).append(boton);
+      }
+      console.log("botonAgregarMas regresa.... "+retorno)
     return retorno;
 }

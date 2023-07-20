@@ -54,7 +54,7 @@ public class Personal  extends models.utils.PlantillaModelo{
 	@OneToMany (mappedBy="personal", cascade=CascadeType.ALL)
 	public List<PersonalCorreo> correos;
 	
-	@OneToOne(mappedBy="personal", cascade=CascadeType.ALL)
+	@OneToOne(mappedBy = "personal", cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
 	public PersonalAvatar avatar;
 	
 	public static Model.Finder<Long,Personal> find = new Model.Finder<Long,Personal>(Long.class, Personal.class);

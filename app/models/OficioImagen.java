@@ -5,8 +5,11 @@ import javax.persistence.ManyToOne;
 
 import models.utils.PlantillaArchivo;
 import play.db.ebean.Model;
+
+import java.io.Serializable;
+
 @Entity
-public class OficioImagen  extends PlantillaArchivo {
+public class OficioImagen  extends PlantillaArchivo implements Serializable {
 	@ManyToOne
 	public Oficio oficio;
 

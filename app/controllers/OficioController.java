@@ -39,19 +39,19 @@ public class OficioController extends Controller{
 		int numRegistros = Integer.parseInt(request().getQueryString("length"));
 		
 		Query<Oficio> q1 = Oficio.find;
-		Query<Oficio> q2 = Oficio.find.where("oficio like :cadena "
-				+ "or urremitente.nombreLargo like :cadena "
-				+ "or descripcion like :cadena")
-				.setParameter("cadena", "%"+filtro+"%")	;
+		Query<Oficio> q2 = Oficio.find.where("lower(oficio) like :cadena "
+				+ "or lower(urremitente.nombreLargo) like :cadena "
+				+ "or lower(descripcion) like :cadena")
+				.setParameter("cadena", "%"+filtro.toLowerCase()+"%")	;
 		
 		Page<Oficio> oficios = Oficio.find				
 				.fetch("urremitente")
 				.fetch("folios")
-				.where("oficio like :cadena "
-						+ "or urremitente.nombreLargo like :cadena "
-						+ "or descripcion like :cadena "
-						+ "or titulo like :cadena")
-				.setParameter("cadena", "%"+filtro+"%")
+				.where("lower(oficio) like :cadena "
+						+ "or lower(urremitente.nombreLargo) like :cadena "
+						+ "or lower(descripcion) like :cadena "
+						+ "or lower(titulo) like :cadena")
+				.setParameter("cadena", "%"+filtro.toLowerCase()+"%")
 			 	.orderBy( listaCols.get(colOrden) +" "+tipoOrden )
 				.findPagingList(numRegistros)
 				.setFetchAhead(false)

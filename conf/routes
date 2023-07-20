@@ -272,5 +272,6 @@ GET     /ingesta                            controllers.UsuarioController.ingest
 POST    /ajaxBuscaFolioProductorAsignado    controllers.AdminFolioController.ajaxBuscaFolioProductorAsignado()
 POST    /eliminaFolio                       controllers.AdminFolioController.eliminaFolio()
 POST    /cancelaFolio                       controllers.AdminFolioController.cancelaFolio()
+POST    /eliminaArchivoOficio               controllers.AdminOficioController.eliminaArchivoOficio()
 
 POST    /rolPorFase                         controllers.UsuarioController.rolPorFase()

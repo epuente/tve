@@ -565,6 +565,8 @@ public class UsuarioController extends ControladorSeguro{
                         datoP.put("id", p.id);
                         datoP.put("folio", p.numfolio);
                         datoP.put("folioId", p.id);
+                        datoP.put("oficioId",  p.oficio.id );
+                        datoP.put("tieneArchs",  p.oficio.tieneArchivos() );
                         datoP.put("ur", p.oficio.urremitente.nombreLargo);
 
                         for (FolioProductorAsignado prod : p.productoresAsignados) {
@@ -3594,7 +3596,7 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
                 jaAux = new JSONArray(new ArrayList<String>());
             } else
                 jaVacios.put(3);
-            // guiones
+            // 4 guiones
             if (o !=null  &&  o.guiones.size()>0) {
                 for (OficioGuion a : o.guiones) {
                     JSONObject jo = new JSONObject();
@@ -3608,7 +3610,8 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
                 jaAux = new JSONArray(new ArrayList<String>());
             } else
                 jaVacios.put(4);
-            // entradassalida
+
+            // 5 entradassalida OneToOne
             if (o !=null  &&  o.entradassalida != null) {
                 JSONObject jo = new JSONObject();
                 jo.put("tipo", "Entradas y salidas");
@@ -3616,10 +3619,12 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
                 jo.put("nombrearchivo", o.entradassalida.nombrearchivo);
                 jo.put("fecha", o.entradassalida.auditUpdate);
                 jaAux.put(jo);
-                joRetorno.put("guion", jaAux);
+                joRetorno.put("entrada", jaAux);
                 jaAux = new JSONArray(new ArrayList<String>());
             } else
                 jaVacios.put(5);
+
+
             // bitacoras
             if (o !=null  &&  o.bitacoras.size()>0) {
                 for (OficioBitacora a : o.bitacoras) {
@@ -3665,6 +3670,7 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
         } catch (JSONException e) {
             System.out.println("Error de JSON en UsuarioController.folioArchivos "+e);
         }
+        Logger.debug("oficioArchivos regresa:  "+joRetorno.toString());
         return ok(joRetorno.toString());
     }
 
