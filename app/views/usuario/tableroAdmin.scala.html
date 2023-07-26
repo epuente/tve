@@ -209,54 +209,99 @@
 				</div>
 			</div>
 		</div>
-		
-            <div class="row" id="divPanelFechasCaducadas" style="display: none;" >
-                <div class="col-sm-12 col-md-12 col-lg-12"  >
-                    <div class="x_panel">
-                    <div class="x_title">
-                            <h2>Fechas caducadas</h2>
-                            <ul class="nav navbar-right panel_toolbox">
-                                 <li><a class="collapse-link"><i class="fa fa-chevron-up" name="iconClosePanel"></i></a>
-                                 </li>
-                                 <li><a class="close-link"><i class="fas fa-times"></i></a>
-                                 </li>
-                            </ul>
-                            <div class="clearfix"></div>
-                          </div>
 
-                        <div class="x_content">
-                          <div style="margin-bottom: 17px">
-                              <h1 class="name_title"></h1>
-                              <div id="fechasCaducadas"></div>
-                              
-                              <div class="center-block">
-                                <button class="btn btn-success btn-lg" onclick="javascript:terminar(0,'grupo')"><i class="far fa-star"></i> Marcar todos como terminados</button>
-                                
-                              </div>
-                              
-                              
-                              <div class="divider"></div>
-                              <div id="divFeCad">
-					            <table class='table table-bordered table-striped jambo_table bulk_action order-column dataTable no-footer' id='tablaCaducos'>
-					               <thead>
-					                   <tr>
-					                        <th>Folio</th>
-							                <th>Descripción</th>
-							                <th>Fase</th>           
-							                <th>Fecha</th>
-							                <th>Desde</th>
-							                <th>Hasta</th>
-							                <th></th>
-					                   </tr>        
-					              </thead>
-					              <tbody></tbody>
-					              </table>
-                              </div>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-            </div>	
+		<div class="row" id="divPanelFechasCaducadasPreAgenda" style="display: none;" >
+			<div class="col-sm-12 col-md-12 col-lg-12"  >
+				<div class="x_panel">
+					<div class="x_title">
+						<h2>Fechas caducadas en preagenda</h2>
+						<ul class="nav navbar-right panel_toolbox">
+							<li><a class="collapse-link"><i class="fa fa-chevron-up" name="iconClosePanel"></i></a>
+							</li>
+							<li><a class="close-link"><i class="fas fa-times"></i></a>
+							</li>
+						</ul>
+						<div class="clearfix"></div>
+					</div>
+
+					<div class="x_content">
+						<div style="margin-bottom: 17px">
+							<h1 class="name_title"></h1>
+							<div id="fechasCaducadasPreAgenda"></div>
+
+
+
+
+							<div class="divider"></div>
+							<div id="divFeCadPreAgenda">
+								<table class='table table-bordered table-striped jambo_table bulk_action order-column dataTable no-footer' id='tablaCaducosPreAgenda'>
+									<thead>
+									<tr>
+										<th>Folio</th>
+										<th>Descripción</th>
+										<th>Fase</th>
+										<th>Fecha</th>
+										<th>Desde</th>
+										<th>Hasta</th>
+										<th></th>
+									</tr>
+									</thead>
+									<tbody></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" id="divPanelFechasCaducadas" style="display: none;" >
+			<div class="col-sm-12 col-md-12 col-lg-12"  >
+				<div class="x_panel">
+				<div class="x_title">
+						<h2>Fechas caducadas</h2>
+						<ul class="nav navbar-right panel_toolbox">
+							 <li><a class="collapse-link"><i class="fa fa-chevron-up" name="iconClosePanel"></i></a>
+							 </li>
+							 <li><a class="close-link"><i class="fas fa-times"></i></a>
+							 </li>
+						</ul>
+						<div class="clearfix"></div>
+					  </div>
+
+					<div class="x_content">
+					  <div style="margin-bottom: 17px">
+						  <h1 class="name_title"></h1>
+						  <div id="fechasCaducadas"></div>
+
+						  <div class="center-block">
+							<button class="btn btn-success btn-lg" onclick="javascript:terminar(0,'grupo')"><i class="far fa-star"></i> Marcar todos como terminados</button>
+
+						  </div>
+
+
+						  <div class="divider"></div>
+						  <div id="divFeCad">
+							<table class='table table-bordered table-striped jambo_table bulk_action order-column dataTable no-footer' id='tablaCaducos'>
+							   <thead>
+								   <tr>
+										<th>Folio</th>
+										<th>Descripción</th>
+										<th>Fase</th>
+										<th>Fecha</th>
+										<th>Desde</th>
+										<th>Hasta</th>
+										<th></th>
+								   </tr>
+							  </thead>
+							  <tbody></tbody>
+							  </table>
+						  </div>
+					  </div>
+					</div>
+				</div>
+			</div>
+		</div>
 		
 		<div class="row" id="divPanelProximasFechas">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -305,7 +350,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div id="losCorreos"></div>
 
 
@@ -356,6 +401,7 @@
   function actualiza(data){
 	    	console.dir(data)
 	    	var auxFeCad="";
+	    	var auxFeCadPre="";
 	        $("#oficioAll").html( data.oficioAll  );
 	    	$("#asignados").html( data.soloAsignados  );
 	    	$("#solicitudes").html( data.solicitudes  );
@@ -453,7 +499,9 @@
 	    	});
 	    	
 	    	
-	    	// Actualiza el panel de fechas caducadas
+	    	// Actualiza el panel de fechas caducadas en agenda
+	    	console.log("fechas caducadas en agenda" )
+	    	console.dir(data.fechasCaducadas)
 	    	$("#divPanelFechasCaducadas").toggle(data.fechasCaducadas.length >0);
 	    	if (data.fechasCaducadas.length >0){	    	
 		    	$("#fechasCaducadas").html("<h5>Se encontraron "+data.fechasCaducadas.length+" fechas atrasadas que no se han terminado</h5>");
@@ -480,7 +528,7 @@
 		    		auxFeCad += "  <td>"+moment(v.fin,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("HH:mm")+"</td>";
 		    		auxFeCad += "  <td>";
 		    		auxFeCad += "       <a href='javascript:terminar("+v.id+",\"individual\")' style='padding-bottom: 5px; cursor: pointer; font-weight: bold;'><i class='far fa-star'></i></a>";
-		    		auxFeCad += "       <a href='javascript:cancelarEvento("+v.id+")' style='padding-bottom: 5px; cursor: pointer; font-weight: bold;'><i class='fas fa-ban'></i></a>";
+		    		auxFeCad += "       <a href='javascript:cancelarEvento(2,"+v.id+")' style='padding-bottom: 5px; cursor: pointer; font-weight: bold;'><i class='fas fa-ban'></i></a>";
 		    		auxFeCad += "  </td>";
 		    		auxFeCad += "</tr>";
 		    	});
@@ -489,7 +537,44 @@
 	            $("#divFeCad").html(  auxFeCad    );
 	    	}
 
-	    	
+
+			// Actualiza el panel de fechas caducadas en preagenda
+			console.log("fechas caducadas en preagenda")
+			console.dir(data.fechasCaducadasPreAgenda)
+			$("#divPanelFechasCaducadasPreAgenda").toggle(data.fechasCaducadasPreAgenda.length >0);
+			if (data.fechasCaducadasPreAgenda.length >0){
+				$("#fechasCaducadasPreAgenda").html("<h5>Se encontraron "+data.fechasCaducadasPreAgenda.length+" fechas atrasadas de solcitudes que no fueron autorizadas</h5>");
+				auxFeCadPre +="<table class='table table-bordered table-striped jambo_table bulk_action order-column dataTable no-footer' id='tablaCaducosPreAgenda'>";
+				auxFeCadPre += "  <thead>";
+				auxFeCadPre += "  <tr>";
+				auxFeCadPre += "    <th>Folio</th>";
+				auxFeCadPre += "    <th>Descripción</th>";
+				auxFeCadPre += "    <th>Fase</th>";
+				auxFeCadPre += "    <th>Fecha</th>";
+				auxFeCadPre += "    <th>Desde</th>";
+				auxFeCadPre += "    <th>Hasta</th>";
+				auxFeCadPre += "    <th></th>";
+				auxFeCadPre += "  </tr>";
+				auxFeCadPre += "  </thead>";
+				auxFeCadPre += "  <tbody>";
+				$.each(data.fechasCaducadasPreAgenda, function(i, v){
+					auxFeCadPre += "<tr id='fc-"+v.id+"'>";
+					auxFeCadPre += "  <td>"+v.folioproductorasignado.folio.numfolio+"</td>";
+					auxFeCadPre += "  <td>"+v.folioproductorasignado.folio.oficio.descripcion+"</td>";
+					auxFeCadPre += "  <td>"+v.fase.descripcion+"</td>";
+					auxFeCadPre += "  <td>"+moment(v.inicio,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("DD/MM/YYYY")+"</td>";
+					auxFeCadPre += "  <td>"+moment(v.inicio,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("HH:mm")+"</td>";
+					auxFeCadPre += "  <td>"+moment(v.fin,"YYYY-MM-DDTHH:mm:ss.SSSSZ").format("HH:mm")+"</td>";
+					auxFeCadPre += "  <td style='text-align: center;'>";
+					auxFeCadPre += "       <a href='javascript:cancelarEvento(1,"+v.id+")' data-toggle='tooltip'  title='Cancelar evento' style='padding-bottom: 5px; cursor: pointer; font-weight: bold;'><i class='fas fa-ban'></i></a>";
+					auxFeCadPre += "  </td>";
+					auxFeCadPre += "</tr>";
+				});
+				auxFeCadPre += "  </tbody>";
+				auxFeCadPre +="</table>";
+				$("#divFeCadPreAgenda").html(  auxFeCadPre    );
+			}
+
 	    	
 	    	// Actualiza el componente horizontaltimeline	    	
 	    	console.log("T A M ",data.eventosProximos.length)
@@ -604,48 +689,53 @@
 		
   }
   
-  function cancelarEvento(servicioId){
-		// Generalas opciones para motivo de cancelación  
-		  var inputOptionsPromise = new Promise(function(resolve) {
-				  resolve({
-					  @for(m <-models.MotivoCancelacion.find.all()){
-						  @m.id : "@m.descripcion",
-					  }
-				  });
-			})	  
-			swal({
-				  type: 'question',
-			      title: '¿Motivo de cancelación?',
-			      input: 'select',
-			      inputOptions: inputOptionsPromise,
-			      inputPlaceholder: 'Seleccione motivo',
-			      showCancelButton: true,
-			      inputValidator: function(value) {
-			        return new Promise(function(resolve, reject) {
-			          if (value != '') {
-			            resolve();
-			          } else {
-			            reject('Seleccione un motivo')
-			          }
-			        }).catch(swal.noop);
-			      }
-			    }).then(function(result) {
-			   	  $cancela =  LlamadaAjaxCancelaEvento(servicioId, result); 
-			  	  $.when($cancela).done(function(datac){
-			  		  console.dir(datac)
-			  		  if (datac.cancelado){
-			  			$.notify("Se canceló el evento");
-			  			  actualiza();
-			  		  } else {
-	                      $.notify(
-	                              "No se pudo cancelar el evento"
-	                          ,{
-	                          	type:"danger"
-	                          }); 
-			  		  }
-			  	  });
-			    })	  
-		} 
+  function cancelarEvento(tipo, servicioId){
+	  // Generalas opciones para motivo de cancelación
+	  var inputOptionsPromise = new Promise(function(resolve) {
+			  resolve({
+				  @for(m <-models.MotivoCancelacion.find.all()){
+					  @m.id : "@m.descripcion",
+				  }
+			  });
+	  })
+		swal({
+			  type: 'question',
+			  title: '¿Motivo de cancelación?',
+			  input: 'select',
+			  inputOptions: inputOptionsPromise,
+			  inputPlaceholder: 'Seleccione motivo',
+			  showCancelButton: true,
+			  inputValidator: function(value) {
+				return new Promise(function(resolve, reject) {
+				  if (value != '') {
+					resolve();
+				  } else {
+					reject('Seleccione un motivo')
+				  }
+				}).catch(swal.noop);
+			  }
+			}).then(function(result) {
+
+				console.debug("Llamando ajaxCancelaEvento")
+			  $cancela = LlamadaAjax("/ajaxCancelaEvento", "POST",  JSON.stringify({"tipo":tipo, "eventoId":servicioId, "motivoId":result}));
+			  $.when($cancela).done(function(datac){
+				  console.dir(datac)
+				  if (datac.cancelado){
+					$.notify("Se canceló el evento");
+				  	var $actaliza = LlamadaAjax("/ajaxTableroAdmin","GET",JSON.stringify( {}));
+					$.when($actaliza).done(function(data){
+						actualiza(data);
+					});
+				  } else {
+					  $.notify(
+							  "No se pudo cancelar el evento"
+						  ,{
+							type:"danger"
+						  });
+				  	}
+			  });
+			})
+		}
   
   
   

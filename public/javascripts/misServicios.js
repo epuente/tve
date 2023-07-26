@@ -157,7 +157,7 @@ function verDetalles(servicioId, tipo, fpaId) {
 									for (x = 0; x <= servicio.personal.length - 1; x++) {
 										p = servicio.personal[x];
 										cadena += p.cantidad + "  "
-												+ p.tipopersonal.descripcion
+												+ p.tipopersonal
 												+ "   <br>";
 									}
 									cadena += "</div>";

@@ -491,8 +491,6 @@ function subirArchivo2(c){
 }
 
 function clonarBaseArchivo(tipo, filename, id){
-    // if ( $("#ajaxEdoInicialArchivos").find("div[name='copiaBaseArchivo']").length==0)
-    //     $("#ajaxEdoInicialArchivos").html("");
     var copia = $("#divBaseArchivo").clone(false);
     var secuencial = ($("input[type='file'][id^='fileOficioArchivo-"+tipo+"']").length)+1
 
@@ -500,17 +498,11 @@ function clonarBaseArchivo(tipo, filename, id){
     $(copia).find("input[type='file']").attr("id", "fileOficioArchivo-"+tipo+"-"+secuencial);
 
     //Renombra copia del id del div que contiene el filename
-    $(copia).find("div[id='txtArchivo-0-0']").attr("id", "txtArchivo-"+tipo+"-"+secuencial).css("display","block");
+    $(copia).find("div[id='txtArchivo-0-0']").attr("id", "txtArchivo-"+tipo+"-"+secuencial);
 
-    // Asigna el botón upload al input file
-    /*
-    $(copia).find(".fa-file-upload").closest("a").attr("href", "javascript:$(\"#fileOficioArchivo-"+tipo+"-"+secuencial+"\").click()"  );
-    $(copia).find(".fa-file-upload").closest("div").css("display","block")
-    */
 
     // Asigna funcion al boton de eliminar archivo
     $(copia).find(".fa-minus-circle").closest("a").attr("href", "javascript:eliminaArchivo("+tipo+","+secuencial+", "+id+")"  );
-    $(copia).find(".fa-minus-circle").closest("div").css("display","block")
 
     $(copia).find("#BaseArchivo").attr("name", "copiaBaseArchivo");
     $(copia).find("#BaseArchivo").removeAttr("id");
@@ -521,7 +513,7 @@ function clonarBaseArchivo(tipo, filename, id){
     }
 
     $(copia).find(".fa-eye").parent().attr("href", "javascript:verOficio("+id+",\""+descripcion[tipo-1]+"\")");
-    $(copia).find(".fa-eye").closest("div").css("display", "block");
+    //$(copia).find(".fa-eye").closest("div").css("display", "block");
 
     if (  $("#archivos"+tipo).length==0 ){
         $("#ajaxEdoInicialArchivos").append( "<div id='archivos"+tipo+"' style='display:block'>       <div class='row' style='margin-bottom:0.5em'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>"+tiposArchivos[tipo-1]+"</div></div></div>"  );
@@ -537,14 +529,6 @@ function clonarBaseArchivo(tipo, filename, id){
 
 function subirArchivoNuevo(tipo){
     console.debug("Desde subirArchivoNuevo "+tipo);
-
-    /*
-    var aux = clonarBaseArchivo(tipo);
-    var copia = aux.renglon.html();
-    var sec = aux.secuencial;
-    $(copia).appendTo("#archivos"+tipo);
-    $("#fileOficioArchivo-"+tipo+"-"+sec).click();
-    */
     s = clonarBaseArchivo(tipo);
     $("#fileOficioArchivo-"+tipo+"-"+s).click();
 }
@@ -561,9 +545,8 @@ $(document).on("change", "[id^='fileOficioArchivo-']", function(){
       secuencial = aux[2];
       console.debug("cname ", cname)
       console.log(filename);
-
+      //  console.debug("path "+this.files[0].value());
       $("#archivos"+tipo).find("button[name='btnAgregarOtroArchivo']").remove();
-      //AQUI ME QUEDÉ
 
       // Ocultar el div divNoHay
       $("#archivos"+tipo).find("div[name='divNoHay']").css("display", "none");
@@ -582,7 +565,10 @@ $(document).on("change", "[id^='fileOficioArchivo-']", function(){
       console.debug("#txtArchivo-"+tipo+"-"+secuencial)
       $("#txtArchivo-"+tipo+"-"+secuencial).html("<small>"+filename+"</small>");
 
+      //$(this).parent().parent().find("a[href^='javascript:verOficio']").attr("href", "javascript:verArchivoExterno('"+this.files[0].value+"')")
       $(this).parent().parent().find("a[href^='javascript:verOficio']").remove();
+
+
       // Muestra el div que contiene el clon de BaseArchivo
       $(this).closest("div[name='copiaBaseArchivo']").css("display","block")
 });
@@ -734,6 +720,7 @@ function listaArchTipo(tipo){
     $("[id^='archivos']").fadeOut("slow","swing");
     $("[id^='archivos']").css("display","none");
     $("#archivos"+tipo).fadeIn("slow","swing");
+    $("#archivos"+tipo).find("div[name='copiaBaseArchivo']").fadeIn("slow","swing");
     $("#listaTiposArchivos strong>a").unwrap();
     $("#listaTiposArchivos a:eq("+(tipo-1)+")").wrap("<strong></strong>");
 }
@@ -907,38 +894,78 @@ function edoInicialArchivos(oficioId){
 
 function eliminaArchivo(tipo, secuencia, idArchivo){
     console.debug("Desde eliminaArchivo "+tipo+"-"+secuencia)
-    // Eliminar de la tabla
-    $b = LlamadaAjax("/eliminaArchivoOficio", "POST", JSON.stringify({"tipo":tipo, "idArchivo": idArchivo}));
-    $.when($b).done(function(data){
-        console.dir(data)
-        if (data.eliminado){
-            e = $("#fileOficioArchivo-"+tipo+"-"+secuencia).closest("div.row");
-            console.debug("e tam "+e.length)
-            e.remove();
-            var contador = $("input[type='file'][id^='fileOficioArchivo-"+tipo+"']").length;
-            console.debug("contador "+contador)
-            var auxTipo = tiposArchivos[tipo-1];
-            // Elimina botón de agregar otro archivo
-             $("#archivos"+tipo).find("button[name='btnAgregarOtroArchivo']").remove();
-            if (contador ==0 ){
-                 retorno="<div class='row'>"+
-                                "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+tipo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div>" +
-                            "</div>";
-                 console.debug(retorno)
-                 $("#archivos"+tipo).find("row:gt(1)").remove();
-                 $("#archivos"+tipo).append(retorno);
-             } else {
-                $("#archivos"+tipo).append(  botonAgregarMas(tipo, contador)  );
-             }
-        } else {
-                swal(
-                        'Error',
-                        'nO FUE POSIBLE ELIMINAR EL ARCHIVO',
-                        'error'
-                      )
-        }
+        swal({
+            title: "¿Eliminar el archivo del registro?",
+            html: "Se eliminará el archivo de la sección <strong>"+tiposArchivos[tipo-1]+"</strong>.",
+            type: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: "Si, borrar el archivo",
+            cancelButtonText: "No, conservar el archivo",
+            preConfirm: function(){
+                return new Promise(function (resolve, reject) {
+                                // Eliminar de la tabla correspondiente
+                                $b = LlamadaAjax("/eliminaArchivoOficio", "POST", JSON.stringify({"tipo":tipo, "idArchivo": idArchivo}));
+                                $.when($b).done(function(data){
+                                    console.dir(data)
+                                    if (data.eliminado){
+                                        e = $("#fileOficioArchivo-"+tipo+"-"+secuencia).closest("div.row");
+                                        console.debug("e tam "+e.length)
+                                        e.remove();
+                                        var contador = $("input[type='file'][id^='fileOficioArchivo-"+tipo+"']").length;
+                                        console.debug("contador "+contador)
+                                        var auxTipo = tiposArchivos[tipo-1];
+                                        // Elimina botón de agregar otro archivo
+                                         $("#archivos"+tipo).find("button[name='btnAgregarOtroArchivo']").remove();
+                                        if (contador ==0 ){
+                                             retorno="<div class='row'>"+
+                                                            "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='text-align:center;'><div name='divNoHay'>No se han subido archivos<div class='center-block'><a href='javascript:subirArchivoNuevo("+tipo+")' style='cursor:hand'><i class='fas fa-2x  fa-file-upload'></i></a></div></div> </div>" +
+                                                        "</div>";
+                                             console.debug(retorno)
+                                             $("#archivos"+tipo).find("row:gt(1)").remove();
+                                             $("#archivos"+tipo).append(retorno);
+                                         } else {
+                                            $("#archivos"+tipo).append(  botonAgregarMas(tipo, contador)  );
+                                         }
+                                        swal(
+                                                  'Eliminado!',
+                                                  'Se eliminó correctamente el archivo',
+                                                  'success'
+                                                )
+                                    } else {
+                                            swal(
+                                                    'Error',
+                                                    'NO FUE POSIBLE ELIMINAR EL ARCHIVO',
+                                                    'error'
+                                                  )
+                                    }
 
-    });
+                                });
+                });
+            }
+          }).then(function () {
+
+          }, function (dismiss) {
+                if (dismiss === 'cancel') {
+                  swal(
+                    'Cancelado',
+                    'Usted canceló la eliminación del archivo.<br>Se conserva el archivo.',
+                    'error'
+                  )
+                }
+          });
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

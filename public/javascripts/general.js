@@ -134,11 +134,10 @@
         
         
         
-        
+    // Visor de un solo archivo del oficio
     function verOficio(idImagen, sufijo){
 	    console.log("desde verOficio")
 		$("#divMsgModal").css("display","block");
-
         fetch('/verOficio?id='+idImagen+'&sufijo='+sufijo)
           .then(response => {
             const contentType = response.headers.get('content-type');
@@ -161,21 +160,40 @@
                 $("#myModalVisorArchivo").modal('hide');
             }
           })
-
-
 		//$("iframe[name='visoriFrame']").attr("src", "/verOficio?id="+idImagen+"&sufijo="+sufijo);
+	}
 
-		 
-	}        
-        
-$("iframe[name='visoriFrame']").on("load",  function(){
-    console.log ("iframe cargado.......")
-    console.log(  $("#title")   )
-    $("iframe[name='visoriFrame']").find("#title").html("jajajaj");
+    // Visor de archivos externos (archivos que no se han guardado en la DB)
+    // Visor de un solo archivo del oficio
+    function verArchivoExterno(archivo){
+	    console.log("desde verArchivoExterno")
+		$("#divMsgModal").css("display","block");
+        fetch('/pruebaPdfExterno?archivo='+archivo)
+          .then(response => {
+            const contentType = response.headers.get('content-type');
+            if (contentType.includes('image') || contentType.includes('pdf') || contentType.includes('text') || contentType.includes('audio') || contentType.includes('video')) {
+                $("iframe[name='visoriFrame']").attr("src", response);
+                $("#divMsgModal").css("display","none");
+                $("#myModalVisorArchivo").modal('show');
+            } else {
+                $("iframe[name='visoriFrame']").attr("src", response);
+                $.notify({
+                    message: "<div clas='row'>"+
+                             "  <div class='col-sm-1'><i class=\"fas fa-download fa-2x\"></i></div>"+
+                             "  <div class='col-sm-11'>El archivo no puede ser visualizado en el navegador, pero es <strong>posible descargarlo</strong> a su equipo.</div>"+
+                             "</div>",
+                    type:"info",
+                    delay: 10000
+                });
+                $("#divMsgModal").css("display","none");
+                $("#myModalVisorArchivo").modal('hide');
+            }
+          })
+		//$("iframe[name='visoriFrame']").attr("src", "/verOficio?id="+idImagen+"&sufijo="+sufijo);
+	}
 
-});
 
-
+     // Abre la ventana modal (visor de archvios con menú del lado izquierdo) y muestra los archivos relacionados al oficio
      function modalVerArchivosOficio(oficioId){
         console.log("Se recibió en ... "+oficioId)
         $("#tiposArchivos").html("");
@@ -185,30 +203,86 @@ $("iframe[name='visoriFrame']").on("load",  function(){
             if (data.imagen!=undefined){
                 $("#tiposArchivos").append("<div style='margin-bottom:-0.7em; '><h4>Oficio</h4></div>");
                 data.imagen.forEach( function(i){
-                    $("#tiposArchivos").append("<div style='margin-left:1em; margin-bottom:-0.3em; '><a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-imagen\">      <small>"+ i.nombrearchivo+"</small></div>");
+                    $("#tiposArchivos").append("<div style='margin-left:1em; line-height: 1.2;' data-gpoarchivo='modalListaArchivos'><a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-imagen\">      <small>"+ i.nombrearchivo+"</small></div>");
                 });
             }
 
             if (data.respuesta!=undefined){
                 $("#tiposArchivos").append("<div style='margin-bottom:-0.7em; '><h4>Oficio de respuesta</h4></div>");
                 data.respuesta.forEach( function(i){
-                    $("#tiposArchivos").append("<div style='margin-left:1em; margin-bottom:-0.3em; '><a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-Respuesta\">      <small>"+ i.nombrearchivo+"</small></a>");
+                    $("#tiposArchivos").append("<div style='margin-left:1em; line-height: 1.2; letter-spacing: 0.01em;' data-gpoarchivo='modalListaArchivos'><a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-Respuesta\">      <small>"+ i.nombrearchivo+"</small></a>");
                 });
             }
 
             if (data.minuta!=undefined){
                 $("#tiposArchivos").append("<div style='margin-bottom:-0.7em; '><h4>Minutas de acuerdos</h4></div>");
                 data.minuta.forEach( function(i){
-                    $("#tiposArchivos").append("<div style='margin-left:1em; margin-bottom:-0.3em; '><a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-Minuta\">      <small>"+ i.nombrearchivo+"</small></div>");
+                    $("#tiposArchivos").append("<div style='margin-left:1em; line-height: 1.2; letter-spacing: 0.01em;' data-gpoarchivo='modalListaArchivos'><a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-Minuta\">      <small>"+ i.nombrearchivo+"</small></div>");
                 });
             }
 
+            if (data.guion!=undefined){
+                $("#tiposArchivos").append("<div style='margin-bottom:-0.7em; '><h4>Guión o escaleta</h4></div>");
+                data.guion.forEach(function(i){
+                    $("#tiposArchivos").append("<div style='margin-left:1em; line-height: 1.2; letter-spacing: 0.01em;' data-gpoarchivo='modalListaArchivos'><a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-Guion\">      <small>"+ i.nombrearchivo+"</small></div>");
+                });
+            }
+
+            if (data.entrada!=undefined){
+                $("#tiposArchivos").append("<div style='margin-bottom:-0.7em; '><h4>Entradas y salidas de material</h4></div>");
+                data.entrada.forEach(function(i){
+                    $("#tiposArchivos").append("<div style='margin-left:1em; line-height: 1.2; letter-spacing: 0.01em;' data-gpoarchivo='modalListaArchivos'><a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-Entrada\">      <small>"+ i.nombrearchivo+"</small></div>");
+                });
+            }
+
+            if (data.bitacora!=undefined){
+                $("#tiposArchivos").append("<div style='margin-bottom:-0.7em; '><h4>Bitácoras</h4></div>");
+                data.bitacora.forEach(function(i){
+                    $("#tiposArchivos").append("<div style='margin-left:1em; line-height: 1.2; letter-spacing: 0.01em;' data-gpoarchivo='modalListaArchivos'><a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-Bitacora\">      <small>"+ i.nombrearchivo+"</small></div>");
+                });
+            }
+
+            if (data.evidencia!=undefined){
+                $("#tiposArchivos").append("<div style='margin-bottom:-0.7em; '><h4>Evidencia de entrega</h4></div>");
+                data.evidencia.forEach(function(i){
+                    $("#tiposArchivos").append("<div style='margin-left:1em; line-height: 1.2; letter-spacing: 0.01em;' data-gpoarchivo='modalListaArchivos'><a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-Evidencia\">      <small>"+ i.nombrearchivo+"</small></div>");
+                });
+            }
+
+            if (data.encuesta!=undefined){
+                $("#tiposArchivos").append("<div style='margin-bottom:-0.7em; '><h4>Encuesta de satisfacción</h4></div>");
+                data.encuesta.forEach(function(i){
+                    $("#tiposArchivos").append("<div style='margin-left:1em; line-height: 1.2; letter-spacing: 0.01em;' data-gpoarchivo='modalListaArchivos'><a href=\"javascript:void(0)\" id=\"verOficioArchivo-"+i.id+"-Encuesta\">      <small>"+ i.nombrearchivo+"</small></div>");
+                });
+            }
         });
         $('#myModalLosVisores').modal('show');
+        document.getElementsByName("visoriFrame2").innerHTML="TEXTO";
+       // $("iframe[name='visoriFrame2']").replaceWith('<p>hi</p>');
+
+        var iFrameDoc = $("iframe[name='visoriFrame2']")[0].contentDocument || $("iframe[name='visoriFrame2']")[0].contentWindow.document;
+        var cadena = "<div style='text-align:center; margin-top:3em;'  class='text-muted'><h4>Elija del menú de la <strong>izquierda</strong> para visualizar los archivos relacionados al oficio</h4>";
+        cadena+="<i class=\"far fa-hand-point-left fa-4x\"></i></div>";
+        var estilos = "<link rel=\"stylesheet\" href=\"/assets/lib/bootstrap/css/bootstrap.min.css\" type=\"text/css\">";
+        estilos+="<link rel=\"stylesheet\" href=\"/assets/lib/font-awesome/css/all.min.css\">";
+        estilos+="<script defer src=\"/assets/lib/font-awesome/js/all.min.js\"></script>";
+        iFrameDoc.write(estilos+cadena);
+        iFrameDoc.close();
+
      }
 
+    // Pone en negritas(tag strong) la opción seleccionada (archivo) de la lista en el visor de documentos de la ventana modal
+    $(document).off("click", "div[data-gpoarchivo='modalListaArchivos']");
+    $(document).on("click", "div[data-gpoarchivo='modalListaArchivos']", function(){
+        console.log("OKKK")
+        $("#tiposArchivos").find("strong>div[data-gpoarchivo='modalListaArchivos']").css("letter-spacing", "0.01em");
+        $("#tiposArchivos").find("strong>div[data-gpoarchivo='modalListaArchivos']").unwrap();
+        $(this).wrap("<strong></strong>");
+        $(this).css("letter-spacing", "-0.02em");
+    });
 
-
+    // En la ventana modal...
+    // Llama al método que regresa el contenido del archivo y lo despliega dentro del iframe (visoriFrame2)
     $(document).off("click", "[id^='verOficioArchivo']");
     $(document).on("click", "[id^='verOficioArchivo']", function(){
         console.debug("desde ^=verOficioArchivo click")
@@ -218,13 +292,10 @@ $("iframe[name='visoriFrame']").on("load",  function(){
         console.debug("sufijo: "+ sufijo)
         console.debug("id: "+ id)
         $("iframe[name='visoriFrame2']").attr("src", "/verOficio?id="+id+"&sufijo="+sufijo);
-
     });
 
 
-    $(document).on("iframe[name='visoriFrame2']", "load", function(){
-        console.debug("...cargando archivo en el iframe");
-    });
+
 
 
         

@@ -421,6 +421,7 @@ System.out.println(json);
 	public static Result ajaxTablero(){
 		System.out.println("Desde AdministracionController.ajaxTablero");
 		List<Agenda> fechasCaducadas = new ArrayList<Agenda>();
+		List<PreAgenda> fechasCaducadasPreAgenda = new ArrayList<PreAgenda>();
 		TreeSet<String> eventos = new TreeSet<String>(); 
 		String jsonString;
 
@@ -524,9 +525,25 @@ System.out.println(json);
 								String format = formatter.format(date);
 								if(ags.fin.after( new Date() )  )
 									eventos.add(format);
+								// fechas caducadas en agenda
 								if(ags.fin.before( new Date() )  ) {
 									fechasCaducadas.add(ags);
-									System.out.println("    ya pasó");								}
+									System.out.println("    ya pasó en agenda");
+								}
+							}
+						}
+
+						// Calcular fechas caducadas en preagenda
+
+						for ( PreAgenda pags : pa.preagendas ){
+							if ( pags.estado.id ==4 || pags.estado.id ==5){
+								java.util.Date date = pags.inicio;
+								SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+								String format = formatter.format(date);
+								if(pags.fin.before( new Date() )  ) {
+									fechasCaducadasPreAgenda.add(pags);
+									System.out.println("    ya pasó en preagenda");
+								}
 							}
 						}
 						Collections.sort(fechasCaducadas);
@@ -558,6 +575,7 @@ System.out.println(json);
 				+", \"autorizados\":"+autorizados.size()
 				+", \"terminados\":"+terminados.size()
 				+", \"fechasCaducadas\":"+ jsonContext.toJsonString(fechasCaducadas)
+				+", \"fechasCaducadasPreAgenda\":"+ jsonContext.toJsonString(fechasCaducadasPreAgenda)
 				+", \"eventosProximos\":"+"[\""+eventosProximos +"\"]"
 				+", \"personal\":"+jsonString +"}"    );
 		
@@ -566,7 +584,7 @@ System.out.println(json);
 
 	public static Result ajaxSolicitaPerfiles(){
 		boolean retorno = true;
-System.out.println("   ...........................   desde AdministracionController.ajaxSolicitaPerfiles ");
+		System.out.println("   ...........................   desde AdministracionController.ajaxSolicitaPerfiles ");
 		JsonNode json = request().body().asJson();
 		System.out.println(json);
 		if (json.findPath("estadoId").asLong() == 5){		

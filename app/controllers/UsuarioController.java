@@ -27,8 +27,14 @@ import views.html.usuario.misServicios;
 import views.html.usuario.misServiciosAdmin;
 
 import javax.sql.DataSource;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -3134,20 +3140,34 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
     @Transactional
     public static Result ajaxCancelaEvento() {
         boolean retorno = true;
+        PreAgendaCancelacion pasc = new PreAgendaCancelacion();
         AgendaCancelacion asc = new AgendaCancelacion();
-        System.out.println("   ...........................   desde AdministracionController.ajaxCancelaEvento ");
+        System.out.println("   ...........................   desde UsuarioController.ajaxCancelaEvento ");
         JsonNode json = request().body().asJson();
+        int tipo = json.findPath("tipo").asInt();
+        Long eventoId = json.findPath("eventoId").asLong();
+        Long motivoId = json.findPath("motivoId").asLong();
         System.out.println(json);
         try {
-            Agenda servicio = Agenda.find.byId(json.findPath("eventoId").asLong());
-            asc.agenda = servicio;
-            asc.estadoAnterior = servicio.estado;
-            asc.motivo = MotivoCancelacion.find.byId(json.findPath("motivoId").asLong());
-            servicio.estado = Estado.find.byId(100L);
-            servicio.cancelaciones.add(asc);
-            servicio.update();
+            if (tipo==1) {
+                PreAgenda servicio = PreAgenda.find.byId(eventoId);
+                pasc.preagenda = servicio;
+                pasc.estadoAnterior = servicio.estado;
+                pasc.motivo = MotivoCancelacion.find.byId(motivoId);
+                servicio.estado = Estado.find.byId(100L);
+                servicio.cancelaciones.add(pasc);
+                servicio.update();
+            }
+            if (tipo==2) {
+                Agenda servicio = Agenda.find.byId(eventoId);
+                asc.agenda = servicio;
+                asc.estadoAnterior = servicio.estado;
+                asc.motivo = MotivoCancelacion.find.byId(motivoId);
+                servicio.estado = Estado.find.byId(100L);
+                servicio.cancelaciones.add(asc);
+                servicio.update();
+            }
         } catch (Exception e) {
-            // TODO: handle exception
             System.out.println("error   "+e);
             retorno = false;
         }
@@ -3862,6 +3882,19 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
         }
         return ok (jsonArray.toString());
     }
+
+
+    public static Result pruebaPdfExterno(String archivo) throws IOException {
+        Logger.debug("Desde pruebaPdfExterno");
+        Logger.debug("archivo:"+archivo);
+        if (archivo==null)
+            archivo = "/home/epuente/Documentos/QR.jpg";
+        Path p = new File(archivo).toPath();
+        String mime = Files.probeContentType(p);
+        Logger.debug("mime type: "+mime);
+        return ok(new FileInputStream(archivo)).as(mime);
+    }
+
 
 }
 

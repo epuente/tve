@@ -347,9 +347,7 @@
 		        } 
 		        	
 				@if(session.get("rolActual")=="16"){
-				
 					<button type="button" class="btn btn-success" id="btnModalGuardar" style="display: none">Guardar</button>
-				
 		            <button type="button" class="btn btn-success" id="btnModalLiberar" style="display: none">Liberar</button>
 		        }		        
 		        
@@ -451,7 +449,7 @@
 
 <!-- Modal usado como visor de archivos/documentos-->
 <div class="modal fade" id="myModalVisorArchivo" tabindex="-1" role="dialog" aria-labelledby="myModalVisorArchivoLabel" style="height: 95vh;">
-  <div class="modal-dialog" role="document" style="width: 95%; height: 100%;" >
+  <div class="modal-dialog" role="document" style="width: 95%; height: 95vh;" >
     <div class="modal-content">
       <div class="modal-header">
         <h3>Visor de archivo</h3>
@@ -465,7 +463,7 @@
                    	</div>                    
                 </div>
             </div>
-            <iframe name="visoriFrame" titñe="jejeje" width="100%" height="100%">Este navegador no soport iframes</iframe>
+            <iframe name="visoriFrame" title="jejeje" width="100%" height="700px">Este navegador no soporta iframes</iframe>
         </div>
       </div>
       <div class="modal-footer">
@@ -476,15 +474,29 @@
 </div>
 
 
+
+<style>
+	.img-2 {
+    	max-height: 750px;
+    	min-height: 750px;
+    }
+
+    ifVisor {
+    	max-height: 700px;
+    	min-height: 700px;
+    }
+</style>
+
 <!-- Visor para los multiples archivos del oficio -->
-<div class="modal fade" id="myModalLosVisores" tabindex="-1" role="dialog" aria-labelledby="myModalLosVisores" style="height: 95%;">
-	<div class="modal-dialog" role="document" style="width: 95%; height: 100%;" >
-		<div class="modal-content">
+<div class="modal fade " id="myModalLosVisores" tabindex="-1" role="dialog" aria-labelledby="myModalLosVisores"  /*style="height:750px"*/     >
+	<div class="modal-dialog" role="document" style="width: 80vw;">
+		<div class="modal-content"  style="">
 			<div class="modal-header">
-				<h3>Visor de archivos del oficio</h3>
+
+				<h3>Visor de archivos del oficio <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></h3>
 			</div>
 			<div class="modal-body">
-				<div style="width: 100%; height: 75%;">
+				<div style="width: 100%; " class="img-2">
 					<div class="row">
 						<div class="col-sm-12 col-md-12 col-lg-12" id="myModalVisor2">
 							<div id="divMsgModal2">
@@ -493,18 +505,16 @@
 					</div>
 					<div class="row">
 						<div class="col-sm-3 col-md-3 col-lg-3">
-							<div id="tiposArchivos"></div>
+							<div id="tiposArchivos" style="overflow:auto; overflow-y: scroll; height: 700px;  "></div>
 						</div>
 						<div class="col-sm-9 col-md-9 col-lg-9">
-							<iframe name="visoriFrame2" style='display: block;'  width="100%"  height="90%" ></iframe>
+							<iframe name="visoriFrame2" style='display: block;' width="100%"  height="700px"></iframe>
 						</div>
 					</div>
 
 				</div>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar ventana</button>
-			</div>
+
 		</div>
 	</div>
 </div>

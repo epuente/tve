@@ -275,3 +275,5 @@ POST    /cancelaFolio                       controllers.AdminFolioController.can
 POST    /eliminaArchivoOficio               controllers.AdminOficioController.eliminaArchivoOficio()
 
 POST    /rolPorFase                         controllers.UsuarioController.rolPorFase()
+
+GET     /pruebaPdfExterno                   controllers.UsuarioController.pruebaPdfExterno(archivo:String)

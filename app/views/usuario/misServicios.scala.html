@@ -1,7 +1,5 @@
 @(estado:Long, numFolio:Long)
 @import helper._
-
-..
 @main{
 	<style>
 	.vbottom{
@@ -175,8 +173,12 @@
                 {"data": "folio",
                     "render": function(data, type, row, meta){
                         var r = data;
-                        if ( row["tieneArchs"]==true )
-                            r+= "<div style=\"cursor:pointer; text-align:center;\"><a onclick='javascript:modalVerArchivosOficio("+row["oficioId"]+")'><i class=\"fa fa-eye fa-lg\" aria-hidden=\"true\"></i></a></div>";
+                        if ( row["tieneArchs"]==true ){
+                             stacked=
+                              '<div style="cursor:pointer"  data-toggle="tooltip"  title="Ver archivos del oficio"  data-placement="top"<div class="fa-stack fa-lg pull-right"><a onclick="javascript:modalVerArchivosOficio('+row["oficioId"]+')"><i class="fas fa-eye fa-stack-1x fa-lg" style="font-size: 1em;"></i><i class="far fa-file fa-stack-1x fa-lg"></i></a></div></div>  ';
+                          //  r+= "<div style=\"cursor:pointer; text-align:center;\"   data-toggle=\"tooltip\"     title=\"Ver archivos del oficio\"  data-placement=\"top\"   ><a onclick='javascript:modalVerArchivosOficio("+row["oficioId"]+")'><i class=\"fa fa-eye fa-lg\" aria-hidden=\"true\"></i></a></div>";
+                           r+=stacked;
+                        }
                         return r;
                     }
 
@@ -192,7 +194,8 @@
                 $("#tablaMisServicios_wrapper div.row div").removeClass("col-sm-6");
                 $("#tablaMisServicios_wrapper div.row div:eq(0)").addClass("col-sm-4");
                 $("#tablaMisServicios_wrapper div.row div:eq(2)").addClass("col-sm-8");
-                $(".dataTables_filter").css("width","auto");  
+                $(".dataTables_filter").css("width","auto");
+
 
                 //console.dir( laTablaDTSS.rows().data()  )
 
@@ -214,13 +217,17 @@
 
 
 
-                $('.popover, [data-toggle="popover"]').popover();
+
                 
                 
              //   $('div.dataTables_scrollBody').css("max-height", $(window).height()-400+"px" );
                 
             }
-        } );
+
+        } );   //  fin del datatables
+
+
+
 
 
 
@@ -251,7 +258,7 @@
 				  }
 			});
 		 
-		 
+
 	});
 
 	
