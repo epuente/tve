@@ -1,3 +1,37 @@
 En el apartado de usuario, validar que solo se agregue un email por cada input
 
 Que los productores puedan ver el pdf del oficio
+
+
+
+
+Query para  serie de videoteca
+
+
+select concat('insert into serie cat (descripcion) values (''', serie,''')' ) from
+	(select distinct serie from newtable
+	where length(serie) >0
+	order by serie)
+	as otro
+
+
+BUQUEDA DE TEXTO
+
+
+SELECT plainto_tsquery('spanish', 'el especial de los alimentos');
+
+
+
+SELECT descripcion
+from serie s
+where to_tsvector(   coalesce(descripcion,' ')   ) @@ to_tsquery('especial & alimento & otros')
+
+Fuente: https://blog.kaleidos.net/como-usar-busqueda-de-texto-en-postgresql/
+
+
+
+SELECT descripcion, ts_rank(to_tsvector(coalesce(descripcion, ' ')), to_tsquery('capsul & ciencia'))
+FROM serie s
+WHERE to_tsvector(coalesce(descripcion, ' ')) @@ to_tsquery('capsul & ciencia')
+ORDER BY ts_rank(to_tsvector(coalesce(descripcion, ' ')), to_tsquery('capsul & ciencia')) desc;
+

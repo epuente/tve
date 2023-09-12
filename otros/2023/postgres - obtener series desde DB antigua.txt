@@ -1,0 +1,44 @@
+CREATE TABLE public.temporal (
+	id serial,
+	serie varchar NULL,
+	titulo varchar NULL,
+	institucion varchar NULL,
+	clave varchar NULL,
+	numobra varchar NULL,
+	formato varchar NULL,
+	creditos varchar NULL,
+	produccion varchar NULL,
+	palabrasclave varchar NULL,
+	sinopsis varchar NULL,
+	duracion varchar NULL,
+	anioproduccion varchar NULL,
+	idioma varchar NULL,
+	sistema varchar NULL,
+	disponibilidad varchar NULL,
+	ubicacion varchar NULL,
+	areatematica varchar NULL
+);
+
+IMPORTAR EN LA TABLA TEMPORAL EL CVS
+
+
+CREATE TABLE public.serie (
+	id serial4,
+	audit_insert timestamp NULL,
+	audit_update timestamp NULL,
+	descripcion varchar NOT NULL,
+	CONSTRAINT pk_serie PRIMARY KEY (id)
+);
+
+select concat('insert into serie (descripcion, audit_insert, audit_update) values (''', replace(serie, '''', ''''''),''', ''', now(), ''',  ''', now(), ''' );' ) from
+	(select distinct serie from temporal
+	where length(serie) >0
+	order by serie)
+	as otro;
+
+----   El resultado es......
+
+insert into serie (descripcion, audit_insert, audit_update) values ('II COLOQUIO INSTITUCIONAL DE COMITES AMBIENTALES HACIA UN POLITECNICO SUSTENTABLE', '2023-08-24 11:55:56.427331-06',  '2023-08-24 11:55:56.427331-06' );
+...
+
+

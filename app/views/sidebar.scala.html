@@ -163,6 +163,20 @@
 	   }
 
 
+	   @* Operador Videoteca *@
+	   @if(session.get("rolActual").compareTo("131")==0  ||  session.get("rolActual").compareTo("132")==0 ){
+	   <div class="menu_selection">
+		   <ul class="nav side-menu">
+			   <li><a href="@routes.VideotecaController.tablero"><i class="fas fa-tachometer-alt"></i> Tablero </a></li>
+
+			   <li><a href="@routes.VideotecaController.catalogo"><i class="fas fa-table"></i> Catálogo </a></li>
+
+
+		   </ul>
+	   </div>
+	   }
+
+
 
 
    </div>

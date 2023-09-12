@@ -2,9 +2,13 @@ package models;
 
 import classes.ColorConsola;
 import classes.Notificaciones.Notificacion;
+import controllers.PersonalController;
+import controllers.UsuarioController;
 import play.Logger;
 import play.data.format.Formats;
 import play.db.ebean.Model;
+import play.mvc.Controller;
+import play.mvc.Result;
 
 import javax.persistence.*;
 import java.util.*;
@@ -82,7 +86,7 @@ public class Folio  extends models.utils.PlantillaModelo{
 	public boolean fechaCaducada(){
 		return ( new Date().after(this.fechaentrega)  );
 	}
-	/*
+    /*
 	@PostPersist
 	@PostUpdate
 	@PostRemove
@@ -95,4 +99,16 @@ public class Folio  extends models.utils.PlantillaModelo{
 		noti.recargar();
 	}
     */
+
+	@PostPersist
+	@PostUpdate
+	public void callbackPost(){
+		HisFolio hf = new HisFolio();
+		hf.folio = this;
+		hf.estado = this.estado;
+		Personal x = PersonalController.buscar(Long.parseLong(play.mvc.Controller.session("usuario")));
+		hf.usuario = x;
+		hf.rol = Rol.find.byId(  Long.parseLong( play.mvc.Controller.session("rolActual")  ));
+		hf.save();
+	}
 }

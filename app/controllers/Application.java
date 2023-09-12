@@ -124,7 +124,10 @@ public class Application extends Controller {
 		if (session("rolActual").compareTo("18")==0) {
 			return redirect(routes.IngenieriaController.tableroIng());
 		}
-
+		// Operador de Videoteca
+		if (session("rolActual").compareTo("132")==0) {
+			return redirect(routes.VideotecaController.tablero());
+		}
 
 		return null;
 	}

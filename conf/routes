@@ -277,3 +277,17 @@ POST    /eliminaArchivoOficio               controllers.AdminOficioController.el
 POST    /rolPorFase                         controllers.UsuarioController.rolPorFase()
 
 GET     /pruebaPdfExterno                   controllers.UsuarioController.pruebaPdfExterno(archivo:String)
+
+GET     /tableroVideoTK                     controllers.VideotecaController.tablero()
+GET     /ajaxTableroVideoTK                 controllers.VideotecaController.ajaxTablero()
+GET     /catalogo                           controllers.VideotecaController.catalogo()
+GET     /vtkCatalogoDTSS                    controllers.VideotecaController.catalogoDTSS()
+GET     /vtkCatalogo/create                 controllers.VideotecaController.catalogoCreate()
+
+#POST    /tsQuery                            controllers.VideotecaController.tsQuery()
+#POST    /tsCoincidencias                    controllers.VideotecaController.tsCoincidencias()
+
+POST    /textsearch                         controllers.VideotecaController.textsearch()
+POST    /nuevaSerie                         controllers.VideotecaController.nuevaSerie()
+POST    /serieList                          controllers.VideotecaController.serieList()
+

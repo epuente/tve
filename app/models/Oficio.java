@@ -112,4 +112,9 @@ public class Oficio  extends models.utils.PlantillaModelo{
 
 		return retorno;
 	}
+
+
+	public void despuesInsert(){
+
+	}
 }

@@ -1,0 +1,139 @@
+@(forma: Form[VtkCatalogo], arrCreditos: List[String])
+
+@import helper._
+
+
+<style>
+    .bootstrap-select .btn {
+        //white-space: normal;
+        font-size: smaller;
+    }
+
+    #serie_id_field span.text{
+        white-space: normal;
+        font-size: smaller;
+        line-height : 15px;
+        margin-bottom: 4px;
+        margin-top: 4px;
+    }
+
+    .tab-pane {
+        marging-top: 10px !important;
+        margin-left: 10px !important;
+    }
+
+</style>
+
+
+@main {
+    @ventanasModales()
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+                <li><a href="@routes.VideotecaController.catalogo()">Catálogo videoteca</a></li>
+                <li>Agregar</li>
+            </ol>
+        </div>
+    </div>
+
+    <h1>Agregar al catálogo de videoteca</h1>
+
+    @form(CSRF(routes.AdminAccesorioController.save()), 'role->"form") {
+        @videotecaForm(forma, arrCreditos)
+        <br/><br/>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div style="width: 80%" class="center-block">
+                    <input type="submit" value="Agregar" class="btn btn-primary btn-block">
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div style="width: 80%" class="center-block">
+                    <a href="@routes.AdminAccesorioController.list()" class="btn btn-warning btn-block">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<script type="text/javascript">
+    var texto="";
+    $(function() {
+        $('form').validator();
+
+        $("#serie_id").selectpicker({
+            title:"Escriba, seleccione o busque un número de oficio o descripción del oficio",
+            size: 10,
+            liveSearchNormalize: true,
+            liveSearch: true,
+            dropdownAlignRight: true,
+            header: "Puede hacer sroll en la lista y seleccionar la serie, o  puede iniciar a escribir la serie y se buscará en el catálogo existente",
+            liveSearchPlaceholder: "Aqui puede escribir la búsqueda de la serie",
+            noneSelectedText: "No se seleccionó ningúna serie",
+            noneResultsText : "La busqueda no regresó resultados. !!!!  <button id='btnAgregarCatVTK' type='button' class='btn btn-primary btn-sm' onclick='javascript:vvVtkCatalogoCrear();'>Agregar serie</button> "
+        });
+
+        $("div.bs-searchbox>input").on("keyup", function(){
+            console.log("desde acaaaa")
+            texto = $(this).val();
+        });
+
+        $("#formato_id label").each(function(i, e){
+            $(e).after("<br>");
+        });
+        $("#idioma_id label").each(function(i, e){
+            $(e).after("<br>");
+        });
+
+        $("#tabProductores").click();
+
+    });
+
+
+    function vvVtkCatalogoCrear(){
+        console.debug("desde vvVtkCatalogoCrear()");
+        $("#serieDescripcion").val("");
+        $("#divCoincidencias div.list-group>button").remove();
+        $("#msgCoincidencias").html("");
+        $("#divIdTipoOperacion").text("1");
+        $('#myModal2').modal('show');
+        if ( texto != null && texto.length>0 ){
+            $("#serieDescripcion").val(   texto    );
+        }
+        $("#serieDescripcion").focus();
+
+    }
+
+
+    $("form").submit(function(){
+
+    //  event.preventDefault();
+        $("#cuentas_username").attr('name', 'cuentas[0].username');
+        $("#cuentas_password").attr('name', 'cuentas[0].password');
+
+        $("[type='checkbox'][id^='auxRoles_']:checked").each(function(i,e){
+            $(this).attr("name","cuentas[0].roles["+i+"].rol.id");
+        });
+
+    });
+
+
+    $(document).on("click", "#btnAgregarCatVTK", function(){
+            console.log("OKI")
+    });
+
+    $(document).off("click","button[name='btnProductor']");
+    $(document).on("click","button[name='btnProductor']", function(){
+        var textoExistente = $("#taProductores").val().length >0;
+        $("#taProductores").val(  $("#taProductores").val()+(textoExistente?", ":"") + $(this).text()    );
+    });
+
+
+
+</script>
+
+<script src="@routes.Assets.at("bootstrap-select/js/bootstrap-select.min.js")"></script>
+<script src="@routes.Assets.at("bootstrap-select/js/i18n/defaults-es_ES.min.js")"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("bootstrap-select/css/bootstrap-select.min.css")">
+
+<script src="@routes.Assets.at("javascripts/videoteca.js")"></script>

@@ -1,0 +1,164 @@
+@(forma: Form[VtkCatalogo], arrCreditos:List[String])
+
+
+@import helper._
+<fieldset>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+                            <div class="form-group">
+                                @select(forma("serie.id"), options(models.Serie.options),
+                                '_label->"Serie", 'class->"form-control", 'required->true)
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                            <br>
+                            <div class="center-block">
+                                <a href="javascript:vvVtkCatalogoCrear()">Agregar serie</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                @inputText(forma("titulo"), '_label -> "Título", 'class->"form-control", 'required->true )
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        @textarea(forma("sinopsis"), '_label -> "Sinópsis", 'class->"form-control", 'cols->"300"  , 'required->true )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        @inputText(forma("clave"), '_label -> "Clave", 'class->"form-control", 'required->true )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                    <div class="form-group">
+                        @inputText(forma("obraTomo"), '_label -> "Tomo", 'class->"form-control", 'required->true )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                    <div class="form-group">
+                        @inputText(forma("obraTotal"), '_label -> "Total", 'class->"form-control", 'required->true )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-12 col-md-10 col-lg-10">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                @textarea(forma("palabrasclave[0]"), '_label -> "Palabras clave", 'class->"form-control", 'cols->"300"  , 'required->true )
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <div class="form-group">
+                                @inputRadioGroup(
+                                forma("idioma.id"),
+                                options = options(Idioma.options),
+                                '_label -> "Idioma",
+                                '_error -> forma("idioma.id").error.map(_.withMessage("Seleccione el idioma"))
+                                )
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        @*inputRadioGroup(contactForm("formato.id"), options = options("M"->"Male","F"->"Female") '_label -> "Gender", '_error -> contactForm("gender").error.map(_.withMessage("select gender"))*@
+                        @inputRadioGroup(
+                        forma("formato.id"),
+                        options = options(VtkFormato.options),
+                        '_label -> "Formato",
+                        '_error -> forma("fomato.id").error.map(_.withMessage("Seleccione el formato"))
+                        )
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Creditos -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <div>
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist" id="navTabs">
+
+                            @for((s, index) <- arrCreditos.zipWithIndex) {
+                                <li role="presentation" ><a href="#@s"  id="tab@s"  role="tab" data-toggle="tab">@s</a></li>
+                            }
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            @for((s, index) <- arrCreditos.zipWithIndex) {
+                                <div role="tabpanel" class="tab-pane active" id="@s">
+                                    <textarea id="ta@s" class="form-control" rows="5" placeholder="Escriba los nombres de las personas que participaron en @index - @s"+
+                                        @(if(index=='0')
+                                              {"la producción"
+                                    }else{"nada"})
+                                    ></textarea>
+                                </div>
+                            }
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <p class="small">
+                                    Puede escribir los nombre del personal de la DEV o puede usar el panel de botones de la derecha <i class="far fa-hand-point-right"></i></i> <br>
+                                    Los nombres que no aparezcan en el área de botones escribalos directamente.
+                                </p>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    @for(p<-models.Personal.find.all()){
+                    <button type="button" name="btnProductor" class="btn btn-default">@p.nombreCompleto()</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</fieldset>

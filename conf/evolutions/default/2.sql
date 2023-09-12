@@ -323,9 +323,9 @@ INSERT INTO folio_productor_asignado (id, audit_insert, audit_update, folio_id, 
 
 
 
-INSERT INTO motivo_cancelacion (id, audit_insert, audit_update, descripcion) VALUES (1, '2018-12-14 12:00:00', '2018-12-14 12:00:00', 'Cancelado por el área solcicitante');
+INSERT INTO motivo_cancelacion (id, audit_insert, audit_update, descripcion) VALUES (1, '2018-12-14 12:00:00', '2018-12-14 12:00:00', 'Cancelado por el área solicitante');
 INSERT INTO motivo_cancelacion (id, audit_insert, audit_update, descripcion) VALUES (2, '2018-12-14 12:00:00', '2018-12-14 12:00:00', 'Falta de personal');
-INSERT INTO motivo_cancelacion (id, audit_insert, audit_update, descripcion) VALUES (3, '2018-12-14 12:00:00', '2018-12-14 12:00:00', 'Falta de vehívulo');
+INSERT INTO motivo_cancelacion (id, audit_insert, audit_update, descripcion) VALUES (3, '2018-12-14 12:00:00', '2018-12-14 12:00:00', 'Falta de vehículo');
 INSERT INTO motivo_cancelacion (id, audit_insert, audit_update, descripcion) VALUES (4, '2018-12-14 12:00:00', '2018-12-14 12:00:00', 'Falta de combustible');
 INSERT INTO motivo_cancelacion (id, audit_insert, audit_update, descripcion) VALUES (5, '2018-12-14 12:00:00', '2018-12-14 12:00:00', 'ECU cerrada');
 
@@ -367,6 +367,7 @@ INSERT INTO cuenta (id, audit_insert, audit_update, personal_id, username, passw
 
 INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (1, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Administrador');
 INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (10, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Admin. Equipo y Accesorios');
+INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (11, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Resp. Digitalizado');
 INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (13, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Guionista');
 INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (14, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Camarógrafo');
 INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (15, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Locutor');
@@ -377,8 +378,8 @@ INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (100, '2021
 INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (126, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Ejecutivo');
 INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (127, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Jefe Depto');
 INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (130, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Transmisión');
-INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (131, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Resp. Videoteca');
-INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (11, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Resp. Digitalizado');
+INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (131, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Responsable Videoteca');
+INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (132, '2023-08-22 12:50:30', '2023-08-22 12:50:30', 'Operador Videoteca');
 
 
 
@@ -435,7 +436,7 @@ INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUE
 INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUES (242, '2023-06-20 17:55:01.726', '2023-06-20 17:55:01.726', 147, 130);
 INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUES (243, '2023-06-20 17:58:05.092', '2023-06-20 17:58:05.092', 148, 100);
 INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUES (245, '2022-11-10 19:23:59', '2022-11-10 19:23:59', 137, 11);
-
+INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUES (246, '2023-08-22 19:23:59', '2022-11-10 19:23:59', 138, 132);
 
 
 

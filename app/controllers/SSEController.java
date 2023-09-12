@@ -68,8 +68,8 @@ public class SSEController extends ControladorSeguro {
             byte[] uno = event.getBytes("UTF-8");
             byte[] dos = data.getBytes("UTF-8");
             byte[] tres = concat(uno, cretry, dos);
-            System.out.println("-------------------" + event);
-            System.out.println("-------------------\n" + new String(tres)+"-------------------");
+            //System.out.println("-------------------" + event);
+            //System.out.println("-------------------\n" + new String(tres)+"-------------------");
             return ok(tres);
         } catch (Exception e) {
             System.out.println("Error en SSEController");

@@ -611,7 +611,8 @@ System.out.println(json);
 		List<PreAgenda> colaPreagenda = PreAgenda
 				.find.setDistinct(true)
 				.select("id")
-				.where().eq("estado.id", 5L).gt("inicio", "2019-01-01")				
+				.where().eq("estado.id", 5L)
+				//.gt("inicio", "2019-01-01")
 				.findList();
 		System.out.println("200");
 		System.out.println("colaPreagenda tam: "+colaPreagenda.size());
@@ -626,9 +627,23 @@ System.out.println(json);
 		///////////////   VERSION COn GROUP_CONCAT
 		String sql = "select distinct folio.numfolio, oficio.descripcion as oficioDescripcion"+
 				", servicio.descripcion as servicioDescripcion "+
-				", CONCAT(personal.nombre,\" \", personal.paterno,\" \",personal.materno )as productor "+				
-				", group_concat(pas.id) as ids "+ 
-				", group_concat(distinct personalcorreo.email) as correos "+
+				", CONCAT(personal.nombre,' ', personal.paterno,' ' ,personal.materno )as productor, "+
+
+				//", group_concat(pas.id) as ids "+
+				//", group_concat(distinct personalcorreo.email) as correos "+
+					"( "+
+						"SELECT STRING_AGG(pas.id::text, ',') "+
+						"FROM pre_agenda pas "+
+						"INNER JOIN folio_productor_asignado fpa ON pas.folioproductorasignado_id = fpa.id "+
+						"WHERE fpa.folio_id = folio.id "+
+					") as ids, "+
+					"	( "+
+					"			SELECT STRING_AGG(DISTINCT personalcorreo.email, ',') "+
+					"	FROM pre_agenda pas "+
+					"	INNER JOIN folio_productor_asignado fpa ON pas.folioproductorasignado_id = fpa.id "+
+					"	INNER JOIN personal_correo personalcorreo ON fpa.personal_id = personalcorreo.personal_id "+
+					"	WHERE fpa.folio_id = folio.id "+
+					") as correos "+
 				"from pre_agenda pas "+
 				"INNER join folio_productor_asignado fpa on pas.folioproductorasignado_id = fpa.id "+ 
 				"INNER join folio folio on fpa.folio_id = folio.id "+ 
@@ -642,9 +657,11 @@ System.out.println(json);
 				"pas.estado_id= 5 "+
 				"and inicio > '2019-01-01' "+
 				//"group by folio.folio, servicio.descripcion, CONCAT(personal.nombre,\" \", personal.paterno,\" \",personal.materno )";
-				"group by folio.numfolio, oficio.descripcion, servicio.descripcion, CONCAT(personal.nombre,' ', personal.paterno,' ',personal.materno )";
+				"group by folio.id, folio.numfolio, oficio.descripcion, servicio.descripcion, CONCAT(personal.nombre,' ', personal.paterno,' ',personal.materno )";
 
-		
+
+		//AQUI ME QUEDÉ
+
 		System.out.println(sql);
 		
 		List<SqlRow> sqlRows = 

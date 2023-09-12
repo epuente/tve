@@ -101,20 +101,16 @@ public class AdminFolioController extends ControladorSeguroAdministrador {
 			System.out.println("despues de refresh");
 
 			correo.asunto="Asignación de folio";
-			correo.mensaje="Se le ha asignado como productor(a) para el folio <strong>"+obj.numfolio+"</strong> "+
+			correo.mensaje="<strong>ESTA ES UNA PRUEBA DE CORREO (desde AdminFolioController.save)</strong><br><br>"+
+					"Se le ha asignado como productor(a) para el folio <strong>"+obj.numfolio+"</strong> "+
 					obj.oficio.descripcion+"<br><br>"+
 					"Oficio "+obj.oficio.oficio+"  "+obj.oficio.descripcion+"<br><br>"+
 					"Servicio(s) solicitado(s): ";
-
 			StringBuilder servs = new StringBuilder();
-
-
 			for ( OficioServicioSolicitado s : obj. oficio.servicios) {
 				servs.append(s.servicio.descripcion).append("<br>");
 			}
 			correo.mensaje+=servs;
-
-
 			if (  session("rolActual").compareTo("334")==0 ) {
 				System.out.println("\n\n\n\n\nSE LANZA LA EXCEPCION\n\n\n\n\n");
 				//	throw new Exception("AGUASSSSSS!!!!!");
@@ -163,20 +159,16 @@ public class AdminFolioController extends ControladorSeguroAdministrador {
 		if ( activa!=null) {
 			miCorreo2 correo = new miCorreo2();
 			correo.asunto = "Asignación de folio";
-			correo.mensaje = "Se le ha asignado como productor(a) para el folio <strong>" + obj.numfolio + "</strong> " +
+			correo.mensaje = "<strong>ESTA ES UNA PRUEBA DE CORREO (desde AdminFolioController.correoAsignacion)</strong><br><br>"+
+					"Se le ha asignado como productor(a) para el folio <strong>" + obj.numfolio + "</strong> " +
 					obj.oficio.descripcion + "<br><br>" +
 					"Oficio " + obj.oficio.oficio + "  " + obj.oficio.descripcion + "<br><br>" +
 					"Servicio(s) solicitado(s): ";
-
 			StringBuilder servs = new StringBuilder();
-
-
 			for (OficioServicioSolicitado s : obj.oficio.servicios) {
 				servs.append(s.servicio.descripcion).append("<br>");
 			}
 			correo.mensaje += servs;
-
-
 			if (session("rolActual").compareTo("334") == 0) {
 				System.out.println("\n\n\n\n\nSE LANZA LA EXCEPCION\n\n\n\n\n");
 				//	throw new Exception("AGUASSSSSS!!!!!");
