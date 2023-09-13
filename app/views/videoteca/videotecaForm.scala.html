@@ -1,4 +1,4 @@
-@(forma: Form[VtkCatalogo], arrCreditos:List[String])
+@(forma: Form[VtkCatalogo], auxCreditos:List[TipoCredito])
 
 
 @import helper._
@@ -61,6 +61,45 @@
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        @select(
+                            forma("produccion.id"),
+                            options(models.Produccion.options),
+                            '_label -> "Producción", '_default -> "-- Seleccione --",
+                            '_showConstraints -> false,
+                            'class->"form-control",
+                            'required->true
+                        )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        @inputText(forma("duracion"), 'type->"time", 'step->"1", '_label -> "Duración", 'class->"form-control", 'required->true )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        @inputText(forma("anioProduccion"), 'type->"number", 'step->"1", 'min->"1900", 'max->"2024", '_label -> "Año producción", 'class->"form-control", 'required->true )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        @select(
+                            forma("sistema.id"),
+                            options(models.Sistema.options),
+                            '_label -> "Sistema", '_default -> "-- Seleccione --",
+                            '_showConstraints -> false,
+                            'class->"form-control",
+                            'required->true
+                        )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -111,47 +150,52 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-sm-12 col-md-8 col-lg-8">
-                    <div>
-                        <!-- Nav tabs -->
-                        <ul class="nav nav-tabs" role="tablist" id="navTabs">
+                <div class="col-sm-12 col-md-12 col-lg-12"><h2>Créditos</h2></div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading panel-heading-nav">
 
-                            @for((s, index) <- arrCreditos.zipWithIndex) {
-                                <li role="presentation" ><a href="#@s"  id="tab@s"  role="tab" data-toggle="tab">@s</a></li>
-                            }
-                        </ul>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <div>
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist" id="navTabs">
 
-                        <!-- Tab panes -->
-                        <div class="tab-content">
-                            @for((s, index) <- arrCreditos.zipWithIndex) {
-                                <div role="tabpanel" class="tab-pane active" id="@s">
-                                    <textarea id="ta@s" class="form-control" rows="5" placeholder="Escriba los nombres de las personas que participaron en @index - @s"+
-                                        @(if(index=='0')
-                                              {"la producción"
-                                    }else{"nada"})
-                                    ></textarea>
+                                    @for( s <- auxCreditos) {
+                                        <li role="presentation" @if(s.id==1){class="active"}><a href="#@s.id"  id="tab@s.id"  role="tab" data-toggle="tab">@s.descripcion</a></li>
+                                    }
+                                </ul>
+
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    @for(s <- auxCreditos) {
+                                        <div role="tabpanel" class="tab-pane @if(s.id==1){ active}" id="@s.id" name="losTabs">
+                                            <textarea id="ta@s.id"  class="form-control" style="margin-top:10px;"  rows="5" placeholder="Escriba los nombres de las personas que participaron en @s.accion"></textarea>
+                                        </div>
+                                    }
+
                                 </div>
-                            }
 
-                        </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                        <p class="small" style="margin-top: 5px;">
+                                            Puede escribir los nombre del personal de la DEV o puede usar el panel de botones de la derecha <i class="far fa-hand-point-right"></i></i> <br>
+                                            Los nombres que no aparezcan en el área de botones escribalos directamente.
+                                        </p>
+                                    </div>
+                                </div>
 
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12 col-lg-12">
-                                <p class="small">
-                                    Puede escribir los nombre del personal de la DEV o puede usar el panel de botones de la derecha <i class="far fa-hand-point-right"></i></i> <br>
-                                    Los nombres que no aparezcan en el área de botones escribalos directamente.
-                                </p>
+
                             </div>
+
                         </div>
-
-
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            @for(p<-models.Personal.find.all()){
+                            <button type="button" name="btnProductor" class="btn btn-default">@p.nombreCompleto()</button>
+                            }
+                        </div>
                     </div>
 
-                </div>
-                <div class="col-sm-12 col-md-4 col-lg-4">
-                    @for(p<-models.Personal.find.all()){
-                    <button type="button" name="btnProductor" class="btn btn-default">@p.nombreCompleto()</button>
-                    }
                 </div>
             </div>
         </div>

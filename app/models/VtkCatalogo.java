@@ -36,7 +36,8 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "catalogo")
     public List<Credito> creditos;
 
-    public String produccion;
+    @ManyToOne
+    public Produccion produccion;
 
     public Duration duracion;
 

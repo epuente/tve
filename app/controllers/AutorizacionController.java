@@ -1,6 +1,6 @@
 package controllers;
 
-import actions.miCorreo2;
+import classes.miCorreo2;
 import classes.ColorConsola;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.SqlRow;

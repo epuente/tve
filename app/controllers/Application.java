@@ -1,8 +1,7 @@
 package controllers;
 
-import actions.miCorreo2;
+import classes.miCorreo2;
 import classes.ColorConsola;
-import classes.Notificaciones.Notificacion;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.text.json.JsonContext;
 import com.fasterxml.jackson.databind.JsonNode;

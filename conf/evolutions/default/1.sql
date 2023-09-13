@@ -312,6 +312,8 @@ create table credito (
   audit_update              timestamp,
   descripcion               varchar(100) not null,
   catalogo_id               bigint,
+  tipo_credito_id           bigint,
+  personas                  varchar(500),
   constraint pk_credito primary key (id))
 ;
 
@@ -897,6 +899,14 @@ create table pre_agenda_vehiculo (
   constraint pk_pre_agenda_vehiculo primary key (id))
 ;
 
+create table produccion (
+  id                        bigint not null,
+  audit_insert              timestamp,
+  audit_update              timestamp,
+  descripcion               varchar(100) not null,
+  constraint pk_produccion primary key (id))
+;
+
 create table registro_acceso (
   id                        bigint not null,
   audit_insert              timestamp,
@@ -990,6 +1000,15 @@ create table tipo_contrato (
   constraint pk_tipo_contrato primary key (id))
 ;
 
+create table tipo_credito (
+  id                        bigint not null,
+  audit_insert              timestamp,
+  audit_update              timestamp,
+  descripcion               varchar(100) not null,
+  accion                    varchar(255),
+  constraint pk_tipo_credito primary key (id))
+;
+
 create table tipo_equipo_accesorio (
   id                        bigint not null,
   audit_insert              timestamp,
@@ -1051,7 +1070,7 @@ create table vtk_catalogo (
   obra_total                integer,
   formato_id                bigint,
   idioma_id                 bigint,
-  produccion                varchar(255),
+  produccion_id             bigint,
   anio_produccion           timestamp,
   sistema_id                bigint,
   disponibilidad_id         bigint,
@@ -1250,6 +1269,8 @@ create sequence pre_agenda_salida_seq;
 
 create sequence pre_agenda_vehiculo_seq;
 
+create sequence produccion_seq;
+
 create sequence registro_acceso_seq;
 
 create sequence rol_seq;
@@ -1269,6 +1290,8 @@ create sequence servicio_seq;
 create sequence sistema_seq;
 
 create sequence tipo_contrato_seq;
+
+create sequence tipo_credito_seq;
 
 create sequence tipo_equipo_accesorio_seq;
 
@@ -1388,188 +1411,192 @@ alter table agenda_vehiculo add constraint fk_agenda_vehiculo_vehiculo_51 foreig
 create index ix_agenda_vehiculo_vehiculo_51 on agenda_vehiculo (vehiculo_id);
 alter table credito add constraint fk_credito_catalogo_52 foreign key (catalogo_id) references vtk_catalogo (id);
 create index ix_credito_catalogo_52 on credito (catalogo_id);
-alter table cuenta add constraint fk_cuenta_personal_53 foreign key (personal_id) references personal (id);
-create index ix_cuenta_personal_53 on cuenta (personal_id);
-alter table cuenta_rol add constraint fk_cuenta_rol_cuenta_54 foreign key (cuenta_id) references cuenta (id);
-create index ix_cuenta_rol_cuenta_54 on cuenta_rol (cuenta_id);
-alter table cuenta_rol add constraint fk_cuenta_rol_rol_55 foreign key (rol_id) references rol (id);
-create index ix_cuenta_rol_rol_55 on cuenta_rol (rol_id);
-alter table equipo add constraint fk_equipo_estado_56 foreign key (estado_id) references estado_equipo_accesorio_vehiculo (id);
-create index ix_equipo_estado_56 on equipo (estado_id);
-alter table folio add constraint fk_folio_oficio_57 foreign key (oficio_id) references oficio (id);
-create index ix_folio_oficio_57 on folio (oficio_id);
-alter table folio add constraint fk_folio_estado_58 foreign key (estado_id) references estado (id);
-create index ix_folio_estado_58 on folio (estado_id);
-alter table folio add constraint fk_folio_foliocancelacion_59 foreign key (foliocancelacion_id) references folio_cancelacion (id);
-create index ix_folio_foliocancelacion_59 on folio (foliocancelacion_id);
-alter table folio_cancelacion add constraint fk_folio_cancelacion_motivo_60 foreign key (motivo_id) references motivo_cancelacion (id);
-create index ix_folio_cancelacion_motivo_60 on folio_cancelacion (motivo_id);
-alter table folio_cancelacion add constraint fk_folio_cancelacion_estadoan_61 foreign key (estadoanterior_id) references estado (id);
-create index ix_folio_cancelacion_estadoan_61 on folio_cancelacion (estadoanterior_id);
-alter table folio_productor_asignado add constraint fk_folio_productor_asignado_f_62 foreign key (folio_id) references folio (id);
-create index ix_folio_productor_asignado_f_62 on folio_productor_asignado (folio_id);
-alter table folio_productor_asignado add constraint fk_folio_productor_asignado_p_63 foreign key (personal_id) references personal (id);
-create index ix_folio_productor_asignado_p_63 on folio_productor_asignado (personal_id);
-alter table his_folio add constraint fk_his_folio_folio_64 foreign key (folio_id) references folio (id);
-create index ix_his_folio_folio_64 on his_folio (folio_id);
-alter table his_folio add constraint fk_his_folio_estado_65 foreign key (estado_id) references estado (id);
-create index ix_his_folio_estado_65 on his_folio (estado_id);
-alter table his_folio add constraint fk_his_folio_usuario_66 foreign key (usuario_id) references personal (id);
-create index ix_his_folio_usuario_66 on his_folio (usuario_id);
-alter table his_folio add constraint fk_his_folio_rol_67 foreign key (rol_id) references rol (id);
-create index ix_his_folio_rol_67 on his_folio (rol_id);
-alter table oficio add constraint fk_oficio_urremitente_68 foreign key (urremitente_id) references unidad_responsable (id);
-create index ix_oficio_urremitente_68 on oficio (urremitente_id);
-alter table oficio_bitacora add constraint fk_oficio_bitacora_oficio_69 foreign key (oficio_id) references oficio (id);
-create index ix_oficio_bitacora_oficio_69 on oficio_bitacora (oficio_id);
-alter table oficio_contacto add constraint fk_oficio_contacto_oficio_70 foreign key (oficio_id) references oficio (id);
-create index ix_oficio_contacto_oficio_70 on oficio_contacto (oficio_id);
-alter table oficio_contacto_correo add constraint fk_oficio_contacto_correo_ofi_71 foreign key (oficio_contactos_id) references oficio_contacto (id);
-create index ix_oficio_contacto_correo_ofi_71 on oficio_contacto_correo (oficio_contactos_id);
-alter table oficio_contacto_telefono add constraint fk_oficio_contacto_telefono_o_72 foreign key (oficio_contactos_id) references oficio_contacto (id);
-create index ix_oficio_contacto_telefono_o_72 on oficio_contacto_telefono (oficio_contactos_id);
-alter table oficio_encuesta add constraint fk_oficio_encuesta_oficio_73 foreign key (oficio_id) references oficio (id);
-create index ix_oficio_encuesta_oficio_73 on oficio_encuesta (oficio_id);
-alter table oficio_entrada_salida add constraint fk_oficio_entrada_salida_ofic_74 foreign key (oficio_id) references oficio (id);
-create index ix_oficio_entrada_salida_ofic_74 on oficio_entrada_salida (oficio_id);
-alter table oficio_evidencia_entrega add constraint fk_oficio_evidencia_entrega_o_75 foreign key (oficio_id) references oficio (id);
-create index ix_oficio_evidencia_entrega_o_75 on oficio_evidencia_entrega (oficio_id);
-alter table oficio_fecha_grabacion add constraint fk_oficio_fecha_grabacion_ofi_76 foreign key (oficio_id) references oficio (id);
-create index ix_oficio_fecha_grabacion_ofi_76 on oficio_fecha_grabacion (oficio_id);
-alter table oficio_guion add constraint fk_oficio_guion_oficio_77 foreign key (oficio_id) references oficio (id);
-create index ix_oficio_guion_oficio_77 on oficio_guion (oficio_id);
-alter table oficio_imagen add constraint fk_oficio_imagen_oficio_78 foreign key (oficio_id) references oficio (id);
-create index ix_oficio_imagen_oficio_78 on oficio_imagen (oficio_id);
-alter table oficio_minuta add constraint fk_oficio_minuta_oficio_79 foreign key (oficio_id) references oficio (id);
-create index ix_oficio_minuta_oficio_79 on oficio_minuta (oficio_id);
-alter table oficio_productor_solicitado add constraint fk_oficio_productor_solicitad_80 foreign key (oficio_id) references oficio (id);
-create index ix_oficio_productor_solicitad_80 on oficio_productor_solicitado (oficio_id);
-alter table oficio_productor_solicitado add constraint fk_oficio_productor_solicitad_81 foreign key (personal_id) references personal (id);
-create index ix_oficio_productor_solicitad_81 on oficio_productor_solicitado (personal_id);
-alter table oficio_respuesta add constraint fk_oficio_respuesta_oficio_82 foreign key (oficio_id) references oficio (id);
-create index ix_oficio_respuesta_oficio_82 on oficio_respuesta (oficio_id);
-alter table oficio_servicio_solicitado add constraint fk_oficio_servicio_solicitado_83 foreign key (oficio_id) references oficio (id);
-create index ix_oficio_servicio_solicitado_83 on oficio_servicio_solicitado (oficio_id);
-alter table oficio_servicio_solicitado add constraint fk_oficio_servicio_solicitado_84 foreign key (servicio_id) references servicio (id);
-create index ix_oficio_servicio_solicitado_84 on oficio_servicio_solicitado (servicio_id);
-alter table operador_sala add constraint fk_operador_sala_personal_85 foreign key (personal_id) references personal (id);
-create index ix_operador_sala_personal_85 on operador_sala (personal_id);
-alter table operador_sala add constraint fk_operador_sala_sala_86 foreign key (sala_id) references sala (id);
-create index ix_operador_sala_sala_86 on operador_sala (sala_id);
-alter table palabra_clave add constraint fk_palabra_clave_catalogo_87 foreign key (catalogo_id) references vtk_catalogo (id);
-create index ix_palabra_clave_catalogo_87 on palabra_clave (catalogo_id);
-alter table personal add constraint fk_personal_tipocontrato_88 foreign key (tipocontrato_id) references tipo_contrato (id);
-create index ix_personal_tipocontrato_88 on personal (tipocontrato_id);
-alter table personal_avatar add constraint fk_personal_avatar_personal_89 foreign key (personal_id) references personal (id);
-create index ix_personal_avatar_personal_89 on personal_avatar (personal_id);
-alter table personal_cambio_horario add constraint fk_personal_cambio_horario_pe_90 foreign key (personal_id) references personal (id);
-create index ix_personal_cambio_horario_pe_90 on personal_cambio_horario (personal_id);
-alter table personal_correo add constraint fk_personal_correo_personal_91 foreign key (personal_id) references personal (id);
-create index ix_personal_correo_personal_91 on personal_correo (personal_id);
-alter table personal_horario add constraint fk_personal_horario_personal_92 foreign key (personal_id) references personal (id);
-create index ix_personal_horario_personal_92 on personal_horario (personal_id);
-alter table pre_agenda add constraint fk_pre_agenda_folioproductora_93 foreign key (folioproductorasignado_id) references folio_productor_asignado (id);
-create index ix_pre_agenda_folioproductora_93 on pre_agenda (folioproductorasignado_id);
-alter table pre_agenda add constraint fk_pre_agenda_fase_94 foreign key (fase_id) references fase (id);
-create index ix_pre_agenda_fase_94 on pre_agenda (fase_id);
-alter table pre_agenda add constraint fk_pre_agenda_estado_95 foreign key (estado_id) references estado (id);
-create index ix_pre_agenda_estado_95 on pre_agenda (estado_id);
-alter table pre_agenda_accesorio add constraint fk_pre_agenda_accesorio_preag_96 foreign key (preagenda_id) references pre_agenda (id);
-create index ix_pre_agenda_accesorio_preag_96 on pre_agenda_accesorio (preagenda_id);
-alter table pre_agenda_accesorio add constraint fk_pre_agenda_accesorio_acces_97 foreign key (accesorio_id) references accesorio (id);
-create index ix_pre_agenda_accesorio_acces_97 on pre_agenda_accesorio (accesorio_id);
-alter table pre_agenda_accesorio add constraint fk_pre_agenda_accesorio_estad_98 foreign key (estado_id) references estado (id);
-create index ix_pre_agenda_accesorio_estad_98 on pre_agenda_accesorio (estado_id);
-alter table pre_agenda_cancelacion add constraint fk_pre_agenda_cancelacion_pre_99 foreign key (preagenda_id) references pre_agenda (id);
-create index ix_pre_agenda_cancelacion_pre_99 on pre_agenda_cancelacion (preagenda_id);
-alter table pre_agenda_cancelacion add constraint fk_pre_agenda_cancelacion_es_100 foreign key (estado_anterior_id) references estado (id);
-create index ix_pre_agenda_cancelacion_es_100 on pre_agenda_cancelacion (estado_anterior_id);
-alter table pre_agenda_cancelacion add constraint fk_pre_agenda_cancelacion_mo_101 foreign key (motivo_id) references motivo_cancelacion (id);
-create index ix_pre_agenda_cancelacion_mo_101 on pre_agenda_cancelacion (motivo_id);
-alter table pre_agenda_equipo add constraint fk_pre_agenda_equipo_preagen_102 foreign key (preagenda_id) references pre_agenda (id);
-create index ix_pre_agenda_equipo_preagen_102 on pre_agenda_equipo (preagenda_id);
-alter table pre_agenda_equipo add constraint fk_pre_agenda_equipo_equipo_103 foreign key (equipo_id) references equipo (id);
-create index ix_pre_agenda_equipo_equipo_103 on pre_agenda_equipo (equipo_id);
-alter table pre_agenda_equipo add constraint fk_pre_agenda_equipo_estado_104 foreign key (estado_id) references estado (id);
-create index ix_pre_agenda_equipo_estado_104 on pre_agenda_equipo (estado_id);
-alter table pre_agenda_formato_entrega add constraint fk_pre_agenda_formato_entreg_105 foreign key (preagenda_id) references pre_agenda (id);
-create index ix_pre_agenda_formato_entreg_105 on pre_agenda_formato_entrega (preagenda_id);
-alter table pre_agenda_formato_entrega add constraint fk_pre_agenda_formato_entreg_106 foreign key (formato_id) references formato (id);
-create index ix_pre_agenda_formato_entreg_106 on pre_agenda_formato_entrega (formato_id);
-alter table pre_agenda_ing_admon_eqpo add constraint fk_pre_agenda_ing_admon_eqpo_107 foreign key (preagenda_id) references pre_agenda (id);
-create index ix_pre_agenda_ing_admon_eqpo_107 on pre_agenda_ing_admon_eqpo (preagenda_id);
-alter table pre_agenda_ing_admon_eqpo add constraint fk_pre_agenda_ing_admon_eqpo_108 foreign key (ingeniero_id) references personal (id);
-create index ix_pre_agenda_ing_admon_eqpo_108 on pre_agenda_ing_admon_eqpo (ingeniero_id);
-alter table pre_agenda_ingesta add constraint fk_pre_agenda_ingesta_preage_109 foreign key (preagenda_id) references pre_agenda (id);
-create index ix_pre_agenda_ingesta_preage_109 on pre_agenda_ingesta (preagenda_id);
-alter table pre_agenda_ingesta add constraint fk_pre_agenda_ingesta_estado_110 foreign key (estado_id) references estado_material (id);
-create index ix_pre_agenda_ingesta_estado_110 on pre_agenda_ingesta (estado_id);
-alter table pre_agenda_ingesta_almacenamiento add constraint fk_pre_agenda_ingesta_almace_111 foreign key (preagendaingesta_id) references pre_agenda_ingesta (id);
-create index ix_pre_agenda_ingesta_almace_111 on pre_agenda_ingesta_almacenamiento (preagendaingesta_id);
-alter table pre_agenda_ingesta_almacenamiento add constraint fk_pre_agenda_ingesta_almace_112 foreign key (medioalmacenamiento_id) references medio_almacenamiento (id);
-create index ix_pre_agenda_ingesta_almace_112 on pre_agenda_ingesta_almacenamiento (medioalmacenamiento_id);
-alter table pre_agenda_ingesta_fmto_salida add constraint fk_pre_agenda_ingesta_fmto_s_113 foreign key (preagendaingesta_id) references pre_agenda_ingesta (id);
-create index ix_pre_agenda_ingesta_fmto_s_113 on pre_agenda_ingesta_fmto_salida (preagendaingesta_id);
-alter table pre_agenda_ingesta_fmto_salida add constraint fk_pre_agenda_ingesta_fmto_s_114 foreign key (formatoingesta_id) references formato_ingesta (id);
-create index ix_pre_agenda_ingesta_fmto_s_114 on pre_agenda_ingesta_fmto_salida (formatoingesta_id);
-alter table pre_agenda_junta add constraint fk_pre_agenda_junta_preagend_115 foreign key (preagenda_id) references pre_agenda (id);
-create index ix_pre_agenda_junta_preagend_115 on pre_agenda_junta (preagenda_id);
-alter table pre_agenda_locacion add constraint fk_pre_agenda_locacion_preag_116 foreign key (preagenda_id) references pre_agenda (id);
-create index ix_pre_agenda_locacion_preag_116 on pre_agenda_locacion (preagenda_id);
-alter table pre_agenda_locutor add constraint fk_pre_agenda_locutor_preage_117 foreign key (preagenda_id) references pre_agenda (id);
-create index ix_pre_agenda_locutor_preage_117 on pre_agenda_locutor (preagenda_id);
-alter table pre_agenda_locutor add constraint fk_pre_agenda_locutor_person_118 foreign key (personal_id) references personal (id);
-create index ix_pre_agenda_locutor_person_118 on pre_agenda_locutor (personal_id);
-alter table pre_agenda_operador_sala add constraint fk_pre_agenda_operador_sala__119 foreign key (preagenda_id) references pre_agenda (id);
-create index ix_pre_agenda_operador_sala__119 on pre_agenda_operador_sala (preagenda_id);
-alter table pre_agenda_operador_sala add constraint fk_pre_agenda_operador_sala__120 foreign key (personal_id) references personal (id);
-create index ix_pre_agenda_operador_sala__120 on pre_agenda_operador_sala (personal_id);
-alter table pre_agenda_rol add constraint fk_pre_agenda_rol_preagenda_121 foreign key (preagenda_id) references pre_agenda (id);
-create index ix_pre_agenda_rol_preagenda_121 on pre_agenda_rol (preagenda_id);
-alter table pre_agenda_rol add constraint fk_pre_agenda_rol_rol_122 foreign key (rol_id) references rol (id);
-create index ix_pre_agenda_rol_rol_122 on pre_agenda_rol (rol_id);
-alter table pre_agenda_sala add constraint fk_pre_agenda_sala_preagenda_123 foreign key (preagenda_id) references pre_agenda (id);
-create index ix_pre_agenda_sala_preagenda_123 on pre_agenda_sala (preagenda_id);
-alter table pre_agenda_sala add constraint fk_pre_agenda_sala_sala_124 foreign key (sala_id) references sala (id);
-create index ix_pre_agenda_sala_sala_124 on pre_agenda_sala (sala_id);
-alter table pre_agenda_sala_uso_cabina add constraint fk_pre_agenda_sala_uso_cabin_125 foreign key (preagendasala_id) references pre_agenda_sala (id);
-create index ix_pre_agenda_sala_uso_cabin_125 on pre_agenda_sala_uso_cabina (preagendasala_id);
-alter table pre_agenda_salida add constraint fk_pre_agenda_salida_preagen_126 foreign key (preagenda_id) references pre_agenda (id);
-create index ix_pre_agenda_salida_preagen_126 on pre_agenda_salida (preagenda_id);
-alter table pre_agenda_vehiculo add constraint fk_pre_agenda_vehiculo_preag_127 foreign key (preagenda_id) references pre_agenda (id);
-create index ix_pre_agenda_vehiculo_preag_127 on pre_agenda_vehiculo (preagenda_id);
-alter table registro_acceso add constraint fk_registro_acceso_usuario_128 foreign key (usuario_id) references personal (id);
-create index ix_registro_acceso_usuario_128 on registro_acceso (usuario_id);
-alter table registro_acceso add constraint fk_registro_acceso_rol_129 foreign key (rol_id) references rol (id);
-create index ix_registro_acceso_rol_129 on registro_acceso (rol_id);
-alter table rol_derecho add constraint fk_rol_derecho_rol_130 foreign key (rol_id) references rol (id);
-create index ix_rol_derecho_rol_130 on rol_derecho (rol_id);
-alter table rol_derecho add constraint fk_rol_derecho_ambito_131 foreign key (ambito_id) references ambito (id);
-create index ix_rol_derecho_ambito_131 on rol_derecho (ambito_id);
-alter table rol_fase add constraint fk_rol_fase_fase_132 foreign key (fase_id) references fase (id);
-create index ix_rol_fase_fase_132 on rol_fase (fase_id);
-alter table rol_fase add constraint fk_rol_fase_rol_133 foreign key (rol_id) references rol (id);
-create index ix_rol_fase_rol_133 on rol_fase (rol_id);
-alter table sala_mantenimiento add constraint fk_sala_mantenimiento_sala_134 foreign key (sala_id) references sala (id);
-create index ix_sala_mantenimiento_sala_134 on sala_mantenimiento (sala_id);
-alter table sala_mantenimiento add constraint fk_sala_mantenimiento_tipo_135 foreign key (tipo_id) references tipo_mantenimiento (id);
-create index ix_sala_mantenimiento_tipo_135 on sala_mantenimiento (tipo_id);
-alter table vehiculo add constraint fk_vehiculo_estado_136 foreign key (estado_id) references estado_equipo_accesorio_vehiculo (id);
-create index ix_vehiculo_estado_136 on vehiculo (estado_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_serie_137 foreign key (serie_id) references serie (id);
-create index ix_vtk_catalogo_serie_137 on vtk_catalogo (serie_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_formato_138 foreign key (formato_id) references vtk_formato (id);
-create index ix_vtk_catalogo_formato_138 on vtk_catalogo (formato_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_idioma_139 foreign key (idioma_id) references idioma (id);
-create index ix_vtk_catalogo_idioma_139 on vtk_catalogo (idioma_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_sistema_140 foreign key (sistema_id) references sistema (id);
-create index ix_vtk_catalogo_sistema_140 on vtk_catalogo (sistema_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_disponibilid_141 foreign key (disponibilidad_id) references disponibilidad (id);
-create index ix_vtk_catalogo_disponibilid_141 on vtk_catalogo (disponibilidad_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_ubicacion_142 foreign key (ubicacion_id) references ubicacion (id);
-create index ix_vtk_catalogo_ubicacion_142 on vtk_catalogo (ubicacion_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_areatematica_143 foreign key (areatematica_id) references areatematica (id);
-create index ix_vtk_catalogo_areatematica_143 on vtk_catalogo (areatematica_id);
+alter table credito add constraint fk_credito_tipoCredito_53 foreign key (tipo_credito_id) references tipo_credito (id);
+create index ix_credito_tipoCredito_53 on credito (tipo_credito_id);
+alter table cuenta add constraint fk_cuenta_personal_54 foreign key (personal_id) references personal (id);
+create index ix_cuenta_personal_54 on cuenta (personal_id);
+alter table cuenta_rol add constraint fk_cuenta_rol_cuenta_55 foreign key (cuenta_id) references cuenta (id);
+create index ix_cuenta_rol_cuenta_55 on cuenta_rol (cuenta_id);
+alter table cuenta_rol add constraint fk_cuenta_rol_rol_56 foreign key (rol_id) references rol (id);
+create index ix_cuenta_rol_rol_56 on cuenta_rol (rol_id);
+alter table equipo add constraint fk_equipo_estado_57 foreign key (estado_id) references estado_equipo_accesorio_vehiculo (id);
+create index ix_equipo_estado_57 on equipo (estado_id);
+alter table folio add constraint fk_folio_oficio_58 foreign key (oficio_id) references oficio (id);
+create index ix_folio_oficio_58 on folio (oficio_id);
+alter table folio add constraint fk_folio_estado_59 foreign key (estado_id) references estado (id);
+create index ix_folio_estado_59 on folio (estado_id);
+alter table folio add constraint fk_folio_foliocancelacion_60 foreign key (foliocancelacion_id) references folio_cancelacion (id);
+create index ix_folio_foliocancelacion_60 on folio (foliocancelacion_id);
+alter table folio_cancelacion add constraint fk_folio_cancelacion_motivo_61 foreign key (motivo_id) references motivo_cancelacion (id);
+create index ix_folio_cancelacion_motivo_61 on folio_cancelacion (motivo_id);
+alter table folio_cancelacion add constraint fk_folio_cancelacion_estadoan_62 foreign key (estadoanterior_id) references estado (id);
+create index ix_folio_cancelacion_estadoan_62 on folio_cancelacion (estadoanterior_id);
+alter table folio_productor_asignado add constraint fk_folio_productor_asignado_f_63 foreign key (folio_id) references folio (id);
+create index ix_folio_productor_asignado_f_63 on folio_productor_asignado (folio_id);
+alter table folio_productor_asignado add constraint fk_folio_productor_asignado_p_64 foreign key (personal_id) references personal (id);
+create index ix_folio_productor_asignado_p_64 on folio_productor_asignado (personal_id);
+alter table his_folio add constraint fk_his_folio_folio_65 foreign key (folio_id) references folio (id);
+create index ix_his_folio_folio_65 on his_folio (folio_id);
+alter table his_folio add constraint fk_his_folio_estado_66 foreign key (estado_id) references estado (id);
+create index ix_his_folio_estado_66 on his_folio (estado_id);
+alter table his_folio add constraint fk_his_folio_usuario_67 foreign key (usuario_id) references personal (id);
+create index ix_his_folio_usuario_67 on his_folio (usuario_id);
+alter table his_folio add constraint fk_his_folio_rol_68 foreign key (rol_id) references rol (id);
+create index ix_his_folio_rol_68 on his_folio (rol_id);
+alter table oficio add constraint fk_oficio_urremitente_69 foreign key (urremitente_id) references unidad_responsable (id);
+create index ix_oficio_urremitente_69 on oficio (urremitente_id);
+alter table oficio_bitacora add constraint fk_oficio_bitacora_oficio_70 foreign key (oficio_id) references oficio (id);
+create index ix_oficio_bitacora_oficio_70 on oficio_bitacora (oficio_id);
+alter table oficio_contacto add constraint fk_oficio_contacto_oficio_71 foreign key (oficio_id) references oficio (id);
+create index ix_oficio_contacto_oficio_71 on oficio_contacto (oficio_id);
+alter table oficio_contacto_correo add constraint fk_oficio_contacto_correo_ofi_72 foreign key (oficio_contactos_id) references oficio_contacto (id);
+create index ix_oficio_contacto_correo_ofi_72 on oficio_contacto_correo (oficio_contactos_id);
+alter table oficio_contacto_telefono add constraint fk_oficio_contacto_telefono_o_73 foreign key (oficio_contactos_id) references oficio_contacto (id);
+create index ix_oficio_contacto_telefono_o_73 on oficio_contacto_telefono (oficio_contactos_id);
+alter table oficio_encuesta add constraint fk_oficio_encuesta_oficio_74 foreign key (oficio_id) references oficio (id);
+create index ix_oficio_encuesta_oficio_74 on oficio_encuesta (oficio_id);
+alter table oficio_entrada_salida add constraint fk_oficio_entrada_salida_ofic_75 foreign key (oficio_id) references oficio (id);
+create index ix_oficio_entrada_salida_ofic_75 on oficio_entrada_salida (oficio_id);
+alter table oficio_evidencia_entrega add constraint fk_oficio_evidencia_entrega_o_76 foreign key (oficio_id) references oficio (id);
+create index ix_oficio_evidencia_entrega_o_76 on oficio_evidencia_entrega (oficio_id);
+alter table oficio_fecha_grabacion add constraint fk_oficio_fecha_grabacion_ofi_77 foreign key (oficio_id) references oficio (id);
+create index ix_oficio_fecha_grabacion_ofi_77 on oficio_fecha_grabacion (oficio_id);
+alter table oficio_guion add constraint fk_oficio_guion_oficio_78 foreign key (oficio_id) references oficio (id);
+create index ix_oficio_guion_oficio_78 on oficio_guion (oficio_id);
+alter table oficio_imagen add constraint fk_oficio_imagen_oficio_79 foreign key (oficio_id) references oficio (id);
+create index ix_oficio_imagen_oficio_79 on oficio_imagen (oficio_id);
+alter table oficio_minuta add constraint fk_oficio_minuta_oficio_80 foreign key (oficio_id) references oficio (id);
+create index ix_oficio_minuta_oficio_80 on oficio_minuta (oficio_id);
+alter table oficio_productor_solicitado add constraint fk_oficio_productor_solicitad_81 foreign key (oficio_id) references oficio (id);
+create index ix_oficio_productor_solicitad_81 on oficio_productor_solicitado (oficio_id);
+alter table oficio_productor_solicitado add constraint fk_oficio_productor_solicitad_82 foreign key (personal_id) references personal (id);
+create index ix_oficio_productor_solicitad_82 on oficio_productor_solicitado (personal_id);
+alter table oficio_respuesta add constraint fk_oficio_respuesta_oficio_83 foreign key (oficio_id) references oficio (id);
+create index ix_oficio_respuesta_oficio_83 on oficio_respuesta (oficio_id);
+alter table oficio_servicio_solicitado add constraint fk_oficio_servicio_solicitado_84 foreign key (oficio_id) references oficio (id);
+create index ix_oficio_servicio_solicitado_84 on oficio_servicio_solicitado (oficio_id);
+alter table oficio_servicio_solicitado add constraint fk_oficio_servicio_solicitado_85 foreign key (servicio_id) references servicio (id);
+create index ix_oficio_servicio_solicitado_85 on oficio_servicio_solicitado (servicio_id);
+alter table operador_sala add constraint fk_operador_sala_personal_86 foreign key (personal_id) references personal (id);
+create index ix_operador_sala_personal_86 on operador_sala (personal_id);
+alter table operador_sala add constraint fk_operador_sala_sala_87 foreign key (sala_id) references sala (id);
+create index ix_operador_sala_sala_87 on operador_sala (sala_id);
+alter table palabra_clave add constraint fk_palabra_clave_catalogo_88 foreign key (catalogo_id) references vtk_catalogo (id);
+create index ix_palabra_clave_catalogo_88 on palabra_clave (catalogo_id);
+alter table personal add constraint fk_personal_tipocontrato_89 foreign key (tipocontrato_id) references tipo_contrato (id);
+create index ix_personal_tipocontrato_89 on personal (tipocontrato_id);
+alter table personal_avatar add constraint fk_personal_avatar_personal_90 foreign key (personal_id) references personal (id);
+create index ix_personal_avatar_personal_90 on personal_avatar (personal_id);
+alter table personal_cambio_horario add constraint fk_personal_cambio_horario_pe_91 foreign key (personal_id) references personal (id);
+create index ix_personal_cambio_horario_pe_91 on personal_cambio_horario (personal_id);
+alter table personal_correo add constraint fk_personal_correo_personal_92 foreign key (personal_id) references personal (id);
+create index ix_personal_correo_personal_92 on personal_correo (personal_id);
+alter table personal_horario add constraint fk_personal_horario_personal_93 foreign key (personal_id) references personal (id);
+create index ix_personal_horario_personal_93 on personal_horario (personal_id);
+alter table pre_agenda add constraint fk_pre_agenda_folioproductora_94 foreign key (folioproductorasignado_id) references folio_productor_asignado (id);
+create index ix_pre_agenda_folioproductora_94 on pre_agenda (folioproductorasignado_id);
+alter table pre_agenda add constraint fk_pre_agenda_fase_95 foreign key (fase_id) references fase (id);
+create index ix_pre_agenda_fase_95 on pre_agenda (fase_id);
+alter table pre_agenda add constraint fk_pre_agenda_estado_96 foreign key (estado_id) references estado (id);
+create index ix_pre_agenda_estado_96 on pre_agenda (estado_id);
+alter table pre_agenda_accesorio add constraint fk_pre_agenda_accesorio_preag_97 foreign key (preagenda_id) references pre_agenda (id);
+create index ix_pre_agenda_accesorio_preag_97 on pre_agenda_accesorio (preagenda_id);
+alter table pre_agenda_accesorio add constraint fk_pre_agenda_accesorio_acces_98 foreign key (accesorio_id) references accesorio (id);
+create index ix_pre_agenda_accesorio_acces_98 on pre_agenda_accesorio (accesorio_id);
+alter table pre_agenda_accesorio add constraint fk_pre_agenda_accesorio_estad_99 foreign key (estado_id) references estado (id);
+create index ix_pre_agenda_accesorio_estad_99 on pre_agenda_accesorio (estado_id);
+alter table pre_agenda_cancelacion add constraint fk_pre_agenda_cancelacion_pr_100 foreign key (preagenda_id) references pre_agenda (id);
+create index ix_pre_agenda_cancelacion_pr_100 on pre_agenda_cancelacion (preagenda_id);
+alter table pre_agenda_cancelacion add constraint fk_pre_agenda_cancelacion_es_101 foreign key (estado_anterior_id) references estado (id);
+create index ix_pre_agenda_cancelacion_es_101 on pre_agenda_cancelacion (estado_anterior_id);
+alter table pre_agenda_cancelacion add constraint fk_pre_agenda_cancelacion_mo_102 foreign key (motivo_id) references motivo_cancelacion (id);
+create index ix_pre_agenda_cancelacion_mo_102 on pre_agenda_cancelacion (motivo_id);
+alter table pre_agenda_equipo add constraint fk_pre_agenda_equipo_preagen_103 foreign key (preagenda_id) references pre_agenda (id);
+create index ix_pre_agenda_equipo_preagen_103 on pre_agenda_equipo (preagenda_id);
+alter table pre_agenda_equipo add constraint fk_pre_agenda_equipo_equipo_104 foreign key (equipo_id) references equipo (id);
+create index ix_pre_agenda_equipo_equipo_104 on pre_agenda_equipo (equipo_id);
+alter table pre_agenda_equipo add constraint fk_pre_agenda_equipo_estado_105 foreign key (estado_id) references estado (id);
+create index ix_pre_agenda_equipo_estado_105 on pre_agenda_equipo (estado_id);
+alter table pre_agenda_formato_entrega add constraint fk_pre_agenda_formato_entreg_106 foreign key (preagenda_id) references pre_agenda (id);
+create index ix_pre_agenda_formato_entreg_106 on pre_agenda_formato_entrega (preagenda_id);
+alter table pre_agenda_formato_entrega add constraint fk_pre_agenda_formato_entreg_107 foreign key (formato_id) references formato (id);
+create index ix_pre_agenda_formato_entreg_107 on pre_agenda_formato_entrega (formato_id);
+alter table pre_agenda_ing_admon_eqpo add constraint fk_pre_agenda_ing_admon_eqpo_108 foreign key (preagenda_id) references pre_agenda (id);
+create index ix_pre_agenda_ing_admon_eqpo_108 on pre_agenda_ing_admon_eqpo (preagenda_id);
+alter table pre_agenda_ing_admon_eqpo add constraint fk_pre_agenda_ing_admon_eqpo_109 foreign key (ingeniero_id) references personal (id);
+create index ix_pre_agenda_ing_admon_eqpo_109 on pre_agenda_ing_admon_eqpo (ingeniero_id);
+alter table pre_agenda_ingesta add constraint fk_pre_agenda_ingesta_preage_110 foreign key (preagenda_id) references pre_agenda (id);
+create index ix_pre_agenda_ingesta_preage_110 on pre_agenda_ingesta (preagenda_id);
+alter table pre_agenda_ingesta add constraint fk_pre_agenda_ingesta_estado_111 foreign key (estado_id) references estado_material (id);
+create index ix_pre_agenda_ingesta_estado_111 on pre_agenda_ingesta (estado_id);
+alter table pre_agenda_ingesta_almacenamiento add constraint fk_pre_agenda_ingesta_almace_112 foreign key (preagendaingesta_id) references pre_agenda_ingesta (id);
+create index ix_pre_agenda_ingesta_almace_112 on pre_agenda_ingesta_almacenamiento (preagendaingesta_id);
+alter table pre_agenda_ingesta_almacenamiento add constraint fk_pre_agenda_ingesta_almace_113 foreign key (medioalmacenamiento_id) references medio_almacenamiento (id);
+create index ix_pre_agenda_ingesta_almace_113 on pre_agenda_ingesta_almacenamiento (medioalmacenamiento_id);
+alter table pre_agenda_ingesta_fmto_salida add constraint fk_pre_agenda_ingesta_fmto_s_114 foreign key (preagendaingesta_id) references pre_agenda_ingesta (id);
+create index ix_pre_agenda_ingesta_fmto_s_114 on pre_agenda_ingesta_fmto_salida (preagendaingesta_id);
+alter table pre_agenda_ingesta_fmto_salida add constraint fk_pre_agenda_ingesta_fmto_s_115 foreign key (formatoingesta_id) references formato_ingesta (id);
+create index ix_pre_agenda_ingesta_fmto_s_115 on pre_agenda_ingesta_fmto_salida (formatoingesta_id);
+alter table pre_agenda_junta add constraint fk_pre_agenda_junta_preagend_116 foreign key (preagenda_id) references pre_agenda (id);
+create index ix_pre_agenda_junta_preagend_116 on pre_agenda_junta (preagenda_id);
+alter table pre_agenda_locacion add constraint fk_pre_agenda_locacion_preag_117 foreign key (preagenda_id) references pre_agenda (id);
+create index ix_pre_agenda_locacion_preag_117 on pre_agenda_locacion (preagenda_id);
+alter table pre_agenda_locutor add constraint fk_pre_agenda_locutor_preage_118 foreign key (preagenda_id) references pre_agenda (id);
+create index ix_pre_agenda_locutor_preage_118 on pre_agenda_locutor (preagenda_id);
+alter table pre_agenda_locutor add constraint fk_pre_agenda_locutor_person_119 foreign key (personal_id) references personal (id);
+create index ix_pre_agenda_locutor_person_119 on pre_agenda_locutor (personal_id);
+alter table pre_agenda_operador_sala add constraint fk_pre_agenda_operador_sala__120 foreign key (preagenda_id) references pre_agenda (id);
+create index ix_pre_agenda_operador_sala__120 on pre_agenda_operador_sala (preagenda_id);
+alter table pre_agenda_operador_sala add constraint fk_pre_agenda_operador_sala__121 foreign key (personal_id) references personal (id);
+create index ix_pre_agenda_operador_sala__121 on pre_agenda_operador_sala (personal_id);
+alter table pre_agenda_rol add constraint fk_pre_agenda_rol_preagenda_122 foreign key (preagenda_id) references pre_agenda (id);
+create index ix_pre_agenda_rol_preagenda_122 on pre_agenda_rol (preagenda_id);
+alter table pre_agenda_rol add constraint fk_pre_agenda_rol_rol_123 foreign key (rol_id) references rol (id);
+create index ix_pre_agenda_rol_rol_123 on pre_agenda_rol (rol_id);
+alter table pre_agenda_sala add constraint fk_pre_agenda_sala_preagenda_124 foreign key (preagenda_id) references pre_agenda (id);
+create index ix_pre_agenda_sala_preagenda_124 on pre_agenda_sala (preagenda_id);
+alter table pre_agenda_sala add constraint fk_pre_agenda_sala_sala_125 foreign key (sala_id) references sala (id);
+create index ix_pre_agenda_sala_sala_125 on pre_agenda_sala (sala_id);
+alter table pre_agenda_sala_uso_cabina add constraint fk_pre_agenda_sala_uso_cabin_126 foreign key (preagendasala_id) references pre_agenda_sala (id);
+create index ix_pre_agenda_sala_uso_cabin_126 on pre_agenda_sala_uso_cabina (preagendasala_id);
+alter table pre_agenda_salida add constraint fk_pre_agenda_salida_preagen_127 foreign key (preagenda_id) references pre_agenda (id);
+create index ix_pre_agenda_salida_preagen_127 on pre_agenda_salida (preagenda_id);
+alter table pre_agenda_vehiculo add constraint fk_pre_agenda_vehiculo_preag_128 foreign key (preagenda_id) references pre_agenda (id);
+create index ix_pre_agenda_vehiculo_preag_128 on pre_agenda_vehiculo (preagenda_id);
+alter table registro_acceso add constraint fk_registro_acceso_usuario_129 foreign key (usuario_id) references personal (id);
+create index ix_registro_acceso_usuario_129 on registro_acceso (usuario_id);
+alter table registro_acceso add constraint fk_registro_acceso_rol_130 foreign key (rol_id) references rol (id);
+create index ix_registro_acceso_rol_130 on registro_acceso (rol_id);
+alter table rol_derecho add constraint fk_rol_derecho_rol_131 foreign key (rol_id) references rol (id);
+create index ix_rol_derecho_rol_131 on rol_derecho (rol_id);
+alter table rol_derecho add constraint fk_rol_derecho_ambito_132 foreign key (ambito_id) references ambito (id);
+create index ix_rol_derecho_ambito_132 on rol_derecho (ambito_id);
+alter table rol_fase add constraint fk_rol_fase_fase_133 foreign key (fase_id) references fase (id);
+create index ix_rol_fase_fase_133 on rol_fase (fase_id);
+alter table rol_fase add constraint fk_rol_fase_rol_134 foreign key (rol_id) references rol (id);
+create index ix_rol_fase_rol_134 on rol_fase (rol_id);
+alter table sala_mantenimiento add constraint fk_sala_mantenimiento_sala_135 foreign key (sala_id) references sala (id);
+create index ix_sala_mantenimiento_sala_135 on sala_mantenimiento (sala_id);
+alter table sala_mantenimiento add constraint fk_sala_mantenimiento_tipo_136 foreign key (tipo_id) references tipo_mantenimiento (id);
+create index ix_sala_mantenimiento_tipo_136 on sala_mantenimiento (tipo_id);
+alter table vehiculo add constraint fk_vehiculo_estado_137 foreign key (estado_id) references estado_equipo_accesorio_vehiculo (id);
+create index ix_vehiculo_estado_137 on vehiculo (estado_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_serie_138 foreign key (serie_id) references serie (id);
+create index ix_vtk_catalogo_serie_138 on vtk_catalogo (serie_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_formato_139 foreign key (formato_id) references vtk_formato (id);
+create index ix_vtk_catalogo_formato_139 on vtk_catalogo (formato_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_idioma_140 foreign key (idioma_id) references idioma (id);
+create index ix_vtk_catalogo_idioma_140 on vtk_catalogo (idioma_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_produccion_141 foreign key (produccion_id) references produccion (id);
+create index ix_vtk_catalogo_produccion_141 on vtk_catalogo (produccion_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_sistema_142 foreign key (sistema_id) references sistema (id);
+create index ix_vtk_catalogo_sistema_142 on vtk_catalogo (sistema_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_disponibilid_143 foreign key (disponibilidad_id) references disponibilidad (id);
+create index ix_vtk_catalogo_disponibilid_143 on vtk_catalogo (disponibilidad_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_ubicacion_144 foreign key (ubicacion_id) references ubicacion (id);
+create index ix_vtk_catalogo_ubicacion_144 on vtk_catalogo (ubicacion_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_areatematica_145 foreign key (areatematica_id) references areatematica (id);
+create index ix_vtk_catalogo_areatematica_145 on vtk_catalogo (areatematica_id);
 
 
 
@@ -1755,6 +1782,8 @@ drop table if exists pre_agenda_salida cascade;
 
 drop table if exists pre_agenda_vehiculo cascade;
 
+drop table if exists produccion cascade;
+
 drop table if exists registro_acceso cascade;
 
 drop table if exists rol cascade;
@@ -1774,6 +1803,8 @@ drop table if exists servicio cascade;
 drop table if exists sistema cascade;
 
 drop table if exists tipo_contrato cascade;
+
+drop table if exists tipo_credito cascade;
 
 drop table if exists tipo_equipo_accesorio cascade;
 
@@ -1969,6 +2000,8 @@ drop sequence if exists pre_agenda_salida_seq;
 
 drop sequence if exists pre_agenda_vehiculo_seq;
 
+drop sequence if exists produccion_seq;
+
 drop sequence if exists registro_acceso_seq;
 
 drop sequence if exists rol_seq;
@@ -1988,6 +2021,8 @@ drop sequence if exists servicio_seq;
 drop sequence if exists sistema_seq;
 
 drop sequence if exists tipo_contrato_seq;
+
+drop sequence if exists tipo_credito_seq;
 
 drop sequence if exists tipo_equipo_accesorio_seq;
 

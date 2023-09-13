@@ -1,4 +1,4 @@
-package actions;
+package classes;
 
 import java.util.Date;
 import java.util.List;
@@ -18,7 +18,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.validation.constraints.Size;
 
-import actions.miCorreo2;
 import models.Ctacorreo;
 import play.data.validation.Constraints.MaxLength;
 

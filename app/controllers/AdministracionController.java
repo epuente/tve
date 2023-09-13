@@ -1,7 +1,5 @@
 package controllers;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,13 +31,9 @@ import org.json.JSONObject;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.SqlRow;
 import com.avaje.ebean.text.json.JsonContext;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import actions.miCorreo2;
+import classes.miCorreo2;
 import models.Agenda;
 import play.libs.Json;
 import play.mvc.Result;

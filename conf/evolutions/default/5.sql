@@ -829,6 +829,25 @@ INSERT INTO areatematica (id, audit_insert, audit_update, descripcion) VALUES(2,
 INSERT INTO areatematica (id, audit_insert, audit_update, descripcion) VALUES(3, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'DIFUSION Y EXTENSION CULTURAL');
 INSERT INTO areatematica (id, audit_insert, audit_update, descripcion) VALUES(4, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'CIENCIAS MEDICO BIOLOGICAS');
 
+
+INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(1, '2023-09-12 11:38:06.354', '2023-09-12 11:38:06.354', 'Productores', 'producción');
+INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(2, '2023-09-12 11:38:06.366', '2023-09-12 11:38:06.366', 'Asistentes', 'asistencia');
+INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(3, '2023-09-12 11:38:06.371', '2023-09-12 11:38:06.371', 'Ponentes', 'ponencia');
+INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(4, '2023-09-12 11:38:06.375', '2023-09-12 11:38:06.375', 'Realizadores', 'realización');
+INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(5, '2023-09-12 11:38:06.379', '2023-09-12 11:38:06.379', 'Locutores / voz', 'Locución o voz');
+INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(6, '2023-09-12 11:38:06.382', '2023-09-12 11:38:06.382', 'Camarógrafos', 'grabación de video / levantamiento de imágen');
+INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(7, '2023-09-12 11:38:06.385', '2023-09-12 11:38:06.385', 'Editores', 'edición de audio y/o video');
+INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(8, '2023-09-12 11:38:06.388', '2023-09-12 11:38:06.388', 'Postproductores', 'postproducción');
+INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(9, '2023-09-12 11:38:06.390', '2023-09-12 11:38:06.390', 'Calificadores', 'calificación');
+INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(10, '2023-09-12 11:38:06.393', '2023-09-12 11:38:06.393', 'Guionistas', 'guión');
+INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(99, '2023-09-12 11:38:06.397', '2023-09-12 11:38:06.397', 'Otros', 'postproducción');
+
+INSERT INTO produccion (id, audit_insert, audit_update, descripcion) VALUES(1, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'COORDINACIÓN DE TELEVISIÓN EDUCATIVA');
+INSERT INTO produccion (id, audit_insert, audit_update, descripcion) VALUES(2, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'COORDINACIÓN DE TECNOLOGÍA EDUCATIVA');
+INSERT INTO produccion (id, audit_insert, audit_update, descripcion) VALUES(3, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'COPRODUCCIÓN DIVISIÓN DE TELEVISIÓN EDUCATIVA - ANUIES');
+INSERT INTO produccion (id, audit_insert, audit_update, descripcion) VALUES(4, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'DEPARTAMENTO DE TELEVISIÓN EDUCATIVA - ANUIES');
+INSERT INTO produccion (id, audit_insert, audit_update, descripcion) VALUES(5, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'TELEVISIÓN EDUCATIVA SEP');
+
 select setval( 'serie_seq', (select max(id)+1 from serie), true);
 
  # --- !Downs

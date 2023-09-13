@@ -26,7 +26,7 @@ $("#serieDescripcion").on("keyup", function(){
                 console.dir(dataTS)
                 console.log("tam "+dataTS.coincidencias.length)
                 if (dataTS.coincidencias.length!=0){
-                    $("#msgCoincidencias").html("Se encontraron "+dataTS.coincidencias.length+" coincidencias.</br>Si la serie que desea agregar aparece en la lista de coincidencias, elijala de la lista.</br>Si la serie es nueva y no aparece en la lista de coincidencias, oprima el botón <strong>nueva</strong>");
+                    $("#msgCoincidencias").html("Se encontraron "+dataTS.coincidencias.length+" coincidencias.");
                     for(var c=0; c < dataTS.coincidencias.length; c++){
                         var aux = dataTS.coincidencias[c];
                         $("#divCoincidencias div.list-group").append( '<button type="button" class="list-group-item" onclick="javascript:seleccionaSerie('+aux.id+')">'+ aux.descripcion+ '</button>');

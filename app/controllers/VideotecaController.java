@@ -1,10 +1,10 @@
 package controllers;
 
+import classes.AuxVTKCredito;
 import com.avaje.ebean.*;
 import com.fasterxml.jackson.databind.JsonNode;
-import models.Accesorio;
-import models.Rol;
 import models.Serie;
+import models.TipoCredito;
 import models.VtkCatalogo;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,9 +13,7 @@ import play.Logger;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Result;
-import views.html.catalogos.Accesorio.createForm;
 
-import java.io.StringWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -115,9 +113,38 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
     public static Result catalogoCreate(){
         Form<VtkCatalogo> forma = play.data.Form.form(VtkCatalogo.class);
+        /*
         List<String> arrCreditos = Arrays.asList("Productores", "Asistentes", "Ponentes", "Realizadores", "Audio" , "Edición");
+
+        List<AuxVTKCredito> lstAuxVTKCreditos = new ArrayList<>();
+
+        lstAuxVTKCreditos.add(  new AuxVTKCredito(1L, "Productores", "producción")  );
+        lstAuxVTKCreditos.add(  new AuxVTKCredito(2L, "Asistentes", "asistencia")  );
+        lstAuxVTKCreditos.add(  new AuxVTKCredito(3L, "Ponentes", "ponencia")  );
+        lstAuxVTKCreditos.add(  new AuxVTKCredito(4L, "Realizadores", "realización")  );
+        lstAuxVTKCreditos.add(  new AuxVTKCredito(5L, "Locutores / voz", "Locución o voz")  );
+        lstAuxVTKCreditos.add(  new AuxVTKCredito(6L, "Camarógrafos", "grabación de video / levantamiento de imágen")  );
+        lstAuxVTKCreditos.add(  new AuxVTKCredito(7L, "Editores", "edición de audio y/o video")  );
+        lstAuxVTKCreditos.add(  new AuxVTKCredito(8L, "Postproducción", "postproducción")  );
+        lstAuxVTKCreditos.add(  new AuxVTKCredito(9L, "Calificadores", "calificación")  );
+        lstAuxVTKCreditos.add(  new AuxVTKCredito(10L, "Guionistas", "guión")  );
+        lstAuxVTKCreditos.add(  new AuxVTKCredito(99L, "Otros", "postproducción")  );
+
+
+        List<TipoCredito> lstTc =new ArrayList<>();
+
+        lstAuxVTKCreditos.forEach(tc->{
+            TipoCredito tc0 = new TipoCredito();
+            tc0.id = tc.id;
+            tc0.descripcion = tc.descripcion;
+            tc0.accion = tc.accion;
+            tc0.save();
+        });
+*/
+
+
         return ok(
-                views.html.videoteca.createForm.render(forma, arrCreditos)
+                views.html.videoteca.createForm.render(forma, TipoCredito.find.all())
         );
     }
 

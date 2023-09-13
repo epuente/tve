@@ -1,4 +1,4 @@
-@(forma: Form[VtkCatalogo], arrCreditos: List[String])
+@(forma: Form[VtkCatalogo], auxCreditos:List[TipoCredito])
 
 @import helper._
 
@@ -22,6 +22,18 @@
         margin-left: 10px !important;
     }
 
+
+.panel-heading-nav {
+  border-bottom: 0;
+  padding: 10px 0 0;
+}
+
+.panel-heading-nav .nav {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+
 </style>
 
 
@@ -39,7 +51,7 @@
     <h1>Agregar al catálogo de videoteca</h1>
 
     @form(CSRF(routes.AdminAccesorioController.save()), 'role->"form") {
-        @videotecaForm(forma, arrCreditos)
+        @videotecaForm(forma, auxCreditos)
         <br/><br/>
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -85,7 +97,7 @@
             $(e).after("<br>");
         });
 
-        $("#tabProductores").click();
+
 
     });
 
@@ -124,8 +136,9 @@
 
     $(document).off("click","button[name='btnProductor']");
     $(document).on("click","button[name='btnProductor']", function(){
-        var textoExistente = $("#taProductores").val().length >0;
-        $("#taProductores").val(  $("#taProductores").val()+(textoExistente?", ":"") + $(this).text()    );
+        var elId = $("div[name='losTabs'].active").attr("id");
+        var textoExistente = $("#ta"+elId).val().length >0;
+        $("#ta"+elId).val(  $("#ta"+elId).val()+(textoExistente?", ":"") + $(this).text()    );
     });
 
 

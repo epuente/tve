@@ -1,6 +1,6 @@
 package controllers;
 
-import actions.miCorreo2;
+import classes.miCorreo2;
 import classes.ColorConsola;
 import classes.Notificaciones.Notificacion;
 import com.avaje.ebean.Ebean;
@@ -18,7 +18,6 @@ import views.html.catalogos.Folio.createForm;
 import views.html.catalogos.Folio.editForm;
 import views.html.catalogos.Folio.list;
 
-import javax.transaction.Transaction;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
