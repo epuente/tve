@@ -1,7 +1,14 @@
 @(forma: Form[VtkCatalogo], auxCreditos:List[TipoCredito])
 
 @import helper._
+@anio = { @(new Date().format("yyyy"))}
+@anio
 
+
+
+<script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify"></script>
+<script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 
 <style>
     .bootstrap-select .btn {
@@ -32,6 +39,23 @@
   padding-left: 10px;
   padding-right: 10px;
 }
+
+
+.tagify{
+  width: 100%;
+  max-width: 100%;
+  background-color: white;
+}
+
+
+.tagify--notAllowed {
+    --tag-invalid-bg : #CBD5CF;
+}
+
+.tagify__tag{
+    --tag-bg: #CBD5CF;
+}
+
 
 
 </style>
@@ -97,9 +121,71 @@
             $(e).after("<br>");
         });
 
+        $("#anioProduccion").prop("max","@anio");
 
 
-    });
+        var listaBlanca=[];
+        @for( p<-models.Personal.find.all()) {
+            listaBlanca.push("@p.nombreCompleto()");
+        }
+
+
+
+        console.debug(listaBlanca)
+
+        var arrTabs = $("div[name='losTabs']").find("textarea");
+
+        console.log("arrrrr")
+        console.log(arrTabs)
+
+
+        $(arrTabs).each(function(i,e){
+            console.debug(e.id)
+            var inputx = document.querySelector("textarea[id='"+e.id+"']"),
+            tagify = new Tagify(inputx, {
+                enforceWhitelist: false,
+                keepInvalidTags: true,
+                whitelist: listaBlanca,
+                editTags: {
+                    clicks: 2,              // single click to edit a tag
+                    keepInvalid: false      // if after editing, tag is invalid, auto-revert
+                }
+            })
+        });
+
+
+        /*
+        var input1 = document.querySelector("textarea[id='ta1']"),
+        tagify = new Tagify(input1, {
+            enforceWhitelist: false,
+            keepInvalidTags: true,
+            whitelist: listaBlanca,
+            editTags: {
+                clicks: 2,              // single click to edit a tag
+                keepInvalid: false      // if after editing, tag is invalid, auto-revert
+            }
+        })
+        */
+
+        $("button[name='laBotoniza']").off("click");
+        $("button[name='laBotoniza']").on("click", function(e){
+            e.preventDefault();
+            console.log("laBotoniza")
+            var indice = $("button[name='laBotoniza']").index( $(this)   );
+            console.log( indice  )
+
+
+
+
+            var tags =  new Tagify(input1);
+            console.log(tags.value);
+
+            console.log(  $("#ta1").val() )
+            console.log(  $("#ta1").text() )
+
+
+        })
+    });  // fin del $(function()
 
 
     function vvVtkCatalogoCrear(){
@@ -143,10 +229,26 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
 </script>
 
 <script src="@routes.Assets.at("bootstrap-select/js/bootstrap-select.min.js")"></script>
 <script src="@routes.Assets.at("bootstrap-select/js/i18n/defaults-es_ES.min.js")"></script>
 <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("bootstrap-select/css/bootstrap-select.min.css")">
 
+<script src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
+
+
 <script src="@routes.Assets.at("javascripts/videoteca.js")"></script>
+
+
+

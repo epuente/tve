@@ -202,7 +202,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
     }
 
 
-    // Aqui se usan 2 metodos, el primero es el clásico (comparar una cadena con ilike y unaccent)
+    // Aqui se usan 2 metodos, el primero es el clásico de busqueda aproximada (comparar una cadena con ilike y unaccent)
     // El segundo usa textsearch con ts_vector y ts_query
     // Se regresa un dataset con la combinacion de los dos resultados, poniendo primero los resultados de la comparación clásica
     public static Result textsearch() throws JSONException {
@@ -303,10 +303,12 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         s.refresh();
         joRetorno.put("estado", "ok");
         joRetorno.put("id", s.id);
+        joRetorno.put("descripcion", s.descripcion);
+
         return ok (joRetorno.toString());
     }
 
-
+/*
     public static Result serieList(){
         Map<String, String> seriesOptions = Serie.options();
         JSONArray ja = new JSONArray();
@@ -322,5 +324,31 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         });
         return ok (ja.toString());
     }
+
+ */
+
+
+
+
+    // Aqui se usa 1 metodo,  (compara con la totalidad del campo insensible a mayúsculas y unaccent)
+    public static Result textsearchCampoCompleto() throws JSONException {
+        System.out.println("\n\n\n\nDesde VideotecaController.textsearchCampoCompleto");
+        JsonNode json = request().body().asJson();
+        JSONObject jo = new JSONObject();
+        JSONArray ja = new JSONArray();
+        String cadena = json.findValue("cadena").asText();
+        String query1 = "select id, descripcion from serie s where unaccent(descripcion) = unaccent('"+cadena+"')";
+        List<SqlRow> sqlRows1 = Ebean.createSqlQuery(query1).findList();
+        final RawSql rawSql1 = RawSqlBuilder.unparsed(query1)
+                .columnMapping("id", "id")
+                .columnMapping("descripcion", "descripcion")
+                .create();
+        List<Serie> list1 = Serie.find.setRawSql(rawSql1).findList();
+        Logger.debug("list1 EXISTE tam: "+list1.size());
+
+        jo.put("coincidencias", list1);
+        return ok ( jo.toString() );
+    }
+
 
 }

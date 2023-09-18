@@ -10,13 +10,14 @@ $("#btnModalGuardar").on("click", function(){
 
 //$("#btnBusquedaSerie").on("click", function(){
 $("#serieDescripcion").on("keyup", function(){
-    texto =
-    console.debug("click! ")
+    console.debug("keyup! ")
     $("#msgCoincidencias").html("");
     $("#divCoincidencias div.list-group button").remove();
     var cadena = $("#serieDescripcion").val();
+    $("#btnNuevaSerie").toggle(cadena.length>1);
     if (cadena.length==0){
         console.log("búsqueda vacía");
+
     } else {
 
 
@@ -26,10 +27,11 @@ $("#serieDescripcion").on("keyup", function(){
                 console.dir(dataTS)
                 console.log("tam "+dataTS.coincidencias.length)
                 if (dataTS.coincidencias.length!=0){
-                    $("#msgCoincidencias").html("Se encontraron "+dataTS.coincidencias.length+" coincidencias.");
+                    $("#msgCoincidencias").html("Se encontraron las siguientes "+dataTS.coincidencias.length+" coincidencias:");
                     for(var c=0; c < dataTS.coincidencias.length; c++){
                         var aux = dataTS.coincidencias[c];
-                        $("#divCoincidencias div.list-group").append( '<button type="button" class="list-group-item" onclick="javascript:seleccionaSerie('+aux.id+')">'+ aux.descripcion+ '</button>');
+                        var comillasEscapadas = aux.descripcion.replace(/"/g, '&#34;');
+                        $("#divCoincidencias div.list-group").append( '<button type="button" class="list-group-item" onclick="javascript:seleccionaSerie('+aux.id+', \''+comillasEscapadas+'\')">'+ aux.descripcion+ '</button>');
                     }
                 } else {
                     $("#msgCoincidencias").html("No se encontraron coincidencias");
@@ -70,51 +72,71 @@ $("#serieDescripcion").on("keyup", function(){
 });
 
 
+function abrirSeries(){
+    console.log("nadaaaaaaaa")
+    $("#divBusqueda, #divCoincidencias, #msgCoincidencias, #divIndicaciones").show();
+    $("#divResultadoBusqueda, #aAbrirSeries").hide();
+    $("#serieDescripcion").val(   $("#textSerie").html()  );
+    $("#serieDescripcion").keyup();
+}
 
-$("#btnNuevaSerie").on("click", function(){
+
+$("#btnNuevaSerie").off("click");
+$("#btnNuevaSerie").on("click", function(e){
     console.log("abc")
+    e.preventDefault();
+    $("#divBusqueda, #divCoincidencias, #msgCoincidencias, #divIndicaciones").show();
+    $("#divResultadoBusqueda").hide();
+
+
+
     var laNueva = $("#serieDescripcion").val();
-    if (laNueva.length==0){
-        alert("No ha escrito la descripción de la nueva serie");
-        $("#serieDescripcion").focus();
-    } else {
-        var $f = LlamadaAjax("/textsearch", "POST", JSON.stringify({cadena:laNueva}));
+     //   $("#serieDescripcion").focus();
+
+        var $f = LlamadaAjax("/textsearchCampoCompleto", "POST", JSON.stringify({cadena:laNueva}));
         $.when($f).done(function(dataTS){
             if (dataTS.coincidencias.length>0){
-                alert("Hay coincidencias");
+                    swal({
+                            title:'No se realizó la operación',
+                            html:'No se puede agregar la serie porque ya existe<br><br>Revise la lista de coincidencias y observará que ya existe. Puede usar la serie existente, solo selecciónela de la lista de coincidencias.<br>',
+                            type:'warning',
+                            confirmButtonText: "Aceptar"
+                          }) ;
+            } else {
+                var $salva = LlamadaAjax("/nuevaSerie","POST", JSON.stringify({descripcion:laNueva}));
+                $.when($salva).done(function(salvado){
+                    console.log("salvado")
+                    console.dir(salvado)
+                    if (salvado.estado=="ok"){
+                        swal({
+                              title:  'Correcto',
+                              html:  'Se agregó la nueva serie.<br><br>Continúe con el formulario del acervo de la videoteca.',
+                              type:  'success',
+                              confirmButtonText: "Aceptar"
+                              });
+                        $('#myModal2').modal('hide');
+                        $("#serie_id").val(salvado.id);
+
+                        $("#textSerie").html(  salvado.descripcion);
+
+                        $("#divResultadoBusqueda, #aAbrirSeries").show();
+                        $("#divBusqueda, #divIndicaciones, #msgCoincidencias, #btnNuevaSerie").hide();
+
+
+
+
+                    } else {
+                        alert("No fue posible agregar la serie.");
+                    }
+                });
             }
-            var $salva = LlamadaAjax("/nuevaSerie","POST", JSON.stringify({descripcion:laNueva}));
-            $.when($salva).done(function(salvado){
-                console.dir(salvado)
-                if (salvado.estado=="ok"){
-                    alert("Se agregó correctamente.");
-                    $('#myModal2').modal('hide');
-                    $("#serie_id").find("option").remove().end();
-                    $('#serie_id').selectpicker('refresh');
-
-                    $recarga = LlamadaAjax("/serieList", "POST", JSON.stringify({}));
-                    $.when($recarga).done(function(data){
-                        console.dir(data)
-                        for (d of data){
-                            $('#serie_id').append("<option value='"+d.id+"'>"+d.descripcion+"</option>");
-                        }
-                     //   $('#serie_id option[value='+salvado.id+']').prop("selected", true);
-
-                        $('#serie_id').selectpicker('refresh');
-                        $('#serie_id').selectpicker('val', salvado.id);
-                    });
-
-                } else {
-                    alert("No fue posible agregar la serie.");
-                }
-            });
         });
-    }
+
 
 });
 
-
-function seleccionaSerie(id){
+// Cuando se da click a un elemento de la lista
+function seleccionaSerie(id, texto){
     console.debug("Se seleccionó la serie id: "+id);
     $('#myModal2').modal('hide');
 
@@ -122,5 +144,15 @@ function seleccionaSerie(id){
     $('#serie_id').selectpicker('val', id);
 
     $('#serie_id').selectpicker('refresh');
+
+
+    $("#divBusqueda, #divCoincidencias, #msgCoincidencias, #divIndicaciones, #btnNuevaSerie").hide();
+    $("#divResultadoBusqueda, #aAbrirSeries").show();
+
+    $("#serie_id").val(id);
+
+
+    $("#textSerie").html(  texto);
+
 }
 

@@ -1,91 +1,163 @@
 @(forma: Form[VtkCatalogo], auxCreditos:List[TipoCredito])
 
-
 @import helper._
 <fieldset>
+
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
-                            <div class="form-group">
-                                @select(forma("serie.id"), options(models.Serie.options),
-                                '_label->"Serie", 'class->"form-control", 'required->true)
-                            </div>
+                <div class="col-sm-12 col-md-10 col-lg-10">
+                    <div class="form-group">
+                        <div id="divResultadoBusqueda" style="display:none">
+
+                            <dt class=" ">
+                                <dt><label>Serie</label>
+                            </dt>
+                            <input type="hidden" id="serie_id" name="serie.id"></input>
+                            <div id="textSerie">???</div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                            <br>
-                            <div class="center-block">
-                                <a href="javascript:vvVtkCatalogoCrear()">Agregar serie</a>
+                        <div id="divBusqueda">
+                            <dl class=" " id="descripcion_field">
+                                <dt><label for="serieDescripcion">Descripción</label></dt>
+                                <dd>
+                                    <input type="text" id="serieDescripcion" value="" class="form-control" placeholder="Ejem. Agenda Politécnica">
+                                </dd>
+                            </dl>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div id="divIndicaciones" class="small">
+                            <div style="margin-botton: 0.5em">
+                                Escriba la descripción de la serie yse realizará automáticamente la búsqueda.
                             </div>
+                            <div>Si la serie que desea agregar aparece en la lista de coincidencias, elijala de la lista.</br>Si la serie es nueva y no aparece en la lista de coincidencias, oprima el botón <strong>nueva</strong></div>
+                        </div>
+                    </div>
+
+
+                    <div id="msgCoincidencias" style="margin-top:5px; margin-bottom:5px;"></div>
+
+                </div>
+                <div class="col-sm-12 col-md-2 col-lg-2 text-center" >
+                    <div style="vertical-align: middle;">
+                        <a href="javascript:abrirSeries();" style="display:none" id="aAbrirSeries">Abrir series</a>
+
+                        <button id ="btnNuevaSerie" class="btn" style="display:none">Nueva</button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div id="divCoincidencias">
+                        <div class="list-group" style="font-size: small">
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+                            <div class="form-group">
+                                @inputText(forma("titulo"), '_label -> "Título", 'class->"form-control", 'required->true, 'placeholder->"Ejem. Segundo programa" )
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                            <div class="form-group">
+                                @inputText(forma("clave"), '_label -> "Clave", 'class->"form-control", 'required->true, 'placeholder->"Ejem. BCT-00081-30" )
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                                @inputText(forma("titulo"), '_label -> "Título", 'class->"form-control", 'required->true )
+                                @textarea(forma("sinopsis"), '_label -> "Sinópsis", 'class->"form-control", 'cols->"300"  , 'required->true, 'placeholder->"Notas: Expo-Profesionfráfica 1998, convenio revision salarial, convenio de colaboración IPN- Instituto de Aviación" )
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="form-group">
-                        @textarea(forma("sinopsis"), '_label -> "Sinópsis", 'class->"form-control", 'cols->"300"  , 'required->true )
-                        <div class="help-block with-errors"></div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                @select(
+                                    forma("produccion.id"),
+                                    options(models.Produccion.options),
+                                    '_label -> "Producción", '_default -> "-- Seleccione --",
+                                    '_showConstraints -> false,
+                                    'class->"form-control",
+                                    'required->true
+                                )
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                @inputText(forma("anioProduccion"), 'type->"number", 'step->"1", 'min->"1980",  '_label -> "Año producción", 'class->"form-control", 'required->true, '_help->"Ingrese un año entre 1980 y el año actual", 'placeholder->"Ejem. 1998" )
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="panel panel-default">
+        <div class="panel-body">
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                    <div class="form-group">
-                        @inputText(forma("clave"), '_label -> "Clave", 'class->"form-control", 'required->true )
-                        <div class="help-block with-errors"></div>
-                    </div>
+                <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+
                 </div>
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+
+                </div>
+            </div>
+
+            <div class="row">
+
 
                 <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
                     <div class="form-group">
-                        @inputText(forma("obraTomo"), '_label -> "Tomo", 'class->"form-control", 'required->true )
-                        <div class="help-block with-errors"></div>
+                            <dl class=" " id="obra_field">
+                                <dt><label for="obra">Obra</label></dt>
+                                <dd>
+                                    <input id="obra" type="text" value="" placeholder="nn/nn" data-mask="00/00"
+                                           data-mask-clearifnotmatch="true" class="form-control"/>
+                                </dd>
+                            </dl>
+                            <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-                    <div class="form-group">
-                        @inputText(forma("obraTotal"), '_label -> "Total", 'class->"form-control", 'required->true )
-                        <div class="help-block with-errors"></div>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                    <div class="form-group">
-                        @select(
-                            forma("produccion.id"),
-                            options(models.Produccion.options),
-                            '_label -> "Producción", '_default -> "-- Seleccione --",
-                            '_showConstraints -> false,
-                            'class->"form-control",
-                            'required->true
-                        )
-                        <div class="help-block with-errors"></div>
-                    </div>
-                </div>
+
+
+
                 <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
                         @inputText(forma("duracion"), 'type->"time", 'step->"1", '_label -> "Duración", 'class->"form-control", 'required->true )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                    <div class="form-group">
-                        @inputText(forma("anioProduccion"), 'type->"number", 'step->"1", 'min->"1900", 'max->"2024", '_label -> "Año producción", 'class->"form-control", 'required->true )
-                        <div class="help-block with-errors"></div>
-                    </div>
-                </div>
+
                 <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
                         @select(
@@ -99,6 +171,35 @@
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                        <div class="form-group">
+                            @select(
+                                forma("formato.id"),
+                                options(VtkFormato.options),
+                                '_label -> "Formato", '_default -> "-- Seleccione --",
+                                '_showConstraints -> false,
+                                'class->"form-control",
+                                'required->true
+                            )
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-2 col-lg-2">
+                        <div class="form-group">
+                            @select(
+                                forma("idioma.id"),
+                                options(Idioma.options),
+                                '_label -> "Idioma", '_default->"-- Seleccione --",
+                                '_showConstraints -> false,
+                                'class->"form-control",
+                                'required->true
+                            )
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                </div>
+
+
 
             </div>
         </div>
@@ -112,35 +213,28 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                                @textarea(forma("palabrasclave[0]"), '_label -> "Palabras clave", 'class->"form-control", 'cols->"300"  , 'required->true )
+                                @textarea(forma("palabrasclave[0]"), '_label -> "Palabras clave", 'class->"form-control", 'cols->"300"  , 'required->true
+                                    , 'placeholder->"Expo-Profesiográfica, convenio revisión salarial, convenio IPN - Instituto de Aviación"
+                                )
                                 <div class="help-block with-errors"></div>
+
+
+                                <input name='basic' value='tag1, tag2 autofocus' placeholder="Ejem. Mercadotecnia" >
+
+
+
+                                <input class='customLook' value='some.name@@website.com'>
+                                <button type="button">+</button>
+
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-4 col-lg-4">
-                            <div class="form-group">
-                                @inputRadioGroup(
-                                forma("idioma.id"),
-                                options = options(Idioma.options),
-                                '_label -> "Idioma",
-                                '_error -> forma("idioma.id").error.map(_.withMessage("Seleccione el idioma"))
-                                )
-                                <div class="help-block with-errors"></div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-2 col-lg-2">
-                    <div class="form-group">
-                        @*inputRadioGroup(contactForm("formato.id"), options = options("M"->"Male","F"->"Female") '_label -> "Gender", '_error -> contactForm("gender").error.map(_.withMessage("select gender"))*@
-                        @inputRadioGroup(
-                        forma("formato.id"),
-                        options = options(VtkFormato.options),
-                        '_label -> "Formato",
-                        '_error -> forma("fomato.id").error.map(_.withMessage("Seleccione el formato"))
-                        )
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -156,7 +250,7 @@
                 <div class="panel-heading panel-heading-nav">
 
                     <div class="row">
-                        <div class="col-sm-12 col-md-8 col-lg-8">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
                             <div>
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs" role="tablist" id="navTabs">
@@ -170,8 +264,11 @@
                                 <div class="tab-content">
                                     @for(s <- auxCreditos) {
                                         <div role="tabpanel" class="tab-pane @if(s.id==1){ active}" id="@s.id" name="losTabs">
-                                            <textarea id="ta@s.id"  class="form-control" style="margin-top:10px;"  rows="5" placeholder="Escriba los nombres de las personas que participaron en @s.accion"></textarea>
+                                            <textarea id="ta@s.id"  class="tagify" style="margin-top:10px; background-color: yellow;"  rows="5" cols="300" placeholder="Escriba los nombres de las personas que participaron en @s.accion"></textarea>
+                                            <br>
+                                            <button name="laBotoniza" id="btnValoresTab@s.id">Valores</button>
                                         </div>
+
                                     }
 
                                 </div>
@@ -189,11 +286,7 @@
                             </div>
 
                         </div>
-                        <div class="col-sm-12 col-md-4 col-lg-4">
-                            @for(p<-models.Personal.find.all()){
-                            <button type="button" name="btnProductor" class="btn btn-default">@p.nombreCompleto()</button>
-                            }
-                        </div>
+
                     </div>
 
                 </div>

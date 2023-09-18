@@ -289,5 +289,7 @@ GET     /vtkCatalogo/create                 controllers.VideotecaController.cata
 
 POST    /textsearch                         controllers.VideotecaController.textsearch()
 POST    /nuevaSerie                         controllers.VideotecaController.nuevaSerie()
-POST    /serieList                          controllers.VideotecaController.serieList()
+#POST    /serieList                          controllers.VideotecaController.serieList()
+
+POST    /textsearchCampoCompleto            controllers.VideotecaController.textsearchCampoCompleto()
 
