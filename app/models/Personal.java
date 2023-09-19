@@ -4,10 +4,8 @@ import com.avaje.ebean.Page;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import play.db.ebean.Model;
 @Entity
 public class Personal  extends models.utils.PlantillaModelo{
@@ -103,6 +101,19 @@ public class Personal  extends models.utils.PlantillaModelo{
     public String nombreCompleto(){
     	return this.nombre+" "+this.paterno+" "+this.materno;
     }
+
+	public static List<Personal> nombresCompletos() {
+		List<Personal> aux = Personal.find.all();
+		aux.sort(new Comparator<Personal>() {
+			@Override
+			public int compare(Personal personal, Personal t1) {
+				return personal.nombre.compareToIgnoreCase(t1.nombre);
+			}
+		});
+		return aux;
+	}
+
+
 
 
     

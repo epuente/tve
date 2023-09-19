@@ -58,6 +58,44 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.tagify--outside{
+    border: 0;
+}
+
+.tagify--outside .tagify__input{
+  order: -1;
+  flex: 100%;
+  border: 1px solid var(--tags-border-color);
+  margin-bottom: 1em;
+  transition: .1s;
+}
+
+.tagify--outside .tagify__input:hover{ border-color:var(--tags-hover-border-color); }
+.tagify--outside.tagify--focus .tagify__input{
+  transition:0s;
+  border-color: var(--tags-focus-border-color);
+}
+
+
+
+
 </style>
 
 
@@ -125,7 +163,7 @@
 
 
         var listaBlanca=[];
-        @for( p<-models.Personal.find.all()) {
+        @for( p<-models.Personal.nombresCompletos()) {
             listaBlanca.push("@p.nombreCompleto()");
         }
 
@@ -149,6 +187,11 @@
                 editTags: {
                     clicks: 2,              // single click to edit a tag
                     keepInvalid: false      // if after editing, tag is invalid, auto-revert
+                },
+                dropdown: {
+                    position: "inputx",
+                    enabled : 1,
+                    maxItems : @models.Personal.find.all().length
                 }
             })
         });
@@ -185,6 +228,86 @@
 
 
         })
+
+
+        // Prueba del outside of the box
+        var input = document.querySelector('input[name=tags-outside]')
+        // init Tagify script on the above inputs
+        var tagify = new Tagify(input, {
+          whitelist: ["foo", "bar", "baz"],
+          dropdown: {
+            position: "input",
+            enabled : 0 // always opens dropdown when input gets focus
+          }
+        })
+
+
+        // Prueba con dos componentes (un input y un div)
+        var input3 = document.getElementById('tag-input');
+        var tagContainer = document.getElementById('tag-container');
+
+        // Inicializar Tagify en el campo de entrada
+        var tagify = new Tagify(input3);
+
+        // Escuchar el evento "add" para agregar las etiquetas al contenedor
+        tagify.on('add', function(e) {
+            var tag = e.detail.data;
+            var tagElement = document.createElement('span');
+            tagElement.textContent = tag.value;
+            tagContainer.appendChild(tagElement);
+        });
+
+
+
+
+        // Prueba con dos componentes (dos div)
+        var input4 = document.getElementById('tag-inputUno');
+        var tagContainer = document.getElementById('tag-inputDos');
+
+        var tagify1 = new Tagify(input4, {
+          callbacks: {
+            "add": e => {
+              console.log(e.detail);
+              console.log("add del input1");
+              var tag = e.detail.data;
+              tagify2.addTags([tag]);
+              tagify1.removeAllTags();
+            },
+            "focus": e => {
+              console.log("focus del input1");
+              tagify1.removeAllTags();
+            },
+            "input": e => {
+              console.log("input del input1");
+              tagify1.removeAllTags();
+            },
+            "keydown": e => {
+              console.log("keydown del input1");
+              tagify1.removeAllTags();
+            }
+
+          }
+        });
+
+        var tagify2 = new Tagify(tagContainer, {
+          userInput: true,
+          editTags: true,
+          callbacks: {
+            "add": e => {
+              console.log("add del input2");
+              tagify1.removeAllTags();
+            }
+          }
+        });
+
+
+
+
+
+
+
+
+
     });  // fin del $(function()
 
 
