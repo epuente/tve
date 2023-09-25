@@ -293,3 +293,5 @@ POST    /nuevaSerie                         controllers.VideotecaController.nuev
 
 POST    /textsearchCampoCompleto            controllers.VideotecaController.textsearchCampoCompleto()
 
+GET     /vtkcarga                           controllers.VideotecaController.cargaInicial()
+GET     /vtkCatalogo/edit/:id               controllers.VideotecaController.catalogoEdit(id:Long)

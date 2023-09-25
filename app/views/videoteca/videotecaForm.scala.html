@@ -18,7 +18,7 @@
                         </div>
                         <div id="divBusqueda">
                             <dl class=" " id="descripcion_field">
-                                <dt><label for="serieDescripcion">Descripción</label></dt>
+                                <dt><label for="serieDescripcion">Serie</label></dt>
                                 <dd>
                                     <input type="text" id="serieDescripcion" value="" class="form-control" placeholder="Ejem. Agenda Politécnica">
                                 </dd>
@@ -27,7 +27,7 @@
                         </div>
                         <div id="divIndicaciones" class="small">
                             <div style="margin-botton: 0.5em">
-                                Escriba la descripción de la serie yse realizará automáticamente la búsqueda.
+                                Escriba la descripción de la serie y se realizará automáticamente la búsqueda.
                             </div>
                             <div>Si la serie que desea agregar aparece en la lista de coincidencias, elijala de la lista.</br>Si la serie es nueva y no aparece en la lista de coincidencias, oprima el botón <strong>nueva</strong></div>
                         </div>
@@ -78,7 +78,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                                @textarea(forma("sinopsis"), '_label -> "Sinópsis", 'class->"form-control", 'cols->"300"  , 'required->true, 'placeholder->"Notas: Expo-Profesionfráfica 1998, convenio revision salarial, convenio de colaboración IPN- Instituto de Aviación" )
+                                @textarea(forma("sinopsis"), '_label -> "Sinópsis", 'class->"form-control", 'rows->3, 'cols->"300"  , 'required->true, 'placeholder->"Notas: Expo-Profesionfráfica 1998, convenio revision salarial, convenio de colaboración IPN- Instituto de Aviación" )
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -108,7 +108,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                                @inputText(forma("anioProduccion"), 'type->"number", 'step->"1", 'min->"1980",  '_label -> "Año producción", 'class->"form-control", 'required->true, '_help->"Ingrese un año entre 1980 y el año actual", 'placeholder->"Ejem. 1998" )
+                                @inputText(forma("anio_produccion"), 'type->"number", 'step->"1", 'min->"1980",  '_label -> "Año producción", 'class->"form-control", 'required->true, '_help->"Ingrese un año entre 1980 y el año actual", 'placeholder->"Ejem. 1998" )
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -134,30 +134,15 @@
             </div>
 
             <div class="row">
-
-
                 <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-                    <div class="form-group">
-                            <dl class=" " id="obra_field">
-                                <dt><label for="obra">Obra</label></dt>
-                                <dd>
-                                    <input id="obra" type="text" value="" placeholder="nn/nn" data-mask="00/00"
-                                           data-mask-clearifnotmatch="true" class="form-control"/>
-                                </dd>
-                            </dl>
-                            <div class="help-block with-errors"></div>
-                    </div>
+                    @inputText(forma("obra"), '_label -> "Obra", 'class->"form-control", 'required->true )
                 </div>
-
-
-
                 <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
-                        @inputText(forma("duracion"), 'type->"time", 'step->"1", '_label -> "Duración", 'class->"form-control", 'required->true )
+                        @inputText(forma("duracion"), 'type->"time", 'step->"1", '_label -> "Duración", 'class->"form-control", 'required->true, '_help->"hh/mm/ss" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-
                 <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
                         @select(
@@ -171,36 +156,69 @@
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
-                        <div class="form-group">
-                            @select(
-                                forma("formato.id"),
-                                options(VtkFormato.options),
-                                '_label -> "Formato", '_default -> "-- Seleccione --",
-                                '_showConstraints -> false,
-                                'class->"form-control",
-                                'required->true
-                            )
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-md-2 col-lg-2">
-                        <div class="form-group">
-                            @select(
-                                forma("idioma.id"),
-                                options(Idioma.options),
-                                '_label -> "Idioma", '_default->"-- Seleccione --",
-                                '_showConstraints -> false,
-                                'class->"form-control",
-                                'required->true
-                            )
-                            <div class="help-block with-errors"></div>
-                        </div>
+                <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        @select(
+                            forma("formato.id"),
+                            options(VtkFormato.options),
+                            '_label -> "Formato", '_default -> "-- Seleccione --",
+                            '_showConstraints -> false,
+                            'class->"form-control",
+                            'required->true
+                        )
                     </div>
                 </div>
-
-
-
+                <div class="col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        @select(
+                            forma("idioma.id"),
+                            options(Idioma.options),
+                            '_label -> "Idioma", '_default->"-- Seleccione --",
+                            '_showConstraints -> false,
+                            'class->"form-control",
+                            'required->true
+                        )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-2 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        @select(
+                        forma("disponibilidad.id"),
+                        options(models.Disponibilidad.options),
+                        '_label -> "Disponibilidad", '_default -> "-- Seleccione --",
+                        '_showConstraints -> false,
+                        'class->"form-control",
+                        'required->true
+                        )
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-2 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        @select(
+                            forma("ubicacion.id"),
+                            options(models.Ubicacion.options),
+                            '_label -> "Ubicación", '_default -> "-- Seleccione --",
+                            '_showConstraints -> false,
+                            'class->"form-control",
+                            'required->true
+                        )
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-2 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        @select(
+                        forma("areatematica.id"),
+                        options(models.Areatematica.options),
+                        '_label -> "Área temática", '_default -> "-- Seleccione --",
+                        '_showConstraints -> false,
+                        'class->"form-control",
+                        'required->true
+                        )
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -212,19 +230,16 @@
                 <div class="col-sm-12 col-md-10 col-lg-10">
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12">
+                            <label for="palabrasclave">Palabras Clave</label>
                             <div class="form-group">
-                                @textarea(forma("palabrasclave[0]"), '_label -> "Palabras clave", 'class->"form-control", 'cols->"300"  , 'required->true
+                                @*textarea(forma("palabrasclave"), '_label -> "Palabras clave", 'class->"tagify form-control", 'rows->"5",  'cols->"300"  , 'required->true
                                     , 'placeholder->"Expo-Profesiográfica, convenio revisión salarial, convenio IPN - Instituto de Aviación"
-                                )
+                                    , 'style -> "margin-top:10px;"
+                                )*@
+                                <textarea id="palabrasclave"  class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Ejemplo: Expo-Profesiográfica"></textarea>
+
                                 <div class="help-block with-errors"></div>
 
-
-                                <input name='basic' value='tag1, tag2 autofocus' placeholder="Ejem. Mercadotecnia" >
-
-
-
-                                <input class='customLook' value='some.name@@website.com'>
-                                <button type="button">+</button>
 
                             </div>
                         </div>
@@ -264,28 +279,14 @@
                                 <div class="tab-content">
                                     @for(s <- auxCreditos) {
                                         <div role="tabpanel" class="tab-pane @if(s.id==1){ active}" id="@s.id" name="losTabs">
-                                            <textarea id="ta@s.id"  class="tagify" style="margin-top:10px; background-color: yellow;"  rows="5" cols="300" placeholder="Escriba los nombres de las personas que participaron en @s.accion"></textarea>
+                                            <textarea id="ta@s.id"  class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Escriba los nombres de las personas que participaron en @s.accion"></textarea>
                                             <br>
-                                            <button name="laBotoniza" id="btnValoresTab@s.id">Valores</button>
+                                            <button name="laBotoniza" id="btnValoresTab_@s.id">Valores</button>
                                         </div>
 
                                     }
 
 
-                                    Prueba del outside of the box
-                                    <input name='tags-outside' class='tagify--outside' placeholder='write tags to add below'>
-
-
-                                    Prueba con dos componentes (1 input y 1 div)
-
-                                    <input type="text" id="tag-input">
-                                    <div id="tag-container"></div>
-
-
-                                    Prueba con dos componentes (2 div)
-
-                                    <input type="text" id="tag-inputUno">
-                                    <input type="text" id="tag-inputDos">
 
 
                                 </div>

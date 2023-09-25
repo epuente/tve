@@ -1,11 +1,10 @@
 package controllers;
 
 import classes.AuxVTKCredito;
+import classes.Duracion;
 import com.avaje.ebean.*;
 import com.fasterxml.jackson.databind.JsonNode;
-import models.Serie;
-import models.TipoCredito;
-import models.VtkCatalogo;
+import models.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,9 +12,14 @@ import play.Logger;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Result;
+import views.html.catalogos.Accesorio.editForm;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static play.data.Form.form;
 
 public class VideotecaController extends ControladorSeguroVideoteca{
     public static Result tablero(){
@@ -34,7 +38,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
     public static Result catalogo(){
         Logger.debug("desde VideotecaController.catalogo");
-        return ok( views.html.usuario.catalogoVideotk.render());
+        return ok( views.html.videoteca.catalogoVideotk.render());
     }
 
     public static Result catalogoDTSS(){
@@ -86,28 +90,17 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                     datoP.put("sinopsis", p.sinopsis);
                     datoP.put("titulo", p.titulo);
                     datoP.put("serie", p.serie.descripcion);
+                    datoP.put("obra", p.obra);
                     losDatos.put(datoP);
                     json2.put("data", losDatos);
                 }
             }
-
-/*
-
-            if ( pag.getTotalRowCount()>0 ){
-                json2.put("data", losDatos);
-            } else {
-                json2.put("data", new JSONArray() );
-                return ok( json2.toString()  );
-            }
-*/
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
             System.out.println("ERROR - VideotecaController.catalogoDTSS ");
             e.printStackTrace();
         }
         System.out.println("retornando:  "+json2.toString());
         return ok( json2.toString() );
-
     }
 
 
@@ -350,5 +343,111 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         return ok ( jo.toString() );
     }
 
+
+
+    public static Result cargaInicial() throws ParseException {
+
+        String query ="select * from temporal order by id";
+        List<SqlRow> sqlRows = Ebean.createSqlQuery(query).findList();
+        int total = sqlRows.size();
+
+        String formatoFecha = "yyyy-MM-dd'T'HH:mm:ss";
+
+        SimpleDateFormat sdf = new SimpleDateFormat(formatoFecha);
+
+        for (SqlRow r :sqlRows ){
+            VtkCatalogo catalogo = new VtkCatalogo();
+            Long id = r.getLong("id");
+            Long serie = r.getLong("serie");
+            System.out.println("   id -->"+r.getString("id")+" serie "+serie+ " "+r.getString("titulo"));
+
+            catalogo.id = id;
+            catalogo.serie =  Serie.find.byId(serie);
+            catalogo.titulo = r.getString("titulo");
+            catalogo.sinopsis = r.getString("sinopsis");
+            catalogo.clave = r.getString("clave");
+            catalogo.obra = r.getString("numobra");
+            catalogo.formato = VtkFormato.find.byId(r.getLong("formato"));
+
+            // PALABRAS CLAVE
+            String strPalabrasClave = r.getString("palabrasclave");
+            // Convertir un texto con comas a un arreglo
+            String[] arrPalabrasClave = strPalabrasClave.split(",");
+            for (String pc : arrPalabrasClave){
+                PalabraClave palabraClave = new PalabraClave();
+                palabraClave.descripcion = pc.trim();
+                //palabraClave.save();
+                System.out.println("                "+palabraClave.descripcion);
+                catalogo.palabrasClave.add(palabraClave);
+            }
+
+
+            // CREDITOS
+            String aux = r.getString("creditos");
+
+            while (aux.length()>1){
+
+                // Encontrar PRODUCTOR ó PRODUCTORES ó PRODUCCION en la cadena hasta el fin de la linea ó , o .
+                if ( aux.toUpperCase().contains("PRODUCTOR:") || aux.toUpperCase().contains("PRODUCTORES:") || aux.toUpperCase().contains("PRODUCCION:")) {
+                    aux.replace("PRODUCTOR:", "");
+                    aux.replace("PRODUCTORES:", "");
+                    aux.replace("PRODUCCION:", "");
+                    int sub = aux.indexOf(",");
+                    if (sub == -1) {
+                        sub = aux.indexOf(".");
+                        if (sub == -1) {
+                            sub = aux.indexOf(" ");
+                            if (sub == -1) {
+
+                            }
+
+                        }
+                    }
+                }
+
+            }
+
+
+
+
+
+            System.out.println("     duracion "+r.getString("duracion"));
+            Duracion duracion = new Duracion();
+            duracion.convertir(r.getString("duracion"));
+
+            catalogo.duracion =  duracion.totalSegundos();
+            catalogo.idioma = Idioma.find.byId(r.getLong("idioma"));
+
+            catalogo.produccion = Produccion.find.byId(  r.getLong("produccion"));
+
+
+
+
+            catalogo.anioProduccion =  sdf.parse( r.getString("anioproduccion"));
+            catalogo.sistema = Sistema.find.byId(r.getLong("sistema"));
+            if (r.getLong("disponibilidad")!=null)
+                catalogo.disponibilidad = Disponibilidad.find.byId(r.getLong("disponibilidad"));
+            if ( r.getLong("ubicacion") != null)
+                catalogo.ubicacion = Ubicacion.find.byId(r.getLong("ubicacion"));
+            catalogo.areatematica = Areatematica.find.byId(r.getLong("areatematica"));
+
+            catalogo.save();
+
+        }
+
+        return ok ( views.html.videoteca.vtkCargaInicial.render(total)  );
+    }
+
+
+
+    public static Result catalogoEdit(Long id){
+        VtkCatalogo catalogo = VtkCatalogo.find.byId(id);
+        Form<VtkCatalogo> forma = form(VtkCatalogo.class).fill( catalogo  );
+
+        Duracion d = new Duracion(  catalogo.duracion );
+
+        return ok( views.html.videoteca.editForm.render(id, forma, TipoCredito.find.all(), d)  );
+
+    }
 
 }

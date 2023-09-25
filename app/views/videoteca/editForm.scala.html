@@ -1,0 +1,290 @@
+@(id: Long, forma: Form[VtkCatalogo], auxCreditos:List[TipoCredito], cDuracion:classes.Duracion)
+
+@import helper._
+@anio = { @(new Date().format("yyyy"))}
+
+@cDuracion.horas<br>
+@cDuracion.minutos<br>
+@cDuracion.segundos<br>
+
+@cDuracion.cadena()
+
+
+<script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify"></script>
+<script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+
+<style>
+    .bootstrap-select .btn {
+        //white-space: normal;
+        font-size: smaller;
+    }
+
+    #serie_id_field span.text{
+        white-space: normal;
+        font-size: smaller;
+        line-height : 15px;
+        margin-bottom: 4px;
+        margin-top: 4px;
+    }
+
+    .tab-pane {
+        marging-top: 10px !important;
+        margin-left: 10px !important;
+    }
+
+
+.panel-heading-nav {
+  border-bottom: 0;
+  padding: 10px 0 0;
+}
+
+.panel-heading-nav .nav {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+
+.tagify{
+  width: 100%;
+  max-width: 100%;
+  background-color: white;
+  padding: 10;
+}
+
+
+.tagify--notAllowed {
+    --tag-invalid-bg : #CBD5CF;
+}
+
+.tagify__tag{
+    --tag-bg: #CBD5CF;
+}
+</style>
+
+
+@main {
+    @ventanasModales()
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+                <li><a href="@routes.VideotecaController.catalogo()">Catálogo videoteca</a></li>
+                <li>Edición</li>
+            </ol>
+        </div>
+    </div>
+
+    <h1>Edición del catálogo de videoteca</h1>
+
+    @form(CSRF(routes.AdminAccesorioController.save()), 'role->"form") {
+        @videotecaForm(forma, auxCreditos)
+        <br/><br/>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div style="width: 80%" class="center-block">
+                    <input type="submit" value="Agregar" class="btn btn-primary btn-block">
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div style="width: 80%" class="center-block">
+                    <a href="@routes.AdminAccesorioController.list()" class="btn btn-warning btn-block">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<script type="text/javascript">
+    var texto="";
+    $(function() {
+        $('form').validator();
+
+        $("#serie_id").selectpicker({
+            title:"Escriba, seleccione o busque un número de oficio o descripción del oficio",
+            size: 10,
+            liveSearchNormalize: true,
+            liveSearch: true,
+            dropdownAlignRight: true,
+            header: "Puede hacer sroll en la lista y seleccionar la serie, o  puede iniciar a escribir la serie y se buscará en el catálogo existente",
+            liveSearchPlaceholder: "Aqui puede escribir la búsqueda de la serie",
+            noneSelectedText: "No se seleccionó ningúna serie",
+            noneResultsText : "La busqueda no regresó resultados. !!!!  <button id='btnAgregarCatVTK' type='button' class='btn btn-primary btn-sm' onclick='javascript:vvVtkCatalogoCrear();'>Agregar serie</button> "
+        });
+
+        $("div.bs-searchbox>input").on("keyup", function(){
+            console.log("desde acaaaa")
+            texto = $(this).val();
+        });
+
+        $("#formato_id label").each(function(i, e){
+            $(e).after("<br>");
+        });
+        $("#idioma_id label").each(function(i, e){
+            $(e).after("<br>");
+        });
+
+        $("#anioProduccion").prop("max","@anio");
+
+        // Palabras clave
+        var inputpc = document.querySelector("textarea[id='palabrasclave']"),
+        tagifyPC = new Tagify(inputpc);
+
+
+
+
+        var listaBlanca=[];
+        @for( p<-models.Personal.nombresCompletos()) {
+            listaBlanca.push("@p.nombreCompleto()");
+        }
+
+
+
+        console.debug(listaBlanca)
+
+        var arrTabs = $("div[name='losTabs']").find("textarea");
+
+        console.log("arrrrr")
+        console.log(arrTabs)
+
+
+        $(arrTabs).each(function(i,e){
+            console.debug(e.id)
+            var inputx = document.querySelector("textarea[id='"+e.id+"']"),
+            tagify = new Tagify(inputx, {
+                whitelist: listaBlanca,
+                dropdown: {
+                    position: "inputx",
+                    enabled : 1,
+                    maxItems : @models.Personal.find.all().length
+                }
+            })
+        });
+
+
+        /*
+        var input1 = document.querySelector("textarea[id='ta1']"),
+        tagify = new Tagify(input1, {
+            enforceWhitelist: false,
+            keepInvalidTags: true,
+            whitelist: listaBlanca,
+            editTags: {
+                clicks: 2,              // single click to edit a tag
+                keepInvalid: false      // if after editing, tag is invalid, auto-revert
+            }
+        })
+        */
+
+        $("button[name='laBotoniza']").off("click");
+        $("button[name='laBotoniza']").on("click", function(e){
+            e.preventDefault();
+            console.log("laBotoniza")
+            var indice = $("button[name='laBotoniza']").index( $(this)   );
+            console.log( indice  )
+            console.log( $("button[name='laBotoniza']").eq(indice) )
+            console.log( $("button[name='laBotoniza']").eq(indice).id )
+
+            var id = $(this).prop("id").substring( $(this).prop("id").indexOf("_")+1   );
+            console.log("id->"+id)
+            console.log(  $("#ta"+id).val() )
+        });
+
+        leer();
+    });  // fin del $(function()
+
+
+    function leer(){
+        $("#serieDescripcion").val( "@forma.get().serie.descripcion"  );
+
+        console.log("duracion: @cDuracion.horas:@cDuracion.minutos:@cDuracion.segundos")
+        $("#duracion").val("@cDuracion.cadena()");
+
+
+        console.log("@forma.get().anioProduccion")
+        console.log(moment("@forma.get().anioProduccion").format("YYYY") )
+        console.log(moment("Thu Oct 01 00:00:00 CDT 1998", "ddd MMM DD HH:mm:ss z YYYY").format("YYYY") )
+
+        $("#anio_produccion").val(   moment("Thu Oct 01 00:00:00 CDT 1998", "ddd MMM DD HH:mm:ss z YYYY").format("YYYY")   )
+
+        // Palabras clave
+        var inputpc = document.querySelector("textarea[id='palabrasclave']"),
+        tagifyPC = new Tagify(inputpc);
+        var arr = [];
+        @for(c<-forma.get().palabrasClave){
+            arr.push( {value:"@c.descripcion", id:@c.id} );
+        }
+        tagifyPC.addTags(arr);
+
+
+
+        console.log("creditos @forma.get().creditos.size()")
+        @for(c<-forma.get().creditos){
+            console.log("@c");
+        }
+
+    }
+
+
+    function vvVtkCatalogoCrear(){
+        console.debug("desde vvVtkCatalogoCrear()");
+        $("#serieDescripcion").val("");
+        $("#divCoincidencias div.list-group>button").remove();
+        $("#msgCoincidencias").html("");
+        $("#divIdTipoOperacion").text("1");
+        $('#myModal2').modal('show');
+        if ( texto != null && texto.length>0 ){
+            $("#serieDescripcion").val(   texto    );
+        }
+        $("#serieDescripcion").focus();
+
+    }
+
+
+    $("form").submit(function(){
+
+    //  event.preventDefault();
+        $("#cuentas_username").attr('name', 'cuentas[0].username');
+        $("#cuentas_password").attr('name', 'cuentas[0].password');
+
+        $("[type='checkbox'][id^='auxRoles_']:checked").each(function(i,e){
+            $(this).attr("name","cuentas[0].roles["+i+"].rol.id");
+        });
+
+    });
+
+
+    $(document).on("click", "#btnAgregarCatVTK", function(){
+            console.log("OKI")
+    });
+
+    $(document).off("click","button[name='btnProductor']");
+    $(document).on("click","button[name='btnProductor']", function(){
+        var elId = $("div[name='losTabs'].active").attr("id");
+        var textoExistente = $("#ta"+elId).val().length >0;
+        $("#ta"+elId).val(  $("#ta"+elId).val()+(textoExistente?", ":"") + $(this).text()    );
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<script src="@routes.Assets.at("bootstrap-select/js/bootstrap-select.min.js")"></script>
+<script src="@routes.Assets.at("bootstrap-select/js/i18n/defaults-es_ES.min.js")"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("bootstrap-select/css/bootstrap-select.min.css")">
+
+<script src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
+
+
+<script src="@routes.Assets.at("javascripts/videoteca.js")"></script>
+
+
+
