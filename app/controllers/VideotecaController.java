@@ -1,9 +1,11 @@
 package controllers;
 
 import classes.AuxVTKCredito;
+import classes.CapitalizaCadena;
 import classes.Duracion;
 import com.avaje.ebean.*;
 import com.fasterxml.jackson.databind.JsonNode;
+import jdk.nashorn.internal.parser.JSONParser;
 import models.*;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,12 +14,15 @@ import play.Logger;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Result;
+import views.html.videoteca.*;
 import views.html.catalogos.Accesorio.editForm;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+
+//import org.apache.commons.lang3.text.WordUtils.*;
 
 import static play.data.Form.form;
 
@@ -30,9 +35,92 @@ public class VideotecaController extends ControladorSeguroVideoteca{
     public static Result ajaxTablero() throws JSONException {
         System.out.println("Desde VideotecaController.ajaxTablero");
         JSONObject retorno = new JSONObject();
-        JSONArray arrEquipo = new JSONArray();
-        JSONArray arrAccesorios = new JSONArray();
-        retorno.put("catalogo", "[]");
+
+        JSONArray arrSeriesLabels = new JSONArray();
+        JSONArray arrSeriesDatos = new JSONArray();
+
+        JSONArray arrAreaLabels = new JSONArray();
+        JSONArray arrAreaDatos = new JSONArray();
+
+        JSONArray arrFormatoLabels = new JSONArray();
+        JSONArray arrFormatoDatos = new JSONArray();
+
+        JSONArray arrIdiomaLabels = new JSONArray();
+        JSONArray arrIdiomaDatos = new JSONArray();
+
+        JSONArray arrProdLabels = new JSONArray();
+        JSONArray arrProdDatos = new JSONArray();
+
+        JSONArray arrAniosProdLabels = new JSONArray();
+        JSONArray arrAniosProdDatos = new JSONArray();
+
+
+        List<VtkCatalogo> total = VtkCatalogo.find.all();
+        List<Serie> series = Serie.find.all();
+        for( Serie  s : series){
+            long c = VtkCatalogo.find.where().eq("serie.id", s.id).findRowCount();
+           // arrSeriesLabels.put(org.apache.commons.lang3.text.WordUtils.capitalizeFully( s.descripcion));
+            arrSeriesLabels.put( new CapitalizaCadena(s.descripcion).modificado());
+            arrSeriesDatos.put(c);
+          //  CapitalizaCadena n = new CapitalizaCadena(s.descripcion);
+        }
+
+        for (Areatematica at : Areatematica.find.all()){
+            //arrAreaLabels.put(org.apache.commons.lang3.text.WordUtils.capitalizeFully( at.descripcion));
+            arrAreaLabels.put( new CapitalizaCadena(at.descripcion).modificado());
+            arrAreaDatos.put(  VtkCatalogo.find.where().eq("areatematica.id", at.id).findRowCount() );
+        }
+
+        for (VtkFormato f : VtkFormato.find.all()){
+            //arrFormatoLabels.put(org.apache.commons.lang3.text.WordUtils.capitalizeFully(f.descripcion));
+            //arrFormatoLabels.put(new CapitalizaCadena(f.descripcion).modificado());
+            arrFormatoLabels.put(f.descripcion);
+            arrFormatoDatos.put( VtkCatalogo.find.where().eq("formato.id", f.id).findRowCount());
+        }
+
+        for (Produccion p: Produccion.find.all()){
+            arrProdLabels.put( p.sigla );
+            arrProdDatos.put( VtkCatalogo.find.where().eq("produccion.id", p.id).findRowCount());
+        }
+
+
+        for (Idioma i : Idioma.find.all()){
+            //arrIdiomaLabels.put(org.apache.commons.lang3.text.WordUtils.capitalizeFully(i.descripcion));
+            arrIdiomaLabels.put( new CapitalizaCadena(i.descripcion).modificado());
+            arrIdiomaDatos.put( VtkCatalogo.find.where().eq("idioma.id", i.id).findRowCount());
+        }
+
+        // Año de producción
+        String strQAnio = "select extract('Year' from vc.anio_produccion) anio,  count(*) valor "+
+            "from vtk_catalogo vc "+
+            "group by extract('Year' from vc.anio_produccion) "+
+            "order by extract('Year' from vc.anio_produccion)";
+
+        List<SqlRow> rowsAnios = Ebean.createSqlQuery(strQAnio).findList();
+
+        for ( SqlRow anio : rowsAnios ){
+            JSONObject o = new JSONObject();
+            arrAniosProdLabels.put( anio.getString("anio") );
+            arrAniosProdDatos.put( anio.getLong("valor"));
+        }
+
+
+
+        retorno.put("total", total.size());
+        retorno.put("series", series.size());
+        retorno.put("seriesLabels", arrSeriesLabels);
+        retorno.put("seriesDatos", arrSeriesDatos);
+        retorno.put("areaLabels", arrAreaLabels);
+        retorno.put("areaDatos", arrAreaDatos);
+        retorno.put("formatoLabels", arrFormatoLabels);
+        retorno.put("formatoDatos", arrFormatoDatos);
+        retorno.put("idiomaLabels", arrIdiomaLabels);
+        retorno.put("idiomaDatos", arrIdiomaDatos);
+        retorno.put("prodLabels", arrProdLabels);
+        retorno.put("prodDatos", arrProdDatos);
+        retorno.put("aniosProdLabels", arrAniosProdLabels);
+        retorno.put("aniosProdDatos", arrAniosProdDatos);
+
         return ok ( retorno.toString() );
     }
 
@@ -382,6 +470,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             }
 
 
+            /*
             // CREDITOS
             String aux = r.getString("creditos");
 
@@ -408,7 +497,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             }
 
 
-
+            */
 
 
             System.out.println("     duracion "+r.getString("duracion"));
@@ -449,5 +538,54 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         return ok( views.html.videoteca.editForm.render(id, forma, TipoCredito.find.all(), d)  );
 
     }
+
+    public static Result save(){
+        System.out.println("\n\n\nDesde VideotecaController.save");
+        Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
+        System.out.println(forma);
+
+        VtkCatalogo vtk = forma.get();
+        // Convertir duracion (hh:mm:ss) a segundos
+        Duracion duracion = new Duracion();
+        duracion.convertir(forma.field("duracionStr").value());
+        vtk.duracion = duracion.totalSegundos();
+
+        if(forma.hasErrors()) {
+            return badRequest(createForm.render(forma, TipoCredito.find.all() ));
+        }
+
+        System.out.println("duracion:"+vtk.duracion);
+        Long elId = 1L;
+        if ( VtkCatalogo.find.all().size()>0)
+            elId = Long.parseLong(Ebean.createSqlQuery("select max(id) x from vtk_catalogo").findUnique().getString("x"))+1;
+        vtk.id =  elId;
+
+        // CREDITOS
+        String texto = forma.field("txaCreditos").value();
+        try {
+            JSONObject jsonObject = new JSONObject( texto   );
+            JSONArray c = jsonObject.getJSONArray("losDatos");
+            for (int i = 0 ; i < c.length(); i++) {
+                JSONObject obj = c.getJSONObject(i);
+                String A = obj.getString("tipo");
+                String B = obj.getString("creditos");
+                String[] arrCreditos = B.split(",");
+                List<Credito> creditos = new ArrayList<>();
+                for (String elCredito : arrCreditos) {
+                    Credito cred = new Credito();
+                    cred.tipoCredito = TipoCredito.find.byId( Long.parseLong(A));
+                    cred.personas = elCredito;
+                    vtk.creditos.add(cred);
+                }
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        vtk.save();
+        flash("success", "Se agregó al acervo");
+        return catalogo();
+    }
+
+
 
 }

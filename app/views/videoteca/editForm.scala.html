@@ -3,13 +3,6 @@
 @import helper._
 @anio = { @(new Date().format("yyyy"))}
 
-@cDuracion.horas<br>
-@cDuracion.minutos<br>
-@cDuracion.segundos<br>
-
-@cDuracion.cadena()
-
-
 <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify"></script>
 <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
@@ -174,19 +167,7 @@
         })
         */
 
-        $("button[name='laBotoniza']").off("click");
-        $("button[name='laBotoniza']").on("click", function(e){
-            e.preventDefault();
-            console.log("laBotoniza")
-            var indice = $("button[name='laBotoniza']").index( $(this)   );
-            console.log( indice  )
-            console.log( $("button[name='laBotoniza']").eq(indice) )
-            console.log( $("button[name='laBotoniza']").eq(indice).id )
 
-            var id = $(this).prop("id").substring( $(this).prop("id").indexOf("_")+1   );
-            console.log("id->"+id)
-            console.log(  $("#ta"+id).val() )
-        });
 
         leer();
     });  // fin del $(function()
@@ -215,10 +196,15 @@
         tagifyPC.addTags(arr);
 
 
+        // Creditos
 
         console.log("creditos @forma.get().creditos.size()")
         @for(c<-forma.get().creditos){
-            console.log("@c");
+            console.log("@c.tipoCredito.id  -  @c.personas");
+            var inputCred = document.querySelector("textarea[id='ta"+@c.tipoCredito.id+"']");
+            tagifyCreds = new Tagify(inputCred);
+            tagifyCreds.addTags("@c.personas");
+
         }
 
     }

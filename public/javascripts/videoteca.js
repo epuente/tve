@@ -113,14 +113,14 @@ $("#btnNuevaSerie").on("click", function(e){
                               html:  'Se agregó la nueva serie.<br><br>Continúe con el formulario del acervo de la videoteca.',
                               type:  'success',
                               confirmButtonText: "Aceptar"
-                              });
+                          });
                         $('#myModal2').modal('hide');
                         $("#serie_id").val(salvado.id);
 
                         $("#textSerie").html(  salvado.descripcion);
 
                         $("#divResultadoBusqueda, #aAbrirSeries").show();
-                        $("#divBusqueda, #divIndicaciones, #msgCoincidencias, #btnNuevaSerie").hide();
+                        $("#divBusqueda, #divIndicaciones, #msgCoincidencias, #btnNuevaSerie, #divCoincidencias" ).hide();
 
 
 
@@ -139,20 +139,80 @@ $("#btnNuevaSerie").on("click", function(e){
 function seleccionaSerie(id, texto){
     console.debug("Se seleccionó la serie id: "+id);
     $('#myModal2').modal('hide');
-
     //$('#serie_id').selectpicker('refresh');
     $('#serie_id').selectpicker('val', id);
-
     $('#serie_id').selectpicker('refresh');
-
-
     $("#divBusqueda, #divCoincidencias, #msgCoincidencias, #divIndicaciones, #btnNuevaSerie").hide();
     $("#divResultadoBusqueda, #aAbrirSeries").show();
-
     $("#serie_id").val(id);
-
-
     $("#textSerie").html(  texto);
-
 }
+
+function agregaJSON(){
+    $("<textarea style='padding-left:100px' name='txaCreditos' id='txaCreditos'>Este es un texto de prueba que despues recibirá código JSON</textarea>").appendTo("#frmVTKCreate");
+}
+
+
+
+
+
+$("button[name='laBotoniza']").off("click");
+$("button[name='laBotoniza']").on("click", function(e){
+    e.preventDefault();
+    console.log("laBotoniza")
+    var indice = $("button[name='laBotoniza']").index( $(this)   );
+    console.log( "indice "+indice  )
+    console.log( $("button[name='laBotoniza']").eq(indice) )
+
+
+    var id = $(this).prop("id").substring( $(this).prop("id").indexOf("_")+1   );
+    console.log("CREDITOS "+id)
+    //console.log("id->"+id)
+    console.log(  $("#ta"+id).val() )
+
+
+
+});
+
+
+
+$("form").submit(function(event){
+  //event.preventDefault();
+    $("#cuentas_username").attr('name', 'cuentas[0].username');
+    $("#cuentas_password").attr('name', 'cuentas[0].password');
+
+    $("[type='checkbox'][id^='auxRoles_']:checked").each(function(i,e){
+        $(this).attr("name","cuentas[0].roles["+i+"].rol.id");
+    });
+    var x = {};
+    var j=[];
+    $("#navTabs>li>a").each(function(index, element){
+        var id = $(element).attr("id").substring(3);
+        console.log("  id "+id)
+        var tipo={};
+        tipo["tipo"]=id;
+        aux= $("#ta"+id).val();
+        console.log("    aux:"+aux+"("+aux.length+")")
+        if (aux.length!=0){
+
+
+            obj = jQuery.parseJSON(aux);
+            console.log("    obj:"+obj)
+
+            cadena="";
+            $.each(obj, function(key,value) {
+                cadena+=value.value+",";
+            });
+            cadena = cadena.substring(0, cadena.length-1);
+            console.log("    cadena:"+cadena)
+            tipo["creditos"]=cadena;
+            j.push(tipo);
+        }
+    });
+    x['losDatos']=j;
+    $("<textarea style='padding-left:100px' name='txaCreditos' id='txaCreditos'>"+JSON.stringify(x)+"</textarea>").appendTo("#frmVTKCreate");
+    console.dir(j)
+});
+
+
 

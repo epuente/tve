@@ -139,7 +139,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
-                        @inputText(forma("duracion"), 'type->"time", 'step->"1", '_label -> "Duración", 'class->"form-control", 'required->true, '_help->"hh/mm/ss" )
+                        @inputText(forma("duracionStr"), 'type->"time", 'step->"1", '_label -> "Duración", 'class->"form-control", 'required->true, '_help->"hh:mm:ss" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -263,13 +263,11 @@
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading panel-heading-nav">
-
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12">
                             <div>
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs" role="tablist" id="navTabs">
-
                                     @for( s <- auxCreditos) {
                                         <li role="presentation" @if(s.id==1){class="active"}><a href="#@s.id"  id="tab@s.id"  role="tab" data-toggle="tab">@s.descripcion</a></li>
                                     }
@@ -283,30 +281,19 @@
                                             <br>
                                             <button name="laBotoniza" id="btnValoresTab_@s.id">Valores</button>
                                         </div>
-
                                     }
-
-
-
-
                                 </div>
 
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-12">
                                         <p class="small" style="margin-top: 5px;">
-                                            Puede escribir los nombre del personal de la DEV o puede usar el panel de botones de la derecha <i class="far fa-hand-point-right"></i></i> <br>
-                                            Los nombres que no aparezcan en el área de botones escribalos directamente.
+                                            Escriba los nombres del personal que participó
                                         </p>
                                     </div>
                                 </div>
-
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </div>

@@ -824,10 +824,10 @@ INSERT INTO ubicacion (id, audit_insert, audit_update, descripcion) VALUES(3, '2
 INSERT INTO ubicacion (id, audit_insert, audit_update, descripcion) VALUES(4, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'DEPARTAMENTO DE RECURSOS EDUCATIVOS');
 INSERT INTO ubicacion (id, audit_insert, audit_update, descripcion) VALUES(5, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'DECANATO');
 
-INSERT INTO areatematica (id, audit_insert, audit_update, descripcion) VALUES(1, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'CIENCIAS FISICO MATEMATICAS');
-INSERT INTO areatematica (id, audit_insert, audit_update, descripcion) VALUES(2, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'CIENCIAS SOCIALES Y ADMINISTRATIVAS');
-INSERT INTO areatematica (id, audit_insert, audit_update, descripcion) VALUES(3, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'CIENCIAS MEDICO BIOLOGICAS');
-INSERT INTO areatematica (id, audit_insert, audit_update, descripcion) VALUES(4, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'DIFUSION Y EXTENSION DE LA CULTURA');
+INSERT INTO areatematica (id, audit_insert, audit_update, descripcion, sigla) VALUES(1, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'CIENCIAS FISICO MATEMATICAS', 'CFM');
+INSERT INTO areatematica (id, audit_insert, audit_update, descripcion, sigla) VALUES(2, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'CIENCIAS SOCIALES Y ADMINISTRATIVAS', 'CSyA');
+INSERT INTO areatematica (id, audit_insert, audit_update, descripcion, sigla) VALUES(3, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'CIENCIAS MEDICO BIOLOGICAS', 'CMB');
+INSERT INTO areatematica (id, audit_insert, audit_update, descripcion, sigla) VALUES(4, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'DIFUSION Y EXTENSION DE LA CULTURA', 'DyEC');
 
 INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(1, '2023-09-12 11:38:06.354', '2023-09-12 11:38:06.354', 'Productores', 'producción');
 INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(2, '2023-09-12 11:38:06.366', '2023-09-12 11:38:06.366', 'Asistentes', 'asistencia');
@@ -841,16 +841,19 @@ INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) V
 INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(10, '2023-09-12 11:38:06.393', '2023-09-12 11:38:06.393', 'Guionistas', 'guión');
 INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(99, '2023-09-12 11:38:06.397', '2023-09-12 11:38:06.397', 'Otros', 'postproducción');
 
-INSERT INTO produccion (id, audit_insert, audit_update, descripcion) VALUES(1, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'COORDINACIÓN DE TELEVISIÓN EDUCATIVA');
-INSERT INTO produccion (id, audit_insert, audit_update, descripcion) VALUES(2, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'COORDINACIÓN DE TECNOLOGÍA EDUCATIVA');
-INSERT INTO produccion (id, audit_insert, audit_update, descripcion) VALUES(3, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'COPRODUCCIÓN DIVISIÓN DE TELEVISIÓN EDUCATIVA - ANUIES');
-INSERT INTO produccion (id, audit_insert, audit_update, descripcion) VALUES(4, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'DEPARTAMENTO DE TELEVISIÓN EDUCATIVA - ANUIES');
-INSERT INTO produccion (id, audit_insert, audit_update, descripcion) VALUES(5, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'TELEVISIÓN EDUCATIVA SEP');
-INSERT INTO produccion (id, audit_insert, audit_update, descripcion) VALUES(6, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'DIVISION DE TELEVISION EDUCATIVA');
-INSERT INTO produccion (id, audit_insert, audit_update, descripcion) VALUES(7, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'DIRECCION DE APOYO A ESTUDIANTES-DIRECCION DE TECNOLOGIA EDUCATIVA');
-INSERT INTO produccion (id, audit_insert, audit_update, descripcion) VALUES(8, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'DEPARTAMENTO DE TELEVISION EDUCATIVA');
+INSERT INTO produccion (id, audit_insert, audit_update, descripcion, sigla) VALUES(1, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'COORDINACIÓN DE TELEVISIÓN EDUCATIVA', 'Cord. TVE');
+INSERT INTO produccion (id, audit_insert, audit_update, descripcion, sigla) VALUES(2, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'COORDINACIÓN DE TECNOLOGÍA EDUCATIVA', 'Cord. TecEduc');
+INSERT INTO produccion (id, audit_insert, audit_update, descripcion, sigla) VALUES(3, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'COPRODUCCIÓN DIVISIÓN DE TELEVISIÓN EDUCATIVA - ANUIES', 'CoProd DivTVE');
+INSERT INTO produccion (id, audit_insert, audit_update, descripcion, sigla) VALUES(4, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'DEPARTAMENTO DE TELEVISIÓN EDUCATIVA - ANUIES', 'Depto TVE-ANUIES');
+INSERT INTO produccion (id, audit_insert, audit_update, descripcion, sigla) VALUES(5, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'TELEVISIÓN EDUCATIVA SEP', 'TVE SEP');
+INSERT INTO produccion (id, audit_insert, audit_update, descripcion, sigla) VALUES(6, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'DIVISION DE TELEVISION EDUCATIVA', 'Div TVE');
+INSERT INTO produccion (id, audit_insert, audit_update, descripcion, sigla) VALUES(7, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'DIRECCION DE APOYO A ESTUDIANTES-DIRECCION DE TECNOLOGIA EDUCATIVA', 'DirAE-DirTVE');
+INSERT INTO produccion (id, audit_insert, audit_update, descripcion, sigla) VALUES(8, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'DEPARTAMENTO DE TELEVISION EDUCATIVA', 'DeptoTVE');
 
 select setval( 'serie_seq', (select max(id)+1 from serie), true);
+select setval( 'vtk_catalogo_seq', (select max(id)+1 from vtk_catalogo), true);
 
  # --- !Downs
 
+drop table if exists areatematica cascade;
+drop sequence if exists areatematica_seq;

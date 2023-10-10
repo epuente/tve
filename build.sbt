@@ -13,7 +13,8 @@ libraryDependencies ++= Seq(
   "org.webjars" % "animate.css" % "3.2.5",
   "org.json" % "org.json" % "chargebee-1.0",
   "org.webjars.bower" % "moment" % "2.29.4",
-  "com.sun.mail" % "javax.mail" % "1.6.2"
+  "com.sun.mail" % "javax.mail" % "1.6.2",
+  "org.apache.commons" % "commons-lang3" % "3.13.0"
 )
 libraryDependencies += filters
 

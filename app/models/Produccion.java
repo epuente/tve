@@ -8,6 +8,8 @@ import java.util.Map;
 
 @Entity
 public class Produccion extends models.utils.PlantillaCatalogo{
+    public String sigla;
+
     public static Model.Finder<Long,Produccion> find = new Model.Finder<Long,Produccion>(Long.class, Produccion.class);
 
     public static Map<String,String> options() {

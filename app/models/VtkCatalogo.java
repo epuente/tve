@@ -74,7 +74,6 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
                 .findPagingList(pageSize)
                 .setFetchAhead(false)
                 .getPage(page);
-//    	System.out.println(" * * * * * * * * registros:"+p.getTotalRowCount());
         return p;
     }
 

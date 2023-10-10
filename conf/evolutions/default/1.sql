@@ -288,6 +288,7 @@ create table areatematica (
   audit_insert              timestamp,
   audit_update              timestamp,
   descripcion               varchar(100) not null,
+  sigla                     varchar(255),
   constraint pk_areatematica primary key (id))
 ;
 
@@ -310,7 +311,6 @@ create table credito (
   id                        bigint not null,
   audit_insert              timestamp,
   audit_update              timestamp,
-  descripcion               varchar(100) not null,
   catalogo_id               bigint,
   tipo_credito_id           bigint,
   personas                  varchar(500),
@@ -904,6 +904,7 @@ create table produccion (
   audit_insert              timestamp,
   audit_update              timestamp,
   descripcion               varchar(100) not null,
+  sigla                     varchar(255),
   constraint pk_produccion primary key (id))
 ;
 

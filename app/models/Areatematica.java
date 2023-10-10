@@ -8,6 +8,8 @@ import java.util.Map;
 
 @Entity
 public class Areatematica extends models.utils.PlantillaCatalogo{
+
+    public String sigla;
     public static Model.Finder<Long,Areatematica> find = new Model.Finder<Long,Areatematica>(Long.class, Areatematica.class);
 
     public static Map<String,String> options() {
