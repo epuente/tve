@@ -1,0 +1,93 @@
+@(forma: Form[Personal])
+@import helper._
+@main {
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+                <li><a href="@routes.SupCatalogadorController.lista()">Catalogadores videoteca</a></li>
+                <li>Agregar</li>
+            </ol>
+        </div>
+    </div>
+
+    <h1>Agregar catalogador de videoteca</h1>
+
+    @form(CSRF(routes.SupCatalogadorController.save()), 'role->"form", 'id->"frmVTKCreate", 'name->"frmVTK" ) {
+        @catalogadorForm(forma)
+        <br/><br/>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div style="width: 80%" class="center-block">
+                    <input type="submit"  onsubmit="javascript:agregaJSON()"  value="Agregar" class="btn btn-primary btn-block">
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div style="width: 80%" class="center-block">
+                    <a onclick="javascript:document.getElementById('frmVTKCreate').reset();" class="btn btn-warning btn-block">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<script type="text/javascript">
+    var texto="";
+    $(function() {
+        $('form').validator();
+    });  // fin del $(function()
+
+
+    function vvVtkCatalogoCrear(){
+        console.debug("desde vvVtkCatalogoCrear()");
+        $("#serieDescripcion").val("");
+        $("#divCoincidencias div.list-group>button").remove();
+        $("#msgCoincidencias").html("");
+        $("#divIdTipoOperacion").text("1");
+        $('#myModal2').modal('show');
+        if ( texto != null && texto.length>0 ){
+            $("#serieDescripcion").val(   texto    );
+        }
+        $("#serieDescripcion").focus();
+
+    }
+
+
+
+
+
+    $(document).on("click", "#btnAgregarCatVTK", function(){
+            console.log("OKI")
+    });
+
+    $(document).off("click","button[name='btnProductor']");
+    $(document).on("click","button[name='btnProductor']", function(){
+        var elId = $("div[name='losTabs'].active").attr("id");
+        var textoExistente = $("#ta"+elId).val().length >0;
+        $("#ta"+elId).val(  $("#ta"+elId).val()+(textoExistente?", ":"") + $(this).text()    );
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<script src="@routes.Assets.at("bootstrap-select/js/bootstrap-select.min.js")"></script>
+<script src="@routes.Assets.at("bootstrap-select/js/i18n/defaults-es_ES.min.js")"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("bootstrap-select/css/bootstrap-select.min.css")">
+
+<script src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
+
+
+
+
+
+

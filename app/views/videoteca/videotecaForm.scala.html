@@ -6,6 +6,99 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        @inputText(forma("folio"), '_label -> "Folio", 'class->"form-control", 'required->true, 'placeholder->"Ejem. DIRGRAL980125" )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                    <div class="form-group">
+                        @select(
+                        forma("unidadresponsable.id"),
+                        options(models.UnidadResponsable.options),
+                        '_label -> "Unidad Responsable", '_default -> "-- Seleccione --",
+                        '_showConstraints -> false,
+                        'class->"form-control",
+                        'required->true
+                        )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <dl class=" " id="evento_field">
+                            <dt><label for="eventos[0].servicio.id">Evento</label></dt>
+                            <dd>
+                                <input type="checkbox" id="eventos_0_id" name="eventos[0].servicio.id" value="1" class="input-block-level" placeholder="">
+                                <span style="margin-right:20px;" > @models.Servicio.find.byId(1).descripcion</span>
+                                <input type="checkbox" id="eventos_1_id" name="eventos[1].servicio.id" value="2" class="input-block-level" placeholder="">
+                                <span>@models.Servicio.find.byId(2).descripcion</span>
+                            </dd>
+                            <dd class="info"> </dd>
+                        </dl>
+                        <div class="help-block with-errors"></div>
+                    </div>
+
+
+                    @*repeat(forma("eventos.id"), min = 2) { eventoField  =>
+
+                        @inputText(eventoField)
+
+
+                    }
+                    *@
+
+
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <dl class=" " id="niverlacademico_field">
+                            <dt><label for="nivel1">Nivel académico</label></dt>
+                            <dd>
+                                <input type="checkbox" id="nivel1" name="nivelesacademicos[0].nivel.id" value="1" class="input-block-level" placeholder="">
+                                <span style="margin-right:20px;" > @models.NivelAcademico.find.byId(1).descripcion</span>
+                                <input type="checkbox" id="nivel2" name="nivelesacademicos[1].nivel.id" value="2" class="input-block-level" placeholder="">
+                                <span style="margin-right:20px;" > @models.NivelAcademico.find.byId(2).descripcion</span>
+                                <input type="checkbox" id="nivel3" name="nivelesacademicos[2].nivel.id" value="3" class="input-block-level" placeholder="">
+                                <span style="margin-right:20px;" > @models.NivelAcademico.find.byId(3).descripcion</span>
+                            </dd>
+                            <dd class="info"> </dd>
+                        </dl>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <dl class=" " id="esAreaCentral_field">
+                            <dt><label for="esAreaCentral">Área Central</label></dt>
+                            <dd>
+                                <input type="checkbox" id="esAreaCentral" name="esAreaCentral" value="1" class="input-block-level" placeholder="">
+                                <span style="margin-right:20px;" > Área Central</span>
+                            </dd>
+                            <dd class="info"> </dd>
+                        </dl>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+
+
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        @inputText(forma("claveclasificatoria"), '_label -> "Clave clasificatoria", 'class->"form-control", 'required->true, 'placeholder->"Ejem. BCT-00081-30" )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
                 <div class="col-sm-12 col-md-10 col-lg-10">
                     <div class="form-group">
                         <div id="divResultadoBusqueda" style="display:none">
@@ -299,7 +392,14 @@
         </div>
     </div>
 
-
+    <!-- Catalogó  -->
+    <div class="panel panel-default" style="display:none">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12"><h2>Catalogó: </h2></div>
+            </div>
+        </div>
+    </div>
 
 
 

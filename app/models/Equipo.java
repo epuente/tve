@@ -33,14 +33,9 @@ public class Equipo  extends models.utils.PlantillaModelo{
 	
 	@Column(length=600)
 	public String observacion;
-	
-	
-	
-	
+
     public static Model.Finder<Long,Equipo> find = new Model.Finder<Long,Equipo>(Long.class, Equipo.class);		
 
-    
-    
     public static Page<Equipo> page(int page, int pageSize, String filtro, String columnaOrden, String tipoOrden) {
     	System.out.println(" * * * * * * * * ");    	
     	Page<Equipo> p = find

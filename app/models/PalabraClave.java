@@ -20,6 +20,10 @@ public class PalabraClave extends Model {
 
     public Date auditInsert =  Date.from( Instant.now().minus(1, ChronoUnit.HOURS));
     public Date auditUpdate =  Date.from( Instant.now().minus(1, ChronoUnit.HOURS));
+
+    @ManyToOne(optional = false)
+    public Personal usuario;
+
     @NotNull
     @Column(length = 1500)
     public String descripcion;

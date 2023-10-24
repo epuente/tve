@@ -850,8 +850,14 @@ INSERT INTO produccion (id, audit_insert, audit_update, descripcion, sigla) VALU
 INSERT INTO produccion (id, audit_insert, audit_update, descripcion, sigla) VALUES(7, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'DIRECCION DE APOYO A ESTUDIANTES-DIRECCION DE TECNOLOGIA EDUCATIVA', 'DirAE-DirTVE');
 INSERT INTO produccion (id, audit_insert, audit_update, descripcion, sigla) VALUES(8, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'DEPARTAMENTO DE TELEVISION EDUCATIVA', 'DeptoTVE');
 
+INSERT INTO nivel_academico (id, audit_insert, audit_update, descripcion) VALUES(1, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Medio Superior');
+INSERT INTO nivel_academico (id, audit_insert, audit_update, descripcion) VALUES(2, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Superior');
+INSERT INTO nivel_academico (id, audit_insert, audit_update, descripcion) VALUES(3, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Posgrado');
+
 select setval( 'serie_seq', (select max(id)+1 from serie), true);
 select setval( 'vtk_catalogo_seq', (select max(id)+1 from vtk_catalogo), true);
+select setval( 'vtk_evento_seq', (select max(id)+1 from vtk_evento), true);
+select setval( 'vtk_nivel_academico_seq', (select max(id)+1 from vtk_nivel_academico), true);
 
  # --- !Downs
 

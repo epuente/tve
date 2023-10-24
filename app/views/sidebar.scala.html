@@ -176,6 +176,16 @@
 	   </div>
 	   }
 
+	   @* Supervisor de catalogadores *@
+	   @if(session.get("rolActual").compareTo("133")==0){
+		   <div class="menu_selection">
+			   <ul class="nav side-menu">
+				   <li><a href="@routes.SupCatalogadorController.tablero"><i class="fas fa-table"></i> tablero </a></li>
+				   <li><a href="@routes.SupCatalogadorController.lista"><i class="fas fa-table"></i> Catalogadores videoteca </a></li>
+			   </ul>
+		   </div>
+	   }
+
 
 
 

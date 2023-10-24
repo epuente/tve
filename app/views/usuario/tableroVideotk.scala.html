@@ -86,7 +86,12 @@
     }
 
 
-
+.chart-container {
+  position: relative;
+  margin: auto;
+  height: 80vh;
+  width: 80vw;
+}
 
 
 </style>
@@ -223,8 +228,8 @@
 					<h2>    Año de producción    </h2>
 					<div class="clearfix"></div>
 				</div>
-				<div class="x_content">
-					<canvas id="canvasAnioProd" style="min-height: 150px; max-height: 150px;" class="centradoHV"></canvas>
+				<div class="chart-container">
+					<canvas id="canvasAnioProd"></canvas>
 				</div>
 			</div>
 		</div>
@@ -323,33 +328,9 @@
 					position: 'bottom',
 					labels:{fontSize: 10}
 				},
-        scales: {
-            yAxes: [{
-                ticks: {
-                	fontSize:30,
-                    // Include a dollar sign in the ticks
-                    callback: function(value, index, values) {
-                    		if (index%3 ==0)
-                        		return value;
-                        	else
-                        		return null;
-                    }
-                }
-            }],
-            xAxes: [{
-                ticks: {
-                	fontSize:30,
-                    // Include a dollar sign in the ticks
-                    callback: function(value, index, values) {
-                    		if (index%3 ==0)
-                        		return value;
-                        	else
-                        		return null;
-                    }
-                }
-            }],
-        }
-		}
+				responsive: true,
+                maintainAspectRatio: false
+			}
 		});
 
 

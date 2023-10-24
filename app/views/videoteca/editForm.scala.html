@@ -53,6 +53,10 @@
 .tagify__tag{
     --tag-bg: #CBD5CF;
 }
+
+input, textarea{
+    text-transform: uppercase;
+}
 </style>
 
 
@@ -69,18 +73,23 @@
 
     <h1>Edición del catálogo de videoteca</h1>
 
-    @form(CSRF(routes.AdminAccesorioController.save()), 'role->"form") {
+    @form(CSRF(routes.AdminAccesorioController.save()), 'role->"form", 'id->"frmVideoteca", 'name->"frmVTK") {
         @videotecaForm(forma, auxCreditos)
         <br/><br/>
         <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <div style="width: 80%" class="center-block">
-                    <input type="submit" value="Agregar" class="btn btn-primary btn-block">
+                    <input type="submit" value="Actualizar" class="btn btn-primary btn-block">
                 </div>
             </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <div style="width: 80%" class="center-block">
-                    <a href="@routes.AdminAccesorioController.list()" class="btn btn-warning btn-block">Cancelar</a>
+                    <a onclick="javascript:eliminarCatalogo(@id)"  class="btn btn-danger btn-block">Eliminar</a>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                    <a onclick="javascript:document.getElementById('frmVideoteca').reset();" class="btn btn-warning btn-block">Cancelar</a>
                 </div>
             </div>
         </div>
@@ -91,14 +100,13 @@
     var texto="";
     $(function() {
         $('form').validator();
-
         $("#serie_id").selectpicker({
             title:"Escriba, seleccione o busque un número de oficio o descripción del oficio",
             size: 10,
             liveSearchNormalize: true,
             liveSearch: true,
             dropdownAlignRight: true,
-            header: "Puede hacer sroll en la lista y seleccionar la serie, o  puede iniciar a escribir la serie y se buscará en el catálogo existente",
+            header: "Puede hacer srcoll en la lista y seleccionar la serie, o  puede iniciar a escribir la serie y se buscará en el catálogo existente",
             liveSearchPlaceholder: "Aqui puede escribir la búsqueda de la serie",
             noneSelectedText: "No se seleccionó ningúna serie",
             noneResultsText : "La busqueda no regresó resultados. !!!!  <button id='btnAgregarCatVTK' type='button' class='btn btn-primary btn-sm' onclick='javascript:vvVtkCatalogoCrear();'>Agregar serie</button> "
@@ -174,6 +182,7 @@
 
 
     function leer(){
+
         $("#serieDescripcion").val( "@forma.get().serie.descripcion"  );
 
         console.log("duracion: @cDuracion.horas:@cDuracion.minutos:@cDuracion.segundos")
@@ -185,6 +194,23 @@
         console.log(moment("Thu Oct 01 00:00:00 CDT 1998", "ddd MMM DD HH:mm:ss z YYYY").format("YYYY") )
 
         $("#anio_produccion").val(   moment("Thu Oct 01 00:00:00 CDT 1998", "ddd MMM DD HH:mm:ss z YYYY").format("YYYY")   )
+
+        // Evento (  Servicio en la DB  )
+        @for(e<-forma.get().eventos){
+            console.log("EVENTOS @e.servicio")
+            console.log("EVENTOS @e.servicio.descripcion")
+            $("#eventos_@(e.servicio.id-1)_id").attr("checked", true);
+        }
+
+        // Nivel académico
+        @for(e<-forma.get().nivelesacademicos){
+            $("#nivel@(e.nivel.id)").attr("checked", true);
+        }
+
+        // ¿Es área central?
+        $("#esAreaCentral").attr("checked", @forma.get().esAreaCentral==1);
+
+
 
         // Palabras clave
         var inputpc = document.querySelector("textarea[id='palabrasclave']"),
@@ -249,7 +275,66 @@
         $("#ta"+elId).val(  $("#ta"+elId).val()+(textoExistente?", ":"") + $(this).text()    );
     });
 
+    function eliminarCatalogo(id){
+        swal({
+          title: 'Confirmar',
+          text: '¿Desea eliminar este registro?',
+          type: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Eliminarlo',
+          cancelButtonText: 'Conservarlo',
+          confirmButtonColor: "#d33",
+          cancelButtonColor: '#3085d6',
+          preConfirm: () => {
+            return new Promise((resolve) => {
+                resolve();
+            });
+          }
+        }).then((result) => {
+            console.dir(result)
+                  if (result) {
+                    $.ajax({
+                            url:"@routes.VideotecaController.catalogoDelete()",
+                            method: 'POST',
+                            data: JSON.stringify( {  id: @id}),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json"
+                    }).success(function(data){
+                        if (data.estado=="eliminado"){
+                            swal({
+                                title: 'Eliminado',
+                                html: "Se eliminó correctamente el registro<br><br><hr><small>Redirigiendo...</small>",
+                                type: 'success',
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                footer: "pie"
+                            }).catch(swal.noop);
+                            setTimeout(function(){
+                                    $("#frmVideoteca").validator('destroy');
+                                    $("#frmVideoteca").attr("action", "@routes.VideotecaController.catalogo()");
+                                    $("#frmVideoteca").attr("method", "GET");
+                                    $("#frmVideoteca").submit();
+                                }
+                            , 5000);
 
+
+                        }
+                    }).error(function(xhr, status, error) {
+                        console.log("no eliminado")
+                    });
+                 //   swal('Eliminado', 'Se eliminó correctamente el registro', 'success');
+
+
+
+                  } else {
+                    swal('Cancelado', 'Se canceló la eliminación', 'error');
+                  }
+        }
+        ,function (dismiss) {
+                console.log("dm")
+                swal('Cancelado', 'Se canceló la eliminación. Se conserva el registro.', 'info');
+        }).catch(swal.noop);
+    }
 
 
 

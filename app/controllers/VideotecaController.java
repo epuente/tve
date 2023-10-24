@@ -14,6 +14,7 @@ import play.Logger;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Result;
+import views.html.operacionNoPermitida;
 import views.html.videoteca.*;
 import views.html.catalogos.Accesorio.editForm;
 
@@ -146,7 +147,15 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         String tipoOrden = request().getQueryString("order[0][dir]");
         String nombreColOrden = request().getQueryString("columns["+colOrden+"][data]");
 
-        List<VtkCatalogo> cat = VtkCatalogo.find.all();
+        List<VtkCatalogo> cat = null;
+        // Es supervisor de catalogadores?
+        if (session("rolActual").compareTo("133")==0){
+            cat = VtkCatalogo.find.all();
+        }
+        // Es catalogador?
+        if (session("rolActual").compareTo("132")==0){
+            cat = VtkCatalogo.find.where().eq("catalogador.id", Long.valueOf(session("usuario"))).findList();
+        }
         int numPag = 0;
         if (Integer.parseInt(request().getQueryString("start")) != 0)
             numPag = Integer.parseInt(request().getQueryString("start")) /   Integer.parseInt(request().getQueryString("length"));
@@ -228,7 +237,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 views.html.videoteca.createForm.render(forma, TipoCredito.find.all())
         );
     }
-
+/*
     public static Result tsQuery() throws JSONException {
         JsonNode json = request().body().asJson();
         System.out.println("Desde tsQuery");
@@ -251,7 +260,8 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
         return ok (  jo.toString() );
     }
-
+*/
+    /*
     public static Result tsCoincidencias() throws JSONException {
         JsonNode json = request().body().asJson();
         System.out.println("Desde tsCoincidencias");
@@ -281,7 +291,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         jo.put("coincidencias", ja);
         return ok ( jo.toString() );
     }
-
+    */
 
     // Aqui se usan 2 metodos, el primero es el clásico de busqueda aproximada (comparar una cadena con ilike y unaccent)
     // El segundo usa textsearch con ts_vector y ts_query
@@ -531,19 +541,20 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
     public static Result catalogoEdit(Long id){
         VtkCatalogo catalogo = VtkCatalogo.find.byId(id);
-        Form<VtkCatalogo> forma = form(VtkCatalogo.class).fill( catalogo  );
-
-        Duracion d = new Duracion(  catalogo.duracion );
-
-        return ok( views.html.videoteca.editForm.render(id, forma, TipoCredito.find.all(), d)  );
-
+        //Logger.debug(  session("usuario") +"  -  "+ );
+        if (session("usuario").compareTo( Long.toString(catalogo.catalogador.id))==0) {
+            Form<VtkCatalogo> forma = form(VtkCatalogo.class).fill(catalogo);
+            Duracion d = new Duracion(catalogo.duracion);
+            return ok( views.html.videoteca.editForm.render(id, forma, TipoCredito.find.all(), d)  );
+        } else {
+            return ok (views.html.operacionNoPermitida.render());
+        }
     }
 
     public static Result save(){
         System.out.println("\n\n\nDesde VideotecaController.save");
         Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
         System.out.println(forma);
-
         VtkCatalogo vtk = forma.get();
         // Convertir duracion (hh:mm:ss) a segundos
         Duracion duracion = new Duracion();
@@ -581,11 +592,26 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+
+        vtk.catalogador = Personal.find.byId( Long.parseLong(session("usuario")));
         vtk.save();
         flash("success", "Se agregó al acervo");
         return catalogo();
     }
 
 
+
+    public static Result catalogoDelete() throws JSONException {
+        JSONObject retorno = new JSONObject().put("estado","error");
+        JsonNode json = request().body().asJson();
+        VtkCatalogo aux = VtkCatalogo.find.byId(json.findValue("id").asLong());
+        if (session("usuario").compareTo( Long.toString(aux.catalogador.id))==0) {
+          //  aux.delete();
+            retorno.put("estado", "eliminado");
+            return ok(  retorno.toString()  );
+        } else {
+            return ok (views.html.operacionNoPermitida.render());
+        }
+    }
 
 }

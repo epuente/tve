@@ -379,8 +379,8 @@ INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (126, '2021
 INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (127, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Jefe Depto');
 INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (130, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Transmisión');
 INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (131, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Responsable Videoteca');
-INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (132, '2023-08-22 12:50:30', '2023-08-22 12:50:30', 'Operador Videoteca');
-
+INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (132, '2023-08-22 12:50:30', '2023-08-22 12:50:30', 'Catalogador Videoteca');
+INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (133, '2023-08-22 12:50:30', '2023-08-22 12:50:30', 'Supervisor Catalogadores');
 
 
 INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUES (114, '2022-11-04 14:39:50', '2022-11-04 14:39:50', 93, 1);
@@ -437,6 +437,7 @@ INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUE
 INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUES (243, '2023-06-20 17:58:05.092', '2023-06-20 17:58:05.092', 148, 100);
 INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUES (245, '2022-11-10 19:23:59', '2022-11-10 19:23:59', 137, 11);
 INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUES (246, '2023-08-22 19:23:59', '2022-11-10 19:23:59', 138, 132);
+INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUES (247, '2023-10-17 12:44:59', '2023-10-17 12:44:59', 138, 133);
 
 
 

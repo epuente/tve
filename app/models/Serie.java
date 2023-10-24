@@ -3,10 +3,7 @@ package models;
 import play.Logger;
 import play.db.ebean.Model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
+import javax.persistence.*;
 import javax.validation.Constraint;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
@@ -26,6 +23,9 @@ public class Serie extends Model{
     @NotNull
     @Column(length=7000)
     public String descripcion;
+
+    @ManyToOne
+    public Personal usuario;
 
 
     public static Model.Finder<Long,Serie> find = new Model.Finder<Long,Serie>(Long.class, Serie.class);

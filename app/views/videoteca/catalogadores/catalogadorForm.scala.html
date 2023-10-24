@@ -1,0 +1,76 @@
+@(forma: Form[Personal])
+
+@import helper._
+<fieldset>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <h2>Generales</h2><br>
+                            <div class="form-group">
+                                @inputText(forma("nombre"), '_label -> "Nombre", 'class->"form-control", 'required->true)
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                @inputText(forma("paterno"), '_label -> "Apellido paterno", 'class->"form-control", 'required->true)
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                @inputText(forma("materno"), '_label -> "Apellido materno", 'class->"form-control", 'required->true)
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <h2>Cuenta</h2><br>
+                            <div class="form-group">
+                                @inputText(forma("username"),  '_label -> "Nombre de usuario", 'class->"form-control", 'required->true)
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                @inputText(forma("password"),  'type->"password",  '_label -> "Clave de acceso", 'class->"form-control", 'required->true)
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</fieldset>

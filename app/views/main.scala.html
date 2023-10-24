@@ -419,7 +419,18 @@ dl {
 			}).fail(function(){alert("aguas");});						
 		}
 
-		
+        $(document).on("keyup","form[name='frmVTK'] input, form[name='frmVTK'] textarea", function(t){
+          console.log("tecla "+t)
+          var cadena = $(this).val();
+          var retorno = cadena.normalize("NFD").replace(/\p{Diacritic}/gu, "")
+          //cadena.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+          $(this).val(retorno);
+
+
+          //const acentos = {'á':'a','é':'e','í':'i','ó':'o','ú':'u','Á':'A','É':'E','Í':'I','Ó':'O','Ú':'U'};
+	      //cadena.split('').map( letra => acentos[letra] || letra).join('').toString();
+
+        });
 
 
 

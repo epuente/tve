@@ -3,12 +3,16 @@ package models;
 import play.db.ebean.Model;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Entity
 public class Produccion extends models.utils.PlantillaCatalogo{
     public String sigla;
+
+    @ManyToOne
+    public Personal usuario;
 
     public static Model.Finder<Long,Produccion> find = new Model.Finder<Long,Produccion>(Long.class, Produccion.class);
 

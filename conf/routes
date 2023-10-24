@@ -283,16 +283,22 @@ GET     /ajaxTableroVideoTK                 controllers.VideotecaController.ajax
 GET     /catalogo                           controllers.VideotecaController.catalogo()
 GET     /vtkCatalogoDTSS                    controllers.VideotecaController.catalogoDTSS()
 GET     /vtkCatalogo/create                 controllers.VideotecaController.catalogoCreate()
-
-#POST    /tsQuery                            controllers.VideotecaController.tsQuery()
-#POST    /tsCoincidencias                    controllers.VideotecaController.tsCoincidencias()
+POST    /vtkCatalogo/delete                 controllers.VideotecaController.catalogoDelete()
 
 POST    /textsearch                         controllers.VideotecaController.textsearch()
 POST    /nuevaSerie                         controllers.VideotecaController.nuevaSerie()
-#POST    /serieList                          controllers.VideotecaController.serieList()
-
 POST    /textsearchCampoCompleto            controllers.VideotecaController.textsearchCampoCompleto()
 
 GET     /vtkcarga                           controllers.VideotecaController.cargaInicial()
 GET     /vtkCatalogo/edit/:id               controllers.VideotecaController.catalogoEdit(id:Long)
 POST    /vtkCatalogo/save                   controllers.VideotecaController.save()
+
+GET     /supervisor/catalogadores           controllers.SupCatalogadorController.lista()
+GET     /supervisor/catalogadoresDTSS       controllers.SupCatalogadorController.listaDTSS()
+GET     /supervisor/catalogadoresCreate     controllers.SupCatalogadorController.create()
+POST    /supervisor/catalogadoresInsert     controllers.SupCatalogadorController.save()
+GET     /supervisor/catalogadoresEdit/:id   controllers.SupCatalogadorController.edit(id:Long)
+POST    /supervisor/catalogadoresUpdate/:id controllers.SupCatalogadorController.update(id:Long)
+POST    /supervisor/catalogadoresDelete     controllers.SupCatalogadorController.delete()
+GET     /supervisor/tablero                 controllers.SupCatalogadorController.tablero()
+POST    /supervisor/ajaxTablero             controllers.SupCatalogadorController.ajaxTablero()

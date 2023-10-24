@@ -17,6 +17,9 @@ public class Credito extends models.utils.PlantillaModelo{
     @Column(length = 500)
     public String personas;
 
+    @ManyToOne(optional = false)
+    public Personal usuario;
+
     public static Model.Finder<Long,Credito> find = new Model.Finder<Long,Credito>(Long.class, Credito.class);
 
 

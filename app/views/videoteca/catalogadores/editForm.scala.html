@@ -1,0 +1,86 @@
+@(id: Long, forma: Form[Personal])
+
+@import helper._
+
+@main {
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+                <li><a href="@routes.SupCatalogadorController.lista()">Catalogador videoteca</a></li>
+                <li>Edición</li>
+            </ol>
+        </div>
+    </div>
+
+    <h1>Edición de catalogador de videoteca</h1>
+
+    @form(CSRF(routes.SupCatalogadorController.update(id)), 'role->"form", 'id->"frmCatalogador" ) {
+        @catalogadorForm(forma)
+        <br/><br/>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                    <input type="submit" value="Actualizar" class="btn btn-primary btn-block">
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                    <a onclick="javascript:valida(@id)" class="btn btn-danger btn-block">Eliminar</a>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
+                <div style="width: 80%" class="center-block">
+                    <a onclick="javascript:document.getElementById('frmCatalogador').reset();" class="btn btn-warning btn-block">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<script type="text/javascript">
+    var texto="";
+    $(function() {
+        leer();
+        $('form').validator();
+
+    });  // fin del $(function()
+
+    function valida(){
+        console.log("desde valida")
+        $.ajax({
+            url: '/supervisor/catalogadoresDelete',
+            method: 'POST',
+            data: JSON.stringify( {id: @id}),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        }).success(function(data){
+            console.dir(data)
+            if (data.estado=="borrado"){
+
+            }
+            if (data.estado=="error"){
+                swal("Restricción",
+                    "El catalogador "+data.descripcion,
+                    "error");
+            }
+        });
+    }
+
+    function leer(){
+        $("#username").val("@forma.field("cuentas[0].username").value()");
+        $("#password").val("@forma.field("cuentas[0].password").value()");
+    }
+
+</script>
+
+<script src="@routes.Assets.at("bootstrap-select/js/bootstrap-select.min.js")"></script>
+<script src="@routes.Assets.at("bootstrap-select/js/i18n/defaults-es_ES.min.js")"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("bootstrap-select/css/bootstrap-select.min.css")">
+
+<script src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
+
+
+<script src="@routes.Assets.at("javascripts/videoteca.js")"></script>
+
+
+
