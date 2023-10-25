@@ -1,0 +1,62 @@
+.campoRequerido {
+    color: #0A093B !important;
+}
+
+    .bootstrap-select .btn {
+        //white-space: normal;
+        font-size: smaller;
+    }
+
+    #unidadresponsable_id_field span.text{
+        white-space: normal;
+        font-size: smaller;
+        line-height : 15px;
+        margin-bottom: 4px;
+        margin-top: 4px;
+        size: 10;
+    }
+
+    #serie_id_field span.text{
+        white-space: normal;
+        font-size: smaller;
+        line-height : 15px;
+        margin-bottom: 4px;
+        margin-top: 4px;
+    }
+
+    .tab-pane {
+        marging-top: 10px !important;
+        margin-left: 10px !important;
+    }
+
+
+.panel-heading-nav {
+  border-bottom: 0;
+  padding: 10px 0 0;
+}
+
+.panel-heading-nav .nav {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+
+.tagify{
+  width: 100%;
+  max-width: 100%;
+  background-color: white;
+  padding: 10;
+}
+
+
+.tagify--notAllowed {
+    --tag-invalid-bg : #CBD5CF;
+}
+
+.tagify__tag{
+    --tag-bg: #CBD5CF;
+}
+
+.mayusculasForzadas{
+    text-transform: uppercase;
+}

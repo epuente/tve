@@ -7,59 +7,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 
-<style>
-    .bootstrap-select .btn {
-        //white-space: normal;
-        font-size: smaller;
-    }
-
-    #serie_id_field span.text{
-        white-space: normal;
-        font-size: smaller;
-        line-height : 15px;
-        margin-bottom: 4px;
-        margin-top: 4px;
-    }
-
-    .tab-pane {
-        marging-top: 10px !important;
-        margin-left: 10px !important;
-    }
-
-
-.panel-heading-nav {
-  border-bottom: 0;
-  padding: 10px 0 0;
-}
-
-.panel-heading-nav .nav {
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-
-.tagify{
-  width: 100%;
-  max-width: 100%;
-  background-color: white;
-  padding: 10;
-}
-
-
-.tagify--notAllowed {
-    --tag-invalid-bg : #CBD5CF;
-}
-
-.tagify__tag{
-    --tag-bg: #CBD5CF;
-}
-
-input, textarea{
-    text-transform: uppercase;
-}
-</style>
-
-
 @main {
     @ventanasModales()
     <div class="row">
@@ -73,13 +20,13 @@ input, textarea{
 
     <h1>Edición del catálogo de videoteca</h1>
 
-    @form(CSRF(routes.AdminAccesorioController.save()), 'role->"form", 'id->"frmVideoteca", 'name->"frmVTK") {
+    @form(CSRF(routes.VideotecaController.update()), 'role->"form", 'id->"frmVideoteca", 'name->"frmVTK") {
         @videotecaForm(forma, auxCreditos)
         <br/><br/>
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <div style="width: 80%" class="center-block">
-                    <input type="submit" value="Actualizar" class="btn btn-primary btn-block">
+                    <input type="submit" onsubmit="javascript:agregaJSON()" value="Actualizar" class="btn btn-primary btn-block">
                 </div>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
@@ -160,24 +107,8 @@ input, textarea{
                 }
             })
         });
-
-
-        /*
-        var input1 = document.querySelector("textarea[id='ta1']"),
-        tagify = new Tagify(input1, {
-            enforceWhitelist: false,
-            keepInvalidTags: true,
-            whitelist: listaBlanca,
-            editTags: {
-                clicks: 2,              // single click to edit a tag
-                keepInvalid: false      // if after editing, tag is invalid, auto-revert
-            }
-        })
-        */
-
-
-
         leer();
+        labelsCamposRequeridos();
     });  // fin del $(function()
 
 
@@ -354,11 +285,13 @@ input, textarea{
 <script src="@routes.Assets.at("bootstrap-select/js/bootstrap-select.min.js")"></script>
 <script src="@routes.Assets.at("bootstrap-select/js/i18n/defaults-es_ES.min.js")"></script>
 <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("bootstrap-select/css/bootstrap-select.min.css")">
+<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/videoteca.css")">
 
 <script src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
 
 
 <script src="@routes.Assets.at("javascripts/videoteca.js")"></script>
-
+<script src="@routes.Assets.at("javascripts/videotecaUR.js")"></script>
+<script src="https://unpkg.com/imask"></script>
 
 

@@ -8,67 +8,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 
-<style>
-    .bootstrap-select .btn {
-        //white-space: normal;
-        font-size: smaller;
-    }
-
-    #unidadresponsable_id_field span.text{
-        white-space: normal;
-        font-size: smaller;
-        line-height : 15px;
-        margin-bottom: 4px;
-        margin-top: 4px;
-        size: 10;
-    }
-
-    #serie_id_field span.text{
-        white-space: normal;
-        font-size: smaller;
-        line-height : 15px;
-        margin-bottom: 4px;
-        margin-top: 4px;
-    }
-
-    .tab-pane {
-        marging-top: 10px !important;
-        margin-left: 10px !important;
-    }
-
-
-.panel-heading-nav {
-  border-bottom: 0;
-  padding: 10px 0 0;
-}
-
-.panel-heading-nav .nav {
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-
-.tagify{
-  width: 100%;
-  max-width: 100%;
-  background-color: white;
-  padding: 10;
-}
-
-
-.tagify--notAllowed {
-    --tag-invalid-bg : #CBD5CF;
-}
-
-.tagify__tag{
-    --tag-bg: #CBD5CF;
-}
-
-.mayusculasForzadas{
-    text-transform: uppercase;
-}
-</style>
-
 
 @main {
     @ventanasModales()
@@ -105,7 +44,6 @@
     var texto="";
     $(function() {
         $('form').validator();
-
         $("#serie_id").selectpicker({
             title:"Escriba, seleccione o busque un número de oficio o descripción del oficio",
             size: 10,
@@ -189,6 +127,8 @@
             console.log("id->"+id)
 
             console.log(  $("#ta"+id).val() )
+
+
         })
 */
 
@@ -213,8 +153,7 @@
                       s: {mask: IMask.MaskedRange, placeholderChar: 's', from: 0, to: 59, maxLength: 2}
                   }
         });
-
-
+        labelsCamposRequeridos();
     });  // fin del $(function()
 
 
@@ -264,6 +203,7 @@
 <script src="@routes.Assets.at("bootstrap-select/js/bootstrap-select.min.js")"></script>
 <script src="@routes.Assets.at("bootstrap-select/js/i18n/defaults-es_ES.min.js")"></script>
 <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("bootstrap-select/css/bootstrap-select.min.css")">
+<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/videoteca.css")">
 
 <script src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
 

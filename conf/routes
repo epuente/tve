@@ -297,6 +297,7 @@ POST    /nuevaUR                            controllers.VideotecaController.nuev
 GET     /vtkcarga                           controllers.VideotecaController.cargaInicial()
 GET     /vtkCatalogo/edit/:id               controllers.VideotecaController.catalogoEdit(id:Long)
 POST    /vtkCatalogo/save                   controllers.VideotecaController.save()
+POST    /vtkCatalogo/update                   controllers.VideotecaController.update()
 
 GET     /supervisor/catalogadores           controllers.SupCatalogadorController.lista()
 GET     /supervisor/catalogadoresDTSS       controllers.SupCatalogadorController.listaDTSS()

@@ -171,4 +171,18 @@ $("form").submit(function(event){
 });
 
 
+function labelsCamposRequeridos(){
+        $("label").each(function( index, e ) {
+            var aux = $(e).attr("for");
+            console.log("for "+aux);
+            if (   $("#"+aux).attr("required")  ){
+                console.log("    requerido" )
+                $("label[for='"+aux+"']").addClass("campoRequerido");
+            }
+        });
+
+        // Otros labels de componentes no convencionales
+        $("label[for='URDescripcion'], label[for='serieDescripcion'], label[for='eventos_0_id'], label[for='nivel1']").addClass("campoRequerido");
+}
+
 

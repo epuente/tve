@@ -634,7 +634,93 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         vtk.catalogador = Personal.find.byId( Long.parseLong(session("usuario")));
         vtk.save();
         flash("success", "Se agregó al acervo");
-        return catalogo();
+        return redirect( routes.VideotecaController.catalogo() );
+    }
+
+
+    public static Result update(){
+        System.out.println("\n\n\nDesde VideotecaController.update");
+        Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
+        System.out.println(forma);
+        VtkCatalogo obj = forma.get();
+        VtkCatalogo vtk = VtkCatalogo.find.byId(obj.id);
+        vtk.creditos.clear();
+        // Convertir duracion (hh:mm:ss) a segundos
+        Duracion duracion = new Duracion();
+        duracion.convertir(forma.field("duracionStr").value());
+        vtk.duracion = duracion.totalSegundos();
+
+        if(forma.hasErrors()) {
+            return badRequest(createForm.render(forma, TipoCredito.find.all() ));
+        }
+
+        System.out.println("duracion:"+vtk.duracion);
+
+        vtk.folio = obj.folio;
+        vtk.unidadresponsable = UnidadResponsable.find.byId(obj.unidadresponsable.id);
+        vtk.eventos = obj.eventos;
+        vtk.nivelesacademicos = obj.nivelesacademicos;
+        vtk.esAreaCentral = obj.esAreaCentral;
+        vtk.claveclasificatoria = obj.claveclasificatoria;
+        vtk.titulo = obj.titulo;
+        vtk.sinopsis = obj.sinopsis;
+        vtk.serie = obj.serie;
+        vtk.clave = obj.clave;
+        vtk.obra = obj.obra;
+        vtk.formato = obj.formato;
+        vtk.palabrasClave = obj.palabrasClave;
+        vtk.idioma = obj.idioma;
+        vtk.creditos = obj.creditos;
+        vtk.produccion = obj.produccion;
+        vtk.anioProduccion = obj.anioProduccion;
+        vtk.sistema = obj.sistema;
+        vtk.disponibilidad = obj.disponibilidad;
+        vtk.ubicacion = obj.ubicacion;
+        vtk.areatematica = obj.areatematica;
+        vtk.nresguardo = obj.nresguardo;
+        vtk.liga = obj.liga;
+        vtk.catalogador = Personal.find.byId(Long.parseLong(session("usuario")));
+        vtk.timeline = obj.timeline;
+        vtk.audio = obj.audio;
+        vtk.video = obj.video;
+        vtk.observaciones = obj.observaciones;
+
+
+        /*
+        Long elId = 1L;
+        if ( VtkCatalogo.find.all().size()>0)
+            elId = Long.parseLong(Ebean.createSqlQuery("select max(id) x from vtk_catalogo").findUnique().getString("x"))+1;
+        vtk.id =  elId;
+        */
+
+
+        // CREDITOS
+        String texto = forma.field("txaCreditos").value();
+        if (texto!=null)
+            try {
+                JSONObject jsonObject = new JSONObject( texto   );
+                JSONArray c = jsonObject.getJSONArray("losDatos");
+                for (int i = 0 ; i < c.length(); i++) {
+                    JSONObject objt = c.getJSONObject(i);
+                    String A = objt.getString("tipo");
+                    String B = objt.getString("creditos");
+                    String[] arrCreditos = B.split(",");
+                    List<Credito> creditos = new ArrayList<>();
+                    for (String elCredito : arrCreditos) {
+                        Credito cred = new Credito();
+                        cred.tipoCredito = TipoCredito.find.byId( Long.parseLong(A));
+                        cred.personas = elCredito;
+                        vtk.creditos.add(cred);
+                    }
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
+       // vtk.catalogador = Personal.find.byId( Long.parseLong(session("usuario")));
+        vtk.update();
+        flash("success", "Se actualizó el registro");
+        return redirect( routes.VideotecaController.catalogo() );
     }
 
 
@@ -644,7 +730,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         JsonNode json = request().body().asJson();
         VtkCatalogo aux = VtkCatalogo.find.byId(json.findValue("id").asLong());
         if (session("usuario").compareTo( Long.toString(aux.catalogador.id))==0) {
-          //  aux.delete();
+            aux.delete();
             retorno.put("estado", "eliminado");
             return ok(  retorno.toString()  );
         } else {

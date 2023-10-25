@@ -2,13 +2,13 @@
 
 @import helper._
 <fieldset>
-
+    @inputText(forma("id"), '_label -> "", 'class->"", 'type->"hidden" )
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
                 <div class="col-sm-12 col-md-4 col-lg-4">
                     <div class="form-group">
-                        @inputText(forma("folio"), '_label -> "Folio", 'class->"form-control", 'required->true, 'placeholder->"Ejem. DIRGRAL980125" )
+                        @inputText(forma("folio"), '_label -> "Folio", 'class->"form-control campoRequerido", 'required->true, 'placeholder->"Ejem. DIRGRAL980125" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -18,7 +18,9 @@
                             <dt class=" ">
                             <dt><label>Unidad responsable</label>
                             </dt>
-                            <input type="hidden" id="unidadresponsable_id" name="unidadresponsable.id">
+                            <dd>
+                                <input type="hidden" id="unidadresponsable_id" name="unidadresponsable.id" required="true">
+                            </dd>
                             <div id="textUR">???</div>
                         </div>
                         <div id="divBusquedaUR">
@@ -30,6 +32,7 @@
                             </dl>
                             <div class="help-block with-errors"></div>
                         </div>
+
                         <div id="divIndicacionesUr" class="small">
                             <div style="margin-botton: 0.5em">
                                 Escriba el nombre completo de la Unidad Responsable y se realizará automáticamente la búsqueda.
@@ -41,22 +44,6 @@
 
                     <div id="msgCoincidenciasUR" style="margin-top:5px; margin-bottom:5px;"></div>
 
-
-
-
-
-
-                        @*
-                        @select(
-                        forma("unidadresponsable.id"),
-                        options(models.UnidadResponsable.options),
-                        '_label -> "Unidad Responsable", '_default -> "-- Seleccione --",
-                        '_showConstraints -> false,
-                        'class->"form-control",
-                        'required->true
-                        )
-                        <div class="help-block with-errors"></div>
-                        *@
                 </div>
                 <div class="col-sm-12 col-md-2 col-lg-2 text-center" >
                     <div style="vertical-align: middle;">
@@ -80,7 +67,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <div class="form-group">
                         <dl class=" " id="evento_field">
-                            <dt><label>Evento</label></dt>
+                            <dt><label for="eventos_0_id">Evento</label></dt>
                             <dd>
                                 <input type="checkbox" id="eventos_0_id" name="eventos[0].servicio.id" value="1" class="input-block-level" placeholder="">
                                 <span style="margin-right:20px;" > @models.Servicio.find.byId(1).descripcion</span>
