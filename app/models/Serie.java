@@ -25,7 +25,7 @@ public class Serie extends Model{
     public String descripcion;
 
     @ManyToOne
-    public Personal usuario;
+    public Personal catalogador;
 
 
     public static Model.Finder<Long,Serie> find = new Model.Finder<Long,Serie>(Long.class, Serie.class);

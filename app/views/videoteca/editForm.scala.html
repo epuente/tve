@@ -182,7 +182,10 @@ input, textarea{
 
 
     function leer(){
+        $("#unidadresponsable_id").val("@forma.get().unidadresponsable.id");
+        $("#URDescripcion").val("@forma.get().unidadresponsable.nombreLargo");
 
+        $("#serie_id").val("@forma.get().serie.id");
         $("#serieDescripcion").val( "@forma.get().serie.descripcion"  );
 
         console.log("duracion: @cDuracion.horas:@cDuracion.minutos:@cDuracion.segundos")

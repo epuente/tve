@@ -5,6 +5,7 @@ import play.Logger;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
+import javax.validation.Constraint;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
@@ -90,6 +91,19 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
 
     @ManyToOne (optional = false)
     public Personal catalogador;
+
+    @OneToMany (orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "catalogo")
+    public List<VtkTimeLine> timeline;
+
+    @Column(length = 1500)
+    public String audio;
+
+    @Column(length = 1500)
+    public String video;
+
+    @Column(length = 3000)
+    public String observaciones;
+
 
     public static Model.Finder<Long,VtkCatalogo> find = new Model.Finder<Long,VtkCatalogo>(Long.class, VtkCatalogo.class);
 

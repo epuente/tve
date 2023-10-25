@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import com.avaje.ebean.Page;
@@ -14,7 +15,7 @@ import play.db.ebean.Model;
 public class UnidadResponsable  extends models.utils.PlantillaModelo{
 
 	
-	@NotNull
+
 	@Column(length=6)
 	public String clave;
 	
@@ -25,7 +26,7 @@ public class UnidadResponsable  extends models.utils.PlantillaModelo{
 	@Column(length=50)
 	public String nombreCorto;
 	
-	@NotNull
+
 	@Column(length=2)
 	public String tipo;
 	
@@ -36,8 +37,9 @@ public class UnidadResponsable  extends models.utils.PlantillaModelo{
 	
 	@Column(length=1)
 	public String areaConocimiento;
-	
 
+	@ManyToOne
+	public Personal catalogador;
 
 	
 	

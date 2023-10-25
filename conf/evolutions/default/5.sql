@@ -824,10 +824,9 @@ INSERT INTO ubicacion (id, audit_insert, audit_update, descripcion) VALUES(3, '2
 INSERT INTO ubicacion (id, audit_insert, audit_update, descripcion) VALUES(4, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'DEPARTAMENTO DE RECURSOS EDUCATIVOS');
 INSERT INTO ubicacion (id, audit_insert, audit_update, descripcion) VALUES(5, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'DECANATO');
 
-INSERT INTO areatematica (id, audit_insert, audit_update, descripcion, sigla) VALUES(1, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'CIENCIAS FISICO MATEMATICAS', 'CFM');
-INSERT INTO areatematica (id, audit_insert, audit_update, descripcion, sigla) VALUES(2, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'CIENCIAS SOCIALES Y ADMINISTRATIVAS', 'CSyA');
-INSERT INTO areatematica (id, audit_insert, audit_update, descripcion, sigla) VALUES(3, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'CIENCIAS MEDICO BIOLOGICAS', 'CMB');
-INSERT INTO areatematica (id, audit_insert, audit_update, descripcion, sigla) VALUES(4, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'DIFUSION Y EXTENSION DE LA CULTURA', 'DyEC');
+INSERT INTO areatematica (id, audit_insert, audit_update, descripcion, sigla) VALUES(1, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'Ciencias Físico Matemáticas', 'CFM');
+INSERT INTO areatematica (id, audit_insert, audit_update, descripcion, sigla) VALUES(2, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'Ciencias Sociales y Administrativas', 'CSyA');
+INSERT INTO areatematica (id, audit_insert, audit_update, descripcion, sigla) VALUES(3, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'Ciencias Médico Biológicas', 'CMB');
 
 INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(1, '2023-09-12 11:38:06.354', '2023-09-12 11:38:06.354', 'Productores', 'producción');
 INSERT INTO tipo_credito (id, audit_insert, audit_update, descripcion, accion) VALUES(2, '2023-09-12 11:38:06.366', '2023-09-12 11:38:06.366', 'Asistentes', 'asistencia');

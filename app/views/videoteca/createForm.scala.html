@@ -14,6 +14,15 @@
         font-size: smaller;
     }
 
+    #unidadresponsable_id_field span.text{
+        white-space: normal;
+        font-size: smaller;
+        line-height : 15px;
+        margin-bottom: 4px;
+        margin-top: 4px;
+        size: 10;
+    }
+
     #serie_id_field span.text{
         white-space: normal;
         font-size: smaller;
@@ -55,7 +64,7 @@
     --tag-bg: #CBD5CF;
 }
 
-input, textarea{
+.mayusculasForzadas{
     text-transform: uppercase;
 }
 </style>
@@ -183,6 +192,29 @@ input, textarea{
         })
 */
 
+        const mDesde = IMask(document.getElementById('desde'), {
+                  mask: 'h:m:s',
+                  lazy: false,
+                  autofix: true,
+                  blocks: {
+                      h: {mask: IMask.MaskedRange, placeholderChar: 'h', from: 0, to: 999, maxLength: 3},
+                      m: {mask: IMask.MaskedRange, placeholderChar: 'm', from: 0, to: 59, maxLength: 2},
+                      s: {mask: IMask.MaskedRange, placeholderChar: 's', from: 0, to: 59, maxLength: 2}
+                  }
+        });
+
+        const mHasta = IMask(document.getElementById('hasta'), {
+                  mask: 'h:m:s',
+                  lazy: false,
+                  autofix: true,
+                  blocks: {
+                      h: {mask: IMask.MaskedRange, placeholderChar: 'h', from: 0, to: 999, maxLength: 3},
+                      m: {mask: IMask.MaskedRange, placeholderChar: 'm', from: 0, to: 59, maxLength: 2},
+                      s: {mask: IMask.MaskedRange, placeholderChar: 's', from: 0, to: 59, maxLength: 2}
+                  }
+        });
+
+
     });  // fin del $(function()
 
 
@@ -237,6 +269,9 @@ input, textarea{
 
 
 <script src="@routes.Assets.at("javascripts/videoteca.js")"></script>
+<script src="@routes.Assets.at("javascripts/videotecaUR.js")"></script>
+<script src="https://unpkg.com/imask"></script>
+
 
 
 

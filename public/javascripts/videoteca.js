@@ -1,14 +1,9 @@
-
-
-
-
-
-
+$("#btnModalGuardar").off("click");
 $("#btnModalGuardar").on("click", function(){
     console.debug("click! ")
 });
 
-//$("#btnBusquedaSerie").on("click", function(){
+$("#serieDescripcion").off("keyup");
 $("#serieDescripcion").on("keyup", function(){
     console.debug("keyup! ")
     $("#msgCoincidencias").html("");
@@ -17,11 +12,8 @@ $("#serieDescripcion").on("keyup", function(){
     $("#btnNuevaSerie").toggle(cadena.length>1);
     if (cadena.length==0){
         console.log("búsqueda vacía");
-
     } else {
-
-
-        var $f = LlamadaAjax("/textsearch", "POST", JSON.stringify({cadena:cadena}));
+        var $f = LlamadaAjax("/textsearch", "POST", JSON.stringify({campo:"serie", cadena:cadena}));
         $.when($f).done(function(dataTS){
                 console.log("....")
                 console.dir(dataTS)
@@ -35,39 +27,8 @@ $("#serieDescripcion").on("keyup", function(){
                     }
                 } else {
                     $("#msgCoincidencias").html("No se encontraron coincidencias");
-
                 }
             });
-
-
-
-        /*
-        var $f = LlamadaAjax("/tsQuery", "POST", JSON.stringify({cadena:cadena}));
-        $.when($f).done(function(data){
-            console.log("....")
-            console.dir(data)
-            if (data.tsquery.length>-1){
-                //Lllamar otro Llamada ajax a tsCoincidencias
-                var $g = LlamadaAjax("/tsCoincidencias", "POST", JSON.stringify( {cadena:data.tsquery} ));
-                $.when($g).done(function(dataTS){
-                    console.log("coincidencias");
-                    console.dir(dataTS)
-                    if (dataTS.coincidencias.length!=0){
-                        $("#msgCoincidencias").html("Se encontraron "+dataTS.coincidencias.length+" coincidencias.</br>Si la serie que desea agregar aparece en la lista de coincidencias, elijala de la lista.</br>Si la serie es nueva y no aparece en la lista de coincidencias, oprima el botón <strong>nueva</strong>");
-                        for(var c=0; c < dataTS.coincidencias.length; c++){
-                            var aux = dataTS.coincidencias[c];
-                            $("#divCoincidencias div.list-group").append( '<button type="button" class="list-group-item" onclick="javascript:alert('+aux.id+')">'+ aux.descripcion+ '</button>');
-                        }
-                    } else {
-                        $("#msgCoincidencias").html("No se encontraron coincidencias");
-
-                    }
-                });
-
-
-            }
-        });
-        */
     }
 });
 
@@ -87,55 +48,50 @@ $("#btnNuevaSerie").on("click", function(e){
     e.preventDefault();
     $("#divBusqueda, #divCoincidencias, #msgCoincidencias, #divIndicaciones").show();
     $("#divResultadoBusqueda").hide();
-
-
-
     var laNueva = $("#serieDescripcion").val();
-     //   $("#serieDescripcion").focus();
-
-        var $f = LlamadaAjax("/textsearchCampoCompleto", "POST", JSON.stringify({cadena:laNueva}));
-        $.when($f).done(function(dataTS){
-            if (dataTS.coincidencias.length>0){
+    var $f = LlamadaAjax("/textsearchCampoCompleto", "POST", JSON.stringify({campo:"serie",cadena:laNueva}));
+    $.when($f).done(function(dataTS){
+        if (dataTS.coincidencias.length>0){
+                swal({
+                        title:'No se realizó la operación',
+                        html:'No se puede agregar la serie porque ya existe<br><br>Revise la lista de coincidencias y observará que ya existe. Puede usar la serie existente, solo selecciónela de la lista de coincidencias.<br>',
+                        type:'warning',
+                        confirmButtonText: "Aceptar"
+                      }) ;
+        } else {
+            var $salva = LlamadaAjax("/nuevaSerie","POST", JSON.stringify({descripcion:laNueva}));
+            $.when($salva).done(function(salvado){
+                console.log("salvado")
+                console.dir(salvado)
+                if (salvado.estado=="ok"){
                     swal({
-                            title:'No se realizó la operación',
-                            html:'No se puede agregar la serie porque ya existe<br><br>Revise la lista de coincidencias y observará que ya existe. Puede usar la serie existente, solo selecciónela de la lista de coincidencias.<br>',
-                            type:'warning',
-                            confirmButtonText: "Aceptar"
-                          }) ;
-            } else {
-                var $salva = LlamadaAjax("/nuevaSerie","POST", JSON.stringify({descripcion:laNueva}));
-                $.when($salva).done(function(salvado){
-                    console.log("salvado")
-                    console.dir(salvado)
-                    if (salvado.estado=="ok"){
-                        swal({
-                              title:  'Correcto',
-                              html:  'Se agregó la nueva serie.<br><br>Continúe con el formulario del acervo de la videoteca.',
-                              type:  'success',
-                              confirmButtonText: "Aceptar"
-                          });
-                        $('#myModal2').modal('hide');
-                        $("#serie_id").val(salvado.id);
+                          title:  'Correcto',
+                          html:  'Se agregó la nueva serie.<br><br>Continúe con el formulario del acervo de la videoteca.',
+                          type:  'success',
+                          confirmButtonText: "Aceptar"
+                      });
+                    $('#myModal2').modal('hide');
+                    $("#serie_id").val(salvado.id);
 
-                        $("#textSerie").html(  salvado.descripcion);
+                    $("#textSerie").html(  salvado.descripcion);
 
-                        $("#divResultadoBusqueda, #aAbrirSeries").show();
-                        $("#divBusqueda, #divIndicaciones, #msgCoincidencias, #btnNuevaSerie, #divCoincidencias" ).hide();
+                    $("#divResultadoBusqueda, #aAbrirSeries").show();
+                    $("#divBusqueda, #divIndicaciones, #msgCoincidencias, #btnNuevaSerie, #divCoincidencias" ).hide();
 
 
 
 
-                    } else {
-                        alert("No fue posible agregar la serie.");
-                    }
-                });
-            }
-        });
+                } else {
+                    alert("No fue posible agregar la serie.");
+                }
+            });
+        }
+    });
 
 
 });
 
-// Cuando se da click a un elemento de la lista
+// Cuando se da click a un elemento de la lista de coincidencias de serie
 function seleccionaSerie(id, texto){
     console.debug("Se seleccionó la serie id: "+id);
     $('#myModal2').modal('hide');

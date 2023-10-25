@@ -7,6 +7,7 @@ import com.avaje.ebean.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import jdk.nashorn.internal.parser.JSONParser;
 import models.*;
+import org.apache.commons.logging.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -299,10 +300,18 @@ public class VideotecaController extends ControladorSeguroVideoteca{
     public static Result textsearch() throws JSONException {
         System.out.println("\n\n\n\nDesde VTKController.textsearch");
         JsonNode json = request().body().asJson();
+        System.out.println(json);
         JSONObject jo = new JSONObject();
         JSONArray ja = new JSONArray();
+        String campo = json.findValue("campo").asText();
         String cadena = json.findValue("cadena").asText();
-        String query1 = "select id, descripcion from serie s where unaccent(descripcion) ilike unaccent('%"+cadena+"%')";
+        Logger.debug("campo "+campo);
+        String query1 = "";
+        if (campo.compareTo("ur")==0)
+            query1 ="select id, nombre_largo from unidad_responsable s where unaccent(nombre_largo) ilike unaccent('%"+cadena+"%')";
+        if (campo.compareTo("serie")==0)
+            query1 ="select id, descripcion from serie s where unaccent(descripcion) ilike unaccent('%"+cadena+"%')";
+        Logger.debug(query1);
         List<SqlRow> sqlRows1 = Ebean.createSqlQuery(query1).findList();
 
         final RawSql rawSql1 = RawSqlBuilder.unparsed(query1)
@@ -390,12 +399,31 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
         //JsonNode personJson = Json.toJson(person);
         Serie s = Json.fromJson(json, Serie.class);
+        s.catalogador = Personal.find.byId(  Long.parseLong(session("usuario"))  );
         s.save();
         s.refresh();
         joRetorno.put("estado", "ok");
         joRetorno.put("id", s.id);
         joRetorno.put("descripcion", s.descripcion);
 
+        return ok (joRetorno.toString());
+    }
+
+
+    public static Result nuevaUR() throws JSONException {
+        Logger.debug("Desde VideotecaController.nuevaUR");
+        JSONObject joRetorno = new JSONObject();
+        JsonNode json = request().body().asJson();
+        UnidadResponsable ur = new UnidadResponsable();
+        Logger.debug(String.valueOf(json));
+        joRetorno.put("estado", "error");
+        UnidadResponsable s = Json.fromJson(json, UnidadResponsable.class);
+        s.catalogador = Personal.find.byId(  Long.parseLong(session("usuario"))  );
+        s.save();
+        s.refresh();
+        joRetorno.put("estado", "ok");
+        joRetorno.put("id", s.id);
+        joRetorno.put("descripcion", s.nombreLargo);
         return ok (joRetorno.toString());
     }
 
@@ -427,17 +455,27 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         JsonNode json = request().body().asJson();
         JSONObject jo = new JSONObject();
         JSONArray ja = new JSONArray();
+        String campo = json.findValue("campo").asText();
         String cadena = json.findValue("cadena").asText();
-        String query1 = "select id, descripcion from serie s where unaccent(descripcion) = unaccent('"+cadena+"')";
+        Logger.debug(cadena +" - "+campo);
+        String query1 = "";
+        if (campo.compareTo("ur")==0){
+            query1 = "select id, nombre_largo from unidad_responsable where unaccent(nombre_largo) = unaccent('"+cadena+"')";
+        }
+        if (campo.compareTo("serie")==0) {
+            query1 = "select id, descripcion from serie s where unaccent(descripcion) = unaccent('" + cadena + "')";
+        }
         List<SqlRow> sqlRows1 = Ebean.createSqlQuery(query1).findList();
+        /*
         final RawSql rawSql1 = RawSqlBuilder.unparsed(query1)
                 .columnMapping("id", "id")
                 .columnMapping("descripcion", "descripcion")
                 .create();
         List<Serie> list1 = Serie.find.setRawSql(rawSql1).findList();
-        Logger.debug("list1 EXISTE tam: "+list1.size());
-
-        jo.put("coincidencias", list1);
+         */
+        Logger.debug("list1 EXISTE tam: "+sqlRows1.size());
+        jo.put("coincidencias", sqlRows1.size());
+        Logger.debug(jo.toString());
         return ok ( jo.toString() );
     }
 
