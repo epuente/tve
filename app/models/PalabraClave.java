@@ -22,7 +22,7 @@ public class PalabraClave extends Model {
     public Date auditUpdate =  Date.from( Instant.now().minus(1, ChronoUnit.HOURS));
 
     @ManyToOne(optional = false)
-    public Personal usuario;
+    public Personal catalogador;
 
     @NotNull
     @Column(length = 1500)

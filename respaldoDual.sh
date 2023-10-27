@@ -14,7 +14,7 @@ else
     #Comprimir en 7z y guardarlo en carpeta local ( ~/playFramework/respaldos)
     7z a -mx=9 -mmt12 -xr!target -xr!.git ~/playFramework/respaldos/$fecha-resp-$este.7z ${PWD}
     echo "Se ha respaldado en la ruta ~/playFramework/respaldos con el nombre $fecha-resp-$este.7z"
-
+    echo ""
     #El segmento siguiente ya no se usa porque webDav de box.com ya no esta soportado en las cuentas gratuitas
     #guardar el comprimido en carpeta para respaldar en la nube (~/respaldosRemotos)
     #cp -r ~/playFramework/respaldos/$fecha-resp-$este.7z ~/respaldosRemotos/

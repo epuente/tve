@@ -35,3 +35,13 @@ run
 exit
 run
 exit
+run
+;clean;reload;comnpile;run;
+;clean;reload;compile;run;
+;clean;reload;compile;run
+run
+;clean;reload;compile;run;
+;clean;reload;compile;run
+compile
+;clean;reload;compile;run
+exit

@@ -325,7 +325,7 @@ create table credito (
   catalogo_id               bigint,
   tipo_credito_id           bigint,
   personas                  varchar(500),
-  usuario_id                bigint not null,
+  catalogador_id            bigint not null,
   constraint pk_credito primary key (id))
 ;
 
@@ -682,7 +682,7 @@ create table palabra_clave (
   id                        bigint not null,
   audit_insert              timestamp,
   audit_update              timestamp,
-  usuario_id                bigint not null,
+  catalogador_id            bigint not null,
   descripcion               varchar(1500) not null,
   catalogo_id               bigint,
   constraint pk_palabra_clave primary key (id))
@@ -1009,15 +1009,6 @@ create table servicio (
   constraint pk_servicio primary key (id))
 ;
 
-create table sistema (
-  id                        bigint not null,
-  audit_insert              timestamp,
-  audit_update              timestamp,
-  descripcion               varchar(100) not null,
-  usuario_id                bigint,
-  constraint pk_sistema primary key (id))
-;
-
 create table tipo_contrato (
   id                        bigint not null,
   audit_insert              timestamp,
@@ -1043,21 +1034,20 @@ create table tipo_equipo_accesorio (
   constraint pk_tipo_equipo_accesorio primary key (id))
 ;
 
+create table tipo_grabacion (
+  id                        bigint not null,
+  audit_insert              timestamp,
+  audit_update              timestamp,
+  descripcion               varchar(100) not null,
+  constraint pk_tipo_grabacion primary key (id))
+;
+
 create table tipo_mantenimiento (
   id                        bigint not null,
   audit_insert              timestamp,
   audit_update              timestamp,
   descripcion               varchar(100) not null,
   constraint pk_tipo_mantenimiento primary key (id))
-;
-
-create table ubicacion (
-  id                        bigint not null,
-  audit_insert              timestamp,
-  audit_update              timestamp,
-  descripcion               varchar(100) not null,
-  usuario_id                bigint,
-  constraint pk_ubicacion primary key (id))
 ;
 
 create table unidad_responsable (
@@ -1107,18 +1097,17 @@ create table vtk_catalogo (
   claveclasificatoria       varchar(255) not null,
   titulo                    varchar(1000),
   sinopsis                  varchar(10000),
-  serie_id                  bigint not null,
+  serie_id                  bigint,
   clave                     varchar(255),
   obra                      varchar(255),
-  formato_id                bigint not null,
-  idioma_id                 bigint not null,
-  produccion_id             bigint not null,
+  formato_id                bigint,
+  idioma_id                 bigint,
+  tipograbacion_id          bigint,
+  produccion_id             bigint,
   duracion                  bigint,
   anio_produccion           timestamp,
-  sistema_id                bigint not null,
   disponibilidad_id         bigint,
-  ubicacion_id              bigint,
-  areatematica_id           bigint not null,
+  areatematica_id           bigint,
   nresguardo                varchar(255),
   liga                      varchar(255),
   catalogador_id            bigint not null,
@@ -1369,17 +1358,15 @@ create sequence serie_seq;
 
 create sequence servicio_seq;
 
-create sequence sistema_seq;
-
 create sequence tipo_contrato_seq;
 
 create sequence tipo_credito_seq;
 
 create sequence tipo_equipo_accesorio_seq;
 
-create sequence tipo_mantenimiento_seq;
+create sequence tipo_grabacion_seq;
 
-create sequence ubicacion_seq;
+create sequence tipo_mantenimiento_seq;
 
 create sequence unidad_responsable_seq;
 
@@ -1503,8 +1490,8 @@ alter table credito add constraint fk_credito_catalogo_52 foreign key (catalogo_
 create index ix_credito_catalogo_52 on credito (catalogo_id);
 alter table credito add constraint fk_credito_tipoCredito_53 foreign key (tipo_credito_id) references tipo_credito (id);
 create index ix_credito_tipoCredito_53 on credito (tipo_credito_id);
-alter table credito add constraint fk_credito_usuario_54 foreign key (usuario_id) references personal (id);
-create index ix_credito_usuario_54 on credito (usuario_id);
+alter table credito add constraint fk_credito_catalogador_54 foreign key (catalogador_id) references personal (id);
+create index ix_credito_catalogador_54 on credito (catalogador_id);
 alter table cuenta add constraint fk_cuenta_personal_55 foreign key (personal_id) references personal (id);
 create index ix_cuenta_personal_55 on cuenta (personal_id);
 alter table cuenta_rol add constraint fk_cuenta_rol_cuenta_56 foreign key (cuenta_id) references cuenta (id);
@@ -1575,8 +1562,8 @@ alter table operador_sala add constraint fk_operador_sala_personal_88 foreign ke
 create index ix_operador_sala_personal_88 on operador_sala (personal_id);
 alter table operador_sala add constraint fk_operador_sala_sala_89 foreign key (sala_id) references sala (id);
 create index ix_operador_sala_sala_89 on operador_sala (sala_id);
-alter table palabra_clave add constraint fk_palabra_clave_usuario_90 foreign key (usuario_id) references personal (id);
-create index ix_palabra_clave_usuario_90 on palabra_clave (usuario_id);
+alter table palabra_clave add constraint fk_palabra_clave_catalogador_90 foreign key (catalogador_id) references personal (id);
+create index ix_palabra_clave_catalogador_90 on palabra_clave (catalogador_id);
 alter table palabra_clave add constraint fk_palabra_clave_catalogo_91 foreign key (catalogo_id) references vtk_catalogo (id);
 create index ix_palabra_clave_catalogo_91 on palabra_clave (catalogo_id);
 alter table personal add constraint fk_personal_tipocontrato_92 foreign key (tipocontrato_id) references tipo_contrato (id);
@@ -1679,50 +1666,44 @@ alter table sala_mantenimiento add constraint fk_sala_mantenimiento_tipo_140 for
 create index ix_sala_mantenimiento_tipo_140 on sala_mantenimiento (tipo_id);
 alter table serie add constraint fk_serie_catalogador_141 foreign key (catalogador_id) references personal (id);
 create index ix_serie_catalogador_141 on serie (catalogador_id);
-alter table sistema add constraint fk_sistema_usuario_142 foreign key (usuario_id) references personal (id);
-create index ix_sistema_usuario_142 on sistema (usuario_id);
-alter table ubicacion add constraint fk_ubicacion_usuario_143 foreign key (usuario_id) references personal (id);
-create index ix_ubicacion_usuario_143 on ubicacion (usuario_id);
-alter table unidad_responsable add constraint fk_unidad_responsable_catalo_144 foreign key (catalogador_id) references personal (id);
-create index ix_unidad_responsable_catalo_144 on unidad_responsable (catalogador_id);
-alter table vehiculo add constraint fk_vehiculo_estado_145 foreign key (estado_id) references estado_equipo_accesorio_vehiculo (id);
-create index ix_vehiculo_estado_145 on vehiculo (estado_id);
-alter table video_personaje add constraint fk_video_personaje_catalogo_146 foreign key (catalogo_id) references vtk_catalogo (id);
-create index ix_video_personaje_catalogo_146 on video_personaje (catalogo_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_unidadrespon_147 foreign key (unidadresponsable_id) references unidad_responsable (id);
-create index ix_vtk_catalogo_unidadrespon_147 on vtk_catalogo (unidadresponsable_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_serie_148 foreign key (serie_id) references serie (id);
-create index ix_vtk_catalogo_serie_148 on vtk_catalogo (serie_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_formato_149 foreign key (formato_id) references vtk_formato (id);
-create index ix_vtk_catalogo_formato_149 on vtk_catalogo (formato_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_idioma_150 foreign key (idioma_id) references idioma (id);
-create index ix_vtk_catalogo_idioma_150 on vtk_catalogo (idioma_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_produccion_151 foreign key (produccion_id) references produccion (id);
-create index ix_vtk_catalogo_produccion_151 on vtk_catalogo (produccion_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_sistema_152 foreign key (sistema_id) references sistema (id);
-create index ix_vtk_catalogo_sistema_152 on vtk_catalogo (sistema_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_disponibilid_153 foreign key (disponibilidad_id) references disponibilidad (id);
-create index ix_vtk_catalogo_disponibilid_153 on vtk_catalogo (disponibilidad_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_ubicacion_154 foreign key (ubicacion_id) references ubicacion (id);
-create index ix_vtk_catalogo_ubicacion_154 on vtk_catalogo (ubicacion_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_areatematica_155 foreign key (areatematica_id) references areatematica (id);
-create index ix_vtk_catalogo_areatematica_155 on vtk_catalogo (areatematica_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_catalogador_156 foreign key (catalogador_id) references personal (id);
-create index ix_vtk_catalogo_catalogador_156 on vtk_catalogo (catalogador_id);
-alter table vtk_evento add constraint fk_vtk_evento_catalogo_157 foreign key (catalogo_id) references vtk_catalogo (id);
-create index ix_vtk_evento_catalogo_157 on vtk_evento (catalogo_id);
-alter table vtk_evento add constraint fk_vtk_evento_servicio_158 foreign key (servicio_id) references servicio (id);
-create index ix_vtk_evento_servicio_158 on vtk_evento (servicio_id);
-alter table vtk_formato add constraint fk_vtk_formato_usuario_159 foreign key (usuario_id) references personal (id);
-create index ix_vtk_formato_usuario_159 on vtk_formato (usuario_id);
-alter table vtk_nivel_academico add constraint fk_vtk_nivel_academico_catal_160 foreign key (catalogo_id) references vtk_catalogo (id);
-create index ix_vtk_nivel_academico_catal_160 on vtk_nivel_academico (catalogo_id);
-alter table vtk_nivel_academico add constraint fk_vtk_nivel_academico_nivel_161 foreign key (nivel_id) references nivel_academico (id);
-create index ix_vtk_nivel_academico_nivel_161 on vtk_nivel_academico (nivel_id);
-alter table vtk_time_line add constraint fk_vtk_time_line_catalogo_162 foreign key (catalogo_id) references vtk_catalogo (id);
-create index ix_vtk_time_line_catalogo_162 on vtk_time_line (catalogo_id);
-alter table vtk_time_line add constraint fk_vtk_time_line_personaje_163 foreign key (personaje_id) references video_personaje (id);
-create index ix_vtk_time_line_personaje_163 on vtk_time_line (personaje_id);
+alter table unidad_responsable add constraint fk_unidad_responsable_catalo_142 foreign key (catalogador_id) references personal (id);
+create index ix_unidad_responsable_catalo_142 on unidad_responsable (catalogador_id);
+alter table vehiculo add constraint fk_vehiculo_estado_143 foreign key (estado_id) references estado_equipo_accesorio_vehiculo (id);
+create index ix_vehiculo_estado_143 on vehiculo (estado_id);
+alter table video_personaje add constraint fk_video_personaje_catalogo_144 foreign key (catalogo_id) references vtk_catalogo (id);
+create index ix_video_personaje_catalogo_144 on video_personaje (catalogo_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_unidadrespon_145 foreign key (unidadresponsable_id) references unidad_responsable (id);
+create index ix_vtk_catalogo_unidadrespon_145 on vtk_catalogo (unidadresponsable_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_serie_146 foreign key (serie_id) references serie (id);
+create index ix_vtk_catalogo_serie_146 on vtk_catalogo (serie_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_formato_147 foreign key (formato_id) references vtk_formato (id);
+create index ix_vtk_catalogo_formato_147 on vtk_catalogo (formato_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_idioma_148 foreign key (idioma_id) references idioma (id);
+create index ix_vtk_catalogo_idioma_148 on vtk_catalogo (idioma_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_tipograbacio_149 foreign key (tipograbacion_id) references tipo_grabacion (id);
+create index ix_vtk_catalogo_tipograbacio_149 on vtk_catalogo (tipograbacion_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_produccion_150 foreign key (produccion_id) references produccion (id);
+create index ix_vtk_catalogo_produccion_150 on vtk_catalogo (produccion_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_disponibilid_151 foreign key (disponibilidad_id) references disponibilidad (id);
+create index ix_vtk_catalogo_disponibilid_151 on vtk_catalogo (disponibilidad_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_areatematica_152 foreign key (areatematica_id) references areatematica (id);
+create index ix_vtk_catalogo_areatematica_152 on vtk_catalogo (areatematica_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_catalogador_153 foreign key (catalogador_id) references personal (id);
+create index ix_vtk_catalogo_catalogador_153 on vtk_catalogo (catalogador_id);
+alter table vtk_evento add constraint fk_vtk_evento_catalogo_154 foreign key (catalogo_id) references vtk_catalogo (id);
+create index ix_vtk_evento_catalogo_154 on vtk_evento (catalogo_id);
+alter table vtk_evento add constraint fk_vtk_evento_servicio_155 foreign key (servicio_id) references servicio (id);
+create index ix_vtk_evento_servicio_155 on vtk_evento (servicio_id);
+alter table vtk_formato add constraint fk_vtk_formato_usuario_156 foreign key (usuario_id) references personal (id);
+create index ix_vtk_formato_usuario_156 on vtk_formato (usuario_id);
+alter table vtk_nivel_academico add constraint fk_vtk_nivel_academico_catal_157 foreign key (catalogo_id) references vtk_catalogo (id);
+create index ix_vtk_nivel_academico_catal_157 on vtk_nivel_academico (catalogo_id);
+alter table vtk_nivel_academico add constraint fk_vtk_nivel_academico_nivel_158 foreign key (nivel_id) references nivel_academico (id);
+create index ix_vtk_nivel_academico_nivel_158 on vtk_nivel_academico (nivel_id);
+alter table vtk_time_line add constraint fk_vtk_time_line_catalogo_159 foreign key (catalogo_id) references vtk_catalogo (id);
+create index ix_vtk_time_line_catalogo_159 on vtk_time_line (catalogo_id);
+alter table vtk_time_line add constraint fk_vtk_time_line_personaje_160 foreign key (personaje_id) references video_personaje (id);
+create index ix_vtk_time_line_personaje_160 on vtk_time_line (personaje_id);
 
 
 
@@ -1930,17 +1911,15 @@ drop table if exists serie cascade;
 
 drop table if exists servicio cascade;
 
-drop table if exists sistema cascade;
-
 drop table if exists tipo_contrato cascade;
 
 drop table if exists tipo_credito cascade;
 
 drop table if exists tipo_equipo_accesorio cascade;
 
-drop table if exists tipo_mantenimiento cascade;
+drop table if exists tipo_grabacion cascade;
 
-drop table if exists ubicacion cascade;
+drop table if exists tipo_mantenimiento cascade;
 
 drop table if exists unidad_responsable cascade;
 
@@ -2160,17 +2139,15 @@ drop sequence if exists serie_seq;
 
 drop sequence if exists servicio_seq;
 
-drop sequence if exists sistema_seq;
-
 drop sequence if exists tipo_contrato_seq;
 
 drop sequence if exists tipo_credito_seq;
 
 drop sequence if exists tipo_equipo_accesorio_seq;
 
-drop sequence if exists tipo_mantenimiento_seq;
+drop sequence if exists tipo_grabacion_seq;
 
-drop sequence if exists ubicacion_seq;
+drop sequence if exists tipo_mantenimiento_seq;
 
 drop sequence if exists unidad_responsable_seq;
 

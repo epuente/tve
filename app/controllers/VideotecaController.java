@@ -561,11 +561,9 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
 
             catalogo.anioProduccion =  sdf.parse( r.getString("anioproduccion"));
-            catalogo.sistema = Sistema.find.byId(r.getLong("sistema"));
             if (r.getLong("disponibilidad")!=null)
                 catalogo.disponibilidad = Disponibilidad.find.byId(r.getLong("disponibilidad"));
-            if ( r.getLong("ubicacion") != null)
-                catalogo.ubicacion = Ubicacion.find.byId(r.getLong("ubicacion"));
+
             catalogo.areatematica = Areatematica.find.byId(r.getLong("areatematica"));
 
             catalogo.save();
@@ -581,8 +579,14 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         VtkCatalogo catalogo = VtkCatalogo.find.byId(id);
         //Logger.debug(  session("usuario") +"  -  "+ );
         if (session("usuario").compareTo( Long.toString(catalogo.catalogador.id))==0) {
+            Logger.debug("001 id "+id);
             Form<VtkCatalogo> forma = form(VtkCatalogo.class).fill(catalogo);
-            Duracion d = new Duracion(catalogo.duracion);
+            Logger.debug("002 FORMA "+forma);
+            Duracion d = new Duracion();
+            if (catalogo.duracion!=null)
+                d = new Duracion(catalogo.duracion);
+            Logger.debug("003 duracion " + d);
+            Logger.debug("004 TP "+TipoCredito.find.all());
             return ok( views.html.videoteca.editForm.render(id, forma, TipoCredito.find.all(), d)  );
         } else {
             return ok (views.html.operacionNoPermitida.render());
@@ -594,6 +598,9 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
         System.out.println(forma);
         VtkCatalogo vtk = forma.get();
+
+        Personal usuarioActual = Personal.find.byId(Long.parseLong(session("usuario")));
+
         // Convertir duracion (hh:mm:ss) a segundos
         Duracion duracion = new Duracion();
         duracion.convertir(forma.field("duracionStr").value());
@@ -624,17 +631,35 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                     Credito cred = new Credito();
                     cred.tipoCredito = TipoCredito.find.byId( Long.parseLong(A));
                     cred.personas = elCredito;
+                    cred.catalogador = usuarioActual;
                     vtk.creditos.add(cred);
+
                 }
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
 
-        vtk.catalogador = Personal.find.byId( Long.parseLong(session("usuario")));
+        vtk.catalogador = usuarioActual;
         vtk.save();
         flash("success", "Se agregó al acervo");
         return redirect( routes.VideotecaController.catalogo() );
+    }
+
+    public static Result save2() throws JSONException {
+        Logger.debug("Desde VideotecaController.save2");
+        JsonNode json = request().body().asJson();
+        Logger.debug(json.toString());
+
+
+        JSONObject retorno = new JSONObject();
+        retorno.put("estado", "indefinido");
+        VtkCatalogo catalogo = Json.fromJson(json, VtkCatalogo.class);
+        catalogo.catalogador = Personal.find.byId(  Long.parseLong(session("usuario"))  );
+
+        catalogo.save();
+        retorno.put("estado", "ok");
+        return ok (retorno.toString());
     }
 
 
@@ -673,9 +698,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         vtk.creditos = obj.creditos;
         vtk.produccion = obj.produccion;
         vtk.anioProduccion = obj.anioProduccion;
-        vtk.sistema = obj.sistema;
         vtk.disponibilidad = obj.disponibilidad;
-        vtk.ubicacion = obj.ubicacion;
         vtk.areatematica = obj.areatematica;
         vtk.nresguardo = obj.nresguardo;
         vtk.liga = obj.liga;

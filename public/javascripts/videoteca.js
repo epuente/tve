@@ -109,6 +109,116 @@ function agregaJSON(){
 }
 
 
+function agregaJSON2(){
+    var json ={};
+    var strEventos ="";
+    var strNiveles ="";
+    console.clear();
+    console.log("UR:"+$("#unidadresponsable_id").val())
+    json["folio"] = $("#folio").val();
+
+    if ($("#unidadresponsable_id").val()!="")
+        json["unidadresponsable"] = {id: $("#unidadresponsable_id").val() }
+
+
+    //json["unidadresponsable"] = {id: $("#unidadresponsable_id").val() };
+    json["eventos"] = JSON.parse('[{"id":1}, {"id":2}]');
+    json["eventos"] = [];
+    $("*[name^='eventos[']:checked").each(function(index, e){
+           strEventos += '{"servicio":{"id":'+$(e).val()+' }},'
+    });
+
+   // console.dir("strEventos:"+strEventos)
+    if (strEventos.length>0)
+        strEventos = strEventos.substring(0, strEventos.length-1);
+    console.dir("strEventos:"+strEventos)
+    json["eventos"] =  JSON.parse('['+strEventos+']');
+
+    $("*[name^='nivelesacademicos[']:checked").each(function(index, e){
+           strNiveles += '{"nivel":{"id":'+$(e).val()+' }},'
+    });
+    if (strNiveles.length>0)
+        strNiveles = strNiveles.substring(0, strNiveles.length-1);
+    json["nivelesacademicos"] = JSON.parse('['+strNiveles+']');
+
+    json["claveclasificatoria"] = $("#claveclasificatoria").val();
+    json["serie"] = {id: $("#serie_id").val()};
+    json["titulo"] = $("#titulo").val();
+    json["clave"] = $("#clave").val();
+    json["sinopsis"] = $("#sinopsis").val();
+    json["produccion"] = {id: $("#produccion_id").val()};
+    json["anioproduccion"] =  $("#anioproduccion").val();
+    json["duracion"] = $("#duracion").val();
+    json["formato"] = {id: $("#formato_id").val()};
+    json["idioma"] = {id: $("#idioma_id").val()};
+    json["disponibilidad"] = {id: $("#disponibilidad_id").val()};
+    json["areatematica"] = {id: $("#areatematica_id").val()};
+    json["audio"] = $("#audio").val();
+
+
+    tempo = valoresCreditos();
+    console.log("los creditos")
+    console.dir(tempo)
+
+
+    console.dir($("#ta1").val());
+
+    var strCreditos="";
+    var arrCreditos=new Array();
+    var txt = "";
+    $("*[name='tasCreditos'").each(function(i,e){
+        var indice = $(e).attr("id").substring(2);
+        console.log(":")
+        console.log($(e).val());
+        console.dir($(e).val());
+        console.log("type: "+ typeof  $(e).val());
+        if ($(e).val()!=""){
+            const az = JSON.parse( $(e).val()  );
+            console.log(az)
+            console.log("type az: "+ typeof  az);
+            console.log("tam az: "+  az.length);
+
+
+            for (let i = 0; i < az.length; i++) {
+                txt += '{"personas":"'+az[i].value+'", "tipoCredito": {"id":'+indice+'}},';
+                console.log("txt:"+txt)
+            }
+            //console.dir(JSON.parse(  txt  ))
+        }
+
+    });
+    if (txt.length>0){
+        txt=txt.substring(0, txt.length-1);
+        console.log(" rl trxto:"+txt)
+        json["creditos"] = JSON.parse( '['+txt+']');
+    } else {
+        json["creditos"] = JSON.stringify({});
+    }
+
+
+
+
+
+
+
+    console.log("---------------");
+    console.log(JSON.stringify(json));
+    console.log("---------------");
+    console.dir(json);
+
+    $aux = LlamadaAjax("/vtkCatalogo/save2", "POST",  JSON.stringify(json) );
+    $.when( $aux )
+        .done(function(data){
+                console.dir(data)
+            });
+
+
+
+
+}
+
+
+
 
 
 
@@ -125,15 +235,29 @@ $("button[name='laBotoniza']").on("click", function(e){
     console.log("CREDITOS "+id)
     //console.log("id->"+id)
     console.log(  $("#ta"+id).val() )
-
-
-
 });
 
 
 
 $("form").submit(function(event){
-  //event.preventDefault();
+    var msgError="";
+    if (  $("*[data-name='cbEvento']:checked").length==0){
+        event.preventDefault();
+        msgError+="No se ha seleccionado un evento.<br>";
+    }
+    if ( $("*[data-name='cbNivelAcademico']:checked").length==0){
+        event.preventDefault();
+        msgError+="No se ha seleccionado un nivel académico.";
+    }
+    if (msgError.length>0){
+            swal({
+                    title: "Aviso",
+                    html: msgError,
+                    type: "warning",
+                    confirmButtonText: "Aceptar"
+            });
+            return false;
+    }
     $("#cuentas_username").attr('name', 'cuentas[0].username');
     $("#cuentas_password").attr('name', 'cuentas[0].password');
 
@@ -141,6 +265,13 @@ $("form").submit(function(event){
         $(this).attr("name","cuentas[0].roles["+i+"].rol.id");
     });
     var x = {};
+    x['losDatos']=valoresCreditos();
+    $("<textarea style='padding-left:100px; display:none;' name='txaCreditos' id='txaCreditos'>"+JSON.stringify(x)+"</textarea>").appendTo("#frmVTKCreate");
+    console.dir(j)
+});
+
+
+function valoresCreditos(){
     var j=[];
     $("#navTabs>li>a").each(function(index, element){
         var id = $(element).attr("id").substring(3);
@@ -150,11 +281,8 @@ $("form").submit(function(event){
         aux= $("#ta"+id).val();
         console.log("    aux:"+aux+"("+aux.length+")")
         if (aux.length!=0){
-
-
             obj = jQuery.parseJSON(aux);
             console.log("    obj:"+obj)
-
             cadena="";
             $.each(obj, function(key,value) {
                 cadena+=value.value+",";
@@ -165,11 +293,8 @@ $("form").submit(function(event){
             j.push(tipo);
         }
     });
-    x['losDatos']=j;
-    $("<textarea style='padding-left:100px' name='txaCreditos' id='txaCreditos'>"+JSON.stringify(x)+"</textarea>").appendTo("#frmVTKCreate");
-    console.dir(j)
-});
-
+    return j;
+}
 
 function labelsCamposRequeridos(){
         $("label").each(function( index, e ) {
@@ -182,7 +307,7 @@ function labelsCamposRequeridos(){
         });
 
         // Otros labels de componentes no convencionales
-        $("label[for='URDescripcion'], label[for='serieDescripcion'], label[for='eventos_0_id'], label[for='nivel1']").addClass("campoRequerido");
+        $("label[for='eventos_0_id'], label[for='nivel1'], label[for='nivelesacademicos[0].nivel.id'], label[for='palabrasclave'], label[for='areatematica_id']").addClass("campoRequerido");
 }
 
 

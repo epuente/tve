@@ -45,42 +45,41 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     public String sinopsis;
 
 
-    @ManyToOne (optional = false)
+    @ManyToOne
     public Serie serie;
 
     public String clave;
 
     public String obra;
 
-    @ManyToOne (optional = false)
+    @ManyToOne
     public VtkFormato formato;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "catalogo")
     public List<PalabraClave> palabrasClave;
 
-    @ManyToOne (optional = false)
+    @ManyToOne
     public Idioma idioma;
+
+    @ManyToOne
+    public TipoGrabacion tipograbacion;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "catalogo")
     public List<Credito> creditos;
 
-    @ManyToOne (optional = false)
+    @ManyToOne
     public Produccion produccion;
 
     public Long duracion;
 
     public Date anioProduccion;
 
-    @ManyToOne (optional = false)
-    public Sistema sistema;
 
     @ManyToOne
     public Disponibilidad disponibilidad;
 
-    @ManyToOne (optional = true)
-    public Ubicacion ubicacion;
 
-    @ManyToOne (optional = false)
+    @ManyToOne
     public Areatematica areatematica;
 
 

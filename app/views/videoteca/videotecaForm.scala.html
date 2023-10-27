@@ -6,20 +6,20 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
-                        @inputText(forma("folio"), '_label -> "Folio", 'class->"form-control campoRequerido", 'required->true, 'placeholder->"Ejem. DIRGRAL980125" )
+                        @inputText(forma("folio"), '_label -> "Folio", 'class->"form-control campoRequerido", 'placeholder->"Ejem. DIRGRAL980125", '_help->"El folio del oficio" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5">
                     <div class="form-group">
                         <div id="divResultadoBusquedaUR" style="display:none">
                             <dt class=" ">
-                            <dt><label>Unidad responsable</label>
+                            <dt><label for="URDescripcion">Unidad Responsable</label>
                             </dt>
                             <dd>
-                                <input type="hidden" id="unidadresponsable_id" name="unidadresponsable.id" required="true">
+                                <input type="hidden" id="unidadresponsable_id" name="unidadresponsable.id">
                             </dd>
                             <div id="textUR">???</div>
                         </div>
@@ -45,18 +45,30 @@
                     <div id="msgCoincidenciasUR" style="margin-top:5px; margin-bottom:5px;"></div>
 
                 </div>
-                <div class="col-sm-12 col-md-2 col-lg-2 text-center" >
+                <div class="col-sm-12 col-md-1 col-lg-1 text-center" >
                     <div style="vertical-align: middle;">
                         <a href="javascript:abrirURs();" style="display:none" id="aAbrirURs">Abrir URs</a>
                         <br>
                         <button id ="btnNuevaUR" class="btn btn-success" style="display:none">Nueva UR</button>
                     </div>
                 </div>
+                <div class="col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        @inputText(forma("claveclasificatoria"), '_label -> "Clave clasificatoria", 'class->"form-control",  'placeholder->"Ejem. BCT-00081-30" )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        @inputText(forma("clave"), '_label -> "ID", 'class->"form-control", 'required->true, 'placeholder->"Ejem. BCT-00081-30" )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
             </div>
             <div class="row">
-                <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="col-sm-12 col-md-2 col-lg-2">
                 </div>
-                <div class="col-sm-12 col-md-8 col-lg-8">
+                <div class="col-sm-12 col-md-6 col-lg-6">
                     <div id="divCoincidenciasUR">
                         <div class="list-group" style="font-size: small">
                         </div>
@@ -69,9 +81,9 @@
                         <dl class=" " id="evento_field">
                             <dt><label for="eventos_0_id">Evento</label></dt>
                             <dd>
-                                <input type="checkbox" id="eventos_0_id" name="eventos[0].servicio.id" value="1" class="input-block-level" placeholder="">
+                                <input type="checkbox" id="eventos_0_id" name="eventos[0].servicio.id" value="1" class="input-block-level" data-name="cbEvento" >
                                 <span style="margin-right:20px;" > @models.Servicio.find.byId(1).descripcion</span>
-                                <input type="checkbox" id="eventos_1_id" name="eventos[1].servicio.id" value="2" class="input-block-level" placeholder="">
+                                <input type="checkbox" id="eventos_1_id" name="eventos[1].servicio.id" value="2" class="input-block-level" data-name="cbEvento">
                                 <span>@models.Servicio.find.byId(2).descripcion</span>
                             </dd>
                             <dd class="info"> </dd>
@@ -85,11 +97,11 @@
                         <dl class=" " id="niverlacademico_field">
                             <dt><label for="nivel1">Nivel académico</label></dt>
                             <dd>
-                                <input type="checkbox" id="nivel1" name="nivelesacademicos[0].nivel.id" value="1" class="input-block-level" placeholder="">
+                                <input type="checkbox" id="nivel1" name="nivelesacademicos[0].nivel.id" value="1" class="input-block-level" data-name="cbNivelAcademico">
                                 <span style="margin-right:20px;" > @models.NivelAcademico.find.byId(1).descripcion</span>
-                                <input type="checkbox" id="nivel2" name="nivelesacademicos[1].nivel.id" value="2" class="input-block-level" placeholder="">
+                                <input type="checkbox" id="nivel2" name="nivelesacademicos[1].nivel.id" value="2" class="input-block-level" data-name="cbNivelAcademico">
                                 <span style="margin-right:20px;" > @models.NivelAcademico.find.byId(2).descripcion</span>
-                                <input type="checkbox" id="nivel3" name="nivelesacademicos[2].nivel.id" value="3" class="input-block-level" placeholder="">
+                                <input type="checkbox" id="nivel3" name="nivelesacademicos[2].nivel.id" value="3" class="input-block-level" data-name="cbNivelAcademico">
                                 <span style="margin-right:20px;" > @models.NivelAcademico.find.byId(3).descripcion</span>
                             </dd>
                             <dd class="info"> </dd>
@@ -112,12 +124,7 @@
                 </div>
 
 
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                    <div class="form-group">
-                        @inputText(forma("claveclasificatoria"), '_label -> "Clave clasificatoria", 'class->"form-control", 'required->true, 'placeholder->"Ejem. BCT-00081-30" )
-                        <div class="help-block with-errors"></div>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>
@@ -183,16 +190,11 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
                             <div class="form-group">
-                                @inputText(forma("titulo"), '_label -> "Título", 'class->"form-control", 'required->true, 'placeholder->"Ejem. Segundo programa" )
+                                @inputText(forma("titulo"), '_label -> "Título", 'class->"form-control", 'placeholder->"Ejem. Segundo programa" )
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                            <div class="form-group">
-                                @inputText(forma("clave"), '_label -> "Clave", 'class->"form-control", 'required->true, 'placeholder->"Ejem. BCT-00081-30" )
-                                <div class="help-block with-errors"></div>
-                            </div>
-                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -217,8 +219,7 @@
                                     options(models.Produccion.options),
                                     '_label -> "Producción", '_default -> "-- Seleccione --",
                                     '_showConstraints -> false,
-                                    'class->"form-control",
-                                    'required->true
+                                    'class->"form-control"
                                 )
                                 <div class="help-block with-errors"></div>
                             </div>
@@ -227,7 +228,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                                @inputText(forma("anio_produccion"), 'type->"number", 'step->"1", 'min->"1980",  '_label -> "Año producción", 'class->"form-control", 'required->true, '_help->"Ingrese un año entre 1980 y el año actual", 'placeholder->"Ejem. 1998" )
+                                @inputText(forma("anio_produccion"), 'type->"number", 'step->"1", 'min->"1980",  '_label -> "Año producción", 'class->"form-control", '_help->"Ingrese un año entre 1980 y el año actual", 'placeholder->"Ejem. 1998" )
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -254,26 +255,16 @@
 
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-                    @inputText(forma("obra"), '_label -> "Obra", 'class->"form-control", 'required->true )
+                    @inputText(forma("obra"), '_label -> "Obra", 'class->"form-control" )
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
-                        @inputText(forma("duracionStr"), 'type->"time", 'step->"1", '_label -> "Duración", 'class->"form-control", 'required->true, '_help->"hh:mm:ss" )
+                        @inputText(forma("duracionStr"), 'type->"time", 'step->"1", '_label -> "Duración", 'class->"form-control", '_help->"hh:mm:ss" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                    <div class="form-group">
-                        @select(
-                            forma("sistema.id"),
-                            options(models.Sistema.options),
-                            '_label -> "Sistema", '_default -> "-- Seleccione --",
-                            '_showConstraints -> false,
-                            'class->"form-control",
-                            'required->true
-                        )
-                        <div class="help-block with-errors"></div>
-                    </div>
+
                 </div>
                 <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
                     <div class="form-group">
@@ -294,8 +285,7 @@
                             options(Idioma.options),
                             '_label -> "Idioma", '_default->"-- Seleccione --",
                             '_showConstraints -> false,
-                            'class->"form-control",
-                            'required->true
+                            'class->"form-control"
                         )
                         <div class="help-block with-errors"></div>
                     </div>
@@ -309,22 +299,12 @@
                         options(models.Disponibilidad.options),
                         '_label -> "Disponibilidad", '_default -> "-- Seleccione --",
                         '_showConstraints -> false,
-                        'class->"form-control",
-                        'required->true
+                        'class->"form-control"
                         )
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-2 col-md-4 col-lg-4">
-                    <div class="form-group">
-                        @select(
-                            forma("ubicacion.id"),
-                            options(models.Ubicacion.options),
-                            '_label -> "Ubicación", '_default -> "-- Seleccione --",
-                            '_showConstraints -> false,
-                            'class->"form-control",
-                            'required->true
-                        )
-                    </div>
+
                 </div>
                 <div class="col-xs-12 col-sm-2 col-md-4 col-lg-4">
                     <div class="form-group">
@@ -346,20 +326,13 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-sm-12 col-md-10 col-lg-10">
+                <div class="col-sm-12 col-md-12 col-lg-12">
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12">
                             <label for="palabrasclave">Palabras Clave</label>
                             <div class="form-group">
-                                @*textarea(forma("palabrasclave"), '_label -> "Palabras clave", 'class->"tagify form-control", 'rows->"5",  'cols->"300"  , 'required->true
-                                    , 'placeholder->"Expo-Profesiográfica, convenio revisión salarial, convenio IPN - Instituto de Aviación"
-                                    , 'style -> "margin-top:10px;"
-                                )*@
-                                <textarea id="palabrasclave"  class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Ejemplo: Expo-Profesiográfica"></textarea>
-
+                                <textarea id="palabrasclave"  class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Ejemplo: Matemáticas discretas"></textarea>
                                 <div class="help-block with-errors"></div>
-
-
                             </div>
                         </div>
                     </div>
@@ -396,7 +369,7 @@
                                 <div class="tab-content">
                                     @for(s <- auxCreditos) {
                                         <div role="tabpanel" class="tab-pane @if(s.id==1){ active}" id="@s.id" name="losTabs">
-                                            <textarea id="ta@s.id"  class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Escriba los nombres de las personas que participaron en @s.accion"></textarea>
+                                            <textarea id="ta@s.id" name="tasCreditos" class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Escriba los nombres de las personas que participaron en @s.accion"></textarea>
                                             <br>
                                             <button name="laBotoniza" id="btnValoresTab_@s.id">Valores</button>
                                         </div>
@@ -510,13 +483,13 @@
             <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
-                        @textarea(forma("audio"), '_label -> "Audio", 'class->"form-control", 'rows->3, 'cols->"300"  , 'required->true, 'placeholder->"Ejem. Fallas de audio de orígen, sonido ambiental" )
+                        @textarea(forma("audio"), '_label -> "Audio", 'class->"form-control", 'rows->3, 'cols->"300"  , 'placeholder->"Ejem. Fallas de audio de orígen, sonido ambiental" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
-                        @textarea(forma("video"), '_label -> "Video", 'class->"form-control", 'rows->3, 'cols->"300"  ,  'placeholder->"Ejem. Resolución 1920 x 1080" )
+                        @textarea(forma("video"), '_label -> "Video", 'class->"form-control", 'rows->3, 'cols->"300", 'required->true,  'placeholder->"Ejem. Resolución 1920 x 1080" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -524,7 +497,7 @@
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12">
                     <div class="form-group">
-                        @textarea(forma("observaciones"), '_label -> "Observaciones", 'class->"form-control", 'rows->3, 'cols->"300"  , 'placeholder->"Ejem. El ponente original no se presentó y en su lugar se contó con el Director de la escuela" )
+                        @textarea(forma("observaciones"), '_label -> "Observaciones", 'class->"form-control", 'rows->3, 'cols->"300",  'required->true, 'placeholder->"Ejem. El ponente original no se presentó y en su lugar se contó con el Director de la escuela" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>

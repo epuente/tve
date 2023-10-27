@@ -507,43 +507,11 @@ INSERT INTO formato_ingesta (id, audit_insert, audit_update, descripcion) VALUES
 INSERT INTO formato_ingesta (id, audit_insert, audit_update, descripcion) VALUES (7, '2021-02-03 17:48:02', '2021-02-03 17:48:02', 'BCT');
 INSERT INTO formato_ingesta (id, audit_insert, audit_update, descripcion) VALUES (8, '2021-02-03 17:48:02', '2021-02-03 17:48:02', 'Otro');
 
-
-
-
-
-
-
-
-
-
-
-
-INSERT INTO idioma (id, audit_insert, audit_update, descripcion) VALUES (1, '2021-02-03 19:23:45', '2021-02-03 19:23:45', 'Español');
-INSERT INTO idioma (id, audit_insert, audit_update, descripcion) VALUES (2, '2021-02-03 19:23:45', '2021-02-03 19:23:45', 'Inglés');
-INSERT INTO idioma (id, audit_insert, audit_update, descripcion) VALUES (3, '2021-02-03 19:23:45', '2021-02-03 19:23:45', 'Otro');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+INSERT INTO idioma (id, audit_insert, audit_update, descripcion) VALUES(1, '2021-02-03 19:23:45.000', '2021-02-03 19:23:45.000', 'Español');
+INSERT INTO idioma (id, audit_insert, audit_update, descripcion) VALUES(2, '2021-02-03 19:23:45.000', '2021-02-03 19:23:45.000', 'Inglés');
+INSERT INTO idioma (id, audit_insert, audit_update, descripcion) VALUES(3, '2021-02-03 19:23:45.000', '2021-02-03 19:23:45.000', 'Francés');
+INSERT INTO idioma (id, audit_insert, audit_update, descripcion) VALUES(4, '2021-02-03 19:23:45.000', '2021-02-03 19:23:45.000', 'Portugues');
+INSERT INTO idioma (id, audit_insert, audit_update, descripcion) VALUES(5, '2021-02-03 19:23:45.000', '2021-02-03 19:23:45.000', 'Otro');
 
 INSERT INTO pre_agenda (id, audit_insert, audit_update, folioproductorasignado_id, fase_id, inicio, fin, estado_id, observacion) VALUES (3, '2023-06-20 20:41:11.211', '2023-06-20 20:41:11.211', 3, 2, '2023-06-26 15:10:00', '2023-06-26 15:20:00', 5, NULL);
 INSERT INTO pre_agenda (id, audit_insert, audit_update, folioproductorasignado_id, fase_id, inicio, fin, estado_id, observacion) VALUES (4, '2023-06-20 20:42:17.214', '2023-06-20 20:42:17.214', 3, 1, '2023-06-26 14:00:00', '2023-06-26 14:10:00', 5, NULL);

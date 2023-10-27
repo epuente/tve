@@ -3,6 +3,8 @@
 @import helper._
 @anio = { @(new Date().format("yyyy"))}
 
+
+
 <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify"></script>
 <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
@@ -77,9 +79,6 @@
         var inputpc = document.querySelector("textarea[id='palabrasclave']"),
         tagifyPC = new Tagify(inputpc);
 
-
-
-
         var listaBlanca=[];
         @for( p<-models.Personal.nombresCompletos()) {
             listaBlanca.push("@p.nombreCompleto()");
@@ -130,15 +129,17 @@
         $("#anio_produccion").val(   moment("Thu Oct 01 00:00:00 CDT 1998", "ddd MMM DD HH:mm:ss z YYYY").format("YYYY")   )
 
         // Evento (  Servicio en la DB  )
-        @for(e<-forma.get().eventos){
-            console.log("EVENTOS @e.servicio")
-            console.log("EVENTOS @e.servicio.descripcion")
-            $("#eventos_@(e.servicio.id-1)_id").attr("checked", true);
+        @if(forma.get().eventos.length>0){
+            @for(e<-forma.get().eventos){
+                $("#eventos_@(e.servicio.id-1)_id").attr("checked", true);
+            }
         }
 
         // Nivel académico
-        @for(e<-forma.get().nivelesacademicos){
-            $("#nivel@(e.nivel.id)").attr("checked", true);
+        @if(forma.get().nivelesacademicos.size!=0){
+                @for(e<-forma.get().nivelesacademicos){
+                    $("#nivel@(e.nivel.id)").attr("checked", true);
+                }
         }
 
         // ¿Es área central?
