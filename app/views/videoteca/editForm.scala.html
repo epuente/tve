@@ -3,7 +3,8 @@
 @import helper._
 @anio = { @(new Date().format("yyyy"))}
 
-
+id:@forma.get().id
+fechaP:@forma.get().fechaProduccion
 
 <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify"></script>
 <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
@@ -22,7 +23,7 @@
 
     <h1>Edición del catálogo de videoteca</h1>
 
-    @form(CSRF(routes.VideotecaController.update()), 'role->"form", 'id->"frmVideoteca", 'name->"frmVTK") {
+    @form(CSRF(routes.VideotecaController.update()), 'role->"form", 'id->"frmVideoteca", 'name->"frmVTK", Symbol("data-modo")->"edicion") {
         @videotecaForm(forma, auxCreditos)
         <br/><br/>
         <div class="row">
@@ -111,22 +112,27 @@
     });  // fin del $(function()
 
 
+//aqui me quedé hay un error en la funcio leer
+
     function leer(){
         $("#unidadresponsable_id").val("@forma.get().unidadresponsable.id");
         $("#URDescripcion").val("@forma.get().unidadresponsable.nombreLargo");
 
-        $("#serie_id").val("@forma.get().serie.id");
+        @if(forma.get().serie.id!=null){
+            $("#serie_id").val("@forma.get().serie.id");
+        }
+
         $("#serieDescripcion").val( "@forma.get().serie.descripcion"  );
 
         console.log("duracion: @cDuracion.horas:@cDuracion.minutos:@cDuracion.segundos")
         $("#duracion").val("@cDuracion.cadena()");
 
 
-        console.log("@forma.get().anioProduccion")
-        console.log(moment("@forma.get().anioProduccion").format("YYYY") )
+        console.log("@forma.get().fechaProduccion")
+        console.log(moment("@forma.get().fechaProduccion").format("YYYY") )
         console.log(moment("Thu Oct 01 00:00:00 CDT 1998", "ddd MMM DD HH:mm:ss z YYYY").format("YYYY") )
 
-        $("#anio_produccion").val(   moment("Thu Oct 01 00:00:00 CDT 1998", "ddd MMM DD HH:mm:ss z YYYY").format("YYYY")   )
+        $("#fecha_produccion").val(   "@forma.get().fechaProduccion" );
 
         // Evento (  Servicio en la DB  )
         @if(forma.get().eventos.length>0){
@@ -135,15 +141,14 @@
             }
         }
 
-        // Nivel académico
-        @if(forma.get().nivelesacademicos.size!=0){
-                @for(e<-forma.get().nivelesacademicos){
+        // Nivel
+        @if(forma.get().niveles.size!=0){
+                @for(e<-forma.get().niveles){
                     $("#nivel@(e.nivel.id)").attr("checked", true);
                 }
         }
 
-        // ¿Es área central?
-        $("#esAreaCentral").attr("checked", @forma.get().esAreaCentral==1);
+
 
 
 
@@ -167,6 +172,8 @@
             tagifyCreds.addTags("@c.personas");
 
         }
+
+        $("#divRegistro").append("Registro :"+moment("@forma.get().auditInsert").format("DD-MM-YY HH:mm:ss")+"<br>Última actualización: "+moment("@forma.get().auditUpdate").format("DD-MM-YY HH:mm:ss")).show();
 
     }
 

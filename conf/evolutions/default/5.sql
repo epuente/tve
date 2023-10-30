@@ -110,7 +110,6 @@ INSERT INTO vtk_formato (id, audit_insert, audit_update, descripcion) VALUES(4, 
 INSERT INTO vtk_formato (id, audit_insert, audit_update, descripcion) VALUES(5, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', '3GP');
 INSERT INTO vtk_formato (id, audit_insert, audit_update, descripcion) VALUES(6, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'WMP');
 
-
 INSERT INTO disponibilidad (id, audit_insert, audit_update, descripcion) VALUES(1, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'Difusión');
 INSERT INTO disponibilidad (id, audit_insert, audit_update, descripcion) VALUES(2, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'Consulta');
 INSERT INTO disponibilidad (id, audit_insert, audit_update, descripcion) VALUES(3, '2023-08-24 14:23:42.691', '2023-08-24 14:23:42.691', 'OnDemand');
@@ -135,9 +134,10 @@ INSERT INTO produccion (id, audit_insert, audit_update, descripcion, sigla) VALU
 INSERT INTO produccion (id, audit_insert, audit_update, descripcion, sigla) VALUES(7, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'DIRECCION DE APOYO A ESTUDIANTES-DIRECCION DE TECNOLOGIA EDUCATIVA', 'DirAE-DirTVE');
 INSERT INTO produccion (id, audit_insert, audit_update, descripcion, sigla) VALUES(8, '2023-09-12 00:00:00.000', '2023-09-12 00:00:00.000', 'DEPARTAMENTO DE TELEVISION EDUCATIVA', 'DeptoTVE');
 
-INSERT INTO nivel_academico (id, audit_insert, audit_update, descripcion) VALUES(1, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Medio Superior');
-INSERT INTO nivel_academico (id, audit_insert, audit_update, descripcion) VALUES(2, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Superior');
-INSERT INTO nivel_academico (id, audit_insert, audit_update, descripcion) VALUES(3, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Posgrado');
+INSERT INTO nivel (id, audit_insert, audit_update, descripcion) VALUES(1, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Medio Superior');
+INSERT INTO nivel (id, audit_insert, audit_update, descripcion) VALUES(2, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Superior');
+INSERT INTO nivel (id, audit_insert, audit_update, descripcion) VALUES(3, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Posgrado');
+INSERT INTO nivel (id, audit_insert, audit_update, descripcion) VALUES(4, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Área Central');
 
 INSERT INTO tipo_grabacion (id, audit_insert, audit_update, descripcion) VALUES(1, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Master');
 INSERT INTO tipo_grabacion (id, audit_insert, audit_update, descripcion) VALUES(2, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Copia');
@@ -145,7 +145,7 @@ INSERT INTO tipo_grabacion (id, audit_insert, audit_update, descripcion) VALUES(
 select setval( 'serie_seq', (select max(id)+1 from serie), true);
 select setval( 'vtk_catalogo_seq', (select max(id)+1 from vtk_catalogo), true);
 select setval( 'vtk_evento_seq', (select max(id)+1 from vtk_evento), true);
-select setval( 'vtk_nivel_academico_seq', (select max(id)+1 from vtk_nivel_academico), true);
+select setval( 'vtk_nivel_seq', (select max(id)+1 from vtk_nivel), true);
 
  # --- !Downs
 
@@ -153,7 +153,7 @@ drop table if exists areatematica cascade;
 drop table if exists disponibilidad cascade;
 drop table if exists serie cascade;
 drop table if exists sistema cascade;
-drop table if exists nivel_academico cascade;
+drop table if exists nivel cascade;
 drop table if exists produccion cascade;
 drop table if exists tipo_credito cascade;
 drop table if exists tipo_grabacion cascade;
@@ -161,7 +161,7 @@ drop table if exists tipo_grabacion cascade;
 drop sequence if exists areatematica_seq;
 drop sequence if exists disponibilidad_seq;
 drop sequence if exists serie_seq;
-drop sequence if exists nivel_academico_seq;
+drop sequence if exists nivel_seq;
 drop sequence if exists produccion_seq;
 drop sequence if exists tipo_credito_seq;
 drop sequence if exists tipo_grabacion;

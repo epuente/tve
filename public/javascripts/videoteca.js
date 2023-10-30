@@ -141,7 +141,7 @@ function agregaJSON2(){
         strNiveles = strNiveles.substring(0, strNiveles.length-1);
     json["nivelesacademicos"] = JSON.parse('['+strNiveles+']');
 
-    json["claveclasificatoria"] = $("#claveclasificatoria").val();
+    json["folioDEV"] = $("#folioDEV").val();
     json["serie"] = {id: $("#serie_id").val()};
     json["titulo"] = $("#titulo").val();
     json["clave"] = $("#clave").val();
@@ -241,15 +241,35 @@ $("button[name='laBotoniza']").on("click", function(e){
 
 $("form").submit(function(event){
     var msgError="";
-    if (  $("*[data-name='cbEvento']:checked").length==0){
-        event.preventDefault();
-        msgError+="No se ha seleccionado un evento.<br>";
-    }
-    if ( $("*[data-name='cbNivelAcademico']:checked").length==0){
-        event.preventDefault();
-        msgError+="No se ha seleccionado un nivel académico.";
-    }
+
+    if ( !$("#clave").val() )
+        msgError+="No se ha seleccionado un ID.<br>";
+    /*
+    if (  $("*[data-name='cbEvento']:checked").length==0)
+        msgError+="No se ha seleccionado un evento<br>";
+      */
+
+     if ($("*[data-name='cbEvento']:checked").length==0)
+        msgError+="No se ha seleccionado un evento<br>";
+    if ( $("*[data-name='cbNivelAcademico']:checked").length==0)
+        msgError+="No se ha seleccionado un nivel académico<br>";
+    if ( !$("#sinopsis").val())
+        msgError+="No se ha escrito la sinópsis<br>";
+    if ( !$("#formato_id").val())
+        msgError+="No se ha seleccionado el formato<br>";
+    if ( !$("#areatematica_id").val())
+        msgError+="No se ha seleccionado el área temática<br>";
+    if ( !$("#palabrasclave").val())
+        msgError+="No se han definido las palabras clave<br>";
+    if ( !$("#video").val())
+        msgError+="No se han escrito las características del video<br>";
+    if ( !$("#observaciones").val())
+        msgError+="No se han escrito las observaciones<br>";
+
     if (msgError.length>0){
+            event.preventDefault();
+            msgError.length==1? msgError+="<br><br>Complete el campo faltante" : msgError+="<br><br>Complete los campos faltantes";
+
             swal({
                     title: "Aviso",
                     html: msgError,

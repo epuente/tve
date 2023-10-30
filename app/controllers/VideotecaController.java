@@ -92,11 +92,19 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             arrIdiomaDatos.put( VtkCatalogo.find.where().eq("idioma.id", i.id).findRowCount());
         }
 
-        // Año de producción
-        String strQAnio = "select extract('Year' from vc.anio_produccion) anio,  count(*) valor "+
+        // Fecha de producción
+        String strQAnio = "select extract('Year' from vc.fecha_produccion) anio,  count(*) valor "+
             "from vtk_catalogo vc "+
-            "group by extract('Year' from vc.anio_produccion) "+
-            "order by extract('Year' from vc.anio_produccion)";
+            "group by extract('Year' from vc.fecha_produccion) "+
+            "order by extract('Year' from vc.fecha_produccion)";
+
+
+
+        strQAnio = "select extract ('Year' from TO_DATE(vc.fecha_produccion, 'DD-MM-YYYY')) anio,  count(*) valor "+
+                "from vtk_catalogo vc "+
+                "group by extract('Year' from TO_DATE(vc.fecha_produccion, 'DD-MM-YYYY')) "+
+                "order by extract('Year' from TO_DATE(vc.fecha_produccion, 'DD-MM-YYYY'))";
+        Logger.debug(strQAnio);
 
         List<SqlRow> rowsAnios = Ebean.createSqlQuery(strQAnio).findList();
 
@@ -185,9 +193,11 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 for( VtkCatalogo p : pag.getList()  ){
                     JSONObject datoP = new JSONObject();
                     datoP.put("id", p.id);
+                    datoP.put("clave", p.clave);
                     datoP.put("sinopsis", p.sinopsis);
                     datoP.put("titulo", p.titulo);
-                    datoP.put("serie", p.serie.descripcion);
+                    if (p.serie!=null)
+                        datoP.put("serie", p.serie.descripcion);
                     datoP.put("obra", p.obra);
                     losDatos.put(datoP);
                     json2.put("data", losDatos);
@@ -560,7 +570,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
 
 
-            catalogo.anioProduccion =  sdf.parse( r.getString("anioproduccion"));
+            catalogo.fechaProduccion =   r.getString("anioproduccion");
             if (r.getLong("disponibilidad")!=null)
                 catalogo.disponibilidad = Disponibilidad.find.byId(r.getLong("disponibilidad"));
 
@@ -585,6 +595,8 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             Duracion d = new Duracion();
             if (catalogo.duracion!=null)
                 d = new Duracion(catalogo.duracion);
+            else
+                d = new Duracion(0L);
             Logger.debug("003 duracion " + d);
             Logger.debug("004 TP "+TipoCredito.find.all());
             return ok( views.html.videoteca.editForm.render(id, forma, TipoCredito.find.all(), d)  );
@@ -684,9 +696,9 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         vtk.folio = obj.folio;
         vtk.unidadresponsable = UnidadResponsable.find.byId(obj.unidadresponsable.id);
         vtk.eventos = obj.eventos;
-        vtk.nivelesacademicos = obj.nivelesacademicos;
-        vtk.esAreaCentral = obj.esAreaCentral;
-        vtk.claveclasificatoria = obj.claveclasificatoria;
+        vtk.niveles = obj.niveles;
+        //vtk.esAreaCentral = obj.esAreaCentral;
+        vtk.folioDEV = obj.folioDEV;
         vtk.titulo = obj.titulo;
         vtk.sinopsis = obj.sinopsis;
         vtk.serie = obj.serie;
@@ -697,7 +709,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         vtk.idioma = obj.idioma;
         vtk.creditos = obj.creditos;
         vtk.produccion = obj.produccion;
-        vtk.anioProduccion = obj.anioProduccion;
+        vtk.fechaProduccion = obj.fechaProduccion;
         vtk.disponibilidad = obj.disponibilidad;
         vtk.areatematica = obj.areatematica;
         vtk.nresguardo = obj.nresguardo;

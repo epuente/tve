@@ -60,3 +60,9 @@
 .mayusculasForzadas{
     text-transform: uppercase;
 }
+
+
+
+dd.info {
+    font-size:85%;
+}

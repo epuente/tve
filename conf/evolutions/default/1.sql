@@ -499,6 +499,14 @@ create table motivo_cancelacion (
   constraint pk_motivo_cancelacion primary key (id))
 ;
 
+create table nivel (
+  id                        bigint not null,
+  audit_insert              timestamp,
+  audit_update              timestamp,
+  descripcion               varchar(100) not null,
+  constraint pk_nivel primary key (id))
+;
+
 create table nivel_academico (
   id                        bigint not null,
   audit_insert              timestamp,
@@ -1081,9 +1089,9 @@ create table video_personaje (
   audit_insert              timestamp,
   audit_update              timestamp,
   catalogo_id               bigint,
-  paterno                   varchar(255),
-  materno                   varchar(255),
-  nombre                    varchar(255),
+  paterno                   varchar(50),
+  materno                   varchar(50),
+  nombre                    varchar(50),
   constraint pk_video_personaje primary key (id))
 ;
 
@@ -1091,29 +1099,29 @@ create table vtk_catalogo (
   id                        bigint not null,
   audit_insert              timestamp,
   audit_update              timestamp,
-  folio                     varchar(255),
-  unidadresponsable_id      bigint not null,
-  es_area_central           boolean,
-  claveclasificatoria       varchar(255) not null,
-  titulo                    varchar(1000),
-  sinopsis                  varchar(10000),
+  folio                     varchar(30),
+  unidadresponsable_id      bigint,
+  folio_dev                 varchar(30),
+  titulo                    varchar(100),
+  sinopsis                  varchar(3000) not null,
   serie_id                  bigint,
-  clave                     varchar(255),
-  obra                      varchar(255),
-  formato_id                bigint,
+  clave                     varchar(30) not null,
+  obra                      varchar(5),
+  formato_id                bigint not null,
   idioma_id                 bigint,
   tipograbacion_id          bigint,
   produccion_id             bigint,
   duracion                  bigint,
-  anio_produccion           timestamp,
+  fecha_produccion          varchar(10),
+  fecha_publicacion         varchar(10),
   disponibilidad_id         bigint,
-  areatematica_id           bigint,
+  areatematica_id           bigint not null,
   nresguardo                varchar(255),
   liga                      varchar(255),
   catalogador_id            bigint not null,
-  audio                     varchar(1500),
-  video                     varchar(1500),
-  observaciones             varchar(3000),
+  audio                     varchar(150),
+  video                     varchar(150) not null,
+  observaciones             varchar(3000) not null,
   constraint pk_vtk_catalogo primary key (id))
 ;
 
@@ -1135,13 +1143,13 @@ create table vtk_formato (
   constraint pk_vtk_formato primary key (id))
 ;
 
-create table vtk_nivel_academico (
+create table vtk_nivel (
   id                        bigint not null,
   audit_insert              timestamp,
   audit_update              timestamp,
   catalogo_id               bigint,
   nivel_id                  bigint,
-  constraint pk_vtk_nivel_academico primary key (id))
+  constraint pk_vtk_nivel primary key (id))
 ;
 
 create table vtk_time_line (
@@ -1150,9 +1158,9 @@ create table vtk_time_line (
   audit_update              timestamp,
   catalogo_id               bigint,
   personaje_id              bigint,
-  gradoacademico            varchar(255),
-  cargo                     varchar(255),
-  tema                      varchar(255),
+  gradoacademico            varchar(100),
+  cargo                     varchar(100),
+  tema                      varchar(200),
   constraint pk_vtk_time_line primary key (id))
 ;
 
@@ -1257,6 +1265,8 @@ create sequence idioma_seq;
 create sequence medio_almacenamiento_seq;
 
 create sequence motivo_cancelacion_seq;
+
+create sequence nivel_seq;
 
 create sequence nivel_academico_seq;
 
@@ -1380,7 +1390,7 @@ create sequence vtk_evento_seq;
 
 create sequence vtk_formato_seq;
 
-create sequence vtk_nivel_academico_seq;
+create sequence vtk_nivel_seq;
 
 create sequence vtk_time_line_seq;
 
@@ -1696,10 +1706,10 @@ alter table vtk_evento add constraint fk_vtk_evento_servicio_155 foreign key (se
 create index ix_vtk_evento_servicio_155 on vtk_evento (servicio_id);
 alter table vtk_formato add constraint fk_vtk_formato_usuario_156 foreign key (usuario_id) references personal (id);
 create index ix_vtk_formato_usuario_156 on vtk_formato (usuario_id);
-alter table vtk_nivel_academico add constraint fk_vtk_nivel_academico_catal_157 foreign key (catalogo_id) references vtk_catalogo (id);
-create index ix_vtk_nivel_academico_catal_157 on vtk_nivel_academico (catalogo_id);
-alter table vtk_nivel_academico add constraint fk_vtk_nivel_academico_nivel_158 foreign key (nivel_id) references nivel_academico (id);
-create index ix_vtk_nivel_academico_nivel_158 on vtk_nivel_academico (nivel_id);
+alter table vtk_nivel add constraint fk_vtk_nivel_catalogo_157 foreign key (catalogo_id) references vtk_catalogo (id);
+create index ix_vtk_nivel_catalogo_157 on vtk_nivel (catalogo_id);
+alter table vtk_nivel add constraint fk_vtk_nivel_nivel_158 foreign key (nivel_id) references nivel (id);
+create index ix_vtk_nivel_nivel_158 on vtk_nivel (nivel_id);
 alter table vtk_time_line add constraint fk_vtk_time_line_catalogo_159 foreign key (catalogo_id) references vtk_catalogo (id);
 create index ix_vtk_time_line_catalogo_159 on vtk_time_line (catalogo_id);
 alter table vtk_time_line add constraint fk_vtk_time_line_personaje_160 foreign key (personaje_id) references video_personaje (id);
@@ -1810,6 +1820,8 @@ drop table if exists idioma cascade;
 drop table if exists medio_almacenamiento cascade;
 
 drop table if exists motivo_cancelacion cascade;
+
+drop table if exists nivel cascade;
 
 drop table if exists nivel_academico cascade;
 
@@ -1933,7 +1945,7 @@ drop table if exists vtk_evento cascade;
 
 drop table if exists vtk_formato cascade;
 
-drop table if exists vtk_nivel_academico cascade;
+drop table if exists vtk_nivel cascade;
 
 drop table if exists vtk_time_line cascade;
 
@@ -2038,6 +2050,8 @@ drop sequence if exists idioma_seq;
 drop sequence if exists medio_almacenamiento_seq;
 
 drop sequence if exists motivo_cancelacion_seq;
+
+drop sequence if exists nivel_seq;
 
 drop sequence if exists nivel_academico_seq;
 
@@ -2161,7 +2175,7 @@ drop sequence if exists vtk_evento_seq;
 
 drop sequence if exists vtk_formato_seq;
 
-drop sequence if exists vtk_nivel_academico_seq;
+drop sequence if exists vtk_nivel_seq;
 
 drop sequence if exists vtk_time_line_seq;
 

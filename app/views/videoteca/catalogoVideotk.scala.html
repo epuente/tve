@@ -26,9 +26,9 @@
         <thead>
         <tr>
             <td>id</td>
+            <td>ID</td>
             <td>Serie</td>
             <td>Titulo</td>
-            <td>Sinópsis</td>
             <td>Obra</td>
         </tr>
         </thead>
@@ -65,9 +65,13 @@
 	                      return '<u><a href="vtkCatalogo/edit/'+data+'">'+data+"</a></u>";
 	                  }
 	                },
-	                { "data": "serie" },
+	                {"data":"clave"},
+	                { "data": "serie",
+	                    "render": function(data, type, row, meta){
+	                        return data==null?"":data;
+	                    }
+	                },
 	                { "data": "titulo" },
-	                { "data": "sinopsis" },
 	                { "data": "obra" }
 	              ]
             });

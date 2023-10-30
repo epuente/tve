@@ -5,9 +5,7 @@ import play.Logger;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
-import javax.validation.Constraint;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.List;
 
 import static play.mvc.Controller.session;
@@ -16,10 +14,10 @@ import static play.mvc.Controller.session;
 public class VtkCatalogo extends models.utils.PlantillaModelo{
 
     @ManyToOne
+    @Column(length = 30)
     public String folio;
 
     @ManyToOne
-    @NotNull
     public UnidadResponsable unidadresponsable;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "catalogo")
@@ -28,34 +26,41 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "catalogo")
     @NotNull
-    public List<VtkNivelAcademico> nivelesacademicos;
-
-    public boolean esAreaCentral;
-
-    @NotNull
-    public String claveclasificatoria;
+    public List<VtkNivel> niveles;
 
 
 
 
+    @Column(length = 30)
+    public String folioDEV;
 
-    @Column(length = 1000)
+
+
+
+
+    @Column(length = 100)
     public String titulo;
-    @Column(length = 10000)
+    @Column(length = 3000)
+    @NotNull
     public String sinopsis;
 
 
     @ManyToOne
     public Serie serie;
 
+    @NotNull
+    @Column(length = 30)
     public String clave;
 
+    @Column(length = 5)
     public String obra;
 
     @ManyToOne
+    @NotNull
     public VtkFormato formato;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "catalogo")
+    @NotNull
     public List<PalabraClave> palabrasClave;
 
     @ManyToOne
@@ -72,14 +77,18 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
 
     public Long duracion;
 
-    public Date anioProduccion;
+    @Column(length = 10)
+    public String fechaProduccion;
 
+    @Column(length = 10)
+    public String fechaPublicacion;
 
     @ManyToOne
     public Disponibilidad disponibilidad;
 
 
     @ManyToOne
+    @NotNull
     public Areatematica areatematica;
 
 
@@ -92,15 +101,18 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     public Personal catalogador;
 
     @OneToMany (orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "catalogo")
+    @NotNull
     public List<VtkTimeLine> timeline;
 
-    @Column(length = 1500)
+    @Column(length = 150)
     public String audio;
 
-    @Column(length = 1500)
+    @Column(length = 150)
+    @NotNull
     public String video;
 
     @Column(length = 3000)
+    @NotNull
     public String observaciones;
 
 
