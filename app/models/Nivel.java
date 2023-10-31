@@ -1,5 +1,7 @@
 package models;
 
+import play.db.ebean.Model;
+
 import javax.persistence.Entity;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,7 +10,7 @@ import java.util.Map;
 public class Nivel extends models.utils.PlantillaCatalogo{
 
 
-    public static Finder<Long, Nivel> find = new Finder<Long, Nivel>(Long.class, Nivel.class);
+    public static Model.Finder<Long,Nivel> find = new Model.Finder<Long,Nivel>(Long.class, Nivel.class);
 
 
     public static Map<String,String> options() {

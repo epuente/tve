@@ -12,9 +12,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import play.Logger;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Result;
+import scala.util.parsing.json.JSON;
 import views.html.operacionNoPermitida;
 import views.html.videoteca.*;
 import views.html.catalogos.Accesorio.editForm;
@@ -605,18 +607,30 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         }
     }
 
-    public static Result save(){
+    public static Result save() throws JSONException {
         System.out.println("\n\n\nDesde VideotecaController.save");
         Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
+
+        DynamicForm fd = DynamicForm.form().bindFromRequest();
+
         System.out.println(forma);
+        System.out.println("--------------------------");
+        System.out.println(fd);
+
+
+
+
         VtkCatalogo vtk = forma.get();
 
         Personal usuarioActual = Personal.find.byId(Long.parseLong(session("usuario")));
 
         // Convertir duracion (hh:mm:ss) a segundos
-        Duracion duracion = new Duracion();
-        duracion.convertir(forma.field("duracionStr").value());
-        vtk.duracion = duracion.totalSegundos();
+        Logger.debug(forma.field("duracionStr").value());
+        if (  forma.field("duracionStr").value().compareTo("hhh:mm:ss")!=0 ) {
+            Duracion duracion = new Duracion();
+            duracion.convertir(forma.field("duracionStr").value());
+            vtk.duracion = duracion.totalSegundos();
+        }
 
         if(forma.hasErrors()) {
             return badRequest(createForm.render(forma, TipoCredito.find.all() ));
@@ -627,6 +641,35 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         if ( VtkCatalogo.find.all().size()>0)
             elId = Long.parseLong(Ebean.createSqlQuery("select max(id) x from vtk_catalogo").findUnique().getString("x"))+1;
         vtk.id =  elId;
+
+        // Palabras clave  -  agregar id del catalogador
+        vtk.palabrasClave.forEach(pc->pc.catalogador = usuarioActual );
+
+
+        Logger.debug("txaPalabrasClave");
+        Logger.debug(forma.data().toString());
+        Logger.debug(   fd.field("txaPalabrasClave").value() );
+
+
+
+        JSONArray jsonArr = new JSONArray(forma.field("txaPalabrasClave").value());
+        Logger.debug(String.valueOf(jsonArr));
+
+        vtk.palabrasClave.clear();
+        vtk.palabrasClave = new ArrayList<>();
+        Logger.debug("iniciando ciclo: ");
+        for (int x=0; x< jsonArr.length();x++){
+            PalabraClave pc = new PalabraClave();
+            pc.descripcion = jsonArr.getJSONObject(x).get("descripcion").toString();
+            pc.catalogador = usuarioActual;
+            Logger.debug(pc.descripcion+"  -  "+pc.catalogador.nombreCompleto());
+            vtk.palabrasClave.add(pc);
+        }
+
+        // Quitar formato  de obra que viene de la forma
+        if (  vtk.obra.compareTo("__/__")==0  )
+            vtk.obra = null;
+
 
         // CREDITOS
         String texto = forma.field("txaCreditos").value();
@@ -655,6 +698,21 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         vtk.catalogador = usuarioActual;
         vtk.save();
         flash("success", "Se agregó al acervo");
+        return redirect( routes.VideotecaController.catalogo() );
+    }
+
+
+    // Usando dynamic form
+    public static Result save3() {
+        System.out.println("\n\n\nDesde VideotecaController.save3");
+        Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
+
+        DynamicForm fd = DynamicForm.form().bindFromRequest();
+
+        System.out.println(forma);
+
+
+
         return redirect( routes.VideotecaController.catalogo() );
     }
 

@@ -12,7 +12,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <h1 id="homeTitle">Catálogo <a href="@routes.VideotecaController.catalogoCreate()" data-toggle="popover" data-content="Agregar Accesorio" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a>
+        <h1 id="homeTitle">Catálogo <a href="@routes.VideotecaController.catalogoCreate()" data-toggle="popover" data-content="Agregar Catalogo" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a>
         </h1>
     </div>
 </div>
@@ -72,7 +72,11 @@
 	                    }
 	                },
 	                { "data": "titulo" },
-	                { "data": "obra" }
+	                { "data": "obra",
+                        "render": function(data, type, row, meta){
+	                        return data==null?"":data;
+	                    }
+	                }
 	              ]
             });
 

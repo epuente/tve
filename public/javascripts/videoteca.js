@@ -105,7 +105,7 @@ function seleccionaSerie(id, texto){
 }
 
 function agregaJSON(){
-    $("<textarea style='padding-left:100px' name='txaCreditos' id='txaCreditos'>Este es un texto de prueba que despues recibirá código JSON</textarea>").appendTo("#frmVTKCreate");
+    console.log(" - agregaJSON -")
 }
 
 
@@ -218,49 +218,28 @@ function agregaJSON2(){
 }
 
 
-
-
-
-
-$("button[name='laBotoniza']").off("click");
-$("button[name='laBotoniza']").on("click", function(e){
-    e.preventDefault();
-    console.log("laBotoniza")
-    var indice = $("button[name='laBotoniza']").index( $(this)   );
-    console.log( "indice "+indice  )
-    console.log( $("button[name='laBotoniza']").eq(indice) )
-
-
-    var id = $(this).prop("id").substring( $(this).prop("id").indexOf("_")+1   );
-    console.log("CREDITOS "+id)
-    //console.log("id->"+id)
-    console.log(  $("#ta"+id).val() )
-});
-
-
-
 $("form").submit(function(event){
+    //event.preventDefault();
+    console.log(" - submit -")
     var msgError="";
+    console.clear()
 
     if ( !$("#clave").val() )
         msgError+="No se ha seleccionado un ID.<br>";
-    /*
-    if (  $("*[data-name='cbEvento']:checked").length==0)
-        msgError+="No se ha seleccionado un evento<br>";
-      */
-
      if ($("*[data-name='cbEvento']:checked").length==0)
         msgError+="No se ha seleccionado un evento<br>";
     if ( $("*[data-name='cbNivelAcademico']:checked").length==0)
-        msgError+="No se ha seleccionado un nivel académico<br>";
+        msgError+="Seleccione al meno un nivel<br>";
     if ( !$("#sinopsis").val())
         msgError+="No se ha escrito la sinópsis<br>";
     if ( !$("#formato_id").val())
         msgError+="No se ha seleccionado el formato<br>";
     if ( !$("#areatematica_id").val())
         msgError+="No se ha seleccionado el área temática<br>";
-    if ( !$("#palabrasclave").val())
-        msgError+="No se han definido las palabras clave<br>";
+    if ( !$("#palabrasClaveStr").val()){
+            msgError+="No se han definido las palabras clave<br>";
+            $("#palabrasclave").closest("div.form-group").addClass("has-error has-danger");
+        }
     if ( !$("#video").val())
         msgError+="No se han escrito las características del video<br>";
     if ( !$("#observaciones").val())
@@ -284,10 +263,23 @@ $("form").submit(function(event){
     $("[type='checkbox'][id^='auxRoles_']:checked").each(function(i,e){
         $(this).attr("name","cuentas[0].roles["+i+"].rol.id");
     });
+
+
     var x = {};
+    var ppcc = {};
+
     x['losDatos']=valoresCreditos();
+    ppcc['lasPalabras'] = valoresPalabrasClave();
+
+    $("<input type='text' name='palabrasClave[0].descripcion' value='uno'>").appendTo("#frmVTKCreate");
+    $("<input type='text' name='palabrasClave[1].descripcion' value='dos'>").appendTo("#frmVTKCreate");
+
     $("<textarea style='padding-left:100px; display:none;' name='txaCreditos' id='txaCreditos'>"+JSON.stringify(x)+"</textarea>").appendTo("#frmVTKCreate");
-    console.dir(j)
+    $("#txaPalabrasClave").val(JSON.stringify(valoresPalabrasClave()));
+
+
+
+
 });
 
 
@@ -316,6 +308,31 @@ function valoresCreditos(){
     return j;
 }
 
+
+function valoresPalabrasClave(){
+    var j=[];
+    var palabraclave={};
+        aux= $("#palabrasClaveStr").val();
+        console.log("    aux:"+aux+"("+aux.length+")")
+        if (aux.length!=0){
+            obj = jQuery.parseJSON(aux);
+            console.log("    obj:"+obj)
+            cadena="";
+            $.each(obj, function(key,value) {
+                var k={};
+                k['descripcion'] = value.value;
+                //cadena+=value.value+",";
+                j.push(k);
+            });
+            //cadena = cadena.substring(0, cadena.length-1);
+            //console.log("    cadena:"+cadena)
+            //palabraclave["descripcion"]
+            //j.push(palabraclave);
+        }
+        console.dir(j)
+    return j;
+}
+
 function labelsCamposRequeridos(){
         $("label").each(function( index, e ) {
             var aux = $(e).attr("for");
@@ -327,7 +344,20 @@ function labelsCamposRequeridos(){
         });
 
         // Otros labels de componentes no convencionales
-        $("label[for='eventos_0_id'], label[for='nivel1'], label[for='nivelesacademicos[0].nivel.id'], label[for='palabrasclave'], label[for='areatematica_id']").addClass("campoRequerido");
+        $("label[for='eventos_0_id'], label[for='nivel1'], label[for='nivelesacademicos[0].nivel.id'], label[for='palabrasClave'], label[for='areatematica_id']").addClass("campoRequerido");
 }
 
 
+
+
+function agregarTimeLine(){
+    console.log("------------------");
+    $("#baseTimeLine").clone().attr("id", "renglonTimeLine-"+Date.now()).appendTo("#abc").find("div.row").css("display","block");
+}
+
+
+function eliminarTimeLine(e){
+    console.log("e "+$(e))
+    console.log("e "+$(e).attr("id"))
+    $(e).closest("div.row").remove();
+}

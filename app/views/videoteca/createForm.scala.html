@@ -29,12 +29,12 @@
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <div style="width: 80%" class="center-block">
                     <input type="submit"  onsubmit="javascript:agregaJSON()"  value="Agregar" class="btn btn-primary btn-block">
-                    <input type="button"  onclick="javascript:agregaJSON2()"  value="Agregar json" class="btn btn-primary btn-block">
+                    <!--input type="button"  onclick="javascript:agregaJSON2()"  value="Agregar json" class="btn btn-primary btn-block"-->
                 </div>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <div style="width: 80%" class="center-block">
-                    <a href="@routes.AdminAccesorioController.list()" class="btn btn-warning btn-block">Cancelar</a>
+                    <a href="@routes.VideotecaController.catalogo()" class="btn btn-warning btn-block">Cancelar</a>
                 </div>
             </div>
         </div>
@@ -72,7 +72,7 @@
         $("#anioProduccion").prop("max","@anio");
 
         // Palabras clave
-        var inputpc = document.querySelector("textarea[id='palabrasclave']"),
+        var inputpc = document.querySelector("textarea[id='palabrasClaveStr']"),
         tagifyPC = new Tagify(inputpc);
 
 
@@ -117,25 +117,24 @@
             }
         })
         */
-/*
-        $("button[name='laBotoniza']").off("click");
-        $("button[name='laBotoniza']").on("click", function(e){
-            e.preventDefault();
-            console.log("laBotoniza")
-            var indice = $("button[name='laBotoniza']").index( $(this)   );
-            console.log( indice  )
-            console.log( $("button[name='laBotoniza']").eq(indice) )
-            console.log( $("button[name='laBotoniza']").eq(indice).id )
-
-            var id = $(this).prop("id").substring( $(this).prop("id").indexOf("_")+1   );
-
-            console.log("id->"+id)
-
-            console.log(  $("#ta"+id).val() )
 
 
-        })
-*/
+        const mObra = IMask(document.getElementById('obra'), {
+                  mask: '00/00',
+                  lazy: false,
+                  autofix: true
+        });
+
+        const mDuracion = IMask(document.getElementById('duracionStr'), {
+                  mask: 'h:m:s',
+                  lazy: false,
+                  autofix: true,
+                  blocks: {
+                      h: {mask: IMask.MaskedRange, placeholderChar: 'h', from: 0, to: 999, maxLength: 3},
+                      m: {mask: IMask.MaskedRange, placeholderChar: 'm', from: 0, to: 59, maxLength: 2},
+                      s: {mask: IMask.MaskedRange, placeholderChar: 's', from: 0, to: 59, maxLength: 2}
+                  }
+        });
 
         const mDesde = IMask(document.getElementById('desde'), {
                   mask: 'h:m:s',

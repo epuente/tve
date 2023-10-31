@@ -10,3 +10,7 @@ sbt
 compile
 run
 exit
+run}
+run
+;clean;reload;compile
+run

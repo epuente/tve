@@ -97,13 +97,13 @@
                         <dl class=" " id="niverlacademico_field">
                             <dt><label for="nivel1">Nivel</label></dt>
                             <dd>
-                                <input type="checkbox" id="nivel1" name="nivelesacademicos[0].nivel.id" value="1" class="input-block-level" data-name="cbNivelAcademico">
+                                <input type="checkbox" id="nivel1" name="niveles[0].nivel.id" value="1" class="input-block-level" data-name="cbNivelAcademico">
                                 <span style="margin-right:20px;" > @models.Nivel.find.byId(1).descripcion</span>
-                                <input type="checkbox" id="nivel2" name="nivelesacademicos[1].nivel.id" value="2" class="input-block-level" data-name="cbNivelAcademico">
+                                <input type="checkbox" id="nivel2" name="niveles[1].nivel.id" value="2" class="input-block-level" data-name="cbNivelAcademico">
                                 <span style="margin-right:20px;" > @models.Nivel.find.byId(2).descripcion</span>
-                                <input type="checkbox" id="nivel3" name="nivelesacademicos[2].nivel.id" value="3" class="input-block-level" data-name="cbNivelAcademico">
+                                <input type="checkbox" id="nivel3" name="niveles[2].nivel.id" value="3" class="input-block-level" data-name="cbNivelAcademico">
                                 <span style="margin-right:20px;" > @models.Nivel.find.byId(3).descripcion</span>
-                                <input type="checkbox" id="nivel4" name="nivelesacademicos[3].nivel.id" value="4" class="input-block-level" data-name="cbNivelAcademico">
+                                <input type="checkbox" id="nivel4" name="niveles[3].nivel.id" value="4" class="input-block-level" data-name="cbNivelAcademico">
                                 <span style="margin-right:20px;" > @models.Nivel.find.byId(4).descripcion</span>
                             </dd>
                             <dd class="info"> </dd>
@@ -265,11 +265,12 @@
 
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-                    @inputText(forma("obra"), '_label -> "Obra", 'class->"form-control" )
+                    @inputText(forma("obra"), '_label -> "Obra", 'class->"form-control", '_help->"xx/xx" )
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
-                        @inputText(forma("duracionStr"), 'type->"time", 'step->"1", '_label -> "Duración", 'class->"form-control", '_help->"hh:mm:ss" )
+                        @*inputText(forma("duracionStr"), 'type->"time", 'step->"1", '_label -> "Duración", 'class->"form-control", '_help->"hh:mm:ss" ) *@
+                        @inputText(forma("duracionStr"), '_label -> "Duración", 'class->"form-control", '_help->"hhh:mm:ss" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -333,15 +334,18 @@
     </div>
 
     <!-- Palabras clave -->
+    <textarea style='display:none;' name='txaPalabrasClave' id='txaPalabrasClave'></textarea>
+
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12">
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12">
-                            <label for="palabrasclave">Palabras Clave</label>
+                            <input type="text" name="palabrasClave[0].descripcion" value="ladescripcion" style="display:none"></input>
+                            <label for="palabrasClaveStr">Palabras Clave</label>
                             <div class="form-group">
-                                <textarea id="palabrasclave"  class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Ejemplo: Matemáticas discretas"></textarea>
+                                <textarea id="palabrasClaveStr"  name="palabrasClaveStr"  class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Ejemplo: Matemáticas discretas"></textarea>
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -380,8 +384,6 @@
                                     @for(s <- auxCreditos) {
                                         <div role="tabpanel" class="tab-pane @if(s.id==1){ active}" id="@s.id" name="losTabs">
                                             <textarea id="ta@s.id" name="tasCreditos" class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Escriba los nombres de las personas que participaron en @s.accion"></textarea>
-                                            <br>
-                                            <button name="laBotoniza" id="btnValoresTab_@s.id">Valores</button>
                                         </div>
                                     }
                                 </div>
@@ -389,7 +391,7 @@
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-12">
                                         <p class="small" style="margin-top: 5px;">
-                                            Escriba los nombres del personal que participó
+                                                Escriba los nombres del personal que participó en cada una de los apartados
                                         </p>
                                     </div>
                                 </div>
@@ -405,82 +407,19 @@
     <!-- TimeLine -->
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="row">
-                <div class="col-sm-12 col-md-12 col-lg-12"><h2>Intervención de personajes  <i class="fas fa-plus-circle" style="cursor:pointer;"></i></h2></div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-md-1 col-lg-1">
-                    <div class="form-group">
-                        <dl class=" " id="desde_field">
-                            <dt><label for="desde">Inicio</label></dt>
-                            <dd>
-                                <input type="text" id="desde" name="desde" value="" class="form-control" placeholder="001:32:14">
-                            </dd>
-                        </dl>
-                        <div class="help-block with-errors"><ul class="list-unstyled"><li></li></ul></div>
+            <div id="abc">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12"><h2>Intervención de personajes  <a href="javascript:agregarTimeLine();" data-toggle="popover" data-content="Agregar Catalogo" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a></h2></div>
                     </div>
-                </div>
-                <div class="col-sm-12 col-md-1 col-lg-1">
-                    <div class="form-group">
-                        <dl class=" " id="hasta_field">
-                            <dt><label for="hasta">Término</label></dt>
-                            <dd>
-                                <input type="text" id="hasta" name="hasta" value="" class="form-control"  placeholder="Ejem. 001:57:04">
-                            </dd>
-                        </dl>
-                        <div class="help-block with-errors"><ul class="list-unstyled"><li></li></ul></div>
+                    <div class="row" id="headersTimeLine">
+                        <div class="col-sm-12 col-md-1 col-lg-1">Inicio</div>
+                        <div class="col-sm-12 col-md-1 col-lg-1">Término</div>
+                        <div class="col-sm-12 col-md-1 col-lg-2">Nombre</div>
+                        <div class="col-sm-12 col-md-1 col-lg-1">Grado</div>
+                        <div class="col-sm-12 col-md-1 col-lg-1">Cargo</div>
+                        <div class="col-sm-12 col-md-1 col-lg-5">Título o tema</div>
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
                     </div>
-                </div>
-                <div class="col-sm-12 col-md-3 col-lg-2">
-                    <div class="form-group">
-                        <dl class=" " id="personaje_field">
-                            <dt><label for="personaje">Nombre</label></dt>
-                            <dd>
-                                <input type="text" id="personaje" name="personaje" value="" class="form-control" placeholder="Ejem. Juán Pérez López">
-                            </dd>
-                        </dl>
-                        <div class="help-block with-errors"><ul class="list-unstyled"><li></li></ul></div>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-1 col-lg-1">
-                    <div class="form-group">
-                        <dl class=" " id="grado_field">
-                            <dt><label for="grado">Grado</label></dt>
-                            <dd>
-                                <input type="text" id="grado" name="grado" value="" class="form-control" placeholder="Ejem. Lic.">
-                            </dd>
-                        </dl>
-                        <div class="help-block with-errors"><ul class="list-unstyled"><li></li></ul></div>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-1 col-lg-1">
-                    <div class="form-group">
-                        <dl class=" " id="cargo_field">
-                            <dt><label for="cargo">Cargo</label></dt>
-                            <dd>
-                                <input type="text" id="cargo" name="cargo" value="" class="form-control" placeholder="Ejem. Director">
-                            </dd>
-                        </dl>
-                        <div class="help-block with-errors"><ul class="list-unstyled"><li></li></ul></div>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-1 col-lg-5">
-                    <div class="form-group">
-                        <dl class="" id="tema_field">
-                            <dt><label for="tema">Título o tema</label></dt>
-                            <dd>
-                                <input type="text" id="tema" name="tema" value="" class="form-control" placeholder="Ejem. Antecedentes de la escuela">
-                            </dd>
-                        </dl>
-                        <div class="help-block with-errors"><ul class="list-unstyled"><li></li></ul></div>
-                    </div>
-                </div>
-                <div class="col-sm-1 col-md-1 col-lg-1">
-                    <h2 style="cursor:pointer;">
-                        <br>
-                        <a onclick=""><i class="fas fa-trash-alt"></i></a>
-                    </h2>
-                </div>
             </div>
         </div>
     </div>
@@ -527,6 +466,50 @@
         </div>
     </div>
 
-
-
 </fieldset>
+
+<div id="baseTimeLine">
+    <div class="row"  style="display:none">
+        <div class="col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+                <input type="text" id="desde" name="desde" value="" class="form-control" placeholder="001:32:14">
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+                <input type="text" id="hasta" name="hasta" value="" class="form-control"  placeholder="Ejem. 001:57:04">
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-2">
+            <div class="form-group">
+                <input type="text" id="personaje" name="personaje" value="" class="form-control" placeholder="Ejem. Juán Pérez López">
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+                <input type="text" id="grado" name="grado" value="" class="form-control" placeholder="Ejem. Lic.">
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+                <input type="text" id="cargo" name="cargo" value="" class="form-control" placeholder="Ejem. Director">
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-1 col-lg-5">
+            <div class="form-group">
+                <input type="text" id="tema" name="tema" value="" class="form-control" placeholder="Ejem. Antecedentes de la escuela">
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="col-sm-1 col-md-1 col-lg-1" data-name="iconEliminar">
+            <h2 style="cursor:pointer;">
+                <a onclick="eliminarTimeLine(this)"><i class="fas fa-trash-alt"></i></a>
+            </h2>
+        </div>
+    </div>
+</div>

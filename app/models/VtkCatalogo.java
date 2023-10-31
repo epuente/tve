@@ -101,7 +101,6 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     public Personal catalogador;
 
     @OneToMany (orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "catalogo")
-    @NotNull
     public List<VtkTimeLine> timeline;
 
     @Column(length = 150)
