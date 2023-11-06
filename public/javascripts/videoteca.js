@@ -113,7 +113,7 @@ function agregaJSON2(){
     var json ={};
     var strEventos ="";
     var strNiveles ="";
-    console.clear();
+  //  console.clear();
     console.log("UR:"+$("#unidadresponsable_id").val())
     json["folio"] = $("#folio").val();
 
@@ -222,14 +222,14 @@ $("form").submit(function(event){
     //event.preventDefault();
     console.log(" - submit -")
     var msgError="";
-    console.clear()
+    //console.clear()
 
     if ( !$("#clave").val() )
         msgError+="No se ha seleccionado un ID.<br>";
      if ($("*[data-name='cbEvento']:checked").length==0)
-        msgError+="No se ha seleccionado un evento<br>";
+        msgError+="Seleccione al menos un evento<br>";
     if ( $("*[data-name='cbNivelAcademico']:checked").length==0)
-        msgError+="Seleccione al meno un nivel<br>";
+        msgError+="Seleccione al menos un nivel<br>";
     if ( !$("#sinopsis").val())
         msgError+="No se ha escrito la sinópsis<br>";
     if ( !$("#formato_id").val())
@@ -256,6 +256,11 @@ $("form").submit(function(event){
                     confirmButtonText: "Aceptar"
             });
             return false;
+    } else {
+        swal("En construcción", "Feltan algunas definiciones para completar esta funcionalidad","warning");
+        event.preventDefault();
+        return false;
+
     }
     $("#cuentas_username").attr('name', 'cuentas[0].username');
     $("#cuentas_password").attr('name', 'cuentas[0].password');
@@ -276,9 +281,6 @@ $("form").submit(function(event){
 
     $("<textarea style='padding-left:100px; display:none;' name='txaCreditos' id='txaCreditos'>"+JSON.stringify(x)+"</textarea>").appendTo("#frmVTKCreate");
     $("#txaPalabrasClave").val(JSON.stringify(valoresPalabrasClave()));
-
-
-
 
 });
 
