@@ -23,7 +23,7 @@
     <h1>Agregar al catálogo de videoteca</h1>
 
     @form(CSRF(routes.VideotecaController.save()), 'role->"form", 'id->"frmVTKCreate", 'name->"frmVTK" , Symbol("data-modo")->"creacion" ) {
-        @videotecaForm(forma, auxCreditos)
+        @videotecaSecuenciaForm(forma, auxCreditos)
         <br/><br/>
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">

@@ -314,7 +314,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         JsonNode json = request().body().asJson();
         System.out.println(json);
         JSONObject jo = new JSONObject();
-        JSONArray ja = new JSONArray();
+    //    JSONArray ja = new JSONArray();
         String campo = json.findValue("campo").asText();
         String cadena = json.findValue("cadena").asText();
         Logger.debug("campo "+campo);
@@ -345,6 +345,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 "FROM serie s " +
                 "WHERE to_tsvector(coalesce(descripcion, ' ')) @@ to_tsquery('"+ts+"') " +
                 "ORDER BY ts_rank(to_tsvector(coalesce(descripcion, ' ')), to_tsquery('"+ts+"')) desc";
+        Logger.debug("query3:    "+query3);
 
 
         final RawSql rawSql3 = RawSqlBuilder.unparsed(query3)
@@ -352,50 +353,45 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 .columnMapping("descripcion", "descripcion")
                 .create();
         List<Serie> list2 = Serie.find.setRawSql(rawSql3).findList();
+
         List<Serie> list3 = new ArrayList<Serie>();
         Logger.debug("list2 tam: "+list2.size());
 
-        /*
-        System.out.println("list1");
-        for (Serie s : list1){
-            System.out.println("    "+s.id+" "+s.descripcion);
-        }
-         */
 
         //ja.put(list1);
         if ( !list1.isEmpty() &&  list1.size()>0)
             list3.addAll(list1);
-        /*
-        System.out.println("list2");
-        for (Serie s : list2){
-            System.out.println("    "+s.id+" "+s.descripcion);
-        }
-         */
-        list3.addAll(list2);
-        ja.put(list3);
+
+        Logger.debug("100");
+
+        if ( !list2.isEmpty() &&  list2.size()>0)
+            list3.addAll(list2);
+        Logger.debug("200");
+
+        Logger.debug("300");
 
         // Para el siguiente código se agregaron los metodos equals y hasCode en la clase Serie
         // Elimina elementos de la lista repetidos
         List<Serie> uniqueSeriesList = list3.stream()
                 .distinct()
                 .collect(Collectors.toList());
+        Logger.debug("400");
 
-        // Imprime la lista de objetos Serie únicos
-        /*
+        // Lista de objetos Serie únicos se pasan a un array de json
+        JSONArray jaUnique = new JSONArray();
         for (Serie serie : uniqueSeriesList) {
-            System.out.println(serie);
+            //System.out.println("    "+serie.id+" - "+serie.descripcion);
+            JSONObject joUnique = new JSONObject();
+            joUnique.put("id", serie.id);
+            joUnique.put("descripcion", serie.descripcion);
+            jaUnique.put(  joUnique  );
         }
-         */
-
-        /*
-        System.out.println("list resultado   uniqueSeriesList");
-        for (Serie s : uniqueSeriesList){
-            System.out.println("    "+s.id+" "+s.descripcion);
-        }
-        */
 
         Logger.debug("uniqueSeriesList (TOTAL) tam: "+uniqueSeriesList.size());
-        jo.put("coincidencias", uniqueSeriesList);
+        //jo.put("coincidencias", uniqueSeriesList);
+        jo.put("coincidencias", jaUnique);
+//        Logger.debug("500");
+//        Logger.debug(jo.toString()    );
         return ok ( jo.toString() );
     }
 

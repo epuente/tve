@@ -9,27 +9,32 @@ $("#serieDescripcion").on("keyup", function(){
     $("#msgCoincidencias").html("");
     $("#divCoincidencias div.list-group button").remove();
     var cadena = $("#serieDescripcion").val();
-    $("#btnNuevaSerie").toggle(cadena.length>1);
-    if (cadena.length==0){
-        console.log("búsqueda vacía");
-    } else {
-        var $f = LlamadaAjax("/textsearch", "POST", JSON.stringify({campo:"serie", cadena:cadena}));
-        $.when($f).done(function(dataTS){
-                console.log("....")
-                console.dir(dataTS)
-                console.log("tam "+dataTS.coincidencias.length)
-                if (dataTS.coincidencias.length!=0){
-                    $("#msgCoincidencias").html("Se encontraron las siguientes "+dataTS.coincidencias.length+" coincidencias:");
-                    for(var c=0; c < dataTS.coincidencias.length; c++){
-                        var aux = dataTS.coincidencias[c];
-                        var comillasEscapadas = aux.descripcion.replace(/"/g, '&#34;');
-                        $("#divCoincidencias div.list-group").append( '<button type="button" class="list-group-item" onclick="javascript:seleccionaSerie('+aux.id+', \''+comillasEscapadas+'\')">'+ aux.descripcion+ '</button>');
+    //if (cadena.length >= 3 ){
+        console.debug("cadena "+cadena)
+        $("#btnNuevaSerie").toggle(cadena.length>1);
+        if (cadena.length==0){
+            console.log("búsqueda vacía");
+        } else {
+            console.log("búsqueda NO vacía");
+
+            var $f = LlamadaAjax("/textsearch", "POST", JSON.stringify({campo:"serie", cadena:cadena}));
+            $.when($f).done(function(dataTS){
+                    console.log("....")
+                    console.dir(dataTS)
+                    console.log("tam "+dataTS.coincidencias.length)
+                    if (dataTS.coincidencias.length!=0){
+                        $("#msgCoincidencias").html("Se encontraron las siguientes "+dataTS.coincidencias.length+" coincidencias:");
+                        for(var c=0; c < dataTS.coincidencias.length; c++){
+                            var aux = dataTS.coincidencias[c];
+                            var comillasEscapadas = aux.descripcion.replace(/"/g, '&#34;');
+                            $("#divCoincidencias div.list-group").append( '<button type="button" class="list-group-item" onclick="javascript:seleccionaSerie('+aux.id+', \''+comillasEscapadas+'\')">'+ aux.descripcion+ '</button>');
+                        }
+                    } else {
+                        $("#msgCoincidencias").html("No se encontraron coincidencias");
                     }
-                } else {
-                    $("#msgCoincidencias").html("No se encontraron coincidencias");
-                }
-            });
-    }
+                });
+        }
+   // }
 });
 
 
