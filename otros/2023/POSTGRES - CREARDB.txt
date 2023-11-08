@@ -6,3 +6,12 @@ create user tve with password 'tve';
 create database tveservicios2023_dev owner tve;
 grant all privileges on database tveservicios2023_dev to tve;
 alter database tveservicios2023_dev owner to tve;
+
+
+INSTALAR EXTENSION UNACCENT
+---------------------------------
+\c tveservicios2023_devnoviembre
+
+CREATE EXTENSION unaccent;
+
+

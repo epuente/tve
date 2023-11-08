@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="tve2023_devAgosto" target="1.8" />
+      <module name="tve2023_devNoviembre" target="1.8" />
+      <module name="tve2023_devOctubre" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="tve2023_devAgosto" options="-Xlint:unchecked -Xlint:deprecation -Werror -J-Xms128M -J-Xmx512m -J-server -encoding utf8 -g" />
+      <module name="tve2023_devNoviembre" options="-Xlint:unchecked -Xlint:deprecation -Werror -J-Xms128M -J-Xmx512m -J-server -encoding utf8 -g" />
+      <module name="tve2023_devOctubre" options="-Xlint:unchecked -Xlint:deprecation -Werror -J-Xms128M -J-Xmx512m -J-server -encoding utf8 -g" />
+    </option>
+  </component>
+</project>

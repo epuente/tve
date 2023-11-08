@@ -13,15 +13,15 @@ public class VtkTimeLine extends models.utils.PlantillaModelo{
     @ManyToOne
     public VideoPersonaje personaje;
 
-    @Column(length = 100)
+    @Column(length = 50)
     public String gradoacademico;
 
-    @Column(length = 100)
+    @Column(length = 50)
     public String cargo;
 
 
-    public Duration desde;
-    public Duration hasta;
+    public Long desde;
+    public Long hasta;
 
     @Column(length = 200)
     public String tema;

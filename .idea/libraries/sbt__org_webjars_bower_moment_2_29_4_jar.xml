@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="sbt: org.webjars.bower:moment:2.29.4:jar" external-system-id="SBT">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/org.webjars.bower/moment/jars/moment-2.29.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/org.webjars.bower/moment/srcs/moment-2.29.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

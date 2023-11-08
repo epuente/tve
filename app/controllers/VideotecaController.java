@@ -653,8 +653,10 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
 
         JSONArray jsonArr = new JSONArray(forma.field("txaPalabrasClave").value());
-        Logger.debug(String.valueOf(jsonArr));
+        JSONArray jsonArrTL = new JSONArray(forma.field("txaTimeLine").value());
 
+        Logger.debug(String.valueOf(jsonArr));
+        ////// Palabras Clave
         vtk.palabrasClave.clear();
         vtk.palabrasClave = new ArrayList<>();
         Logger.debug("iniciando ciclo: ");
@@ -695,8 +697,65 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             throw new RuntimeException(e);
         }
 
+
+
         vtk.catalogador = usuarioActual;
         vtk.save();
+        vtk.refresh();
+        Long idVTK = vtk.id;
+
+        /////////// TimeLine
+        vtk.timeline.clear();
+        JSONArray jsonArrTimeLine = new JSONArray(forma.field("txaTimeLine").value());
+        for (int i=0; i< jsonArrTimeLine.length(); i++){
+            VtkTimeLine tl = new VtkTimeLine();
+            JSONObject objTL = jsonArrTimeLine.getJSONObject(i);
+
+            if (objTL.get("desde").toString().length()!=0) {
+                Duracion dDesde = new Duracion();
+                dDesde.convertir(objTL.get("desde").toString());
+                tl.desde = dDesde.totalSegundos();
+            }
+            if (objTL.get("hasta").toString().length()!=0) {
+                Duracion dHasta = new Duracion();
+                dHasta.convertir(objTL.get("hasta").toString());
+                tl.hasta = dHasta.totalSegundos();
+            }
+            if (objTL.get("nombre").toString().length()!=0){
+                Long idVP = null;
+                VideoPersonaje vp = new VideoPersonaje();
+                String elNombre = objTL.get("nombre").toString();
+                // Busca en VideoPersonaje que exista la persona, sino lo crea
+                List<VideoPersonaje> existePersonaje = VideoPersonaje.find.where().ilike("nombre", elNombre).findList();
+                if ( existePersonaje.size()==0 ){
+                    vp.catalogo = VtkCatalogo.find.byId(idVTK);
+                    vp.nombre = elNombre;
+                    vp.save();
+                    vp.refresh();
+                    idVP = vp.id;
+                    tl.personaje = vp;
+                }
+                if ( existePersonaje.size()!=0 ){
+                    tl.personaje = existePersonaje.get(0);
+                }
+
+
+            }
+            if (objTL.get("grado").toString().length()!=0){
+                tl.gradoacademico = objTL.get("grado").toString();
+            }
+            if (objTL.get("cargo").toString().length()!=0){
+                tl.cargo = objTL.get("cargo").toString();
+            }
+            if (objTL.get("tema").toString().length()!=0){
+                tl.tema = objTL.get("tema").toString();
+            }
+
+            vtk.timeline.add(tl);
+        }
+        vtk.update();
+
+
         flash("success", "Se agregó al acervo");
         return redirect( routes.VideotecaController.catalogo() );
     }

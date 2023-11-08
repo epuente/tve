@@ -196,11 +196,6 @@ function agregaJSON2(){
     }
 
 
-
-
-
-
-
     console.log("---------------");
     console.log(JSON.stringify(json));
     console.log("---------------");
@@ -212,14 +207,11 @@ function agregaJSON2(){
                 console.dir(data)
             });
 
-
-
-
 }
 
 
 $("form").submit(function(event){
-    //event.preventDefault();
+   // event.preventDefault();
     console.log(" - submit -")
     var msgError="";
     //console.clear()
@@ -256,32 +248,35 @@ $("form").submit(function(event){
                     confirmButtonText: "Aceptar"
             });
             return false;
-    } else {
-        swal("En construcción", "Feltan algunas definiciones para completar esta funcionalidad","warning");
-        event.preventDefault();
-        return false;
-
     }
-    $("#cuentas_username").attr('name', 'cuentas[0].username');
-    $("#cuentas_password").attr('name', 'cuentas[0].password');
+    else {
+        //swal("En construcción", "Faltan algunas definiciones para completar esta funcionalidad","warning");
+        //event.preventDefault();
 
-    $("[type='checkbox'][id^='auxRoles_']:checked").each(function(i,e){
-        $(this).attr("name","cuentas[0].roles["+i+"].rol.id");
-    });
+        $("#cuentas_username").attr('name', 'cuentas[0].username');
+        $("#cuentas_password").attr('name', 'cuentas[0].password');
+
+        $("[type='checkbox'][id^='auxRoles_']:checked").each(function(i,e){
+            $(this).attr("name","cuentas[0].roles["+i+"].rol.id");
+        });
 
 
-    var x = {};
-    var ppcc = {};
+        var x = {};
+        var ppcc = {};
 
-    x['losDatos']=valoresCreditos();
-    ppcc['lasPalabras'] = valoresPalabrasClave();
+        x['losDatos']=valoresCreditos();
+        ppcc['lasPalabras'] = valoresPalabrasClave();
 
-    $("<input type='text' name='palabrasClave[0].descripcion' value='uno'>").appendTo("#frmVTKCreate");
-    $("<input type='text' name='palabrasClave[1].descripcion' value='dos'>").appendTo("#frmVTKCreate");
+        $("<input type='text' name='palabrasClave[0].descripcion' value='uno'>").appendTo("#frmVTKCreate");
+        $("<input type='text' name='palabrasClave[1].descripcion' value='dos'>").appendTo("#frmVTKCreate");
 
-    $("<textarea style='padding-left:100px; display:none;' name='txaCreditos' id='txaCreditos'>"+JSON.stringify(x)+"</textarea>").appendTo("#frmVTKCreate");
-    $("#txaPalabrasClave").val(JSON.stringify(valoresPalabrasClave()));
+        $("<textarea style='padding-left:100px; display:none;' name='txaCreditos' id='txaCreditos'>"+JSON.stringify(x)+"</textarea>").appendTo("#frmVTKCreate");
+        $("#txaPalabrasClave").val(JSON.stringify(valoresPalabrasClave()));
+        $("#txaTimeLine").val(JSON.stringify(valoresTimeLine()));
 
+        //event.preventDefault();
+        //return false;
+    }
 });
 
 
@@ -313,7 +308,7 @@ function valoresCreditos(){
 
 function valoresPalabrasClave(){
     var j=[];
-    var palabraclave={};
+  //  var palabraclave={};
         aux= $("#palabrasClaveStr").val();
         console.log("    aux:"+aux+"("+aux.length+")")
         if (aux.length!=0){
@@ -335,6 +330,38 @@ function valoresPalabrasClave(){
     return j;
 }
 
+function valoresTimeLine(){
+    var j=[];
+
+    $("div[id^='renglonTimeLine-']").each(function(i,e){
+        var renglon = {};
+        var auxDesde = $(e).find("input[name='desde']").val();
+        var auxHasta = $(e).find("input[name='hasta']").val();
+        var auxNombre = $(e).find("input[name='personaje']").val();
+        var auxGrado = $(e).find("input[name='grado']").val();
+        var auxCargo = $(e).find("input[name='cargo']").val();
+        var auxTema = $(e).find("input[name='tema']").val();
+        console.log("auxDesde "+ auxDesde)
+        console.log("auxHasta "+ auxHasta)
+        if (auxDesde.length!=0)
+            renglon['desde'] = auxDesde;
+        if (auxHasta.length!=0)
+            renglon['hasta'] = auxHasta;
+        if (auxNombre.length>0)
+            renglon['nombre'] = auxNombre;
+        if (auxGrado.length>0)
+            renglon['grado'] = auxGrado;
+        if (auxCargo.length>0)
+            renglon['cargo'] = auxCargo;
+        if (auxTema.length>0)
+            renglon['tema'] = auxTema;
+
+        j.push(renglon);
+    });
+    return j;
+}
+
+
 function labelsCamposRequeridos(){
         $("label").each(function( index, e ) {
             var aux = $(e).attr("for");
@@ -346,7 +373,7 @@ function labelsCamposRequeridos(){
         });
 
         // Otros labels de componentes no convencionales
-        $("label[for='eventos_0_id'], label[for='nivel1'], label[for='nivelesacademicos[0].nivel.id'], label[for='palabrasClave'], label[for='areatematica_id']").addClass("campoRequerido");
+        $("label[for='eventos_0_id'], label[for='nivel1'], label[for='nivelesacademicos[0].nivel.id'], label[for='palabrasClaveStr'], label[for='areatematica_id']").addClass("campoRequerido");
 }
 
 
@@ -354,7 +381,39 @@ function labelsCamposRequeridos(){
 
 function agregarTimeLine(){
     console.log("------------------");
-    $("#baseTimeLine").clone().attr("id", "renglonTimeLine-"+Date.now()).appendTo("#abc").find("div.row").css("display","block");
+    var now = Date.now();
+    $("#baseTimeLine").clone().attr("id", "renglonTimeLine-"+ now ).appendTo("#abc").find("div.row").css("display","block");
+
+    $("*[name='desde']").each(function(i,e){
+        var mMascaraDesde = IMask(e, {
+                                     mask: 'h:m:s',
+                                     lazy: false,
+                                     autofix: true,
+                                     blocks: {
+                                         h: {mask: IMask.MaskedRange, placeholderChar: 'h', from: 0, to: 999, maxLength: 3},
+                                         m: {mask: IMask.MaskedRange, placeholderChar: 'm', from: 0, to: 59, maxLength: 2},
+                                         s: {mask: IMask.MaskedRange, placeholderChar: 's', from: 0, to: 59, maxLength: 2}
+                                     }
+                           });
+    });
+
+    $("*[name='hasta']").each(function(i,e){
+        var mMascaraHasta = IMask(e, {
+                                     mask: 'h:m:s',
+                                     lazy: false,
+                                     autofix: true,
+                                     blocks: {
+                                         h: {mask: IMask.MaskedRange, placeholderChar: 'h', from: 0, to: 999, maxLength: 3},
+                                         m: {mask: IMask.MaskedRange, placeholderChar: 'm', from: 0, to: 59, maxLength: 2},
+                                         s: {mask: IMask.MaskedRange, placeholderChar: 's', from: 0, to: 59, maxLength: 2}
+                                     }
+                           });
+    });
+
+
+
+
+
 }
 
 
@@ -362,4 +421,17 @@ function eliminarTimeLine(e){
     console.log("e "+$(e))
     console.log("e "+$(e).attr("id"))
     $(e).closest("div.row").remove();
+}
+
+
+function segundosACadena(seconds) {
+  var hour = Math.floor(seconds / 3600);
+  hour = (hour < 10)? '0' + hour : hour;
+  if (hour.length<3)
+    hour = "0"+hour;
+  var minute = Math.floor((seconds / 60) % 60);
+  minute = (minute < 10)? '0' + minute : minute;
+  var second = seconds % 60;
+  second = (second < 10)? '0' + second : second;
+  return hour + ':' + minute + ':' + second;
 }

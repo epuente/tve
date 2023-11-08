@@ -1089,9 +1089,7 @@ create table video_personaje (
   audit_insert              timestamp,
   audit_update              timestamp,
   catalogo_id               bigint,
-  paterno                   varchar(50),
-  materno                   varchar(50),
-  nombre                    varchar(50),
+  nombre                    varchar(200),
   constraint pk_video_personaje primary key (id))
 ;
 
@@ -1158,8 +1156,10 @@ create table vtk_time_line (
   audit_update              timestamp,
   catalogo_id               bigint,
   personaje_id              bigint,
-  gradoacademico            varchar(100),
-  cargo                     varchar(100),
+  gradoacademico            varchar(50),
+  cargo                     varchar(50),
+  desde                     bigint,
+  hasta                     bigint,
   tema                      varchar(200),
   constraint pk_vtk_time_line primary key (id))
 ;

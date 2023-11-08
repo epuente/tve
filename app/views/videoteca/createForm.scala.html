@@ -136,27 +136,8 @@
                   }
         });
 
-        const mDesde = IMask(document.getElementById('desde'), {
-                  mask: 'h:m:s',
-                  lazy: false,
-                  autofix: true,
-                  blocks: {
-                      h: {mask: IMask.MaskedRange, placeholderChar: 'h', from: 0, to: 999, maxLength: 3},
-                      m: {mask: IMask.MaskedRange, placeholderChar: 'm', from: 0, to: 59, maxLength: 2},
-                      s: {mask: IMask.MaskedRange, placeholderChar: 's', from: 0, to: 59, maxLength: 2}
-                  }
-        });
 
-        const mHasta = IMask(document.getElementById('hasta'), {
-                  mask: 'h:m:s',
-                  lazy: false,
-                  autofix: true,
-                  blocks: {
-                      h: {mask: IMask.MaskedRange, placeholderChar: 'h', from: 0, to: 999, maxLength: 3},
-                      m: {mask: IMask.MaskedRange, placeholderChar: 'm', from: 0, to: 59, maxLength: 2},
-                      s: {mask: IMask.MaskedRange, placeholderChar: 's', from: 0, to: 59, maxLength: 2}
-                  }
-        });
+
         labelsCamposRequeridos();
     });  // fin del $(function()
 

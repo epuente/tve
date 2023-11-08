@@ -115,14 +115,18 @@ fechaP:@forma.get().fechaProduccion
 //aqui me quedé hay un error en la funcio leer
 
     function leer(){
-        $("#unidadresponsable_id").val("@forma.get().unidadresponsable.id");
-        $("#URDescripcion").val("@forma.get().unidadresponsable.nombreLargo");
+        @if(forma.get().unidadresponsable!=null){
+            $("#unidadresponsable_id").val("@forma.get().unidadresponsable.id");
+            $("#URDescripcion").val("@forma.get().unidadresponsable.nombreLargo");
+        }
 
-        @if(forma.get().serie.id!=null){
+        @if(forma.get().serie!=null){
             $("#serie_id").val("@forma.get().serie.id");
         }
 
-        $("#serieDescripcion").val( "@forma.get().serie.descripcion"  );
+        @if(forma.get().serie!=null){
+            $("#serieDescripcion").val( "@forma.get().serie.descripcion"  );
+        }
 
         console.log("duracion: @cDuracion.horas:@cDuracion.minutos:@cDuracion.segundos")
         $("#duracion").val("@cDuracion.cadena()");
@@ -172,6 +176,36 @@ fechaP:@forma.get().fechaProduccion
             tagifyCreds.addTags("@c.personas");
 
         }
+
+
+        // TimeLine
+        console.log("timeline @forma.get().timeline.size()")
+        @for(c<-forma.get().timeline){
+            agregarTimeLine();
+            var renglonesTL = $("div[id^='renglonTimeLine-']").length;
+            console.log("@c.desde  -  @c.hasta");
+            @if(c.desde!=null){
+                $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='desde']").val( segundosACadena("@c.desde") );
+            }
+            @if(c.hasta!=null){
+                $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='hasta']").val( segundosACadena("@c.hasta") );
+            }
+            @if(c.personaje.nombre.length>0){
+
+                $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='personaje']").val( "@c.personaje.nombre" );
+            }
+            @if(c.gradoacademico.length>0){
+                $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='grado']").val( "@c.gradoacademico" );
+            }
+            @if(c.cargo.length>0){
+                $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='cargo']").val( "@c.cargo" );
+            }
+            @if(c.tema.length>0){
+                $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='tema']").val( "@c.tema" );
+            }
+        }
+
+
 
         $("#divRegistro").append("Registro :"+moment("@forma.get().auditInsert").format("DD-MM-YY HH:mm:ss")+"<br>Última actualización: "+moment("@forma.get().auditUpdate").format("DD-MM-YY HH:mm:ss")).show();
 
