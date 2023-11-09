@@ -935,7 +935,7 @@ create table produccion (
   audit_update              timestamp,
   descripcion               varchar(100) not null,
   sigla                     varchar(255),
-  usuario_id                bigint,
+  catalogador_id            bigint,
   constraint pk_produccion primary key (id))
 ;
 
@@ -1656,8 +1656,8 @@ alter table pre_agenda_salida add constraint fk_pre_agenda_salida_preagen_130 fo
 create index ix_pre_agenda_salida_preagen_130 on pre_agenda_salida (preagenda_id);
 alter table pre_agenda_vehiculo add constraint fk_pre_agenda_vehiculo_preag_131 foreign key (preagenda_id) references pre_agenda (id);
 create index ix_pre_agenda_vehiculo_preag_131 on pre_agenda_vehiculo (preagenda_id);
-alter table produccion add constraint fk_produccion_usuario_132 foreign key (usuario_id) references personal (id);
-create index ix_produccion_usuario_132 on produccion (usuario_id);
+alter table produccion add constraint fk_produccion_catalogador_132 foreign key (catalogador_id) references personal (id);
+create index ix_produccion_catalogador_132 on produccion (catalogador_id);
 alter table registro_acceso add constraint fk_registro_acceso_usuario_133 foreign key (usuario_id) references personal (id);
 create index ix_registro_acceso_usuario_133 on registro_acceso (usuario_id);
 alter table registro_acceso add constraint fk_registro_acceso_rol_134 foreign key (rol_id) references rol (id);

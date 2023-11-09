@@ -289,10 +289,8 @@ POST    /textsearch                         controllers.VideotecaController.text
 POST    /nuevaSerie                         controllers.VideotecaController.nuevaSerie()
 POST    /textsearchCampoCompleto            controllers.VideotecaController.textsearchCampoCompleto()
 
-#POST    /textsearchUR                       controllers.VideotecaController.textsearchUR()
 POST    /nuevaUR                            controllers.VideotecaController.nuevaUR()
-#POST    /textsearchCampoCompletoUR          controllers.VideotecaController.textsearchCampoCompletoUR()
-
+POST    /nuevaProduccion                    controllers.VideotecaController.nuevaProduccion()
 
 GET     /vtkcarga                           controllers.VideotecaController.cargaInicial()
 GET     /vtkCatalogo/edit/:id               controllers.VideotecaController.catalogoEdit(id:Long)

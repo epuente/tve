@@ -15,3 +15,5 @@ exit
 run
 ;clean;reload;compile;run
 exit
+;clean;reload;compile;run
+exit

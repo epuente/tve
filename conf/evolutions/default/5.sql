@@ -146,6 +146,7 @@ select setval( 'serie_seq', (select max(id)+1 from serie), true);
 select setval( 'vtk_catalogo_seq', (select max(id)+1 from vtk_catalogo), true);
 select setval( 'vtk_evento_seq', (select max(id)+1 from vtk_evento), true);
 select setval( 'vtk_nivel_seq', (select max(id)+1 from vtk_nivel), true);
+select setval( 'produccion_seq', (select max(id)+1 from produccion), true);
 
  # --- !Downs
 

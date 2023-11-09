@@ -92,8 +92,6 @@ $("#btnNuevaSerie").on("click", function(e){
             });
         }
     });
-
-
 });
 
 // Cuando se da click a un elemento de la lista de coincidencias de serie

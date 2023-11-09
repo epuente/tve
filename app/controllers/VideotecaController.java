@@ -63,15 +63,16 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         List<Serie> series = Serie.find.all();
         for( Serie  s : series){
             long c = VtkCatalogo.find.where().eq("serie.id", s.id).findRowCount();
-           // arrSeriesLabels.put(org.apache.commons.lang3.text.WordUtils.capitalizeFully( s.descripcion));
-            arrSeriesLabels.put( new CapitalizaCadena(s.descripcion).modificado());
+            //arrSeriesLabels.put( new CapitalizaCadena(s.descripcion).modificado());
+            arrSeriesLabels.put( s.descripcion);
             arrSeriesDatos.put(c);
           //  CapitalizaCadena n = new CapitalizaCadena(s.descripcion);
         }
 
         for (Areatematica at : Areatematica.find.all()){
             //arrAreaLabels.put(org.apache.commons.lang3.text.WordUtils.capitalizeFully( at.descripcion));
-            arrAreaLabels.put( new CapitalizaCadena(at.descripcion).modificado());
+            //arrAreaLabels.put( new CapitalizaCadena(at.descripcion).modificado());
+            arrAreaLabels.put( at.descripcion);
             arrAreaDatos.put(  VtkCatalogo.find.where().eq("areatematica.id", at.id).findRowCount() );
         }
 
@@ -90,7 +91,8 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
         for (Idioma i : Idioma.find.all()){
             //arrIdiomaLabels.put(org.apache.commons.lang3.text.WordUtils.capitalizeFully(i.descripcion));
-            arrIdiomaLabels.put( new CapitalizaCadena(i.descripcion).modificado());
+            //arrIdiomaLabels.put( new CapitalizaCadena(i.descripcion).modificado());
+            arrIdiomaLabels.put( i.descripcion);
             arrIdiomaDatos.put( VtkCatalogo.find.where().eq("idioma.id", i.id).findRowCount());
         }
 
@@ -323,6 +325,8 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             query1 ="select id, nombre_largo from unidad_responsable s where unaccent(nombre_largo) ilike unaccent('%"+cadena+"%')";
         if (campo.compareTo("serie")==0)
             query1 ="select id, descripcion from serie s where unaccent(descripcion) ilike unaccent('%"+cadena+"%')";
+        if (campo.compareTo("produccion")==0)
+            query1 ="select id, descripcion from produccion s where unaccent(descripcion) ilike unaccent('%"+cadena+"%')";
         Logger.debug(query1);
         List<SqlRow> sqlRows1 = Ebean.createSqlQuery(query1).findList();
 
@@ -400,7 +404,6 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         Logger.debug("Desde VideotecaController.nuevaSerie");
         JSONObject joRetorno = new JSONObject();
         JsonNode json = request().body().asJson();
-        Serie serie = new Serie();
         Logger.debug(String.valueOf(json));
         joRetorno.put("estado", "error");
 
@@ -422,7 +425,6 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         Logger.debug("Desde VideotecaController.nuevaUR");
         JSONObject joRetorno = new JSONObject();
         JsonNode json = request().body().asJson();
-        UnidadResponsable ur = new UnidadResponsable();
         Logger.debug(String.valueOf(json));
         joRetorno.put("estado", "error");
         UnidadResponsable s = Json.fromJson(json, UnidadResponsable.class);
@@ -434,6 +436,25 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         joRetorno.put("descripcion", s.nombreLargo);
         return ok (joRetorno.toString());
     }
+
+    public static Result nuevaProduccion() throws JSONException {
+        Logger.debug("Desde VideotecaController.nuevaProduccion");
+        JSONObject joRetorno = new JSONObject();
+        JsonNode json = request().body().asJson();
+        Logger.debug(String.valueOf(json));
+        joRetorno.put("estado", "error");
+
+        Produccion p = Json.fromJson(json, Produccion.class);
+        p.catalogador = Personal.find.byId(  Long.parseLong(session("usuario"))  );
+        p.save();
+        p.refresh();
+        joRetorno.put("estado", "ok");
+        joRetorno.put("id", p.id);
+        joRetorno.put("descripcion", p.descripcion);
+        return ok (joRetorno.toString());
+    }
+
+
 
 /*
     public static Result serieList(){
@@ -472,6 +493,10 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         }
         if (campo.compareTo("serie")==0) {
             query1 = "select id, descripcion from serie s where unaccent(descripcion) = unaccent('" + cadena + "')";
+        }
+
+        if (campo.compareTo("produccion")==0) {
+            query1 = "select id, descripcion from produccion s where unaccent(descripcion) = unaccent('" + cadena + "')";
         }
         List<SqlRow> sqlRows1 = Ebean.createSqlQuery(query1).findList();
         /*

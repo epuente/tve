@@ -12,7 +12,7 @@ public class Produccion extends models.utils.PlantillaCatalogo{
     public String sigla;
 
     @ManyToOne
-    public Personal usuario;
+    public Personal catalogador;
 
     public static Model.Finder<Long,Produccion> find = new Model.Finder<Long,Produccion>(Long.class, Produccion.class);
 
