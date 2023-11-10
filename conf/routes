@@ -289,8 +289,10 @@ POST    /textsearch                         controllers.VideotecaController.text
 POST    /nuevaSerie                         controllers.VideotecaController.nuevaSerie()
 POST    /textsearchCampoCompleto            controllers.VideotecaController.textsearchCampoCompleto()
 
+
 POST    /nuevaUR                            controllers.VideotecaController.nuevaUR()
 POST    /nuevaProduccion                    controllers.VideotecaController.nuevaProduccion()
+POST    /nuevaAreaTematica                  controllers.VideotecaController.nuevaAreaTematica()
 
 GET     /vtkcarga                           controllers.VideotecaController.cargaInicial()
 GET     /vtkCatalogo/edit/:id               controllers.VideotecaController.catalogoEdit(id:Long)

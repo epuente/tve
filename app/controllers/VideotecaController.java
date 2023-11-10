@@ -327,6 +327,8 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             query1 ="select id, descripcion from serie s where unaccent(descripcion) ilike unaccent('%"+cadena+"%')";
         if (campo.compareTo("produccion")==0)
             query1 ="select id, descripcion from produccion s where unaccent(descripcion) ilike unaccent('%"+cadena+"%')";
+        if (campo.compareTo("areatematica")==0)
+            query1 ="select id, descripcion from areatematica s where unaccent(descripcion) ilike unaccent('%"+cadena+"%')";
         Logger.debug(query1);
         List<SqlRow> sqlRows1 = Ebean.createSqlQuery(query1).findList();
 
@@ -345,10 +347,29 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         //Se obtiene el ts_query y le quita las comillas simples
         String ts = sqlRow2.getString("plainto_tsquery").toString().replaceAll("'","");;
         Logger.debug("ts: '"+ts+"'");
-        String query3 = "SELECT id, descripcion, ts_rank(to_tsvector(coalesce(descripcion, ' ')), to_tsquery('"+ts+"'))" +
-                "FROM serie s " +
-                "WHERE to_tsvector(coalesce(descripcion, ' ')) @@ to_tsquery('"+ts+"') " +
-                "ORDER BY ts_rank(to_tsvector(coalesce(descripcion, ' ')), to_tsquery('"+ts+"')) desc";
+        String query3 ="";
+        if (campo.compareTo("ur")==0)
+            query3 = "SELECT id, nombre_largo, ts_rank(to_tsvector(coalesce(nombre_largo, ' ')), to_tsquery('"+ts+"'))" +
+                "FROM unidad_responsable s " +
+                "WHERE to_tsvector(coalesce(nombre_largo, ' ')) @@ to_tsquery('"+ts+"') " +
+                "ORDER BY ts_rank(to_tsvector(coalesce(nombre_largo, ' ')), to_tsquery('"+ts+"')) desc";
+        if (campo.compareTo("serie")==0)
+            query3 = "SELECT id, descripcion, ts_rank(to_tsvector(coalesce(descripcion, ' ')), to_tsquery('"+ts+"'))" +
+                    "FROM serie s " +
+                    "WHERE to_tsvector(coalesce(descripcion, ' ')) @@ to_tsquery('"+ts+"') " +
+                    "ORDER BY ts_rank(to_tsvector(coalesce(descripcion, ' ')), to_tsquery('"+ts+"')) desc";
+        if (campo.compareTo("produccion")==0)
+            query3 = "SELECT id, descripcion, ts_rank(to_tsvector(coalesce(descripcion, ' ')), to_tsquery('"+ts+"'))" +
+                    "FROM produccion s " +
+                    "WHERE to_tsvector(coalesce(descripcion, ' ')) @@ to_tsquery('"+ts+"') " +
+                    "ORDER BY ts_rank(to_tsvector(coalesce(descripcion, ' ')), to_tsquery('"+ts+"')) desc";
+        if (campo.compareTo("areatematica")==0)
+            query3 = "SELECT id, descripcion, ts_rank(to_tsvector(coalesce(descripcion, ' ')), to_tsquery('"+ts+"'))" +
+                    "FROM areatematica s " +
+                    "WHERE to_tsvector(coalesce(descripcion, ' ')) @@ to_tsquery('"+ts+"') " +
+                    "ORDER BY ts_rank(to_tsvector(coalesce(descripcion, ' ')), to_tsquery('"+ts+"')) desc";
+
+
         Logger.debug("query3:    "+query3);
 
 
@@ -454,6 +475,23 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         return ok (joRetorno.toString());
     }
 
+    public static Result nuevaAreaTematica() throws JSONException {
+        Logger.debug("Desde VideotecaController.nuevaAreaTematica");
+        JSONObject joRetorno = new JSONObject();
+        JsonNode json = request().body().asJson();
+        Logger.debug(String.valueOf(json));
+        joRetorno.put("estado", "error");
+
+        Areatematica at = Json.fromJson(json, Areatematica.class);
+        at.catalogador = Personal.find.byId(  Long.parseLong(session("usuario"))  );
+        at.save();
+        at.refresh();
+        joRetorno.put("estado", "ok");
+        joRetorno.put("id", at.id);
+        joRetorno.put("descripcion", at.descripcion);
+        return ok (joRetorno.toString());
+    }
+
 
 
 /*
@@ -488,24 +526,15 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         String cadena = json.findValue("cadena").asText();
         Logger.debug(cadena +" - "+campo);
         String query1 = "";
-        if (campo.compareTo("ur")==0){
+        if (campo.compareTo("ur")==0)
             query1 = "select id, nombre_largo from unidad_responsable where unaccent(nombre_largo) = unaccent('"+cadena+"')";
-        }
-        if (campo.compareTo("serie")==0) {
+        if (campo.compareTo("serie")==0)
             query1 = "select id, descripcion from serie s where unaccent(descripcion) = unaccent('" + cadena + "')";
-        }
-
-        if (campo.compareTo("produccion")==0) {
+        if (campo.compareTo("produccion")==0)
             query1 = "select id, descripcion from produccion s where unaccent(descripcion) = unaccent('" + cadena + "')";
-        }
+        if (campo.compareTo("areatematica")==0)
+            query1 = "select id, descripcion from areatematica s where unaccent(descripcion) = unaccent('" + cadena + "')";
         List<SqlRow> sqlRows1 = Ebean.createSqlQuery(query1).findList();
-        /*
-        final RawSql rawSql1 = RawSqlBuilder.unparsed(query1)
-                .columnMapping("id", "id")
-                .columnMapping("descripcion", "descripcion")
-                .create();
-        List<Serie> list1 = Serie.find.setRawSql(rawSql1).findList();
-         */
         Logger.debug("list1 EXISTE tam: "+sqlRows1.size());
         jo.put("coincidencias", sqlRows1.size());
         Logger.debug(jo.toString());
@@ -642,6 +671,10 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
 
         VtkCatalogo vtk = forma.get();
+
+
+
+
 
         Personal usuarioActual = Personal.find.byId(Long.parseLong(session("usuario")));
 
@@ -813,12 +846,14 @@ public class VideotecaController extends ControladorSeguroVideoteca{
     }
 
 
-    public static Result update(){
+    public static Result update() throws JSONException {
         System.out.println("\n\n\nDesde VideotecaController.update");
         Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
         System.out.println(forma);
         VtkCatalogo obj = forma.get();
         VtkCatalogo vtk = VtkCatalogo.find.byId(obj.id);
+        Personal usuarioActual = Personal.find.byId(Long.parseLong(session("usuario")));
+
         vtk.creditos.clear();
         // Convertir duracion (hh:mm:ss) a segundos
         Duracion duracion = new Duracion();
@@ -852,7 +887,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         vtk.areatematica = obj.areatematica;
         vtk.nresguardo = obj.nresguardo;
         vtk.liga = obj.liga;
-        vtk.catalogador = Personal.find.byId(Long.parseLong(session("usuario")));
+        vtk.catalogador = usuarioActual;
         vtk.timeline = obj.timeline;
         vtk.audio = obj.audio;
         vtk.video = obj.video;
@@ -889,6 +924,25 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
+
+
+        JSONArray jsonArr = new JSONArray(forma.field("txaPalabrasClave").value());
+        JSONArray jsonArrTL = new JSONArray(forma.field("txaTimeLine").value());
+
+        Logger.debug(String.valueOf(jsonArr));
+        ////// Palabras Clave
+        vtk.palabrasClave.clear();
+        vtk.palabrasClave = new ArrayList<>();
+        Logger.debug("iniciando ciclo: ");
+        for (int x=0; x< jsonArr.length();x++){
+            PalabraClave pc = new PalabraClave();
+            pc.descripcion = jsonArr.getJSONObject(x).get("descripcion").toString();
+            pc.catalogador = usuarioActual;
+            Logger.debug(pc.descripcion+"  -  "+pc.catalogador.nombreCompleto());
+            vtk.palabrasClave.add(pc);
+        }
+
+
 
        // vtk.catalogador = Personal.find.byId( Long.parseLong(session("usuario")));
         vtk.update();

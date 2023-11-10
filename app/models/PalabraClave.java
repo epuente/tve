@@ -25,7 +25,7 @@ public class PalabraClave extends Model {
     public Personal catalogador;
 
     @NotNull
-    @Column(length = 1500)
+    @Column(length = 30)
     public String descripcion;
     @ManyToOne
     VtkCatalogo catalogo;

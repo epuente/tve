@@ -13,7 +13,7 @@ public class VideoPersonaje extends models.utils.PlantillaModelo{
     public VtkCatalogo catalogo;
 
 
-    @Column(length = 200)
+    @Column(length = 75)
     public String nombre;
 
     public static Model.Finder<Long,VideoPersonaje> find = new Model.Finder<Long,VideoPersonaje>(Long.class, VideoPersonaje.class);

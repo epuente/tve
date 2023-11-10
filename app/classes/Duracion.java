@@ -45,7 +45,7 @@ public class Duracion {
     public String cadena(){
         String retorno="";
         if (horas<10 || horas==0)
-            retorno="0";
+            retorno="00";
         retorno+=horas+":";
         if (minutos<10 || minutos==0)
             retorno+="0";

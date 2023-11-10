@@ -3,9 +3,6 @@
 @import helper._
 @anio = { @(new Date().format("yyyy"))}
 
-id:@forma.get().id
-fechaP:@forma.get().fechaProduccion
-
 <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify"></script>
 <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
@@ -24,7 +21,7 @@ fechaP:@forma.get().fechaProduccion
     <h1>Edición del catálogo de videoteca</h1>
 
     @form(CSRF(routes.VideotecaController.update()), 'role->"form", 'id->"frmVideoteca", 'name->"frmVTK", Symbol("data-modo")->"edicion") {
-        @videotecaForm(forma, auxCreditos)
+        @videotecaSecuenciaForm(forma, auxCreditos)
         <br/><br/>
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
@@ -77,7 +74,7 @@ fechaP:@forma.get().fechaProduccion
         $("#anioProduccion").prop("max","@anio");
 
         // Palabras clave
-        var inputpc = document.querySelector("textarea[id='palabrasclave']"),
+        var inputpc = document.querySelector("textarea[id='palabrasClaveStr']"),
         tagifyPC = new Tagify(inputpc);
 
         var listaBlanca=[];
@@ -129,7 +126,9 @@ fechaP:@forma.get().fechaProduccion
         }
 
         console.log("duracion: @cDuracion.horas:@cDuracion.minutos:@cDuracion.segundos")
+        console.log("duracion cadena: @cDuracion.cadena()")
         $("#duracion").val("@cDuracion.cadena()");
+        $("#duracionStr").val("@cDuracion.cadena()");
 
 
         console.log("@forma.get().fechaProduccion")
@@ -157,7 +156,7 @@ fechaP:@forma.get().fechaProduccion
 
 
         // Palabras clave
-        var inputpc = document.querySelector("textarea[id='palabrasclave']"),
+        var inputpc = document.querySelector("textarea[id='palabrasClaveStr']"),
         tagifyPC = new Tagify(inputpc);
         var arr = [];
         @for(c<-forma.get().palabrasClave){

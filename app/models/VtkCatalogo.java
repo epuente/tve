@@ -38,8 +38,9 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
 
 
 
-    @Column(length = 100)
+    @Column(length = 200)
     public String titulo;
+
     @Column(length = 3000)
     @NotNull
     public String sinopsis;

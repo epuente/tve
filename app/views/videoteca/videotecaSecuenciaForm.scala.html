@@ -8,13 +8,13 @@
             <div class="row">
                 <div class="col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
-                         @inputText(forma("folio"), '_label -> "1. Clave clasificatoria", 'class->"form-control campoRequerido", 'placeholder->"Ejem. DIRGRAL980125", '_help->"El folio del oficio" )
+                         @inputText(forma("folio"), '_label -> "1. Clave clasificatoria", 'class->"form-control campoRequerido", 'maxlength->"30",  'placeholder->"Ejem. DIRGRAL980125", '_help->"El folio del oficio" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
-                        @inputText(forma("clave"), '_label -> "2. ID", 'class->"form-control", 'required->true, 'placeholder->"Ejem. BCT-00081-30",  '_help->"Identificador Videoteca" )
+                        @inputText(forma("clave"), '_label -> "2. ID", 'class->"form-control", 'required->true, 'maxlength->"30", 'placeholder->"Ejem. BCT-00081-30",  '_help->"Identificador Videoteca" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                             <dl class=" " id="descripcionUR_field">
                                 <dt><label for="URDescripcion">3. Instancia solicitante</label></dt>
                                 <dd>
-                                    <input type="text" id="URDescripcion" value="" class="form-control" placeholder="Ejem. Escuela Nacional de Biblioteconomía y Archivonomía">
+                                    <input type="text" id="URDescripcion" value=""  maxlength="150",  class="form-control" placeholder="Ejem. Escuela Nacional de Biblioteconomía y Archivonomía">
                                 </dd>
                             </dl>
                             <div class="help-block with-errors"></div>
@@ -112,7 +112,7 @@
                 </div>
                 <div class="col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
-                        @inputText(forma("folioDEV"), '_label -> "6. Folio DEV", 'class->"form-control",  'placeholder->"Ejem. 0225689", '_help->"Folio cuando se recibe en la DEV" )
+                        @inputText(forma("folioDEV"), '_label -> "6. Folio DEV",  'maxlength->"30",  'class->"form-control",  'placeholder->"Ejem. 0225689", '_help->"Folio cuando se recibe en la DEV" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -142,7 +142,7 @@
                                     <dl class=" " id="descripcion_field">
                                         <dt><label for="serieDescripcion">7. Serie</label></dt>
                                         <dd>
-                                            <input type="text" id="serieDescripcion" value="" class="form-control" placeholder="Ejem. Agenda Politécnica">
+                                            <input type="text" id="serieDescripcion" value=""  maxlength="500",  class="form-control" placeholder="Ejem. Agenda Politécnica">
                                         </dd>
                                     </dl>
                                     <div class="help-block with-errors"></div>
@@ -159,10 +159,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
-
                         </div>
                         <div class="col-sm-12 col-md-2 col-lg-2 text-center" >
                             <div style="vertical-align: middle;">
@@ -172,11 +168,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12 col-lg-12">
 
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -229,7 +221,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                             <div class="form-group">
-                                @inputText(forma("titulo"), '_label -> "9. Título", 'class->"form-control", 'placeholder->"Ejem. Segundo programa" )
+                                @inputText(forma("titulo"), '_label -> "9. Título",  'maxlength->"200", 'class->"form-control", 'placeholder->"Ejem. Segundo programa" )
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -238,8 +230,7 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-1">
                             <div class="form-group">
-                                @*inputText(forma("duracionStr"), 'type->"time", 'step->"1", '_label -> "Duración", 'class->"form-control", '_help->"hh:mm:ss" ) *@
-                                @inputText(forma("duracionStr"), '_label -> "11. Duración", 'class->"form-control", '_help->"hhh:mm:ss" )
+                                @inputText(forma("duracionStr"), '_label -> "11. Duración",  'class->"form-control", '_help->"hhh:mm:ss" )
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -255,16 +246,6 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <!--div class="form-group">
-                                @select(
-                                forma("produccion.id"),
-                                options(models.Produccion.options),
-                                '_label -> "13. Producción", '_default -> "-- Seleccione --",
-                                '_showConstraints -> false,
-                                'class->"form-control"
-                                )
-                                <div class="help-block with-errors"></div>
-                            </div-->
                             <div id="divResultadoBusquedaProduccion" style="display:none">
                                 <dt class=" ">
                                 <dt><label>13. Producción</label>
@@ -276,7 +257,7 @@
                                 <dl class=" " id="descripcionProduccion_field">
                                     <dt><label for="produccionDescripcion">13. Producción</label></dt>
                                     <dd>
-                                        <input type="text" id="produccionDescripcion" value="" class="form-control" placeholder="Ejem. Televisión Educativa SEP">
+                                        <input type="text" id="produccionDescripcion" value=""  maxlength="100",  class="form-control" placeholder="Ejem. Televisión Educativa SEP">
                                     </dd>
                                 </dl>
                                 <div class="help-block with-errors"></div>
@@ -319,13 +300,13 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                             <div class="form-group">
-                                @inputText(forma("fechaProduccion"), '_label -> "16. Fecha producción", 'class->"form-control", '_help->"dd/mm/yyyy o mm/yyyy o yyyy", 'placeholder->"Ejem. 04/11/2001" )
+                                @inputText(forma("fechaProduccion"), '_label -> "16. Fecha producción",  'maxlength->"10", 'class->"form-control", '_help->"dd/mm/yyyy o mm/yyyy o yyyy", 'placeholder->"Ejem. 04/11/2001" )
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                             <div class="form-group">
-                                @inputText(forma("fechaPublicacion"), '_label -> "17. Fecha publicación", 'class->"form-control", '_help->"dd/mm/yyyy o mm/yyyy o yyyy", 'placeholder->"Ejem. 02/12/2001" )
+                                @inputText(forma("fechaPublicacion"), '_label -> "17. Fecha publicación",  'maxlength->"10", 'class->"form-control", '_help->"dd/mm/yyyy o mm/yyyy o yyyy", 'placeholder->"Ejem. 02/12/2001" )
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -342,18 +323,49 @@
                                 )
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-2 col-md-4 col-lg-4">
+
+
+                        <div class="col-sm-12 col-md-3 col-lg-3">
                             <div class="form-group">
-                                @select(
-                                forma("areatematica.id"),
-                                options(models.Areatematica.options),
-                                '_label -> "19. Área temática", '_default -> "-- Seleccione --",
-                                '_showConstraints -> false,
-                                'class->"form-control",
-                                'required->true
-                                )
+                                <div id="divResultadoBusquedaAreaTematica" style="display:none">
+                                    <dt class=" ">
+                                    <dt><label>19. Área Temática</label>
+                                    </dt>
+                                    <input type="hidden" id="areatematica_id" name="areatematica.id">
+                                    <div id="textAreaTematica">???</div>
+                                </div>
+                                <div id="divBusquedaAreaTematica">
+                                    <dl class=" " id="descripcionAreaTematica_field">
+                                        <dt><label for="areatematicaDescripcion">19. Área Temática</label></dt>
+                                        <dd>
+                                            <input type="text" id="areatematicaDescripcion" value=""  maxlength="100",  class="form-control" placeholder="Ejem. ---">
+                                        </dd>
+                                    </dl>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div id="divIndicacionesAreaTematica" class="small">
+                                    <div style="margin-botton: 0.5em">
+                                        Escriba la descripción del área temática y se realizará automáticamente la búsqueda.
+                                    </div>
+                                    <div>Si el área temática que desea agregar aparece en la lista de coincidencias, elijala de la lista.<br>Si el área temática es nueva y no aparece en la lista de coincidencias, oprima el botón <strong>Nueva área</strong></div>
+                                </div>
+                                <div id="msgCoincidenciasAreaTematica" style="margin-top:5px; margin-bottom:5px;"></div>
+                                <div id="divCoincidenciasAreaTematica">
+                                    <div class="list-group" style="font-size: small">
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <div class="col-sm-12 col-md-1 col-lg-1 text-center" >
+                            <div style="vertical-align: middle;">
+                                <a href="javascript:abrirAreas();" style="display:none" id="aAbrirAreas">Abrir áreas</a>
+                                <br>
+                                <button id ="btnNuevaAreaTematica" class="btn btn-success" style="display:none">Nueva área</button>
+                            </div>
+                        </div>
+
+
+
                         <div class="col-xs-12 col-sm-2 col-md-4 col-lg-4">
                             <div class="form-group">
                                 @select(
@@ -378,7 +390,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                                @textarea(forma("sinopsis"), '_label -> "21. Sinópsis", 'class->"form-control", 'rows->2, 'cols->"300"  , 'required->true, 'placeholder->"Notas: Expo-Profesionfráfica 1998, convenio revision salarial, convenio de colaboración IPN- Instituto de Aviación" )
+                                @textarea(forma("sinopsis"), '_label -> "21. Sinópsis",  'maxlength->"3000", 'class->"form-control", 'rows->2, 'cols->"300"  , 'required->true, 'placeholder->"Notas: Expo-Profesionfráfica 1998, convenio revision salarial, convenio de colaboración IPN- Instituto de Aviación" )
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -434,13 +446,13 @@
             <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
-                        @textarea(forma("audio"), '_label -> "30. Audio", 'class->"form-control", 'rows->3, 'cols->"300"  , 'placeholder->"Ejem. Stereo 48000Hz 16bits Bueno" )
+                        @textarea(forma("audio"), '_label -> "30. Audio",  'maxlength->"200", 'class->"form-control", 'rows->3, 'cols->"300"  , 'placeholder->"Ejem. Stereo 48000Hz 16bits Bueno" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
-                        @textarea(forma("video"), '_label -> "31. Video", 'class->"form-control", 'rows->3, 'cols->"300", 'required->true,  'placeholder->"Ejem. NTSC 1920x1080 H.264 16:9 Bueno" )
+                        @textarea(forma("video"), '_label -> "31. Video",  'maxlength->"200", 'class->"form-control", 'rows->3, 'cols->"300", 'required->true,  'placeholder->"Ejem. NTSC 1920x1080 H.264 16:9 Bueno" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -448,7 +460,7 @@
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12">
                     <div class="form-group">
-                        @textarea(forma("observaciones"), '_label -> "32. Observaciones", 'class->"form-control", 'rows->3, 'cols->"300",  'placeholder->"Ejem. El ponente original no se presentó y en su lugar se contó con el Director de la escuela" )
+                        @textarea(forma("observaciones"), '_label -> "32. Observaciones", 'maxlength->"300", 'class->"form-control", 'rows->3, 'cols->"300",  'placeholder->"Ejem. El ponente original no se presentó y en su lugar se contó con el Director de la escuela" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -474,37 +486,37 @@
     <div class="row"  style="display:none">
         <div class="col-sm-12 col-md-1 col-lg-1">
             <div class="form-group">
-                <input type="text" name="desde" value="" class="form-control">
+                <input type="text" name="desde"  value="" class="form-control">
                 <div class="help-block with-errors"></div>
             </div>
         </div>
         <div class="col-sm-12 col-md-1 col-lg-1">
             <div class="form-group">
-                <input type="text" name="hasta" value="" class="form-control">
+                <input type="text" name="hasta"   value="" class="form-control">
                 <div class="help-block with-errors"></div>
             </div>
         </div>
         <div class="col-sm-12 col-md-3 col-lg-2">
             <div class="form-group">
-                <input type="text" name="personaje" value="" class="form-control" placeholder="Ejem. Juán Pérez López">
+                <input type="text" name="personaje" value=""  maxlength="75"  class="form-control" placeholder="Ejem. Juán Pérez López">
                 <div class="help-block with-errors"></div>
             </div>
         </div>
         <div class="col-sm-12 col-md-1 col-lg-1">
             <div class="form-group">
-                <input type="text"  name="grado" value="" class="form-control" placeholder="Ejem. Lic.">
+                <input type="text"  name="grado" value=""  maxlength="50"  class="form-control" placeholder="Ejem. Lic.">
                 <div class="help-block with-errors"></div>
             </div>
         </div>
         <div class="col-sm-12 col-md-1 col-lg-1">
             <div class="form-group">
-                <input type="text"  name="cargo" value="" class="form-control" placeholder="Ejem. Director">
+                <input type="text"  name="cargo" value=""  maxlength="50"  class="form-control" placeholder="Ejem. Director">
                 <div class="help-block with-errors"></div>
             </div>
         </div>
         <div class="col-sm-12 col-md-1 col-lg-5">
             <div class="form-group">
-                <input type="text"  name="tema" value="" class="form-control" placeholder="Ejem. Antecedentes de la escuela">
+                <input type="text"  name="tema" value=""  maxlength="200"  class="form-control" placeholder="Ejem. Antecedentes de la escuela">
                 <div class="help-block with-errors"></div>
             </div>
         </div>

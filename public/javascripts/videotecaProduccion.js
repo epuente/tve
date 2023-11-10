@@ -44,14 +44,17 @@ function abrirProducciones(){
 
 $("#btnNuevaProduccion").off("click");
 $("#btnNuevaProduccion").on("click", function(e){
-    console.log("abc")
+
+    console.log("Desde btnNuevaProduccion.click")
     e.preventDefault();
     $("#divBusquedaProduccion, #divCoincidenciasProduccion, #msgCoincidenciasProduccion, #divIndicacionesProduccion").show();
     $("#divResultadoBusquedaProduccion").hide();
     var laNueva = $("#produccionDescripcion").val();
     var $f = LlamadaAjax("/textsearchCampoCompleto", "POST", JSON.stringify({campo:"produccion",cadena:laNueva}));
     $.when($f).done(function(dataTS){
-        if (dataTS.coincidencias.length>0){
+        console.log("Hay coincidencias? "+   (dataTS.coincidencias.length>0))
+        console.dir(dataTS)
+        if (dataTS.coincidencias>0){
                 swal({
                         title:'No se realizó la operación',
                         html:'No se puede agregar la produccion porque ya existe<br><br>Revise la lista de coincidencias y observará que ya existe. Puede usar la produccion existente, solo selecciónela de la lista de coincidencias.<br>',
@@ -76,11 +79,7 @@ $("#btnNuevaProduccion").on("click", function(e){
                     $("#textProduccion").html(  salvado.descripcion);
 
                     $("#divResultadoBusquedaProduccion, #aAbrirProducciones").show();
-                        $("#divBusquedaProduccion, #divIndicacionesProduccion, #msgCoincidenciasProduccion, #btnNuevaProduccion, #divCoincidenciasProduccion" ).hide();
-
-
-
-
+                    $("#divBusquedaProduccion, #divIndicacionesProduccion, #msgCoincidenciasProduccion, #btnNuevaProduccion, #divCoincidenciasProduccion" ).hide();
                 } else {
                     alert("No fue posible agregar la produccion.");
                 }

@@ -21,7 +21,7 @@ public class Serie extends Model{
     public Date auditUpdate =  Date.from( Instant.now().minus(1, ChronoUnit.HOURS));
 
     @NotNull
-    @Column(length=7000)
+    @Column(length=500)
     public String descripcion;
 
     @ManyToOne

@@ -15,7 +15,7 @@ public class Credito extends models.utils.PlantillaModelo{
     @ManyToOne
     public TipoCredito tipoCredito;
 
-    @Column(length = 500)
+    @Column(length = 75)
     public String personas;
 
     @ManyToOne(optional = false)

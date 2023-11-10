@@ -237,8 +237,6 @@ $("form").submit(function(event){
         }
     if ( !$("#video").val())
         msgError+="No se han escrito las características del video<br>";
-    if ( !$("#observaciones").val())
-        msgError+="No se han escrito las observaciones<br>";
 
     if (msgError.length>0){
             event.preventDefault();
