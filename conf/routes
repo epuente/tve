@@ -297,9 +297,7 @@ POST    /nuevaAreaTematica                  controllers.VideotecaController.nuev
 GET     /vtkcarga                           controllers.VideotecaController.cargaInicial()
 GET     /vtkCatalogo/edit/:id               controllers.VideotecaController.catalogoEdit(id:Long)
 POST    /vtkCatalogo/save                   controllers.VideotecaController.save()
-POST    /vtkCatalogo/save2                   controllers.VideotecaController.save2()
-POST    /vtkCatalogo/save3                   controllers.VideotecaController.save3()
-POST    /vtkCatalogo/update                 controllers.VideotecaController.update()
+POST    /vtkCatalogo/update2                 controllers.VideotecaController.update2()
 
 GET     /supervisor/catalogadores           controllers.SupCatalogadorController.lista()
 GET     /supervisor/catalogadoresDTSS       controllers.SupCatalogadorController.listaDTSS()

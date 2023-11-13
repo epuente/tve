@@ -10,4 +10,7 @@ public class TipoCredito extends models.utils.PlantillaCatalogo{
 
     public static Model.Finder<Long,TipoCredito> find = new Model.Finder<Long,TipoCredito>(Long.class, TipoCredito.class);
 
+    public  Long getId(){
+        return id;
+    }
 }

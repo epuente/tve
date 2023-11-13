@@ -28,6 +28,6 @@ public class PalabraClave extends Model {
     @Column(length = 30)
     public String descripcion;
     @ManyToOne
-    VtkCatalogo catalogo;
+    public VtkCatalogo catalogo;
 
 }

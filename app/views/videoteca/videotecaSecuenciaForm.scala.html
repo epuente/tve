@@ -1,6 +1,9 @@
 @(forma: Form[VtkCatalogo], auxCreditos:List[TipoCredito])
 
 @import helper._
+
+Los campos en <label class="campoRequerido">color oscuro</label> son obligatorios
+
 <fieldset>
     @inputText(forma("id"), '_label -> "", 'class->"", 'type->"hidden" )
     <div class="panel panel-default">
@@ -8,7 +11,7 @@
             <div class="row">
                 <div class="col-sm-12 col-md-2 col-lg-2">
                     <div class="form-group">
-                         @inputText(forma("folio"), '_label -> "1. Clave clasificatoria", 'class->"form-control campoRequerido", 'maxlength->"30",  'placeholder->"Ejem. DIRGRAL980125", '_help->"El folio del oficio" )
+                         @inputText(forma("folio"), '_label -> "1. Folio", 'class->"form-control campoRequerido", 'maxlength->"30",  'placeholder->"Ejem. DIRGRAL980125", '_help->"El folio del oficio" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -37,20 +40,21 @@
                                 </dd>
                             </dl>
                             <div class="help-block with-errors"></div>
+                            <div id="divIndicacionesUr" class="small">
+                                <div style="margin-botton: 0.5em">
+                                    Escriba el nombre completo de la Unidad Responsable y se realizará automáticamente la búsqueda.
+                                </div>
+                                <div>Si la Unidad Responsable que desea agregar aparece en la lista de coincidencias, elijala de la lista.<br>Si la Unidad Responsable es nueva y no aparece en la lista de coincidencias, oprima el botón <strong>Nueva UR</strong></div>
+                            </div>
+                            <div id="msgCoincidenciasUR" style="margin-top:5px; margin-bottom:5px;"></div>
                             <div id="divCoincidenciasUR">
                                 <div class="list-group" style="font-size: small">
                                 </div>
                             </div>
                         </div>
 
-                        <div id="divIndicacionesUr" class="small">
-                            <div style="margin-botton: 0.5em">
-                                Escriba el nombre completo de la Unidad Responsable y se realizará automáticamente la búsqueda.
-                            </div>
-                            <div>Si la Unidad Responsable que desea agregar aparece en la lista de coincidencias, elijala de la lista.<br>Si la Unidad Responsable es nueva y no aparece en la lista de coincidencias, oprima el botón <strong>Nueva UR</strong></div>
-                        </div>
+
                     </div>
-                    <div id="msgCoincidenciasUR" style="margin-top:5px; margin-bottom:5px;"></div>
 
                 </div>
                 <div class="col-sm-12 col-md-1 col-lg-1 text-center" >
@@ -186,7 +190,7 @@
                                         <!-- Nav tabs -->
                                         <ul class="nav nav-tabs" role="tablist" id="navTabs">
                                             @for( s <- auxCreditos) {
-                                            <li role="presentation" @if(s.id==1){class="active"}><a href="#@s.id"  id="tab@s.id"  role="tab" data-toggle="tab">@s.descripcion</a></li>
+                                            <li role="presentation" @if(s.id==1){class="active"}><a href="#@s.id"  id="tab@s.id"  role="tab" data-toggle="tab">8.@s.id @s.descripcion</a></li>
                                             }
                                         </ul>
 
@@ -226,7 +230,7 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-1">
-                                @inputText(forma("obra"), '_label -> "10. Obra", 'class->"form-control", '_help->"xx/xx" )
+                                @inputText(forma("obra"), '_label -> "10. Num. de obra", 'class->"form-control", '_help->"xx/xx" )
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-1">
                             <div class="form-group">
@@ -237,30 +241,41 @@
                         <div class="col-sm-12 col-md-4 col-lg-6">
                             <textarea style='display:none;' name='txaPalabrasClave' id='txaPalabrasClave'></textarea>
                             <input type="text" name="palabrasClave[0].descripcion" value="ladescripcion" style="display:none"></input>
-                            <label for="palabrasClaveStr">12. Palabras Clave</label>
+                            <label for="palabrasClaveStr">12. Palabras clave</label>
                             <div class="form-group">
                                 <textarea id="palabrasClaveStr"  name="palabrasClaveStr"  class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Ejemplo: Matemáticas discretas"></textarea>
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
                     </div>
+
+
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <div id="divResultadoBusquedaProduccion" style="display:none">
-                                <dt class=" ">
-                                <dt><label>13. Producción</label>
-                                </dt>
-                                <input type="hidden" id="produccion_id" name="produccion.id">
-                                <div id="textProduccion">???</div>
-                            </div>
-                            <div id="divBusquedaProduccion">
-                                <dl class=" " id="descripcionProduccion_field">
-                                    <dt><label for="produccionDescripcion">13. Producción</label></dt>
-                                    <dd>
-                                        <input type="text" id="produccionDescripcion" value=""  maxlength="100",  class="form-control" placeholder="Ejem. Televisión Educativa SEP">
-                                    </dd>
-                                </dl>
-                                <div class="help-block with-errors"></div>
+                        <div class="col-sm-12 col-md-10 col-lg-10">
+                            <div class="form-group">
+                                <div id="divResultadoBusquedaProduccion" style="display:none">
+                                    <dt class=" ">
+                                    <dt><label>13. Producción</label>
+                                    </dt>
+                                    <input type="hidden" id="produccion_id" name="produccion.id">
+                                    <div id="textProduccion">???</div>
+                                </div>
+                                <div id="divBusquedaProduccion">
+                                    <dl class=" " id="produccionDescripcion_field">
+                                        <dt><label for="produccionDescripcion">13. Producción</label></dt>
+                                        <dd>
+                                            <input type="text" id="produccionDescripcion" value=""  maxlength="100",  class="form-control" placeholder="Ejem. ">
+                                        </dd>
+                                    </dl>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div id="divIndicacionesProduccion" class="small">
+                                    <div style="margin-botton: 0.5em">
+                                        Escriba la descripción de la produccion y se realizará automáticamente la búsqueda.
+                                    </div>
+                                    <div>Si la producción que desea agregar aparece en la lista de coincidencias, elijala de la lista.<br>Si la producción es nueva y no aparece en la lista de coincidencias, oprima el botón <strong>Nueva producción</strong></div>
+                                </div>
+                                <div id="msgCoincidenciasProduccion" style="margin-top:5px; margin-bottom:5px;"></div>
                                 <div id="divCoincidenciasProduccion">
                                     <div class="list-group" style="font-size: small">
                                     </div>
@@ -274,43 +289,10 @@
                                 <button id ="btnNuevaProduccion" class="btn btn-success" style="display:none">Nueva producción</button>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-                            <div class="form-group">
-                                @select(
-                                forma("idioma.id"),
-                                options(Idioma.options),
-                                '_label -> "14. Idioma", '_default->"-- Seleccione --",
-                                '_showConstraints -> false,
-                                'class->"form-control"
-                                )
-                                <div class="help-block with-errors"></div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-                            <div class="form-group">
-                                @select(
-                                forma("tipograbacion.id"),
-                                options(models.TipoGrabacion.options),
-                                '_label -> "15. Grabación", '_default -> "-- Seleccione --",
-                                '_showConstraints -> false,
-                                'class->"form-control"
-                                )
-                                <div class="help-block with-errors"></div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                            <div class="form-group">
-                                @inputText(forma("fechaProduccion"), '_label -> "16. Fecha producción",  'maxlength->"10", 'class->"form-control", '_help->"dd/mm/yyyy o mm/yyyy o yyyy", 'placeholder->"Ejem. 04/11/2001" )
-                                <div class="help-block with-errors"></div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                            <div class="form-group">
-                                @inputText(forma("fechaPublicacion"), '_label -> "17. Fecha publicación",  'maxlength->"10", 'class->"form-control", '_help->"dd/mm/yyyy o mm/yyyy o yyyy", 'placeholder->"Ejem. 02/12/2001" )
-                                <div class="help-block with-errors"></div>
-                            </div>
-                        </div>
                     </div>
+
+
+
                     <div class="row">
                         <div class="col-xs-12 col-sm-2 col-md-4 col-lg-4">
                             <div class="form-group">
@@ -329,7 +311,7 @@
                             <div class="form-group">
                                 <div id="divResultadoBusquedaAreaTematica" style="display:none">
                                     <dt class=" ">
-                                    <dt><label>19. Área Temática</label>
+                                    <dt><label>19. Área temática</label>
                                     </dt>
                                     <input type="hidden" id="areatematica_id" name="areatematica.id">
                                     <div id="textAreaTematica">???</div>
@@ -338,7 +320,7 @@
                                     <dl class=" " id="descripcionAreaTematica_field">
                                         <dt><label for="areatematicaDescripcion">19. Área Temática</label></dt>
                                         <dd>
-                                            <input type="text" id="areatematicaDescripcion" value=""  maxlength="100",  class="form-control" placeholder="Ejem. ---">
+                                            <input type="text" id="areatematicaDescripcion" value=""  maxlength="100",  class="form-control" placeholder="Ejem. ---"  required>
                                         </dd>
                                     </dl>
                                     <div class="help-block with-errors"></div>

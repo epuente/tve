@@ -56,7 +56,7 @@ $("#btnNuevaSerie").on("click", function(e){
     var laNueva = $("#serieDescripcion").val();
     var $f = LlamadaAjax("/textsearchCampoCompleto", "POST", JSON.stringify({campo:"serie",cadena:laNueva}));
     $.when($f).done(function(dataTS){
-        if (dataTS.coincidencias.length>0){
+        if (dataTS.coincidencias>0){
                 swal({
                         title:'No se realizó la operación',
                         html:'No se puede agregar la serie porque ya existe<br><br>Revise la lista de coincidencias y observará que ya existe. Puede usar la serie existente, solo selecciónela de la lista de coincidencias.<br>',
@@ -82,9 +82,6 @@ $("#btnNuevaSerie").on("click", function(e){
 
                     $("#divResultadoBusqueda, #aAbrirSeries").show();
                     $("#divBusqueda, #divIndicaciones, #msgCoincidencias, #btnNuevaSerie, #divCoincidencias" ).hide();
-
-
-
 
                 } else {
                     alert("No fue posible agregar la serie.");
@@ -213,11 +210,22 @@ function agregaJSON2(){
 }
 
 
-$("form").submit(function(event){
+$("form[name='frmVTK']").submit(function(event){
    // event.preventDefault();
     console.log(" - submit -")
     var msgError="";
-    //console.clear()
+    console.clear()
+    console.log("has-error:"+  $("div.has-error").length)
+
+    if (  $("div.has-error").length!=0  ){
+
+        console.log("123")
+        $("div.has-error").each(function(i,e){
+            console.log("456")
+           msgError+="El campo "+$(e).attr("name")+" tiene error<br";
+        });
+    }
+
 
     if ( !$("#clave").val() )
         msgError+="No se ha seleccionado un ID.<br>";
@@ -268,10 +276,8 @@ $("form").submit(function(event){
         x['losDatos']=valoresCreditos();
         ppcc['lasPalabras'] = valoresPalabrasClave();
 
-        $("<input type='text' name='palabrasClave[0].descripcion' value='uno'>").appendTo("#frmVTKCreate");
-        $("<input type='text' name='palabrasClave[1].descripcion' value='dos'>").appendTo("#frmVTKCreate");
 
-        $("<textarea style='padding-left:100px; display:none;' name='txaCreditos' id='txaCreditos'>"+JSON.stringify(x)+"</textarea>").appendTo("#frmVTKCreate");
+        $("<textarea style='padding-left:100px; display:none;' name='txaCreditos' id='txaCreditos'>"+JSON.stringify(x)+"</textarea>").appendTo("form[name='frmVTK']");
         $("#txaPalabrasClave").val(JSON.stringify(valoresPalabrasClave()));
         $("#txaTimeLine").val(JSON.stringify(valoresTimeLine()));
 
@@ -374,9 +380,28 @@ function labelsCamposRequeridos(){
         });
 
         // Otros labels de componentes no convencionales
-        $("label[for='eventos_0_id'], label[for='nivel1'], label[for='nivelesacademicos[0].nivel.id'], label[for='palabrasClaveStr'], label[for='areatematica_id']").addClass("campoRequerido");
+        $("label[for='eventos_0_id'], label[for='nivel1'], label[for='nivelesacademicos[0].nivel.id'], label[for='palabrasClaveStr'], label[for='areatematicaDescripcion'], label[for='areatematica_id']" ).addClass("campoRequerido");
 }
 
+
+// Validar que los campos fecha de producción y fecha de grabación cumplan con alguno de los formatos estrablecidos
+$("#fechaProduccion, #fechaPublicacion").off("blur");
+$("#fechaProduccion, #fechaPublicacion").on("blur",  function(){
+    var cadena = $(this).val();
+    if (cadena.length!=0){
+        if (!formatoFechaValido(cadena)){
+            $(this).closest("div.form-group").addClass("has-error has-danger");
+            $(this).closest("div.form-group").find("div.help-block").html('<ul class="list-unstyled"><li>No cumple con formato</li></ul>');
+        } else {
+            $(this).closest("div.form-group").removeClass("has-error has-danger");
+            $(this).closest("div.form-group").find("div.help-block").html('');
+        }
+    }
+} );
+
+function formatoFechaValido(cadena){
+    return moment(cadena,  ["DD/MM/YYYY", "MM/YYYY", "YYYY"], true).isValid();
+}
 
 
 

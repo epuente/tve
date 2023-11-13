@@ -20,7 +20,7 @@
 
     <h1>Edición del catálogo de videoteca</h1>
 
-    @form(CSRF(routes.VideotecaController.update()), 'role->"form", 'id->"frmVideoteca", 'name->"frmVTK", Symbol("data-modo")->"edicion") {
+    @form(CSRF(routes.VideotecaController.update2()), 'role->"form", 'id->"frmVideoteca", 'name->"frmVTK", Symbol("data-modo")->"edicion") {
         @videotecaSecuenciaForm(forma, auxCreditos)
         <br/><br/>
         <div class="row">
@@ -163,6 +163,20 @@
             arr.push( {value:"@c.descripcion", id:@c.id} );
         }
         tagifyPC.addTags(arr);
+
+        // Produccion
+        @if(forma.get().produccion!=null){
+            $("#produccion_id").val(@forma.get().produccion.id);
+            $("#produccionDescripcion").val("@forma.get().produccion.descripcion");
+        }
+
+        // Área temática
+        @if(forma.get().areatematica!=null){
+            $("#areatematica_id").val("@forma.get().areatematica.id");
+            $("#areatematicaDescripcion").val("@forma.get().areatematica.descripcion");
+        }
+
+
 
 
         // Creditos
@@ -333,6 +347,9 @@
 
 <script src="@routes.Assets.at("javascripts/videoteca.js")"></script>
 <script src="@routes.Assets.at("javascripts/videotecaUR.js")"></script>
+<script src="@routes.Assets.at("javascripts/videotecaProduccion.js")"></script>
+<script src="@routes.Assets.at("javascripts/videotecaAreaTematica.js")"></script>
+
 <script src="https://unpkg.com/imask"></script>
 
 

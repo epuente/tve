@@ -246,10 +246,12 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             tc0.save();
         });
 */
-
-
+        List<TipoCredito> tipos = TipoCredito.find.all();
+        List<TipoCredito> tiposOrdenados = tipos.stream()
+                .sorted(Comparator.comparing(TipoCredito::getId))
+                .collect(Collectors.toList());
         return ok(
-                views.html.videoteca.createForm.render(forma, TipoCredito.find.all())
+                views.html.videoteca.createForm.render(forma, tiposOrdenados)
         );
     }
 /*
@@ -320,15 +322,16 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         String campo = json.findValue("campo").asText();
         String cadena = json.findValue("cadena").asText();
         Logger.debug("campo "+campo);
+        // Primero la búsqueda tradicional
         String query1 = "";
         if (campo.compareTo("ur")==0)
-            query1 ="select id, nombre_largo from unidad_responsable s where unaccent(nombre_largo) ilike unaccent('%"+cadena+"%')";
+            query1 ="select id, nombre_largo from unidad_responsable s where unaccent(nombre_largo) ilike unaccent('%"+cadena+"%') order by nombre_largo";
         if (campo.compareTo("serie")==0)
-            query1 ="select id, descripcion from serie s where unaccent(descripcion) ilike unaccent('%"+cadena+"%')";
+            query1 ="select id, descripcion from serie s where unaccent(descripcion) ilike unaccent('%"+cadena+"%') order by descripcion";
         if (campo.compareTo("produccion")==0)
-            query1 ="select id, descripcion from produccion s where unaccent(descripcion) ilike unaccent('%"+cadena+"%')";
+            query1 ="select id, descripcion from produccion s where unaccent(descripcion) ilike unaccent('%"+cadena+"%') order by descripcion";
         if (campo.compareTo("areatematica")==0)
-            query1 ="select id, descripcion from areatematica s where unaccent(descripcion) ilike unaccent('%"+cadena+"%')";
+            query1 ="select id, descripcion from areatematica s where unaccent(descripcion) ilike unaccent('%"+cadena+"%') order by descripcion";
         Logger.debug(query1);
         List<SqlRow> sqlRows1 = Ebean.createSqlQuery(query1).findList();
 
@@ -368,8 +371,6 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                     "FROM areatematica s " +
                     "WHERE to_tsvector(coalesce(descripcion, ' ')) @@ to_tsquery('"+ts+"') " +
                     "ORDER BY ts_rank(to_tsvector(coalesce(descripcion, ' ')), to_tsquery('"+ts+"')) desc";
-
-
         Logger.debug("query3:    "+query3);
 
 
@@ -650,32 +651,112 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             else
                 d = new Duracion(0L);
             Logger.debug("003 duracion " + d);
-            Logger.debug("004 TP "+TipoCredito.find.all());
-            return ok( views.html.videoteca.editForm.render(id, forma, TipoCredito.find.all(), d)  );
+            List<TipoCredito> tipos = TipoCredito.find.all();
+            List<TipoCredito> tiposOrdenados = tipos.stream()
+                    .sorted(Comparator.comparing(TipoCredito::getId))
+                    .collect(Collectors.toList());
+
+            return ok( views.html.videoteca.editForm.render(id, forma, tiposOrdenados, d)  );
         } else {
             return ok (views.html.operacionNoPermitida.render());
         }
     }
 
     public static Result save() throws JSONException {
-        System.out.println("\n\n\nDesde VideotecaController.save");
-        Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
+        Ebean.beginTransaction();
+        try{
+            System.out.println("\n\n\nDesde VideotecaController.save");
+            Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
 
-        DynamicForm fd = DynamicForm.form().bindFromRequest();
+            DynamicForm fd = DynamicForm.form().bindFromRequest();
 
-        System.out.println(forma);
-        System.out.println("--------------------------");
-        System.out.println(fd);
-
-
+            if(forma.hasErrors()) {
+                return badRequest(createForm.render(forma, TipoCredito.find.all() ));
+            }
 
 
+            System.out.println(forma);
+            System.out.println("--------------------------");
+            System.out.println(fd);
+
+            //VtkCatalogo vtk = forma.get();
+
+            VtkCatalogo vtk = losDatos(forma, fd);
+
+
+            //vtk.save();
+            Ebean.save(vtk);
+            //vtk.refresh();
+            Ebean.refresh(vtk);
+            Long idVTK = vtk.id;
+
+            /////////// TimeLine
+            vtk.timeline.clear();
+            JSONArray jsonArrTimeLine = new JSONArray(forma.field("txaTimeLine").value());
+            for (int i=0; i< jsonArrTimeLine.length(); i++){
+                VtkTimeLine tl = new VtkTimeLine();
+                JSONObject objTL = jsonArrTimeLine.getJSONObject(i);
+
+                if (objTL.get("desde").toString().length()!=0) {
+                    Duracion dDesde = new Duracion();
+                    dDesde.convertir(objTL.get("desde").toString());
+                    tl.desde = dDesde.totalSegundos();
+                }
+                if (objTL.get("hasta").toString().length()!=0) {
+                    Duracion dHasta = new Duracion();
+                    dHasta.convertir(objTL.get("hasta").toString());
+                    tl.hasta = dHasta.totalSegundos();
+                }
+                if (objTL.get("nombre").toString().length()!=0){
+                    Long idVP = null;
+                    VideoPersonaje vp = new VideoPersonaje();
+                    String elNombre = objTL.get("nombre").toString();
+                    // Busca en VideoPersonaje que exista la persona, sino lo crea
+                    List<VideoPersonaje> existePersonaje = VideoPersonaje.find.where().ilike("nombre", elNombre).findList();
+                    if ( existePersonaje.size()==0 ){
+                        vp.catalogo = VtkCatalogo.find.byId(idVTK);
+                        vp.nombre = elNombre;
+                        vp.save();
+                        vp.refresh();
+                        idVP = vp.id;
+                        tl.personaje = vp;
+                    }
+                    if ( existePersonaje.size()!=0 ){
+                        tl.personaje = existePersonaje.get(0);
+                    }
+
+
+                }
+                if (objTL.get("grado").toString().length()!=0){
+                    tl.gradoacademico = objTL.get("grado").toString();
+                }
+                if (objTL.get("cargo").toString().length()!=0){
+                    tl.cargo = objTL.get("cargo").toString();
+                }
+                if (objTL.get("tema").toString().length()!=0){
+                    tl.tema = objTL.get("tema").toString();
+                }
+
+                vtk.timeline.add(tl);
+            }
+            //vtk.update();
+            Ebean.update(vtk);
+            Ebean.commitTransaction();
+            flash("success", "Se agregó al acervo");
+        } catch(Exception e) {
+            Ebean.rollbackTransaction();
+            System.out.println("Ocurrió un error al intentar grabar el registro. "+e);
+        }finally {
+            Ebean.endTransaction();
+        }
+        return redirect( routes.VideotecaController.catalogo() );
+    }
+
+
+
+
+    private static VtkCatalogo losDatos(Form<VtkCatalogo> forma, DynamicForm fd) throws JSONException {
         VtkCatalogo vtk = forma.get();
-
-
-
-
-
         Personal usuarioActual = Personal.find.byId(Long.parseLong(session("usuario")));
 
         // Convertir duracion (hh:mm:ss) a segundos
@@ -686,9 +767,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             vtk.duracion = duracion.totalSegundos();
         }
 
-        if(forma.hasErrors()) {
-            return badRequest(createForm.render(forma, TipoCredito.find.all() ));
-        }
+
 
         System.out.println("duracion:"+vtk.duracion);
         Long elId = 1L;
@@ -729,37 +808,154 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
         // CREDITOS
         String texto = forma.field("txaCreditos").value();
-        try {
-            JSONObject jsonObject = new JSONObject( texto   );
-            JSONArray c = jsonObject.getJSONArray("losDatos");
-            for (int i = 0 ; i < c.length(); i++) {
-                JSONObject obj = c.getJSONObject(i);
-                String A = obj.getString("tipo");
-                String B = obj.getString("creditos");
-                String[] arrCreditos = B.split(",");
-                List<Credito> creditos = new ArrayList<>();
-                for (String elCredito : arrCreditos) {
-                    Credito cred = new Credito();
-                    cred.tipoCredito = TipoCredito.find.byId( Long.parseLong(A));
-                    cred.personas = elCredito;
-                    cred.catalogador = usuarioActual;
-                    vtk.creditos.add(cred);
+        if (!texto.isEmpty()) {
+            try {
+                JSONObject jsonObject = new JSONObject(texto);
+                JSONArray c = jsonObject.getJSONArray("losDatos");
+                for (int i = 0; i < c.length(); i++) {
+                    JSONObject obj = c.getJSONObject(i);
+                    String A = obj.getString("tipo");
+                    String B = obj.getString("creditos");
+                    String[] arrCreditos = B.split(",");
+                    List<Credito> creditos = new ArrayList<>();
+                    for (String elCredito : arrCreditos) {
+                        Credito cred = new Credito();
+                        cred.tipoCredito = TipoCredito.find.byId(Long.parseLong(A));
+                        cred.personas = elCredito;
+                        cred.catalogador = usuarioActual;
+                        vtk.creditos.add(cred);
 
+                    }
                 }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
+        }
+
+
+        vtk.catalogador = usuarioActual;
+        return vtk;
+    }
+
+
+
+
+
+
+
+    public static Result update2() throws JSONException {
+        System.out.println("\n\n\nDesde VideotecaController.update2");
+        Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
+
+        DynamicForm fd = DynamicForm.form().bindFromRequest();
+
+        if(forma.hasErrors()) {
+            return badRequest(createForm.render(forma, TipoCredito.find.all() ));
+        }
+
+
+        System.out.println(forma);
+        System.out.println("--------------------------");
+        System.out.println(fd);
+
+        //VtkCatalogo vtk = forma.get();
+        VtkCatalogo vtk = VtkCatalogo.find.byId(forma.get().id);
+        //vtk = losDatos(forma, fd);
+
+        /////////////////////////////////////////////////////////
+        Personal usuarioActual = Personal.find.byId(Long.parseLong(session("usuario")));
+
+        // Convertir duracion (hh:mm:ss) a segundos
+        Logger.debug(forma.field("duracionStr").value());
+        if (  forma.field("duracionStr").value().compareTo("hhh:mm:ss")!=0 ) {
+            Duracion duracion = new Duracion();
+            duracion.convertir(forma.field("duracionStr").value());
+            vtk.duracion = duracion.totalSegundos();
         }
 
 
 
+        System.out.println("duracion:"+vtk.duracion);
+        Long elId = 1L;
+        if ( VtkCatalogo.find.all().size()>0)
+            elId = Long.parseLong(Ebean.createSqlQuery("select max(id) x from vtk_catalogo").findUnique().getString("x"))+1;
+        vtk.id =  elId;
+
+        // Palabras clave  -  agregar id del catalogador
+        vtk.palabrasClave.forEach(pc->pc.catalogador = usuarioActual );
+
+
+        Logger.debug("txaPalabrasClave");
+        Logger.debug(forma.data().toString());
+        Logger.debug(   fd.field("txaPalabrasClave").value() );
+
+
+
+        JSONArray jsonArr = new JSONArray(forma.field("txaPalabrasClave").value());
+        JSONArray jsonArrTL = new JSONArray(forma.field("txaTimeLine").value());
+
+        Logger.debug(String.valueOf(jsonArr));
+        ////// Palabras Clave
+        for ( PalabraClave palabra : vtk.palabrasClave ) {
+            palabra.delete();
+        }
+
+        vtk.palabrasClave = new ArrayList<>();
+        Logger.debug("iniciando ciclo: ");
+        for (int x=0; x< jsonArr.length();x++){
+            PalabraClave pc = new PalabraClave();
+          //  pc.catalogo =  VtkCatalogo.find.byId(vtk.id);
+            pc.descripcion = jsonArr.getJSONObject(x).get("descripcion").toString();
+            pc.catalogador = usuarioActual;
+            Logger.debug(pc.descripcion+"  -  "+pc.catalogador.nombreCompleto());
+            vtk.palabrasClave.add(pc);
+        }
+
+        // Quitar formato  de obra que viene de la forma
+        if (  vtk.obra.compareTo("__/__")==0  )
+            vtk.obra = null;
+
+
+        // CREDITOS
+        String texto = forma.field("txaCreditos").value();
+        if (!texto.isEmpty()) {
+            try {
+                JSONObject jsonObject = new JSONObject(texto);
+                JSONArray c = jsonObject.getJSONArray("losDatos");
+                for (int i = 0; i < c.length(); i++) {
+                    JSONObject obj = c.getJSONObject(i);
+                    String A = obj.getString("tipo");
+                    String B = obj.getString("creditos");
+                    String[] arrCreditos = B.split(",");
+                    List<Credito> creditos = new ArrayList<>();
+                    for (String elCredito : arrCreditos) {
+                        Credito cred = new Credito();
+                        cred.tipoCredito = TipoCredito.find.byId(Long.parseLong(A));
+                        cred.personas = elCredito;
+                        cred.catalogador = usuarioActual;
+                        vtk.creditos.add(cred);
+
+                    }
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
         vtk.catalogador = usuarioActual;
-        vtk.save();
+        //////////////////////////////////////////////////////////
+
+
+        vtk.update(vtk.id);
         vtk.refresh();
         Long idVTK = vtk.id;
 
         /////////// TimeLine
         vtk.timeline.clear();
+        for ( VtkTimeLine tl : vtk.timeline ) {
+            tl.delete();
+        }
         JSONArray jsonArrTimeLine = new JSONArray(forma.field("txaTimeLine").value());
         for (int i=0; i< jsonArrTimeLine.length(); i++){
             VtkTimeLine tl = new VtkTimeLine();
@@ -810,146 +1006,9 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         vtk.update();
 
 
-        flash("success", "Se agregó al acervo");
+        flash("success", "Se actualizó al acervo");
         return redirect( routes.VideotecaController.catalogo() );
     }
-
-
-    // Usando dynamic form
-    public static Result save3() {
-        System.out.println("\n\n\nDesde VideotecaController.save3");
-        Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
-
-        DynamicForm fd = DynamicForm.form().bindFromRequest();
-
-        System.out.println(forma);
-
-
-
-        return redirect( routes.VideotecaController.catalogo() );
-    }
-
-    public static Result save2() throws JSONException {
-        Logger.debug("Desde VideotecaController.save2");
-        JsonNode json = request().body().asJson();
-        Logger.debug(json.toString());
-
-
-        JSONObject retorno = new JSONObject();
-        retorno.put("estado", "indefinido");
-        VtkCatalogo catalogo = Json.fromJson(json, VtkCatalogo.class);
-        catalogo.catalogador = Personal.find.byId(  Long.parseLong(session("usuario"))  );
-
-        catalogo.save();
-        retorno.put("estado", "ok");
-        return ok (retorno.toString());
-    }
-
-
-    public static Result update() throws JSONException {
-        System.out.println("\n\n\nDesde VideotecaController.update");
-        Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
-        System.out.println(forma);
-        VtkCatalogo obj = forma.get();
-        VtkCatalogo vtk = VtkCatalogo.find.byId(obj.id);
-        Personal usuarioActual = Personal.find.byId(Long.parseLong(session("usuario")));
-
-        vtk.creditos.clear();
-        // Convertir duracion (hh:mm:ss) a segundos
-        Duracion duracion = new Duracion();
-        duracion.convertir(forma.field("duracionStr").value());
-        vtk.duracion = duracion.totalSegundos();
-
-        if(forma.hasErrors()) {
-            return badRequest(createForm.render(forma, TipoCredito.find.all() ));
-        }
-
-        System.out.println("duracion:"+vtk.duracion);
-
-        vtk.folio = obj.folio;
-        vtk.unidadresponsable = UnidadResponsable.find.byId(obj.unidadresponsable.id);
-        vtk.eventos = obj.eventos;
-        vtk.niveles = obj.niveles;
-        //vtk.esAreaCentral = obj.esAreaCentral;
-        vtk.folioDEV = obj.folioDEV;
-        vtk.titulo = obj.titulo;
-        vtk.sinopsis = obj.sinopsis;
-        vtk.serie = obj.serie;
-        vtk.clave = obj.clave;
-        vtk.obra = obj.obra;
-        vtk.formato = obj.formato;
-        vtk.palabrasClave = obj.palabrasClave;
-        vtk.idioma = obj.idioma;
-        vtk.creditos = obj.creditos;
-        vtk.produccion = obj.produccion;
-        vtk.fechaProduccion = obj.fechaProduccion;
-        vtk.disponibilidad = obj.disponibilidad;
-        vtk.areatematica = obj.areatematica;
-        vtk.nresguardo = obj.nresguardo;
-        vtk.liga = obj.liga;
-        vtk.catalogador = usuarioActual;
-        vtk.timeline = obj.timeline;
-        vtk.audio = obj.audio;
-        vtk.video = obj.video;
-        vtk.observaciones = obj.observaciones;
-
-
-        /*
-        Long elId = 1L;
-        if ( VtkCatalogo.find.all().size()>0)
-            elId = Long.parseLong(Ebean.createSqlQuery("select max(id) x from vtk_catalogo").findUnique().getString("x"))+1;
-        vtk.id =  elId;
-        */
-
-
-        // CREDITOS
-        String texto = forma.field("txaCreditos").value();
-        if (texto!=null)
-            try {
-                JSONObject jsonObject = new JSONObject( texto   );
-                JSONArray c = jsonObject.getJSONArray("losDatos");
-                for (int i = 0 ; i < c.length(); i++) {
-                    JSONObject objt = c.getJSONObject(i);
-                    String A = objt.getString("tipo");
-                    String B = objt.getString("creditos");
-                    String[] arrCreditos = B.split(",");
-                    List<Credito> creditos = new ArrayList<>();
-                    for (String elCredito : arrCreditos) {
-                        Credito cred = new Credito();
-                        cred.tipoCredito = TipoCredito.find.byId( Long.parseLong(A));
-                        cred.personas = elCredito;
-                        vtk.creditos.add(cred);
-                    }
-                }
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-
-
-        JSONArray jsonArr = new JSONArray(forma.field("txaPalabrasClave").value());
-        JSONArray jsonArrTL = new JSONArray(forma.field("txaTimeLine").value());
-
-        Logger.debug(String.valueOf(jsonArr));
-        ////// Palabras Clave
-        vtk.palabrasClave.clear();
-        vtk.palabrasClave = new ArrayList<>();
-        Logger.debug("iniciando ciclo: ");
-        for (int x=0; x< jsonArr.length();x++){
-            PalabraClave pc = new PalabraClave();
-            pc.descripcion = jsonArr.getJSONObject(x).get("descripcion").toString();
-            pc.catalogador = usuarioActual;
-            Logger.debug(pc.descripcion+"  -  "+pc.catalogador.nombreCompleto());
-            vtk.palabrasClave.add(pc);
-        }
-
-
-
-       // vtk.catalogador = Personal.find.byId( Long.parseLong(session("usuario")));
-        vtk.update();
-        flash("success", "Se actualizó el registro");
-        return redirect( routes.VideotecaController.catalogo() );
-    }
-
 
 
     public static Result catalogoDelete() throws JSONException {

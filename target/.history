@@ -18,3 +18,8 @@ exit
 ;clean;reload;compile;run
 exit
 run
+compile
+run
+compile
+run
+exit
