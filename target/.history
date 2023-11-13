@@ -23,3 +23,9 @@ run
 compile
 run
 exit
+run
+clean
+reload
+compile
+run
+exit
