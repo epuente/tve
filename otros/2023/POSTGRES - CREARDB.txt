@@ -15,3 +15,28 @@ INSTALAR EXTENSION UNACCENT
 CREATE EXTENSION unaccent;
 
 
+
+--------------------------------------
+
+
+eduardo@lando:~/tve$ sudo -i -u postgres psql
+[sudo] password for eduardo:
+psql (12.16 (Ubuntu 12.16-0ubuntu0.20.04.1))
+Type "help" for help.
+
+postgres=# create user tve with password 'tve';
+CREATE ROLE
+postgres=# create database tveservicios2023_testnoviembre owner tve;
+CREATE DATABASE
+postgres=# grant all privileges on database tveservicios2023_testnoviembre to tve;
+GRANT
+postgres=# alter database tveservicios2023_testnoviembre owner to tve;
+ALTER DATABASE
+postgres=# \c tveservicios2023_testnoviembre
+You are now connected to database "tveservicios2023_testnoviembre" as user "postgres".
+tveservicios2023_testnoviembre=# CREATE EXTENSION unaccent;
+CREATE EXTENSION
+tveservicios2023_testnoviembre=#
+
+
+

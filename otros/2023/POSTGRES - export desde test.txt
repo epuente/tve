@@ -1,5 +1,14 @@
+EXPORT TODO
+pg_dump -h localhost -U tve -Fc tveservicios2023_testnoviembre > tve.sq
+
 EXPORT SOLO INSERTS
 pg_dump -U tve -W  --column-inserts --data-only -h localhost tveservicios2022_test > tveservicios2022_test.sql
 
-EXPORT SOLO INSERTS, EXCLUIR TABLA PLA_EVOLUTIONS, ELIMINA LAS LINEAS QUE INICIAN CON - (GUIÓN, COMENTARIOS GENERADOS POR DUMP)
+EXPORT SOLO INSERTS, EXCLUIR TABLA PLAY_EVOLUTIONS, ELIMINA LAS LINEAS QUE INICIAN CON - (GUIÓN, COMENTARIOS GENERADOS POR DUMP)
 pg_dump -U tve -W  --column-inserts --data-only --exclude-table=play_evolutions -h localhost tveservicios2023_test | sed -e '/^--/d' > /home/epuente/dumps/tveservicios2023_test.sql
+
+
+IMPORT
+
+ pg_restore -h localhost -U tve -d tveservicios2023_testnoviembre tve2023_testNoviembre.dump
+

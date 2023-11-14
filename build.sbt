@@ -28,16 +28,6 @@ javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation", "-Werror", "-J-Xm
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 
 
-// Para hacer una distribucion tipo debian server    mediante play debian:packageBin
 
-import com.typesafe.sbt.SbtNativePackager._
-import NativePackagerKeys._
-
-import com.typesafe.sbt.packager.archetypes.ServerLoader
-serverLoading in Debian := ServerLoader.Systemd
-
-maintainer in Linux := "Eduardo Puente <epuente@ipn.mx>"
-packageSummary in Linux := "Sistema de TV Educativa - Videoteca"
-packageDescription := "Sistema de TV Educativa - Videoteca"
 
 
