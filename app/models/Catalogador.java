@@ -74,7 +74,7 @@ public class Catalogador extends models.utils.PlantillaModelo{
                 .setFetchAhead(false)
                 .getPage(page);
 
-        System.out.println("tam page2 "+p.getList().size());
+
 
       //  List<Long> ctasCatalogadores = Cuenta.find.where().ne("peronal.id", null).filterMany("roles").eq("id", 133).findList();
         return p;

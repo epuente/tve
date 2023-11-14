@@ -294,7 +294,8 @@ INSERT INTO personal (id, audit_insert, audit_update, num_empleado, paterno, mat
 INSERT INTO personal (id, audit_insert, audit_update, num_empleado, paterno, materno, nombre, tipocontrato_id, turno, activo) VALUES (11, '2023-06-20 17:51:47.754', '2023-06-20 17:51:47.754', 'VIRM890505FL0', 'Villa', 'Rojas', 'Marco', 2, 'M', 'N');
 INSERT INTO personal (id, audit_insert, audit_update, num_empleado, paterno, materno, nombre, tipocontrato_id, turno, activo) VALUES (97, '2023-06-20 17:55:01.725', '2023-06-20 17:55:01.725', 'RAAA23', 'Alva', 'Ramirez', 'Alan Roberto', 2, 'M', 'S');
 INSERT INTO personal (id, audit_insert, audit_update, num_empleado, paterno, materno, nombre, tipocontrato_id, turno, activo) VALUES (98, '2023-06-20 17:58:05.092', '2023-06-20 17:58:05.092', 'VASC23', 'Sanchez', 'Vazquez', 'Carlos Alejandro', 2, 'V', 'S');
-
+INSERT INTO personal (id, audit_insert, audit_update, num_empleado, paterno, materno, nombre, tipocontrato_id, turno, activo) VALUES(100, '2023-11-13 13:32:03.284', '2023-11-13 13:32:03.284', 'video001', 'Pérez', 'Pérez', 'Juán', 1, 'A', 'S');
+INSERT INTO personal (id, audit_insert, audit_update, num_empleado, paterno, materno, nombre, tipocontrato_id, turno, activo) VALUES(102, '2023-11-13 13:52:02.690', '2023-11-13 13:52:02.690', '1699908722690', 'Martínez', 'Martínez', 'Pedro', 2, 'A', 'S');
 
 
 INSERT INTO folio_productor_asignado (id, audit_insert, audit_update, folio_id, personal_id) VALUES (2, '2023-06-20 19:29:12.159', '2023-06-20 19:29:12.159', 2, 96);
@@ -347,8 +348,8 @@ INSERT INTO cuenta (id, audit_insert, audit_update, personal_id, username, passw
 INSERT INTO cuenta (id, audit_insert, audit_update, personal_id, username, password) VALUES (146, '2023-06-20 17:51:47.754', '2023-06-20 17:51:47.754', 11, 'mvilla', 'mvr');
 INSERT INTO cuenta (id, audit_insert, audit_update, personal_id, username, password) VALUES (147, '2023-06-20 17:55:01.725', '2023-06-20 17:55:01.725', 97, 'aalvar', 'aalvar');
 INSERT INTO cuenta (id, audit_insert, audit_update, personal_id, username, password) VALUES (148, '2023-06-20 17:58:05.092', '2023-06-20 17:58:05.092', 98, 'casanchezv', 'casanchezv');
-
-
+INSERT INTO cuenta (id, audit_insert, audit_update, personal_id, username, "password") VALUES(149, '2023-11-13 00:00:00.000', '0023-11-13 00:00:00.000', 100, 'video001', 'video001');
+INSERT INTO cuenta (id, audit_insert, audit_update, personal_id, username, "password") VALUES(151, '2023-11-13 13:52:02.694', '2023-11-13 13:52:02.694', 102, 'video002', 'video002');
 
 INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (1, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Administrador');
 INSERT INTO rol (id, audit_insert, audit_update, descripcion) VALUES (10, '2021-05-11 12:50:30', '2021-05-11 12:50:30', 'Admin. Equipo y Accesorios');
@@ -423,8 +424,8 @@ INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUE
 INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUES (245, '2022-11-10 19:23:59', '2022-11-10 19:23:59', 137, 11);
 INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUES (246, '2023-08-22 19:23:59', '2022-11-10 19:23:59', 138, 132);
 INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUES (247, '2023-10-17 12:44:59', '2023-10-17 12:44:59', 138, 133);
-
-
+INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUES (248, '2023-11-13', '2023-11-13', 149, 133);
+INSERT INTO cuenta_rol (id, audit_insert, audit_update, cuenta_id, rol_id) VALUES(249, '2023-11-13 13:52:02.694', '2023-11-13 13:52:02.694', 151, 132);
 
 
 

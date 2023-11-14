@@ -29,3 +29,8 @@ reload
 compile
 run
 exit
+tun
+run
+exit
+run
+exit

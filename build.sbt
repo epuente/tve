@@ -1,4 +1,4 @@
-name := """tve2023_devNoviembre"""
+name := """tve2023_testNoviembre"""
 version := "0.0.1-SNAPSHOT"
 scalaVersion := "2.11.4"
 libraryDependencies ++= Seq(
@@ -20,11 +20,24 @@ libraryDependencies += filters
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
-play.PlayImport.PlayKeys.playDefaultPort := 8089
+play.PlayImport.PlayKeys.playDefaultPort := 8087
 
 doc in Compile <<= target.map(_ / "none")
 
 javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation", "-Werror", "-J-Xms128M", "-J-Xmx512m", "-J-server")
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
+
+
+// Para hacer una distribucion tipo debian server    mediante play debian:packageBin
+
+import com.typesafe.sbt.SbtNativePackager._
+import NativePackagerKeys._
+
+import com.typesafe.sbt.packager.archetypes.ServerLoader
+serverLoading in Debian := ServerLoader.Systemd
+
+maintainer in Linux := "Eduardo Puente <epuente@ipn.mx>"
+packageSummary in Linux := "Sistema de TV Educativa - Videoteca"
+packageDescription := "Sistema de TV Educativa - Videoteca"
 
 

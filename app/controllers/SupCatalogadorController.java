@@ -195,7 +195,8 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
         nuevo.materno = forma.get("materno");
         nuevo.activo = "S";
         nuevo.numEmpleado =  Long.toString( new Date().getTime() );
-
+        nuevo.turno = "A";
+        nuevo.tipocontrato = TipoContrato.find.byId(2L);
         nuevo.cuentas = new ArrayList<>();
         CuentaRol cr = new CuentaRol();
         Cuenta cta = new Cuenta();
@@ -256,9 +257,25 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
             jo.put("estado","error");
             jo.put("descripcion", "tiene "+existencias+" registros");
         } else {
-            Catalogador aux = Catalogador.find.byId(id);
+            //Catalogador aux = Catalogador.find.byId(id);
+            Logger.debug("id:"+id);
+            Personal aux = Personal.find.byId(id);
             jo.put("eliminado", aux.nombreCompleto());
-            aux.delete();
+            for ( CuentaRol x : aux.cuentas.get(0).roles){
+                if (x.rol.id==132) {
+                    //  x.delete();
+                }
+            }
+
+            Logger.debug("aux.cuentas.get(0).roles.size() "+aux.cuentas.get(0).roles.size());
+
+            if (aux.cuentas.get(0).roles.size()==1) {
+                for ( Cuenta c :  aux.cuentas ){
+                    c.delete();
+                }
+               aux.delete();
+               jo.put("adicional", "si");
+            }
             jo.put("estado", "borrado");
         }
         return ok (  jo.toString()    );
