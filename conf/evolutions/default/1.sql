@@ -1102,6 +1102,16 @@ create table video_personaje (
   constraint pk_video_personaje primary key (id))
 ;
 
+create table vtk_campo (
+  id                        bigint not null,
+  audit_insert              timestamp,
+  audit_update              timestamp,
+  label                     varchar(255),
+  nombre                    varchar(255),
+  indicaciones              varchar(2000),
+  constraint pk_vtk_campo primary key (id))
+;
+
 create table vtk_catalogo (
   id                        bigint not null,
   audit_insert              timestamp,
@@ -1395,6 +1405,8 @@ create sequence unidad_responsable_seq;
 create sequence vehiculo_seq;
 
 create sequence video_personaje_seq;
+
+create sequence vtk_campo_seq;
 
 create sequence vtk_catalogo_seq;
 
@@ -1957,6 +1969,8 @@ drop table if exists vehiculo cascade;
 
 drop table if exists video_personaje cascade;
 
+drop table if exists vtk_campo cascade;
+
 drop table if exists vtk_catalogo cascade;
 
 drop table if exists vtk_evento cascade;
@@ -2188,6 +2202,8 @@ drop sequence if exists unidad_responsable_seq;
 drop sequence if exists vehiculo_seq;
 
 drop sequence if exists video_personaje_seq;
+
+drop sequence if exists vtk_campo_seq;
 
 drop sequence if exists vtk_catalogo_seq;
 

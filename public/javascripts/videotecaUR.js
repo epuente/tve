@@ -30,7 +30,7 @@ $("#URDescripcion").on("keyup", function(){
 
 function abrirURs(){
     console.log("nadaaaaaaaa")
-    $("#divBusquedaUR, #divCoincidenciasUR, #msgCoincidenciasUR, #divIndicacionesUR").show();
+    $("#divBusquedaUR, #divCoincidenciasUR, #msgCoincidenciasUR").show();
     $("#divResultadoBusquedaUR, #aabrirURs").hide();
     $("#URDescripcion").val(   $("#textUR").html()  );
     $("#URDescripcion").keyup();
@@ -41,7 +41,7 @@ $("#btnNuevaUR").off("click");
 $("#btnNuevaUR").on("click", function(e){
     console.log("abc")
     e.preventDefault();
-    $("#divBusquedaUR, #divCoincidenciasUR, #msgCoincidenciasUR, #divIndicaciones").show();
+    $("#divBusquedaUR, #divCoincidenciasUR, #msgCoincidenciasUR").show();
     $("#divResultadoBusquedaUR").hide();
     var laNueva = $("#URDescripcion").val();
     var $f = LlamadaAjax("/textsearchCampoCompleto", "POST", JSON.stringify({campo:"ur", cadena:laNueva}));
@@ -73,7 +73,7 @@ $("#btnNuevaUR").on("click", function(e){
 
                     $("#textUR").html(  salvado.descripcion);
                     $("#divResultadoBusquedaUR, #aabrirURs").show();
-                    $("#divBusquedaUR, #divIndicacionesUR, #msgCoincidenciasUR, #btnNuevaUR, #divCoincidenciasUR" ).hide();
+                    $("#divBusquedaUR, #msgCoincidenciasUR, #btnNuevaUR, #divCoincidenciasUR" ).hide();
 
                 } else {
                     alert("No fue posible agregar la Unidad Responsable.");
@@ -91,7 +91,7 @@ function seleccionaUR(id, texto){
     $('#myModal2').modal('hide');
     $('#unidadresponsable_id').selectpicker('val', id);
     $('#unidadresponsable_id').selectpicker('refresh');
-    $("#divBusquedaUR, #divCoincidenciasUR, #msgCoincidenciasUR, #divIndicacionesUR, #btnNuevaUR").hide();
+    $("#divBusquedaUR, #divCoincidenciasUR, #msgCoincidenciasUR, #btnNuevaUR").hide();
     $("#divResultadoBusquedaUR, #aabrirURs").show();
     $("#unidadresponsable_id").val(id);
     $("#textUR").html(  texto);

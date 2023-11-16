@@ -35,7 +35,7 @@ $("#produccionDescripcion").on("keyup", function(){
 
 function abrirProducciones(){
     console.log("nadaaaaaaaa")
-    $("#divBusquedaProduccion, #divCoincidenciasProduccion, #msgCoincidenciasProduccion, #divIndicacionesProduccion").show();
+    $("#divBusquedaProduccion, #divCoincidenciasProduccion, #msgCoincidenciasProduccion").show();
     $("#divResultadoBusquedaProduccion, #aAbrirProducciones").hide();
     $("#produccionDescripcion").val(   $("#textProduccion").html()  );
     $("#produccionDescripcion").keyup();
@@ -47,7 +47,7 @@ $("#btnNuevaProduccion").on("click", function(e){
 
     console.log("Desde btnNuevaProduccion.click")
     e.preventDefault();
-    $("#divBusquedaProduccion, #divCoincidenciasProduccion, #msgCoincidenciasProduccion, #divIndicacionesProduccion").show();
+    $("#divBusquedaProduccion, #divCoincidenciasProduccion, #msgCoincidenciasProduccion").show();
     $("#divResultadoBusquedaProduccion").hide();
     var laNueva = $("#produccionDescripcion").val();
     var $f = LlamadaAjax("/textsearchCampoCompleto", "POST", JSON.stringify({campo:"produccion",cadena:laNueva}));
@@ -79,7 +79,7 @@ $("#btnNuevaProduccion").on("click", function(e){
                     $("#textProduccion").html(  salvado.descripcion);
 
                     $("#divResultadoBusquedaProduccion, #aAbrirProducciones").show();
-                    $("#divBusquedaProduccion, #divIndicacionesProduccion, #msgCoincidenciasProduccion, #btnNuevaProduccion, #divCoincidenciasProduccion" ).hide();
+                    $("#divBusquedaProduccion, #msgCoincidenciasProduccion, #btnNuevaProduccion, #divCoincidenciasProduccion" ).hide();
                 } else {
                     alert("No fue posible agregar la produccion.");
                 }
@@ -95,7 +95,7 @@ function seleccionaProduccion(id, texto){
     //$('#produccion_id').selectpicker('refresh');
     $('#produccion_id').selectpicker('val', id);
     $('#produccion_id').selectpicker('refresh');
-    $("#divBusquedaProduccion, #divCoincidenciasProduccion, #msgCoincidenciasProduccion, #divIndicacionesProduccion, #btnNuevaProduccion").hide();
+    $("#divBusquedaProduccion, #divCoincidenciasProduccion, #msgCoincidenciasProduccion, #btnNuevaProduccion").hide();
     $("#divResultadoBusquedaProduccion, #aAbrirProducciones").show();
     $("#produccion_id").val(id);
     $("#textProduccion").html(  texto);

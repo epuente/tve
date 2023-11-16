@@ -11,13 +11,13 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
             <div class="row">
                 <div class="col-xs-12 col-sm-2 col-md-2 col-lg-3">
                     <div class="form-group">
-                         @inputText(forma("folio"), '_label -> "1. Folio", 'class->"form-control campoRequerido", 'maxlength->"30",  'placeholder->"Ejem. DIRGRAL980125", '_help->"El folio del oficio" )
+                        @inputText(forma("folio"), '_label -> "1. Folio", 'class->"form-control campoRequerido", 'maxlength->"30",  'placeholder->"Ejem. DIRGRAL980125", '_help->"" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-2 col-md-2 col-lg-3">
                     <div class="form-group">
-                        @inputText(forma("clave"), '_label -> "2. ID", 'class->"form-control", 'required->true, 'maxlength->"30", 'placeholder->"Ejem. BCT-00081-30",  '_help->"Identificador Videoteca" )
+                        @inputText(forma("clave"), '_label -> "2. ID", 'class->"form-control", 'required->true, 'maxlength->"30", 'placeholder->"Ejem. BCT-00081-30",  '_help->"" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -40,12 +40,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                                 </dd>
                             </dl>
                             <div class="help-block with-errors"></div>
-                            <div id="divIndicacionesUr" class="small">
-                                <div style="margin-botton: 0.5em">
-                                    Escriba el nombre completo de la Unidad Responsable y se realizará automáticamente la búsqueda.
-                                </div>
-                                <div>Si la Unidad Responsable que desea agregar aparece en la lista de coincidencias, elijala de la lista.<br>Si la Unidad Responsable es nueva y no aparece en la lista de coincidencias, oprima el botón <strong>Nueva UR</strong></div>
-                            </div>
+
                             <div id="msgCoincidenciasUR" style="margin-top:5px; margin-bottom:5px;"></div>
                             <div id="divCoincidenciasUR">
                                 <div class="list-group" style="font-size: small">
@@ -61,7 +56,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                     <div style="vertical-align: middle;">
                         <a href="javascript:abrirURs();" style="display:none" id="aAbrirURs">Abrir URs</a>
                         <br>
-                        <button id ="btnNuevaUR" class="btn btn-success" style="display:none">Nueva UR</button>
+                        <button id ="btnNuevaUR" class="btn btn-sm btn-success" style="display:none">Nueva UR</button>
                     </div>
                 </div>
 
@@ -116,7 +111,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                 </div>
                 <div class="col-sm-12 col-sm-12 col-md-2 col-lg-4">
                     <div class="form-group">
-                        @inputText(forma("folioDEV"), '_label -> "6. Folio DEV",  'maxlength->"30",  'class->"form-control",  'placeholder->"Ejem. 0225689", '_help->"Folio cuando se recibe en la DEV" )
+                        @inputText(forma("folioDEV"), '_label -> "6. Folio DEV",  'maxlength->"30",  'class->"form-control",  'placeholder->"Ejem. 0225689", '_help->"" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -126,7 +121,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
 
 
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="row">
@@ -148,12 +143,6 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                                     </dl>
                                     <div class="help-block with-errors"></div>
                                 </div>
-                                <div id="divIndicaciones" class="small">
-                                    <div style="margin-botton: 0.5em">
-                                        Escriba la descripción de la serie y se realizará automáticamente la búsqueda.
-                                    </div>
-                                    <div>Si la serie que desea agregar aparece en la lista de coincidencias, elijala de la lista.<br>Si la serie es nueva y no aparece en la lista de coincidencias, oprima el botón <strong>Nueva serie</strong></div>
-                                </div>
                                 <div id="msgCoincidencias" style="margin-top:5px; margin-bottom:5px;"></div>
                                 <div id="divCoincidencias">
                                     <div class="list-group" style="font-size: small">
@@ -165,7 +154,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                             <div style="vertical-align: middle;">
                                 <a href="javascript:abrirSeries();" style="display:none" id="aAbrirSeries">Abrir series</a>
                                 <br>
-                                <button id ="btnNuevaSerie" class="btn btn-success" style="display:none">Nueva serie</button>
+                                <button id ="btnNuevaSerie" class="btn btn-sm btn-success" style="display:none">Nueva serie</button>
                             </div>
                         </div>
                     </div>
@@ -173,31 +162,34 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12 col-lg-12"><h2>8. Créditos</h2></div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading panel-heading-nav">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12">
-                                    <div>
-                                        <!-- Nav tabs -->
-                                        <ul class="nav nav-tabs" role="tablist" id="navTabs">
-                                            @for( s <- auxCreditos) {
-                                            <li role="presentation" @if(s.id==1){class="active"}><a href="#@s.id"  id="tab@s.id"  role="tab" data-toggle="tab">8.@s.id @s.descripcion</a></li>
-                                            }
-                                        </ul>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12"><h2>8. Créditos</h2></div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading panel-heading-nav">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                        <div>
+                                            <!-- Nav tabs -->
+                                            <ul class="nav nav-tabs" role="tablist" id="navTabs">
+                                                @for( s <- auxCreditos) {
+                                                <li role="presentation" @if(s.id==1){class="active"}><a href="#@s.id"  id="tab@s.id"  role="tab" data-toggle="tab">8.@s.id @s.descripcion</a></li>
+                                                }
+                                            </ul>
 
-                                        <!-- Tab panes -->
-                                        <div class="tab-content">
-                                            @for(s <- auxCreditos) {
-                                            <div role="tabpanel" class="tab-pane @if(s.id==1){ active}" id="@s.id" name="losTabs">
-                                                <textarea id="ta@s.id" name="tasCreditos" class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Escriba los nombres de las personas que participaron en @s.accion"></textarea>
+                                            <!-- Tab panes -->
+                                            <div class="tab-content">
+                                                @for(s <- auxCreditos) {
+                                                <div role="tabpanel" class="tab-pane @if(s.id==1){ active}" id="@s.id" name="losTabs">
+                                                    <textarea id="ta@s.id" name="tasCreditos" class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Escriba los nombres de las personas que participaron en @s.accion"></textarea>
+                                                </div>
+                                                }
                                             </div>
-                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -206,36 +198,31 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                     </div>
                 </div>
             </div>
-        </div>
     </div>
-
-
-
-
-
-
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
                             <div class="form-group">
                                 @inputText(forma("titulo"), '_label -> "9. Título",  'maxlength->"200", 'class->"form-control", 'placeholder->"Ejem. Segundo programa" )
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-1">
-                                @inputText(forma("obra"), '_label -> "10. Num. de obra", 'class->"form-control", '_help->"xx/xx" )
+                        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2">
+                                @inputText(forma("obra"), '_label -> "10. Num. de obra", 'class->"form-control", '_help->"" )
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-1">
+                        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2">
                             <div class="form-group">
-                                @inputText(forma("duracionStr"), '_label -> "11. Duración",  'class->"form-control", '_help->"hhh:mm:ss" )
+                                @inputText(forma("duracionStr"), '_label -> "11. Duración",  'class->"form-control", '_help->"" )
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-4 col-lg-6">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4 col-lg-4">
                             <textarea style='display:none;' name='txaPalabrasClave' id='txaPalabrasClave'></textarea>
                             <input type="text" name="palabrasClave[0].descripcion" value="ladescripcion" style="display:none"></input>
                             <label for="palabrasClaveStr">12. Palabras clave</label>
@@ -244,49 +231,87 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
-                    </div>
 
 
-                    <div class="row">
-                        <div class="col-sm-12 col-md-10 col-lg-10">
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-10 col-lg-10">
+                                    <div class="form-group">
+                                        <div id="divResultadoBusquedaProduccion" style="display:none">
+                                            <dt class=" ">
+                                            <dt><label>13. Producción</label>
+                                            </dt>
+                                            <input type="hidden" id="produccion_id" name="produccion.id">
+                                            <div id="textProduccion">???</div>
+                                        </div>
+                                        <div id="divBusquedaProduccion">
+                                            <dl class=" " id="produccionDescripcion_field">
+                                                <dt><label for="produccionDescripcion">13. Producción</label></dt>
+                                                <dd>
+                                                    <input type="text" id="produccionDescripcion" value=""  maxlength="100",  class="form-control" placeholder="Ejem. ">
+                                                </dd>
+                                            </dl>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+
+                                        <div id="msgCoincidenciasProduccion" style="margin-top:5px; margin-bottom:5px;"></div>
+                                        <div id="divCoincidenciasProduccion">
+                                            <div class="list-group" style="font-size: small">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-2 col-lg-2 text-center" >
+                                    <div style="vertical-align: middle;">
+                                        <a href="javascript:abrirProducciones();" style="display:none" id="aAbrirProducciones">Abrir producciones</a>
+                                        <br>
+                                        <button id ="btnNuevaProduccion" class="btn btn-sm btn-success" style="display:none">Nueva producción</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                             <div class="form-group">
-                                <div id="divResultadoBusquedaProduccion" style="display:none">
-                                    <dt class=" ">
-                                    <dt><label>13. Producción</label>
-                                    </dt>
-                                    <input type="hidden" id="produccion_id" name="produccion.id">
-                                    <div id="textProduccion">???</div>
-                                </div>
-                                <div id="divBusquedaProduccion">
-                                    <dl class=" " id="produccionDescripcion_field">
-                                        <dt><label for="produccionDescripcion">13. Producción</label></dt>
-                                        <dd>
-                                            <input type="text" id="produccionDescripcion" value=""  maxlength="100",  class="form-control" placeholder="Ejem. ">
-                                        </dd>
-                                    </dl>
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                                <div id="divIndicacionesProduccion" class="small">
-                                    <div style="margin-botton: 0.5em">
-                                        Escriba la descripción de la produccion y se realizará automáticamente la búsqueda.
-                                    </div>
-                                    <div>Si la producción que desea agregar aparece en la lista de coincidencias, elijala de la lista.<br>Si la producción es nueva y no aparece en la lista de coincidencias, oprima el botón <strong>Nueva producción</strong></div>
-                                </div>
-                                <div id="msgCoincidenciasProduccion" style="margin-top:5px; margin-bottom:5px;"></div>
-                                <div id="divCoincidenciasProduccion">
-                                    <div class="list-group" style="font-size: small">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-2 col-lg-2 text-center" >
-                            <div style="vertical-align: middle;">
-                                <a href="javascript:abrirProducciones();" style="display:none" id="aAbrirProducciones">Abrir producciones</a>
-                                <br>
-                                <button id ="btnNuevaProduccion" class="btn btn-success" style="display:none">Nueva producción</button>
+                                @select(
+                                forma("idioma.id"),
+                                options(Idioma.options),
+                                '_label -> "14. Idioma", '_default->"-- Seleccione --",
+                                '_showConstraints -> false,
+                                'class->"form-control"
+                                )
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                            <div class="form-group">
+                                @select(
+                                forma("tipograbacion.id"),
+                                options(models.TipoGrabacion.options),
+                                '_label -> "15. Grabación", '_default -> "-- Seleccione --",
+                                '_showConstraints -> false,
+                                'class->"form-control"
+                                )
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                            <div class="form-group">
+                                @inputText(forma("fechaProduccion"), '_label -> "16. Fecha producción", 'class->"form-control", '_help->"", 'placeholder->"Ejem. 04/11/2001" )
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                            <div class="form-group">
+                                @inputText(forma("fechaPublicacion"), '_label -> "17. Fecha publicación", 'class->"form-control", '_help->"", 'placeholder->"Ejem. 02/12/2001" )
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
 
 
 
@@ -322,12 +347,6 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                                     </dl>
                                     <div class="help-block with-errors"></div>
                                 </div>
-                                <div id="divIndicacionesAreaTematica" class="small">
-                                    <div style="margin-botton: 0.5em">
-                                        Escriba la descripción del área temática y se realizará automáticamente la búsqueda.
-                                    </div>
-                                    <div>Si el área temática que desea agregar aparece en la lista de coincidencias, elijala de la lista.<br>Si el área temática es nueva y no aparece en la lista de coincidencias, oprima el botón <strong>Nueva área</strong></div>
-                                </div>
                                 <div id="msgCoincidenciasAreaTematica" style="margin-top:5px; margin-bottom:5px;"></div>
                                 <div id="divCoincidenciasAreaTematica">
                                     <div class="list-group" style="font-size: small">
@@ -339,7 +358,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                             <div style="vertical-align: middle;">
                                 <a href="javascript:abrirAreas();" style="display:none" id="aAbrirAreas">Abrir áreas</a>
                                 <br>
-                                <button id ="btnNuevaAreaTematica" class="btn btn-success" style="display:none">Nueva área</button>
+                                <button id ="btnNuevaAreaTematica" class="btn btn-sm btn-success" style="display:none">Nueva área</button>
                             </div>
                         </div>
 
@@ -363,16 +382,13 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
         </div>
     </div>
 
-
-
-
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="form-group">
-                                @textarea(forma("sinopsis"), '_label -> "21. Sinópsis",  'maxlength->"3000", 'class->"form-control", 'rows->2, 'cols->"300"  , 'required->true, 'placeholder->"Notas: Expo-Profesionfráfica 1998, convenio revision salarial, convenio de colaboración IPN- Instituto de Aviación" )
-                                <div class="help-block with-errors"></div>
-                            </div>
-                        </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        @textarea(forma("sinopsis"), '_label -> "21. Sinópsis",  'maxlength->"3000", 'class->"form-control", 'rows->2, 'cols->"300"  , 'required->true, 'placeholder->"Notas: Expo-Profesionfráfica 1998, convenio revision salarial, convenio de colaboración IPN- Instituto de Aviación" )
+                        <div class="help-block with-errors"></div>
                     </div>
                 </div>
             </div>

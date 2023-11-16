@@ -251,8 +251,9 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         List<TipoCredito> tiposOrdenados = tipos.stream()
                 .sorted(Comparator.comparing(TipoCredito::getId))
                 .collect(Collectors.toList());
+        List<VtkCampo> campos = VtkCampo.find.all();
         return ok(
-                views.html.videoteca.createForm.render(forma, tiposOrdenados)
+                views.html.videoteca.createForm.render(forma, tiposOrdenados, campos)
         );
     }
 /*
@@ -674,7 +675,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             System.out.println(fd);
 
             if(forma.hasErrors()) {
-                return badRequest(createForm.render(forma, TipoCredito.find.all() ));
+                return badRequest(createForm.render(forma, TipoCredito.find.all(), VtkCampo.find.all() ));
             }
 
 
@@ -967,7 +968,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         vtk.duracion = duracion.totalSegundos();
 
         if(forma.hasErrors()) {
-            return badRequest(createForm.render(forma, TipoCredito.find.all() ));
+            return badRequest(createForm.render(forma, TipoCredito.find.all(), VtkCampo.find.all() ));
         }
 
         System.out.println("duracion:"+vtk.duracion);
@@ -1060,7 +1061,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         DynamicForm fd = DynamicForm.form().bindFromRequest();
 
         if(forma.hasErrors()) {
-            return badRequest(createForm.render(forma, TipoCredito.find.all() ));
+            return badRequest(createForm.render(forma, TipoCredito.find.all(), VtkCampo.find.findList() ));
         }
 
 

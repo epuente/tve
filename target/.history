@@ -50,5 +50,7 @@ compile
 run
 stage
 clean
+/home/epuente/pruebasServer/tve2023_testNoviembre/target/universal/stage/bin/tve2023_testnoviembre -Dhttp.port=8089 -Dplay.crypto.secret=mySecretKey >>$APP_HOME/salida.log 2>errores.log
 run
+clean
 exit

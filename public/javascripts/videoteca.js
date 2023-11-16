@@ -1,3 +1,10 @@
+const ayudaCampos = ['ayuda del campo 1',
+                        'ayuda del campo2',
+                        'Escriba el nombre completo de la Instancia solicitante y se realizará automáticamente la búsqueda.<br><br>Si la Instancia que desea agregar aparece en la lista de coincidencias, elijala de la lista.<br><br>Si la Instancia es nueva, oprima el botón <strong>Nueva UR</strong>',
+                        'ayuda del campo 4'
+                    ]
+
+
 $("#btnModalGuardar").off("click");
 $("#btnModalGuardar").on("click", function(){
     console.debug("click! ")
@@ -40,7 +47,7 @@ $("#serieDescripcion").on("keyup", function(){
 
 function abrirSeries(){
     console.log("nadaaaaaaaa")
-    $("#divBusqueda, #divCoincidencias, #msgCoincidencias, #divIndicaciones").show();
+    $("#divBusqueda, #divCoincidencias, #msgCoincidencias").show();
     $("#divResultadoBusqueda, #aAbrirSeries").hide();
     $("#serieDescripcion").val(   $("#textSerie").html()  );
     $("#serieDescripcion").keyup();
@@ -51,7 +58,7 @@ $("#btnNuevaSerie").off("click");
 $("#btnNuevaSerie").on("click", function(e){
     console.log("abc")
     e.preventDefault();
-    $("#divBusqueda, #divCoincidencias, #msgCoincidencias, #divIndicaciones").show();
+    $("#divBusqueda, #divCoincidencias, #msgCoincidencias").show();
     $("#divResultadoBusqueda").hide();
     var laNueva = $("#serieDescripcion").val();
     var $f = LlamadaAjax("/textsearchCampoCompleto", "POST", JSON.stringify({campo:"serie",cadena:laNueva}));
@@ -81,7 +88,7 @@ $("#btnNuevaSerie").on("click", function(e){
                     $("#textSerie").html(  salvado.descripcion);
 
                     $("#divResultadoBusqueda, #aAbrirSeries").show();
-                    $("#divBusqueda, #divIndicaciones, #msgCoincidencias, #btnNuevaSerie, #divCoincidencias" ).hide();
+                    $("#divBusqueda, #msgCoincidencias, #btnNuevaSerie, #divCoincidencias" ).hide();
 
                 } else {
                     alert("No fue posible agregar la serie.");
@@ -98,7 +105,7 @@ function seleccionaSerie(id, texto){
     //$('#serie_id').selectpicker('refresh');
     $('#serie_id').selectpicker('val', id);
     $('#serie_id').selectpicker('refresh');
-    $("#divBusqueda, #divCoincidencias, #msgCoincidencias, #divIndicaciones, #btnNuevaSerie").hide();
+    $("#divBusqueda, #divCoincidencias, #msgCoincidencias, #btnNuevaSerie").hide();
     $("#divResultadoBusqueda, #aAbrirSeries").show();
     $("#serie_id").val(id);
     $("#textSerie").html(  texto);
@@ -447,6 +454,8 @@ function valoresTimeLine(){
     });
     return j;
 }
+
+
 
 
 function labelsCamposRequeridos(){

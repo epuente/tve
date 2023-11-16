@@ -35,7 +35,7 @@ $("#areatematicaDescripcion").on("keyup", function(){
 
 function abrirAreas(){
     console.log("nadaaaaaaaa")
-    $("#divBusquedaAreaTematica, #divCoincidenciasAreaTematica, #msgCoincidenciasAreaTematica, #divIndicacionesAreaTematica").show();
+    $("#divBusquedaAreaTematica, #divCoincidenciasAreaTematica, #msgCoincidenciasAreaTematica").show();
     $("#divResultadoBusquedaAreaTematica, #aAbrirAreas").hide();
     $("#areatematicaDescripcion").val(   $("#textAreaTematica").html()  );
     $("#areatematicaDescripcion").keyup();
@@ -47,7 +47,7 @@ $("#btnNuevaAreaTematica").on("click", function(e){
 
     console.log("Desde btnNuevaAreaTematica.click")
     e.preventDefault();
-    $("#divBusquedaAreaTematica, #divCoincidenciasAreaTematica, #msgCoincidenciasAreaTematica, #divIndicacionesAreaTematica").show();
+    $("#divBusquedaAreaTematica, #divCoincidenciasAreaTematica, #msgCoincidenciasAreaTematica").show();
     $("#divResultadoBusquedaAreaTematica").hide();
     var laNueva = $("#areatematicaDescripcion").val();
     var $f = LlamadaAjax("/textsearchCampoCompleto", "POST", JSON.stringify({campo:"areatematica",cadena:laNueva}));
@@ -79,7 +79,7 @@ $("#btnNuevaAreaTematica").on("click", function(e){
                     $("#textAreaTematica").html(  salvado.descripcion);
 
                     $("#divResultadoBusquedaAreaTematica, #aAbrirAreas").show();
-                    $("#divBusquedaAreaTematica, #divIndicacionesAreaTematica, #msgCoincidenciasAreaTematica, #btnNuevaAreaTematica, #divCoincidenciasAreaTematica" ).hide();
+                    $("#divBusquedaAreaTematica, #msgCoincidenciasAreaTematica, #btnNuevaAreaTematica, #divCoincidenciasAreaTematica" ).hide();
                 } else {
                     alert("No fue posible agregar la areatematica.");
                 }
@@ -95,7 +95,7 @@ function seleccionaAreaTematica(id, texto){
     //$('#areatematica_id').selectpicker('refresh');
     $('#areatematica_id').selectpicker('val', id);
     $('#areatematica_id').selectpicker('refresh');
-    $("#divBusquedaAreaTematica, #divCoincidenciasAreaTematica, #msgCoincidenciasAreaTematica, #divIndicacionesAreaTematica, #btnNuevaAreaTematica").hide();
+    $("#divBusquedaAreaTematica, #divCoincidenciasAreaTematica, #msgCoincidenciasAreaTematica, #btnNuevaAreaTematica").hide();
     $("#divResultadoBusquedaAreaTematica, #aAbrirAreas").show();
     $("#areatematica_id").val(id);
     $("#textAreaTematica").html(  texto);

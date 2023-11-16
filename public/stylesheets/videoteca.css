@@ -70,3 +70,9 @@
 dd.info {
     font-size:85%;
 }
+
+.iconoAyudaCampo,
+.iconoAyudaCampo:hover
+{
+    font-color: yellow;
+}

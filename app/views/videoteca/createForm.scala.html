@@ -1,7 +1,10 @@
-@(forma: Form[VtkCatalogo], auxCreditos:List[TipoCredito])
+@(forma: Form[VtkCatalogo], auxCreditos:List[TipoCredito], campos:List[VtkCampo])
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
 
 @import helper._
+
 @anio = { @(new Date().format("yyyy"))}
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify"></script>
@@ -44,6 +47,10 @@
 <script type="text/javascript">
     var texto="";
     $(function() {
+
+
+        $("#botonAyudaCampo3").attr("data-content",ayudaCampos[2]);
+
         $('form').validator();
         $("#serie_id").selectpicker({
             title:"Escriba, seleccione o busque un número de oficio o descripción del oficio",
@@ -137,8 +144,27 @@
         });
 
 
-
         labelsCamposRequeridos();
+
+
+
+        @for(c<-campos){
+            $("label[for='@c.label']").append('<a tabindex="0" class="iconoAyudaCampo" style="margin-left:10px;" role=""  id="botonAyudaCampo@c.id"  data-html="true" data-toggle="popover" data-trigger="hover" title="Ayuda del campo @c.nombre" data-content="@c.indicaciones"   data-container="body"><i class="fas fa-question-circle"></i></a>');
+            $("#botonAyudaCampo3").attr("data-content",ayudaCampos[2]);
+
+        }
+        $('[data-toggle="popover"]').popover()
+
+
+
+
+
+
+
+
+
+
+
         $('[data-toggle="tooltip"]').tooltip();
     });  // fin del $(function()
 
