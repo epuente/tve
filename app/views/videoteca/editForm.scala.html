@@ -20,13 +20,13 @@
 
     <h1>Edición del catálogo de videoteca</h1>
 
-    @form(CSRF(routes.VideotecaController.update2()), 'role->"form", 'id->"frmVideoteca", 'name->"frmVTK", Symbol("data-modo")->"edicion") {
+    @form(CSRF(routes.VideotecaController.update()), 'role->"form",'id->"frmVideoteca", 'name->"frmVTK", Symbol("data-modo")->"edicion"){
         @videotecaSecuenciaForm(forma, auxCreditos)
         <br/><br/>
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <div style="width: 80%" class="center-block">
-                    <input type="submit" onsubmit="javascript:agregaJSON()" value="Actualizar" class="btn btn-primary btn-block">
+                    <input type="submit" onsubmit="javascript:agregaJSON2()" value="Actualizar" class="btn btn-primary btn-block">
                 </div>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
@@ -140,14 +140,20 @@
         // Evento (  Servicio en la DB  )
         @if(forma.get().eventos.length>0){
             @for(e<-forma.get().eventos){
-                $("#eventos_@(e.servicio.id-1)_id").attr("checked", true);
+                @if(e.servicio!=null){
+                    console.log("-------------@e.id")
+                    $("#eventos_@(e.servicio.id-1)").val(@e.id);
+                    $("#eventos_@(e.servicio.id-1)_id").attr("checked", true);
+                }
             }
         }
 
         // Nivel
         @if(forma.get().niveles.size!=0){
                 @for(e<-forma.get().niveles){
-                    $("#nivel@(e.nivel.id)").attr("checked", true);
+                    @if(e.nivel!=null){
+                        $("#nivel@(e.nivel.id)").attr("checked", true);
+                    }
                 }
         }
 
@@ -220,7 +226,7 @@
 
 
 
-        $("#divRegistro").append("Registro :"+moment("@forma.get().auditInsert").format("DD-MM-YY HH:mm:ss")+"<br>Última actualización: "+moment("@forma.get().auditUpdate").format("DD-MM-YY HH:mm:ss")).show();
+        $("#divRegistro").append("Registro :"+moment("@forma.get().auditInsert").format("DD-MM-YY HH:mm:ss")).show();
 
     }
 

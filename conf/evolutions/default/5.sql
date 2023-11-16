@@ -39,6 +39,19 @@ INSERT INTO nivel (id, audit_insert, audit_update, descripcion) VALUES(4, '2023-
 INSERT INTO tipo_grabacion (id, audit_insert, audit_update, descripcion) VALUES(1, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Master');
 INSERT INTO tipo_grabacion (id, audit_insert, audit_update, descripcion) VALUES(2, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Copia');
 
+INSERT INTO tipo_video (id, audit_insert, audit_update, descripcion) VALUES(1, '2023-11-15 00:00:00.000', '2023-11-15 00:00:00.000', 'NTSC 1920x1080 (FHD) H.264 16:9');
+INSERT INTO tipo_video (id, audit_insert, audit_update, descripcion) VALUES(2, '2023-11-15 00:00:00.000', '2023-11-15 00:00:00.000', 'NTSC 1280x720 (HD) H.264 16:9');
+INSERT INTO tipo_video (id, audit_insert, audit_update, descripcion) VALUES(3, '2023-11-15 00:00:00.000', '2023-11-15 00:00:00.000', 'NTSC 854x480 (SD) H.264 16:9');
+INSERT INTO tipo_video (id, audit_insert, audit_update, descripcion) VALUES(4, '2023-11-15 00:00:00.000', '2023-11-15 00:00:00.000', 'NTSC 640x360 (SD) H.264 16:9');
+INSERT INTO tipo_video (id, audit_insert, audit_update, descripcion) VALUES(5, '2023-11-15 00:00:00.000', '2023-11-15 00:00:00.000', 'NTSC 426x240 (SD) H.264 16:9');
+INSERT INTO tipo_video (id, audit_insert, audit_update, descripcion) VALUES(6, '2023-11-15 00:00:00.000', '2023-11-15 00:00:00.000', 'NTSC 2560x1440 (2K) H.264 16:9');
+INSERT INTO tipo_video (id, audit_insert, audit_update, descripcion) VALUES(7, '2023-11-15 00:00:00.000', '2023-11-15 00:00:00.000', 'NTSC 3840x2160 (4K) H.264 16:9');
+INSERT INTO tipo_video (id, audit_insert, audit_update, descripcion) VALUES(8, '2023-11-15 00:00:00.000', '2023-11-15 00:00:00.000', 'NTSC 7680x4320 (8K) H.264 16:9');
+INSERT INTO tipo_video (id, audit_insert, audit_update, descripcion) VALUES(9, '2023-11-15 00:00:00.000', '2023-11-15 00:00:00.000', 'NTSC 1920x1080 (FHD) H.265 16:9');
+INSERT INTO tipo_video (id, audit_insert, audit_update, descripcion) VALUES(10, '2023-11-15 00:00:00.000', '2023-11-15 00:00:00.000', 'NTSC 2560x1440 (2K) H.265 16:9');
+INSERT INTO tipo_video (id, audit_insert, audit_update, descripcion) VALUES(11, '2023-11-15 00:00:00.000', '2023-11-15 00:00:00.000', 'NTSC 3840x2160 (4K) H.265 16:9');
+INSERT INTO tipo_video (id, audit_insert, audit_update, descripcion) VALUES(12, '2023-11-15 00:00:00.000', '2023-11-15 00:00:00.000', 'NTSC 7680x4320 (8K) H.265 16:9');
+
 select setval( 'serie_seq', (select max(id)+1 from serie), true);
 select setval( 'vtk_catalogo_seq', (select max(id)+1 from vtk_catalogo), true);
 select setval( 'vtk_evento_seq', (select max(id)+1 from vtk_evento), true);
@@ -56,6 +69,7 @@ drop table if exists nivel cascade;
 drop table if exists produccion cascade;
 drop table if exists tipo_credito cascade;
 drop table if exists tipo_grabacion cascade;
+drop table if exists tipo_grabacion cascade;
 
 drop sequence if exists areatematica_seq;
 drop sequence if exists disponibilidad_seq;
@@ -63,4 +77,5 @@ drop sequence if exists serie_seq;
 drop sequence if exists nivel_seq;
 drop sequence if exists produccion_seq;
 drop sequence if exists tipo_credito_seq;
-drop sequence if exists tipo_grabacion;
+drop sequence if exists tipo_grabacion_seq;
+drop sequence if exists tipo_video_seq;

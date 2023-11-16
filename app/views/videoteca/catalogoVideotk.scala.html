@@ -25,7 +25,6 @@
     <table class="table table-bordered table-striped" id="tabla">
         <thead>
         <tr>
-            <td>id</td>
             <td>ID</td>
             <td>Serie</td>
             <td>Titulo</td>
@@ -60,21 +59,24 @@
 	                "dataType": "json"
 	            },
 	            "columns": [
-	                { "data": "id" ,
-	                  "render": function(data, type, row, meta){
-	                      return '<u><a href="vtkCatalogo/edit/'+data+'">'+data+"</a></u>";
-	                  }
-	                },
-	                {"data":"clave"},
-	                { "data": "serie",
-	                    "render": function(data, type, row, meta){
-	                        return data==null?"":data;
+	                {"data":"clave",
+	                    render: function(data, type, row, meta){
+	                      return '<u><a href="vtkCatalogo/edit/'+row['id']+'">'+data+"</a></u>";
 	                    }
 	                },
-	                { "data": "titulo" },
+	                { "data": "serie",
+	                    "render": function(data, type, row, meta){
+	                        return data==null || data.length==0?"<span style='font-size:small'>Sin información</span>":data;
+	                    }
+	                },
+	                { "data": "titulo",
+                        render: function(data, type, row, meta){
+	                        return data==null || data.length==0?"<span style='font-size:small'>Sin información</span>":data;
+	                    }
+	                },
 	                { "data": "obra",
                         "render": function(data, type, row, meta){
-	                        return data==null?"":data;
+	                        return data==null || data.length==0?"<span style='font-size:small'>Sin información</span>":data;
 	                    }
 	                }
 	              ]

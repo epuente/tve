@@ -9,19 +9,19 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-sm-12 col-md-2 col-lg-2">
+                <div class="col-xs-12 col-sm-2 col-md-2 col-lg-3">
                     <div class="form-group">
                          @inputText(forma("folio"), '_label -> "1. Folio", 'class->"form-control campoRequerido", 'maxlength->"30",  'placeholder->"Ejem. DIRGRAL980125", '_help->"El folio del oficio" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                <div class="col-xs-12 col-sm-2 col-md-2 col-lg-3">
                     <div class="form-group">
                         @inputText(forma("clave"), '_label -> "2. ID", 'class->"form-control", 'required->true, 'maxlength->"30", 'placeholder->"Ejem. BCT-00081-30",  '_help->"Identificador Videoteca" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                <div class="col-xs-12 col-sm-7 col-md-4 col-lg-5">
                     <div class="form-group">
                         <div id="divResultadoBusquedaUR" style="display:none">
                             <dt class=" ">
@@ -57,14 +57,29 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                     </div>
 
                 </div>
-                <div class="col-sm-12 col-md-1 col-lg-1 text-center" >
+                <div class="col-xs-12 col-sm-1 col-md-1 col-lg-1 text-center" >
                     <div style="vertical-align: middle;">
                         <a href="javascript:abrirURs();" style="display:none" id="aAbrirURs">Abrir URs</a>
                         <br>
                         <button id ="btnNuevaUR" class="btn btn-success" style="display:none">Nueva UR</button>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-3">
+
+
+
+
+
+
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-2 col-lg-2">
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6">
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-4">
                     <div class="form-group">
                         <dl class=" " id="evento_field">
                             <dt><label for="eventos_0_id">4. Evento</label></dt>
@@ -80,22 +95,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                     </div>
 
                 </div>
-
-
-
-
-
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-md-2 col-lg-2">
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-6">
-
-                </div>
-            </div>
-            <div class="row">
-
-                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-4">
                     <div class="form-group">
                         <dl class=" " id="niverlacademico_field">
                             <dt><label for="nivel1">5. Nivel</label></dt>
@@ -114,15 +114,12 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-2 col-lg-2">
+                <div class="col-sm-12 col-sm-12 col-md-2 col-lg-4">
                     <div class="form-group">
                         @inputText(forma("folioDEV"), '_label -> "6. Folio DEV",  'maxlength->"30",  'class->"form-control",  'placeholder->"Ejem. 0225689", '_help->"Folio cuando se recibe en la DEV" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </div>
@@ -405,15 +402,15 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                         <div class="col-sm-12 col-md-12 col-lg-12"><h2>22. Intervención de personajes  <a href="javascript:agregarTimeLine();" data-toggle="popover" data-content="Agregar Catalogo" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a></h2></div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-2 col-lg-2" style="text-align: center;">23. Tiempo</div>
+                        <div class="col-sm-2 col-md-2 col-lg-2" style="text-align: center;">23. Tiempo</div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-1 col-lg-1">24. Inicio</div>
                         <div class="col-sm-12 col-md-1 col-lg-1">25. Término</div>
-                        <div class="col-sm-12 col-md-1 col-lg-2">26. Nombre</div>
+                        <div class="col-sm-12 col-md-2 col-lg-2">26. Nombre</div>
                         <div class="col-sm-12 col-md-1 col-lg-1">27. Grado</div>
                         <div class="col-sm-12 col-md-1 col-lg-1">28. Cargo</div>
-                        <div class="col-sm-12 col-md-1 col-lg-5">29. Título o tema</div>
+                        <div class="col-sm-12 col-md-5 col-lg-5">29. Título o tema</div>
                         <div class="col-sm-12 col-md-1 col-lg-1"></div>
                     </div>
             </div>
@@ -434,7 +431,14 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
-                        @textarea(forma("video"), '_label -> "31. Video",  'maxlength->"200", 'class->"form-control", 'rows->3, 'cols->"300", 'required->true,  'placeholder->"Ejem. NTSC 1920x1080 H.264 16:9 Bueno" )
+                        @select(
+                            forma("video.id"),
+                            options(models.TipoVideo.options),
+                            '_label -> "31. Video", '_default -> "-- Seleccione --",
+                            '_showConstraints -> false,
+                            'class->"form-control",
+                            'required->true
+                        )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -457,7 +461,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
         <div class="panel-body">
             <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6">Catalogador: @models.Personal.find.byId( Long.parseLong(session.get("usuario"))).nombreCompleto()</div>
-                <div class="col-sm-12 col-md-6 col-lg-6" style="display:none" id="divRegistro"></div>
+                <div class="col-sm-12 col-md-6 col-lg-6 text-right" style="display:none;" id="divRegistro"></div>
             </div>
         </div>
     </div>

@@ -406,7 +406,7 @@
         <div class="panel-body">
             <div id="abc">
                     <div class="row">
-                        <div class="col-sm-12 col-md-12 col-lg-12"><h2>Intervención de personajes  <a href="javascript:agregarTimeLine();" data-toggle="popover" data-content="Agregar Catalogo" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a></h2></div>
+                        <div class="col-sm-12 col-md-12 col-lg-12"><h2>Intervención de personajes  <a href="javascript:agregarTimeLine();"  data-toggle="tooltip" data-placement="top" title="Agregar renglón"  class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a></h2></div>
                     </div>
 
                     <div class="row" id="">
@@ -459,7 +459,7 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6">Catalogador: @models.Personal.find.byId( Long.parseLong(session.get("usuario"))).nombreCompleto()</div>
-                <div class="col-sm-12 col-md-6 col-lg-6" style="display:none" id="divRegistro"></div>
+                <div class="col-sm-12 col-md-6 col-lg-6 " style="display:none" id="divRegistro"></div>
             </div>
         </div>
     </div>

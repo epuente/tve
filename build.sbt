@@ -1,9 +1,10 @@
-name := """tve2023_testNoviembre"""
+name := """tve2023_devNoviembre"""
 version := "0.0.1-SNAPSHOT"
 scalaVersion := "2.11.4"
 libraryDependencies ++= Seq(
   jdbc,
   javaEbean,
+  "org.webjars.bower" % "popper.js" % "1.11.1",
   "org.webjars" % "bootstrap" % "3.3.7",
   //  "mysql" % "mysql-connector-java" % "5.1.46",
   //"org.postgresql" % "postgresql" % "9.4-1200-jdbc41",
@@ -13,8 +14,8 @@ libraryDependencies ++= Seq(
   "org.webjars" % "animate.css" % "3.2.5",
   "org.json" % "org.json" % "chargebee-1.0",
   "org.webjars.bower" % "moment" % "2.29.4",
-  "com.sun.mail" % "javax.mail" % "1.6.2",
-  "org.apache.commons" % "commons-lang3" % "3.13.0"
+  "com.sun.mail" % "javax.mail" % "1.6.2"
+  //"org.apache.commons" % "commons-lang3" % "3.13.0"
 )
 libraryDependencies += filters
 

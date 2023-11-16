@@ -1,11 +1,14 @@
 package models;
 
 import com.avaje.ebean.Page;
+import com.avaje.ebean.annotation.ConcurrencyMode;
+import com.avaje.ebean.annotation.EntityConcurrencyMode;
 import play.Logger;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 import static play.mvc.Controller.session;
@@ -28,15 +31,8 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     @NotNull
     public List<VtkNivel> niveles;
 
-
-
-
     @Column(length = 30)
     public String folioDEV;
-
-
-
-
 
     @Column(length = 200)
     public String titulo;
@@ -44,7 +40,6 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     @Column(length = 3000)
     @NotNull
     public String sinopsis;
-
 
     @ManyToOne
     public Serie serie;
@@ -92,9 +87,7 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     @NotNull
     public Areatematica areatematica;
 
-
     public String nresguardo;
-
 
     public String liga;
 
@@ -107,14 +100,16 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     @Column(length = 150)
     public String audio;
 
-    @Column(length = 150)
     @NotNull
-    public String video;
+    @ManyToOne
+    public TipoVideo video;
 
     @Column(length = 3000)
     @NotNull
     public String observaciones;
 
+    @Version
+    long version;
 
     public static Model.Finder<Long,VtkCatalogo> find = new Model.Finder<Long,VtkCatalogo>(Long.class, VtkCatalogo.class);
 

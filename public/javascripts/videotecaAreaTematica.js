@@ -96,7 +96,7 @@ function seleccionaAreaTematica(id, texto){
     $('#areatematica_id').selectpicker('val', id);
     $('#areatematica_id').selectpicker('refresh');
     $("#divBusquedaAreaTematica, #divCoincidenciasAreaTematica, #msgCoincidenciasAreaTematica, #divIndicacionesAreaTematica, #btnNuevaAreaTematica").hide();
-    $("#divResultadoBusquedaAreaTematica, #aAbrirAreasTematicas").show();
+    $("#divResultadoBusquedaAreaTematica, #aAbrirAreas").show();
     $("#areatematica_id").val(id);
     $("#textAreaTematica").html(  texto);
 }

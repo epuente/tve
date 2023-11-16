@@ -122,7 +122,7 @@ function agregaJSON2(){
 
 
     //json["unidadresponsable"] = {id: $("#unidadresponsable_id").val() };
-    json["eventos"] = JSON.parse('[{"id":1}, {"id":2}]');
+    //json["eventos"] = JSON.parse('[{"id":1}, {"id":2}]');
     json["eventos"] = [];
     $("*[name^='eventos[']:checked").each(function(index, e){
            strEventos += '{"servicio":{"id":'+$(e).val()+' }},'
@@ -211,7 +211,7 @@ function agregaJSON2(){
 
 
 $("form[name='frmVTK']").submit(function(event){
-   // event.preventDefault();
+    //event.preventDefault();
     console.log(" - submit -")
     var msgError="";
     console.clear()
@@ -243,7 +243,7 @@ $("form[name='frmVTK']").submit(function(event){
             msgError+="No se han definido las palabras clave<br>";
             $("#palabrasclave").closest("div.form-group").addClass("has-error has-danger");
         }
-    if ( !$("#video").val())
+    if ( $("#video").val())
         msgError+="No se han escrito las características del video<br>";
 
     if (msgError.length>0){
@@ -271,15 +271,32 @@ $("form[name='frmVTK']").submit(function(event){
 
 
         var x = {};
-        var ppcc = {};
+        //var ppcc = {};
+        //x['losDatos']=valoresCreditos();
+        x=valoresCreditos();
+        //ppcc['lasPalabras'] = valoresPalabrasClave();
 
-        x['losDatos']=valoresCreditos();
-        ppcc['lasPalabras'] = valoresPalabrasClave();
+
+        var x2 = {};
+        x2=valoresCreditos2();
 
 
+        var xEventos = {};
+        xEventos = valoresEventos();
+
+        var xNiveles = {};
+        xNiveles = valoresNiveles();
+
+
+        $("<textarea style='padding-left:100px; display:none;' name='txaEventos' id='txaEventos'>"+JSON.stringify(xEventos)+"</textarea>").appendTo("form[name='frmVTK']");
+        $("<textarea style='padding-left:100px; display:none;' name='txaNiveles' id='txaNiveles'>"+JSON.stringify(xNiveles)+"</textarea>").appendTo("form[name='frmVTK']");
         $("<textarea style='padding-left:100px; display:none;' name='txaCreditos' id='txaCreditos'>"+JSON.stringify(x)+"</textarea>").appendTo("form[name='frmVTK']");
+        $("<textarea style='padding-left:100px; display:none;' name='txaCreditos2' id='txaCreditos2'>"+JSON.stringify(x2)+"</textarea>").appendTo("form[name='frmVTK']");
         $("#txaPalabrasClave").val(JSON.stringify(valoresPalabrasClave()));
         $("#txaTimeLine").val(JSON.stringify(valoresTimeLine()));
+
+        console.log(">>>>>>>>>>>>>>>>>>>>>>")
+        console.dir(x2)
 
         //event.preventDefault();
         //return false;
@@ -312,6 +329,69 @@ function valoresCreditos(){
     return j;
 }
 
+
+function valoresCreditos2(){
+    var j=[];
+    $("#navTabs>li>a").each(function(index, element){
+        var id = $(element).attr("id").substring(3);
+        console.log("  id "+id)
+        var tipo={};
+
+        aux= $("#ta"+id).val();
+        console.log("    aux:"+aux+"("+aux.length+")")
+        if (aux.length!=0){
+            obj = jQuery.parseJSON(aux);
+            console.log("    obj:"+obj)
+            console.dir(obj)
+            var todos = "";
+            $.each(obj, function(key,value) {
+
+          //      alert(value.value);
+                todos += value.value+"|";
+            });
+            console.log("todos:"+todos)
+            var arrString = todos.split("|");
+            console.log("arrString "+arrString+"("+arrString.length+")")
+            for (var i=0; i < arrString.length-1; i++){
+                tipox={tipoCredito:{id:id}, personas:arrString[i]}
+                j.push(tipox);
+            }
+            console.log("");
+            console.log("");
+            console.log("");
+
+
+        }
+    });
+    console.log("->j")
+    console.dir(j)
+    return j;
+}
+
+
+function valoresEventos(){
+    var j=[];
+     $("*[name^='eventos[']:checked").each(function(index, element){
+        var evento = {};
+        evento["servicio"] = {id:$(this).val()};
+        j.push(evento);
+     });
+     console.log("j : ")
+     console.dir(j)
+    return j;
+}
+
+function valoresNiveles(){
+    var j=[];
+     $("*[name^='niveles[']:checked").each(function(index, element){
+        var evento = {};
+        evento["nivel"] = {id:$(this).val()};
+        j.push(evento);
+     });
+     console.log("j : ")
+     console.dir(j)
+    return j;
+}
 
 function valoresPalabrasClave(){
     var j=[];
