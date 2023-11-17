@@ -5,8 +5,6 @@
 
 @anio = { @(new Date().format("yyyy"))}
 
-
-
 <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify"></script>
 <script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
@@ -26,7 +24,7 @@
     <h1>Agregar al catálogo de videoteca</h1>
 
     @form(CSRF(routes.VideotecaController.save()), 'role->"form", 'id->"frmVTKCreate", 'name->"frmVTK" , Symbol("data-modo")->"creacion" ) {
-        @videotecaSecuenciaForm(forma, auxCreditos)
+        @videotecaSecuencia2Form(forma, auxCreditos)
         <br/><br/>
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -47,8 +45,6 @@
 <script type="text/javascript">
     var texto="";
     $(function() {
-      //  $("#botonAyudaCampo3").attr("data-content",ayudaCampos[2]);
-
         $('form').validator();
         $("#serie_id").selectpicker({
             title:"Escriba, seleccione o busque un número de oficio o descripción del oficio",

@@ -71,8 +71,18 @@ dd.info {
     font-size:85%;
 }
 
-.iconoAyudaCampo,
-.iconoAyudaCampo:hover
-{
-    font-color: yellow;
+
+.spanIconoAyudaCampo {
+    color: #3e95d5;
+    margin-left: 6px;
+}
+
+.row {
+    margin: 10px;
+}
+
+
+.checkbox-group {
+    display: inline-block;
+    margin-right: 17px;
 }

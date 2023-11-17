@@ -283,6 +283,7 @@ GET     /ajaxTableroVideoTK                 controllers.VideotecaController.ajax
 GET     /catalogo                           controllers.VideotecaController.catalogo()
 GET     /vtkCatalogoDTSS                    controllers.VideotecaController.catalogoDTSS()
 GET     /vtkCatalogo/create                 controllers.VideotecaController.catalogoCreate()
+GET     /vtkCatalogo/create2                controllers.VideotecaController.catalogoCreate2()
 POST    /vtkCatalogo/delete                 controllers.VideotecaController.catalogoDelete()
 
 POST    /textsearch                         controllers.VideotecaController.textsearch()

@@ -11,7 +11,7 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <h1 id="homeTitle">Catalogadores <a href="@routes.SupCatalogadorController.create()" data-toggle="popover" data-content="Agregar Catalogador" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a>
+            <h1 id="homeTitle">Catalogadores <a href="@routes.SupCatalogadorController.create()" data-toggle="popover" data-trigger="hover" data-content="Agregar Catalogador" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a>
             </h1>
         </div>
     </div>
@@ -60,6 +60,7 @@
 	                { "data": "materno" }
 	              ]
             });
+            $('[data-toggle="popover"]').popover()
     });
 </script>
 
