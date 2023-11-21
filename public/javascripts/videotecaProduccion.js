@@ -2,11 +2,13 @@ $("#produccionDescripcion").off("keyup");
 $("#produccionDescripcion").on("keyup", function(){
     console.debug("Produccion keyup! ")
     $("#msgCoincidenciasProduccion").html("");
-    $("#divCoincidenciasProduccion div.list-group button").remove();
+    $("#divCoincidenciasProduccion div.list-group").html("");
+    //$("#divCoincidenciasProduccion div.list-group button").remove();
     var cadena = $("#produccionDescripcion").val();
-    //if (cadena.length >= 3 ){
+    $("#panelCoincidenciasProduccion").toggle(cadena.length>0);
+    if (cadena.length >= 1 ){
         console.debug("cadena "+cadena)
-        $("#btnNuevaProduccion").toggle(cadena.length>1);
+        $("#btnNuevaProduccion").toggle(cadena.length>2);
         if (cadena.length==0){
             console.log("búsqueda vacía");
         } else {
@@ -17,34 +19,35 @@ $("#produccionDescripcion").on("keyup", function(){
                     console.log("....")
                     console.dir(dataTS)
                     console.log("tam "+dataTS.coincidencias.length)
+                     $("#panelCoincidenciasProduccion").show();
                     if (dataTS.coincidencias.length!=0){
                         $("#msgCoincidenciasProduccion").html("Se encontraron las siguientes "+dataTS.coincidencias.length+" coincidencias:");
+                        $("#divCoincidenciasProduccion div.list-group").html("");
                         for(var c=0; c < dataTS.coincidencias.length; c++){
                             var aux = dataTS.coincidencias[c];
                             var comillasEscapadas = aux.descripcion.replace(/"/g, '&#34;');
                             $("#divCoincidenciasProduccion div.list-group").append( '<button type="button" class="list-group-item" onclick="javascript:seleccionaProduccion('+aux.id+', \''+comillasEscapadas+'\')">'+ aux.descripcion+ '</button>');
                         }
                     } else {
-                        $("#msgCoincidenciasProduccion").html("No se encontraron coincidencias");
+                        $("#msgCoincidenciasProduccion").html("No se encontraron coincidencias para la producción.<br><br>Si se trata de una nueva producción, oprima el siguiente botón para agregarla<br><br> <div style='text-align:center;'>  <input class='btn btn-default' type='button' role='button' id='btnNuevaProduccion'  value='Nueva Producción'></div>");
+                        $("#msgCoincidenciasProduccion").html("No se encontraron coincidencias para la producción.<br><br>Si se trata de una nueva producción, oprima el siguiente botón para agregarla");
                     }
                 });
         }
-   // }
+    }
 });
 
 
 function abrirProducciones(){
     console.log("nadaaaaaaaa")
     $("#divBusquedaProduccion, #divCoincidenciasProduccion, #msgCoincidenciasProduccion").show();
-    $("#divResultadoBusquedaProduccion, #aAbrirProducciones").hide();
+    $("#divResultadoBusquedaProduccion").hide();
     $("#produccionDescripcion").val(   $("#textProduccion").html()  );
     $("#produccionDescripcion").keyup();
 }
 
-
-$("#btnNuevaProduccion").off("click");
-$("#btnNuevaProduccion").on("click", function(e){
-
+$(document).off("click", "#btnNuevaProduccion");
+$(document).on("click", "#btnNuevaProduccion",function(e){
     console.log("Desde btnNuevaProduccion.click")
     e.preventDefault();
     $("#divBusquedaProduccion, #divCoincidenciasProduccion, #msgCoincidenciasProduccion").show();
@@ -78,8 +81,15 @@ $("#btnNuevaProduccion").on("click", function(e){
 
                     $("#textProduccion").html(  salvado.descripcion);
 
-                    $("#divResultadoBusquedaProduccion, #aAbrirProducciones").show();
-                    $("#divBusquedaProduccion, #msgCoincidenciasProduccion, #btnNuevaProduccion, #divCoincidenciasProduccion" ).hide();
+                    $("#divResultadoBusquedaProduccion").show();
+                    $("#divBusquedaProduccion, #msgCoincidenciasProduccion, #divCoincidenciasProduccion" ).hide();
+
+                    agregarAbrir("produccionDescripcion");
+                    $("label[for='produccionDescripcion'] span").eq(1).click(function(){
+                        abrirProducciones();
+                    });
+                    $("label[for='produccionDescripcion'] span").eq(1).show();
+
                 } else {
                     alert("No fue posible agregar la produccion.");
                 }
@@ -95,8 +105,15 @@ function seleccionaProduccion(id, texto){
     //$('#produccion_id').selectpicker('refresh');
     $('#produccion_id').selectpicker('val', id);
     $('#produccion_id').selectpicker('refresh');
-    $("#divBusquedaProduccion, #divCoincidenciasProduccion, #msgCoincidenciasProduccion, #btnNuevaProduccion").hide();
-    $("#divResultadoBusquedaProduccion, #aAbrirProducciones").show();
+    $("#divBusquedaProduccion, #divCoincidenciasProduccion, #msgCoincidenciasProduccion").hide();
+
+    agregarAbrir("produccionDescripcion");
+    $("label[for='produccionDescripcion'] span").eq(1).click(function(){
+        abrirProducciones();
+    });
+    $("label[for='produccionDescripcion'] span").eq(1).show();
+
+    $("#divResultadoBusquedaProduccion").show();
     $("#produccion_id").val(id);
     $("#textProduccion").html(  texto);
 }

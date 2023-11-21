@@ -16,6 +16,7 @@
 	<link rel="icon" type="image/png" href="@routes.Assets.at("images/favicon.ico")">
     <script defer src="@routes.Assets.at("lib/font-awesome/js/all.min.js")"></script>
 
+
     <link rel="preload" href="@routes.Assets.at("lib/font-awesome/css/all.min.css")" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="@routes.Assets.at("lib/font-awesome/css/all.min.css")"></noscript>
 
@@ -37,72 +38,89 @@
     <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("lib/animate.css/animate.min.css")">
     <link href="@routes.Assets.at("stylesheets/main.css")" rel="stylesheet">
     <link rel="stylesheet" href="@routes.Assets.at("horizontal-timeline/css/style.css")")> <!-- Resource style -->
-<style>
-dl {
-  margin-top: 0;
-  margin-bottom: 0px;
-}
+          <!-- Matomo -->
 
+          <script>
 
-.swal2-popup {
-  font-size: 1.6rem !important;
-}
+        var _paq = window._paq = window._paq || [];
 
-.navbar-nav .open .dropdown-menu.msg_list {
-    width: 700px;
-}
+        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
 
+        _paq.push(['trackPageView']);
 
-.not-success {
-  padding: 3px;
-  border-left: 6px solid #ccc!important;
-  border-color: #3c763d !important;
-}
+        _paq.push(['enableLinkTracking']);
 
-.not-error {
-  border-left: 6px solid #ccc!important;
-  border-color: #a94442 !important;
-}
+        (function() {
 
+          var u="https://check.dev.ipn.mx/";
 
-.colUno {
-   display: inline-block;
-  width: 60%;
-}
+          _paq.push(['setTrackerUrl', u+'matomo.php']);
 
-.colDos {
-  display: inline-block;
-  width: 15%;
-  top: 50%;
-  text-align: center;
-  transform: translate(0, -50%);
-}
+          _paq.push(['setSiteId', '8']);
 
-.colTres {
-  display: inline-block;
-  text-align: center;
-  font-size:smaller;
-  float:right;
-  display: flex;
-   align-items: center
-}
+          var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
 
+          g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
 
+        })();
 
+      </script>
 
-.padre {
-   position: relative;
-}
-.hijo {
-   position: absolute;
-   top: 50%;
-   left: 50%;
-   height: 30%;
-   width: 50%;
-   margin: -15% 0 0 -25%;
-}
+          <noscript><p><img src="https://check.dev.ipn.mx/matomo.php?idsite=8&amp;rec=1" style="border:0;" alt="" /></p></noscript>
 
-</style>    
+          <!-- End Matomo Code -->
+
+    <style>
+        dl {
+          margin-top: 0;
+          margin-bottom: 0px;
+        }
+        .swal2-popup {
+          font-size: 1.6rem !important;
+        }
+        .navbar-nav .open .dropdown-menu.msg_list {
+            width: 700px;
+        }
+        .not-success {
+          padding: 3px;
+          border-left: 6px solid #ccc!important;
+          border-color: #3c763d !important;
+        }
+        .not-error {
+          border-left: 6px solid #ccc!important;
+          border-color: #a94442 !important;
+        }
+        .colUno {
+           display: inline-block;
+          width: 60%;
+        }
+        .colDos {
+          display: inline-block;
+          width: 15%;
+          top: 50%;
+          text-align: center;
+          transform: translate(0, -50%);
+        }
+        .colTres {
+          display: inline-block;
+          text-align: center;
+          font-size:smaller;
+          float:right;
+          display: flex;
+           align-items: center
+        }
+        .padre {
+           position: relative;
+        }
+        .hijo {
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           height: 30%;
+           width: 50%;
+           margin: -15% 0 0 -25%;
+        }
+    </style>
         
         
     

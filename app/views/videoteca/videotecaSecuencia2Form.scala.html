@@ -21,11 +21,11 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+                <div class="col-xs-12 col-sm-12 col-md-5 col-lg-6   ">
                     <div class="form-group">
                         <div id="divResultadoBusquedaUR" style="display:none">
                             <dt class=" ">
-                            <dt><label for="URDescripcion">Unidad Responsable</label>
+                            <dt><label for="URDescripcion">Instancia solicitante</label>
                             </dt>
                             <dd>
                                 <input type="hidden" id="unidadresponsable_id" name="unidadresponsable.id">
@@ -36,29 +36,45 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                             <dl class=" " id="descripcionUR_field">
                                 <dt><label for="URDescripcion">3. Instancia solicitante</label></dt>
                                 <dd>
-                                    <input type="text" id="URDescripcion" value=""  maxlength="150",  class="form-control" placeholder="Ejem. Escuela Nacional de Biblioteconomía y Archivonomía">
+                                    <input type="text" id="URDescripcion" value="" autocomplete="off" maxlength="150",  class="form-control" placeholder="Ejem. Escuela Nacional de Biblioteconomía y Archivonomía">
                                 </dd>
                             </dl>
                             <div class="help-block with-errors"></div>
 
-                            <div id="msgCoincidenciasUR" style="margin-top:5px; margin-bottom:5px;"></div>
-                            <div id="divCoincidenciasUR">
-                                <div class="list-group" style="font-size: small">
-                                </div>
+                            <div id="panelCoincidenciasUR"
+                                 style="margin-top:5px;
+                                        margin-bottom:5px;
+                                        width: 100%;
+                                        max-height: 50ex;
+                                        z-index: 40;
+                                        position: absolute;
+                                        overflow: auto;
+                                        background-color: white ;
+                                        padding: 20px;
+                                        border:1px solid #C0C0C0;
+                                        display: none;
+                                        "
+                                    >
+                                        <div id="msgCoincidenciasUR" style="with:100%; margin-bottom:5px;"></div>
+                                        <div id="divCoincidenciasUR" style="with:100%">
+                                            <div class="list-group" style="font-size: small">
+                                            </div>
+                                        </div>
+                                        <div style="text-align:center;" id="divBtnNuevaUR">  <input class="btn btn-default" type="button" role="button" id="btnNuevaUR" value="Nueva Instancia"></div>
+
                             </div>
                         </div>
-
-
                     </div>
-
                 </div>
+                <!--
                 <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1 text-center" >
                     <div style="vertical-align: middle;">
                         <a href="javascript:abrirURs();" style="display:none" id="aAbrirURs">Abrir URs</a>
                         <br>
-                        <button id ="btnNuevaUR" class="btn btn-sm btn-success" style="display:none">Nueva UR</button>
+                        <button id ="btnNuevaUR5" class="btn btn-sm btn-success" style="display:none">Nueva UR</button>
                     </div>
                 </div>
+                -->
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
@@ -116,11 +132,11 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="form-group">
                         <div id="divResultadoBusqueda" style="display:none">
                             <dt class=" ">
-                            <dt><label>7. Serie</label>
+                            <dt><label for="serieDescripcion">7. Serie</label>
                             </dt>
                             <input type="hidden" id="serie_id" name="serie.id">
                             <div id="textSerie">???</div>
@@ -129,24 +145,36 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                             <dl class=" " id="descripcion_field">
                                 <dt><label for="serieDescripcion">7. Serie</label></dt>
                                 <dd>
-                                    <input type="text" id="serieDescripcion" value=""  maxlength="500",  class="form-control" placeholder="Ejem. Agenda Politécnica">
+                                    <input type="text" id="serieDescripcion" value=""  maxlength="500" autocomplete="off"  class="form-control" placeholder="Ejem. Agenda Politécnica">
                                 </dd>
                             </dl>
                             <div class="help-block with-errors"></div>
-                        </div>
-                        <div id="msgCoincidencias" style="margin-top:5px; margin-bottom:5px;"></div>
-                        <div id="divCoincidencias">
-                            <div class="list-group" style="font-size: small">
+
+                            <div id="panelCoincidenciasSerie"
+                                 style="margin-top:5px;
+                                        margin-bottom:5px;
+                                        width: 100%;
+                                        max-height: 50ex;
+                                        z-index: 40;
+                                        position: absolute;
+                                        overflow: auto;
+                                        background-color: white ;
+                                        padding: 20px;
+                                        border:1px solid #C0C0C0;
+                                        display: none;">
+                                <div id="msgCoincidencias" style="margin-top:5px; margin-bottom:5px;"></div>
+                                <div id="divCoincidencias">
+                                    <div class="list-group" style="font-size: small">
+                                    </div>
+                                </div>
+                                <div style="text-align:center;" id="divBtnNuevaSerie">  <input class="btn btn-default" type="button" role="button" id="btnNuevaSerie" value="Nueva Serie"></div>
+
+
                             </div>
+
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-12 col-md-2 col-lg-2 text-center" >
-                    <div style="vertical-align: middle;">
-                        <a href="javascript:abrirSeries();" style="display:none" id="aAbrirSeries">Abrir series</a>
-                        <br>
-                        <button id ="btnNuevaSerie" class="btn btn-sm btn-success" style="display:none">Nueva serie</button>
-                    </div>
+
                 </div>
             </div>
             <!-- 8 -->
@@ -209,13 +237,11 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+                <div class="col-xs-12 col-sm-12 col-md-10 col-lg-6">
                             <div class="form-group">
                                 <div id="divResultadoBusquedaProduccion" style="display:none">
                                     <dt class=" ">
-                                    <dt><label>13. Producción</label>
+                                    <dt><label for="produccionDescripcion">13. Producción</label>
                                     </dt>
                                     <input type="hidden" id="produccion_id" name="produccion.id">
                                     <div id="textProduccion">???</div>
@@ -224,30 +250,44 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                                     <dl class=" " id="produccionDescripcion_field">
                                         <dt><label for="produccionDescripcion">13. Producción</label></dt>
                                         <dd>
-                                            <input type="text" id="produccionDescripcion" value=""  maxlength="100",  class="form-control" placeholder="Ejem. ">
+                                            <input type="text" id="produccionDescripcion" value=""  maxlength="100" autocomplete="off"  class="form-control" placeholder="Ejem. ">
                                         </dd>
                                     </dl>
                                     <div class="help-block with-errors"></div>
+                                    <div id="panelCoincidenciasProduccion"
+                                         style="margin-top:5px;
+                                        margin-bottom:5px;
+                                        width: 100%;
+                                        max-height: 50ex;
+                                        z-index: 40;
+                                        position: absolute;
+                                        overflow: auto;
+                                        background-color: white ;
+                                        padding: 20px;
+                                        border:1px solid #C0C0C0;
+                                        display: none;">
+
+                                        <div id="msgCoincidenciasProduccion" style="margin-top:5px; margin-bottom:5px;"></div>
+                                        <div id="divCoincidenciasProduccion">
+                                            <div class="list-group" style="font-size: small">
+                                            </div>
+                                        </div>
+                                        <div style="text-align:center;" id="divBtnNuevaProduccion">  <input class="btn btn-default" type="button" role="button" id="btnNuevaProduccion" value="Nueva Producción"></div>
                                 </div>
 
-                                <div id="msgCoincidenciasProduccion" style="margin-top:5px; margin-bottom:5px;"></div>
-                                <div id="divCoincidenciasProduccion">
-                                    <div class="list-group" style="font-size: small">
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 text-center" >
                             <div style="vertical-align: middle;">
                                 <a href="javascript:abrirProducciones();" style="display:none" id="aAbrirProducciones">Abrir producciones</a>
                                 <br>
-                                <button id ="btnNuevaProduccion" class="btn btn-sm btn-success" style="display:none">Nueva producción</button>
+
                             </div>
                         </div>
                     </div>
-                </div>
                 <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                    <div class="form-group">
+                <div class="form-group">
                         @select(
                         forma("idioma.id"),
                         options(Idioma.options),
@@ -257,7 +297,8 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                         )
                         <div class="help-block with-errors"></div>
                     </div>
-                </div>
+
+
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
@@ -301,7 +342,7 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                     <div class="form-group">
                         <div id="divResultadoBusquedaAreaTematica" style="display:none">
                             <dt class=" ">
-                            <dt><label class="campoRequerido">19. Área temática</label>
+                            <dt><label for="areatematicaDescripcion"  class="campoRequerido">19. Área temática</label>
                             </dt>
                             <input type="hidden" id="areatematica_id" name="areatematica.id">
                             <div id="textAreaTematica">???</div>
@@ -310,25 +351,36 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                             <dl class=" " id="descripcionAreaTematica_field">
                                 <dt><label for="areatematicaDescripcion" class="campoRequerido">19. Área temática</label></dt>
                                 <dd>
-                                    <input type="text" id="areatematicaDescripcion" value=""  maxlength="100",  class="form-control" placeholder="Ejem. ---"  required>
+                                    <input type="text" id="areatematicaDescripcion" value=""  maxlength="100" autocomplete="off"  class="form-control" placeholder="Ejem. ---"  required>
                                 </dd>
                             </dl>
                             <div class="help-block with-errors"></div>
-                        </div>
-                        <div id="msgCoincidenciasAreaTematica" style="margin-top:5px; margin-bottom:5px;"></div>
-                        <div id="divCoincidenciasAreaTematica">
-                            <div class="list-group" style="font-size: small">
+
+                            <div id="panelCoincidenciasAreaTematica"
+                                 style="margin-top:5px;
+                                        margin-bottom:5px;
+                                        width: 100%;
+                                        max-height: 50ex;
+                                        z-index: 40;
+                                        position: absolute;
+                                        overflow: auto;
+                                        background-color: white ;
+                                        padding: 20px;
+                                        border:1px solid #C0C0C0;
+                                        display: none;">
+                                <div id="msgCoincidenciasAreaTematica" style="margin-top:5px; margin-bottom:5px;"></div>
+                                <div id="divCoincidenciasAreaTematica">
+                                    <div class="list-group" style="font-size: small">
+                                    </div>
+                                </div>
+                                <div style="text-align:center;" id="divBtnNuevaAreaTematica">  <input class="btn btn-default" type="button" role="button" id="btnNuevaAreaTematica" value="Nueva Área Temática"></div>
+
                             </div>
                         </div>
+
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1 text-center" >
-                    <div style="vertical-align: middle;">
-                        <a href="javascript:abrirAreas();" style="display:none" id="aAbrirAreas">Abrir áreas</a>
-                        <br>
-                        <button id ="btnNuevaAreaTematica" class="btn btn-sm btn-success" style="display:none">Nueva área</button>
-                    </div>
-                </div>
+
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <div class="form-group">
                         @select(
@@ -350,14 +402,14 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                     </div>
                 </div>
             </div>
+            </div>
         </div>
     </div>
-
     <div class="panel panel-default">
         <div class="panel-body">
             <div id="abc">
                 <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12"> <label for="auxIntervencion">22. Intervención de personajes</label>  <a href="javascript:agregarTimeLine();" data-toggle="popover" data-trigger="hover" data-content="Agregar renglon de internención de personajes" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a></div>
+                    <div class="col-sm-12 col-md-12 col-lg-12"> <label for="auxIntervencion">22. Intervención de personajes</label> <span data-toggle="popover" data-trigger="hover" data-content="Agregar renglón de intervención de personajes"><a href="javascript:agregarTimeLine();" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a> </span> </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-2 col-md-2 col-lg-2" style="text-align: center;"><label for="auxTiempo">23. Tiempo</label></div>

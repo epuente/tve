@@ -10,106 +10,7 @@ $("#btnModalGuardar").on("click", function(){
     console.debug("click! ")
 });
 
-$("#serieDescripcion").off("keyup");
-$("#serieDescripcion").on("keyup", function(){
-    console.debug("keyup! ")
-    $("#msgCoincidencias").html("");
-    $("#divCoincidencias div.list-group button").remove();
-    var cadena = $("#serieDescripcion").val();
-    //if (cadena.length >= 3 ){
-        console.debug("cadena "+cadena)
-        $("#btnNuevaSerie").toggle(cadena.length>1);
-        if (cadena.length==0){
-            console.log("búsqueda vacía");
-        } else {
-            console.log("búsqueda NO vacía");
 
-            var $f = LlamadaAjax("/textsearch", "POST", JSON.stringify({campo:"serie", cadena:cadena}));
-            $.when($f).done(function(dataTS){
-                    console.log("....")
-                    console.dir(dataTS)
-                    console.log("tam "+dataTS.coincidencias.length)
-                    if (dataTS.coincidencias.length!=0){
-                        $("#msgCoincidencias").html("Se encontraron las siguientes "+dataTS.coincidencias.length+" coincidencias:");
-                        for(var c=0; c < dataTS.coincidencias.length; c++){
-                            var aux = dataTS.coincidencias[c];
-                            var comillasEscapadas = aux.descripcion.replace(/"/g, '&#34;');
-                            $("#divCoincidencias div.list-group").append( '<button type="button" class="list-group-item" onclick="javascript:seleccionaSerie('+aux.id+', \''+comillasEscapadas+'\')">'+ aux.descripcion+ '</button>');
-                        }
-                    } else {
-                        $("#msgCoincidencias").html("No se encontraron coincidencias");
-                    }
-                });
-        }
-   // }
-});
-
-
-function abrirSeries(){
-    console.log("nadaaaaaaaa")
-    $("#divBusqueda, #divCoincidencias, #msgCoincidencias").show();
-    $("#divResultadoBusqueda, #aAbrirSeries").hide();
-    $("#serieDescripcion").val(   $("#textSerie").html()  );
-    $("#serieDescripcion").keyup();
-}
-
-
-$("#btnNuevaSerie").off("click");
-$("#btnNuevaSerie").on("click", function(e){
-    console.log("abc")
-    e.preventDefault();
-    $("#divBusqueda, #divCoincidencias, #msgCoincidencias").show();
-    $("#divResultadoBusqueda").hide();
-    var laNueva = $("#serieDescripcion").val();
-    var $f = LlamadaAjax("/textsearchCampoCompleto", "POST", JSON.stringify({campo:"serie",cadena:laNueva}));
-    $.when($f).done(function(dataTS){
-        if (dataTS.coincidencias>0){
-                swal({
-                        title:'No se realizó la operación',
-                        html:'No se puede agregar la serie porque ya existe<br><br>Revise la lista de coincidencias y observará que ya existe. Puede usar la serie existente, solo selecciónela de la lista de coincidencias.<br>',
-                        type:'warning',
-                        confirmButtonText: "Aceptar"
-                      }) ;
-        } else {
-            var $salva = LlamadaAjax("/nuevaSerie","POST", JSON.stringify({descripcion:laNueva}));
-            $.when($salva).done(function(salvado){
-                console.log("salvado")
-                console.dir(salvado)
-                if (salvado.estado=="ok"){
-                    swal({
-                          title:  'Correcto',
-                          html:  'Se agregó la nueva serie.<br><br>Continúe con el formulario del acervo de la videoteca.',
-                          type:  'success',
-                          confirmButtonText: "Aceptar"
-                      });
-                    $('#myModal2').modal('hide');
-                    $("#serie_id").val(salvado.id);
-
-                    $("#textSerie").html(  salvado.descripcion);
-
-                    $("#divResultadoBusqueda, #aAbrirSeries").show();
-                    $("#divBusqueda, #msgCoincidencias, #btnNuevaSerie, #divCoincidencias" ).hide();
-
-                } else {
-                    alert("No fue posible agregar la serie.");
-                }
-            });
-        }
-    });
-});
-
-// Cuando se da click a un elemento de la lista de coincidencias de serie
-function seleccionaSerie(id, texto){
-    console.debug("Se seleccionó la serie id: "+id);
-    $('#myModal2').modal('hide');
-    //$('#serie_id').selectpicker('refresh');
-    $('#serie_id').selectpicker('val', id);
-    $('#serie_id').selectpicker('refresh');
-    $("#divBusqueda, #divCoincidencias, #msgCoincidencias, #btnNuevaSerie").hide();
-    $("#divResultadoBusqueda, #aAbrirSeries").show();
-    $("#serie_id").val(id);
-    $("#textSerie").html(  texto);
-}
 
 function agregaJSON(){
     console.log(" - agregaJSON -")
@@ -472,6 +373,12 @@ function labelsCamposRequeridos(){
         $("label[for='eventos_0_id'], label[for='nivel1'], label[for='nivelesacademicos[0].nivel.id'], label[for='palabrasClaveStr'], label[for='areatematicaDescripcion'], label[for='areatematica_id']" ).addClass("campoRequerido");
 }
 
+function agregarAbrir(label){
+        console.log("agregarAbrir recibe "+label)
+        console.log("label[for='"+label+"']")
+        $("label[for='"+label+"']").append("  <span style='display:none; font-size:small'>  <a><i class='fas fa-angle-down'></i></a>Abrir lista</span>     ");
+}
+
 
 // Validar que los campos fecha de producción y fecha de grabación cumplan con alguno de los formatos estrablecidos
 $("#fechaProduccion, #fechaPublicacion").off("blur");
@@ -550,3 +457,5 @@ function segundosACadena(seconds) {
   second = (second < 10)? '0' + second : second;
   return hour + ':' + minute + ':' + second;
 }
+
+

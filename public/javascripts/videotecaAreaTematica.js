@@ -1,12 +1,16 @@
 $("#areatematicaDescripcion").off("keyup");
 $("#areatematicaDescripcion").on("keyup", function(){
     console.debug("AreaTematica keyup! ")
+
     $("#msgCoincidenciasAreaTematica").html("");
-    $("#divCoincidenciasAreaTematica div.list-group button").remove();
+    $("#divCoincidenciasAreaTematica div.list-group").html("");
+    //$("#divCoincidenciasAreaTematica div.list-group button").remove();
     var cadena = $("#areatematicaDescripcion").val();
-    //if (cadena.length >= 3 ){
+    $("#panelCoincidenciasAreaTematica").toggle(cadena.length>0);
+    if (cadena.length >= 1 ){
+
         console.debug("cadena "+cadena)
-        $("#btnNuevaAreaTematica").toggle(cadena.length>1);
+        $("#btnNuevaAreaTematica").toggle(cadena.length>2);
         if (cadena.length==0){
             console.log("búsqueda vacía");
         } else {
@@ -17,34 +21,39 @@ $("#areatematicaDescripcion").on("keyup", function(){
                     console.log("....")
                     console.dir(dataTS)
                     console.log("tam "+dataTS.coincidencias.length)
+                    $("#panelCoincidenciasAreaTematica").show();
                     if (dataTS.coincidencias!=0){
                         $("#msgCoincidenciasAreaTematica").html("Se encontraron las siguientes "+dataTS.coincidencias.length+" coincidencias:");
+                        $("#divCoincidenciasAreaTematica div.list-group").html("");
                         for(var c=0; c < dataTS.coincidencias.length; c++){
                             var aux = dataTS.coincidencias[c];
                             var comillasEscapadas = aux.descripcion.replace(/"/g, '&#34;');
                             $("#divCoincidenciasAreaTematica div.list-group").append( '<button type="button" class="list-group-item" onclick="javascript:seleccionaAreaTematica('+aux.id+', \''+comillasEscapadas+'\')">'+ aux.descripcion+ '</button>');
                         }
+                        //$("#divCoincidenciasAreaTematica").append("<span class='small'>¿Nueva <i>área temática</i>?, <a href='javascript:void(0);' onclick='javascript: $('#btnNuevaAreaTematica').click();  ' >agréguela  </a> </span>");
                     } else {
-                        $("#msgCoincidenciasAreaTematica").html("No se encontraron coincidencias");
+                       // $("#msgCoincidenciasAreaTematica").html("No se encontraron coincidencias para el área temática.<br><br>Si se trata de una nueva área temática, oprima el siguiente botón para agregarla<br><br> <div style='text-align:center;'>  <input class='btn btn-default' type='button' role='button' id='btnNuevaAreaTematica'  value='Nueva Área Temática'></div>");
+                        $("#msgCoincidenciasAreaTematica").html("No se encontraron coincidencias para el área temática.<br><br>Si se trata de una nueva área temática, oprima el siguiente botón para agregarla");
+
                     }
+
                 });
         }
-   // }
+    }
 });
 
 
 function abrirAreas(){
     console.log("nadaaaaaaaa")
     $("#divBusquedaAreaTematica, #divCoincidenciasAreaTematica, #msgCoincidenciasAreaTematica").show();
-    $("#divResultadoBusquedaAreaTematica, #aAbrirAreas").hide();
+    $("#divResultadoBusquedaAreaTematica").hide();
     $("#areatematicaDescripcion").val(   $("#textAreaTematica").html()  );
     $("#areatematicaDescripcion").keyup();
 }
 
 
-$("#btnNuevaAreaTematica").off("click");
-$("#btnNuevaAreaTematica").on("click", function(e){
-
+$(document).off("click", "#btnNuevaAreaTematica");
+$(document).on("click", "#btnNuevaAreaTematica", function(e){
     console.log("Desde btnNuevaAreaTematica.click")
     e.preventDefault();
     $("#divBusquedaAreaTematica, #divCoincidenciasAreaTematica, #msgCoincidenciasAreaTematica").show();
@@ -73,15 +82,22 @@ $("#btnNuevaAreaTematica").on("click", function(e){
                           type:  'success',
                           confirmButtonText: "Aceptar"
                       });
-                    $('#myModal2').modal('hide');
+
                     $("#areatematica_id").val(salvado.id);
 
                     $("#textAreaTematica").html(  salvado.descripcion);
 
-                    $("#divResultadoBusquedaAreaTematica, #aAbrirAreas").show();
-                    $("#divBusquedaAreaTematica, #msgCoincidenciasAreaTematica, #btnNuevaAreaTematica, #divCoincidenciasAreaTematica" ).hide();
+                    $("#divResultadoBusquedaAreaTematica").show();
+                    $("#divBusquedaAreaTematica, #msgCoincidenciasAreaTematica, #divCoincidenciasAreaTematica" ).hide();
+
+                    agregarAbrir("areatematicaDescripcion");
+                    $("label[for='areatematicaDescripcion'] span").eq(1).click(function(){
+                        abrirAreas();
+                    });
+                    $("label[for='areatematicaDescripcion'] span").eq(1).show();
+
                 } else {
-                    alert("No fue posible agregar la areatematica.");
+                    alert("No fue posible agregar la Área Temática.");
                 }
             });
         }
@@ -95,8 +111,15 @@ function seleccionaAreaTematica(id, texto){
     //$('#areatematica_id').selectpicker('refresh');
     $('#areatematica_id').selectpicker('val', id);
     $('#areatematica_id').selectpicker('refresh');
-    $("#divBusquedaAreaTematica, #divCoincidenciasAreaTematica, #msgCoincidenciasAreaTematica, #btnNuevaAreaTematica").hide();
-    $("#divResultadoBusquedaAreaTematica, #aAbrirAreas").show();
+    $("#divBusquedaAreaTematica, #divCoincidenciasAreaTematica, #msgCoincidenciasAreaTematica").hide();
+
+    agregarAbrir("areatematicaDescripcion");
+    $("label[for='areatematicaDescripcion'] span").eq(1).click(function(){
+        abrirAreas();
+    });
+    $("label[for='areatematicaDescripcion'] span").eq(1).show();
+
+    $("#divResultadoBusquedaAreaTematica").show();
     $("#areatematica_id").val(id);
     $("#textAreaTematica").html(  texto);
 }
