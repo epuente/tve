@@ -1,5 +1,4 @@
 EXPORT TODO
-pg_dump -h localhost -U tve -Fc tveservicios2023_testnoviembre > tve.sq
 
 EXPORT SOLO INSERTS
 pg_dump -U tve -W  --column-inserts --data-only -h localhost tveservicios2022_test > tveservicios2022_test.sql

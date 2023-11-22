@@ -65,3 +65,7 @@ clean
 reload
 compile
 run
+run 
+reload
+run 
+exit
