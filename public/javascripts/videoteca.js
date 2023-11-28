@@ -130,6 +130,7 @@ $("form[name='frmVTK']").submit(function(event){
     console.clear()
     console.log("has-error:"+  $("div.has-error").length)
 
+
     if (  $("div.has-error").length!=0  ){
 
         console.log("123")
@@ -138,6 +139,7 @@ $("form[name='frmVTK']").submit(function(event){
            msgError+="El campo "+$(e).attr("name")+" tiene error<br";
         });
     }
+
 
 
     var $uf = LlamadaAjax("/vtkBuscaFolio", "POST", JSON.stringify( {"folio":$("#folio").val()}));
@@ -160,6 +162,8 @@ $("form[name='frmVTK']").submit(function(event){
             msgError+="Seleccione al menos un evento<br>";
         if ( $("*[data-name='cbNivelAcademico']:checked").length==0)
             msgError+="Seleccione al menos un nivel<br>";
+        if ( !$("#titulo").val() )
+            msgError+="No se ha escrito el título<br>";
         if ( !$("#sinopsis").val())
             msgError+="No se ha escrito la sinópsis<br>";
         if ( !$("#formato_id").val())
@@ -170,8 +174,16 @@ $("form[name='frmVTK']").submit(function(event){
                 msgError+="No se han definido las palabras clave<br>";
                 $("#palabrasclave").closest("div.form-group").addClass("has-error has-danger");
             }
-        if ( $("#video").val())
+        if ( $("#video_id option:selected").length==0)
             msgError+="No se han escrito las características del video<br>";
+        if ( $("#audio_id option:selected").length==0 )
+            msgError+="No se han escrito las características del audio<br>";
+        if (  $("input[name='calidadAudio']:checked").length==0  )
+            msgError+="Inidique la calidad del audio (bueno o malo)<br>";
+        if (  $("input[name='calidadVideo']:checked").length==0  )
+            msgError+="Inidique la calidad del video (bueno o malo)<br>";
+        if (  !$("#observaciones").val()  )
+            msgError+="Escriba sus observaciones<br>";
 
         if (msgError.length>0){
                 event.preventDefault();
@@ -414,7 +426,8 @@ function labelsCamposRequeridos(){
         });
 
         // Otros labels de componentes no convencionales
-        $("label[for='eventos_0_id'], label[for='nivel1'], label[for='nivelesacademicos[0].nivel.id'], label[for='palabrasClaveStr'], label[for='areatematicaDescripcion'], label[for='areatematica_id']" ).addClass("campoRequerido");
+        $("label[for='eventos_0_id'], label[for='nivel1'], label[for='nivelesacademicos[0].nivel.id'], label[for='palabrasClaveStr'], label[for='areatematicaDescripcion'], label[for='areatematica_id'], label[for='calidad_audio_b'] , label[for='calidad_video_B']" ).addClass("campoRequerido");
+
 }
 
 function agregarAbrir(label){

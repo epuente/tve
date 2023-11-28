@@ -102,3 +102,10 @@ reload
 run 9000
 run
 exit
+run
+compile
+run
+clean
+reload
+compile
+run

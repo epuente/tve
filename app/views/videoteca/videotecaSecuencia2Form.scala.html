@@ -9,13 +9,13 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                     <div class="form-group">
-                        @inputText(forma("folio"), '_label -> "1. Folio", 'class->"form-control campoRequerido", 'maxlength->"30",  'placeholder->"Ejem. DIRGRAL980125", '_help->"", 'required->true )
+                        @inputText(forma("folio"), '_label -> "1. Folio", 'class->"form-control", 'maxlength->"30",  'placeholder->"Ejem. DIRGRAL980125", '_help->"")
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                     <div class="form-group">
                         @inputText(forma("clave"), '_label -> "2. ID", 'class->"form-control", 'required->true, 'maxlength->"30", 'placeholder->"Ejem. BCT-00081-30",  '_help->"" )
                         <div class="help-block with-errors"></div>
@@ -126,13 +126,13 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                     <div class="form-group">
                         @inputText(forma("folioDEV"), '_label -> "6. Folio DEV",  'maxlength->"30",  'class->"form-control",  'placeholder->"Ejem. 0225689", '_help->"" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                <div class="col-xs-12 col-sm-6 col-md-9 col-lg-9">
                     <div class="form-group">
                         <div id="divResultadoBusqueda" style="display:none">
                             <dt class=" ">
@@ -211,51 +211,18 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
 
 
 
-            @*   8. anterior
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12 col-lg-12"><h2>8. Créditos</h2></div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading panel-heading-nav">
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <div>
-                                        <!-- Nav tabs -->
-                                        <ul class="nav nav-tabs" role="tablist" id="navTabs">
-                                            @for( s <- auxCreditos) {
-                                            <li role="presentation" @if(s.id==1){class="active"}><a href="#@s.id"  id="tab@s.id"  role="tab" data-toggle="tab">8.@s.id @s.descripcion</a></li>
-                                            }
-                                        </ul>
 
-                                        <!-- Tab panes -->
-                                        <div class="tab-content">
-                                            @for(s <- auxCreditos) {
-                                            <div role="tabpanel" class="tab-pane @if(s.id==1){ active}" id="@s.id" name="losTabs">
-                                                <textarea id="ta@s.id" name="tasCreditos" class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Escriba los nombres de las personas que participaron en @s.accion"></textarea>
-                                            </div>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            *@
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
                     <div class="form-group">
-                        @inputText(forma("titulo"), '_label -> "9. Título",  'maxlength->"200", 'class->"form-control", 'placeholder->"Ejem. Segundo programa" )
+                        @inputText(forma("titulo"), '_label -> "9. Título",  'maxlength->"200", 'class->"form-control", 'placeholder->"Ejem. Segundo programa" , 'required->true)
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
                     @inputText(forma("obra"), '_label -> "10. Num. de obra", 'class->"form-control", '_help->"" )
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
                     <div class="form-group">
                         @inputText(forma("duracionStr"), '_label -> "11. Duración",  'class->"form-control", '_help->"" )
                         <div class="help-block with-errors"></div>
@@ -263,7 +230,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                 </div>
             </div>
             <div class="row" style="margin-top:10px;">
-                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                     <textarea style='display:none;' name='txaPalabrasClave' id='txaPalabrasClave'></textarea>
                     <input type="text" name="palabrasClave[0].descripcion" value="ladescripcion" style="display:none"></input>
                     <label for="palabrasClaveStr">12. Palabras clave</label>
@@ -272,7 +239,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-10 col-lg-4">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                             <div class="form-group">
                                 <div id="divResultadoBusquedaProduccion" style="display:none">
                                     <dt class=" ">
@@ -321,7 +288,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                             </div>
                         </div>
                     </div>
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-2">
                     <div class="form-group">
                         @select(
                         forma("idioma.id"),
@@ -333,7 +300,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-2">
                     <div class="form-group">
                         <dl class=" " id="accesibilidad_audio_field">
                             <dt><label for="accesibilidad_audio">15. Accesibilidad</label></dt>
@@ -354,7 +321,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
             </div>
 
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div class="form-group">
                         @select(
                         forma("tipograbacion.id"),
@@ -366,13 +333,13 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div class="form-group">
                         @inputText(forma("fechaProduccion"), '_label -> "17. Fecha producción", 'class->"form-control", '_help->"", 'placeholder->"Ejem. 04/11/2001" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div class="form-group">
                         @inputText(forma("fechaPublicacion"), '_label -> "18. Fecha publicación", 'class->"form-control", '_help->"", 'placeholder->"Ejem. 02/12/2001" )
                         <div class="help-block with-errors"></div>
@@ -380,7 +347,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                 </div>
             </div>
             <div class="row" style="margin-top:25px;">
-                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div class="form-group">
                         @select(
                         forma("disponibilidad.id"),
@@ -391,7 +358,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                         )
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-4">
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-4">
                     <div class="form-group">
                         <div id="divResultadoBusquedaAreaTematica" style="display:none">
                             <dt class=" ">
@@ -433,7 +400,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
 
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div class="form-group">
                         @select(
                         forma("formato.id"),
@@ -485,19 +452,20 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                     <div class="form-group">
                         @select(
                         forma("audio.id"),
                         options(models.TipoAudio.options),
                         '_label -> "31. Audio", '_default -> "-- Seleccione --",
                         '_showConstraints -> false,
-                        'class->"form-control"
+                        'class->"form-control",
+                        'required->true
                         )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                     <div class="form-group">
                         <dl class=" " id="calidad_audio_field">
                             <dt><label for="calidad_audio_b">32. Calidad audio</label></dt>
@@ -515,7 +483,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                         </dl>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                     <div class="form-group">
                         @select(
                         forma("video.id"),
@@ -528,7 +496,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                     <div class="form-group">
                         <dl class=" " id="calidad_video_field">
                             <dt><label for="calidad_video_B">34. Calidad video</label></dt>
@@ -550,7 +518,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="form-group">
-                        @textarea(forma("observaciones"), '_label -> "35. Observaciones", 'maxlength->"300", 'class->"form-control", 'rows->3, 'cols->"300",  'placeholder->"Ejem. El ponente original no se presentó y en su lugar se contó con el Director de la escuela" )
+                        @textarea(forma("observaciones"), '_label -> "35. Observaciones", 'maxlength->"300", 'class->"form-control", 'rows->3, 'cols->"300",  'placeholder->"Ejem. El ponente original no se presentó y en su lugar se contó con el Director de la escuela", 'required->true )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -585,7 +553,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                 <div class="help-block with-errors"></div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2">
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
             <div class="form-group">
                 <input type="text" name="personaje" value=""  maxlength="75"  class="form-control" placeholder="Ejem. Juán Pérez López">
                 <div class="help-block with-errors"></div>
@@ -603,7 +571,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                 <div class="help-block with-errors"></div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-5">
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-5">
             <div class="form-group">
                 <input type="text"  name="tema" value=""  maxlength="200"  class="form-control" placeholder="Ejem. Antecedentes de la escuela">
                 <div class="help-block with-errors"></div>

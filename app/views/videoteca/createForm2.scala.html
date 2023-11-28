@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <textarea id="txtLosCreditos" name="txtLosCreditos"></textarea>
+        <textarea id="txtLosCreditos" name="txtLosCreditos" style="display:none"></textarea>
     }
 }
 
@@ -108,20 +108,6 @@
         });
 
 
-        /*
-        var input1 = document.querySelector("textarea[id='ta1']"),
-        tagify = new Tagify(input1, {
-            enforceWhitelist: false,
-            keepInvalidTags: true,
-            whitelist: listaBlanca,
-            editTags: {
-                clicks: 2,              // single click to edit a tag
-                keepInvalid: false      // if after editing, tag is invalid, auto-revert
-            }
-        })
-        */
-
-
         const mObra = IMask(document.getElementById('obra'), {
                   mask: '00/00',
                   lazy: false,
@@ -138,6 +124,8 @@
                       s: {mask: IMask.MaskedRange, placeholderChar: 's', from: 0, to: 59, maxLength: 2}
                   }
         });
+
+
 
 
         labelsCamposRequeridos();
