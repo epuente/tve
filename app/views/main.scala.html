@@ -38,37 +38,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("lib/animate.css/animate.min.css")">
     <link href="@routes.Assets.at("stylesheets/main.css")" rel="stylesheet">
     <link rel="stylesheet" href="@routes.Assets.at("horizontal-timeline/css/style.css")")> <!-- Resource style -->
-          <!-- Matomo -->
 
-          <script>
-
-        var _paq = window._paq = window._paq || [];
-
-        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-
-        _paq.push(['trackPageView']);
-
-        _paq.push(['enableLinkTracking']);
-
-        (function() {
-
-          var u="https://check.dev.ipn.mx/";
-
-          _paq.push(['setTrackerUrl', u+'matomo.php']);
-
-          _paq.push(['setSiteId', '8']);
-
-          var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-
-          g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-
-        })();
-
-      </script>
-
-          <noscript><p><img src="https://check.dev.ipn.mx/matomo.php?idsite=8&amp;rec=1" style="border:0;" alt="" /></p></noscript>
-
-          <!-- End Matomo Code -->
 
     <style>
         dl {
@@ -438,7 +408,7 @@
 		}
 
         // PAra cambiar acentos
-        $(document).on("keyup","form[name='frmVTK5'] input, form[name='frmVTK'] textarea", function(t){
+        $(document).on("keyup","form[name='frmVTK5ninguna'] input, form[name='frmVTKninguna'] textarea", function(t){
           console.log("tecla "+t)
           var cadena = $(this).val();
           var retorno = cadena.normalize("NFD").replace(/\p{Diacritic}/gu, "")

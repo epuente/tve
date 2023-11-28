@@ -23,7 +23,7 @@
 
     <h1>Agregar al catálogo de videoteca</h1>
 
-    @form(CSRF(routes.VideotecaController.save()), 'role->"form", 'id->"frmVTKCreate", 'name->"frmVTK" , Symbol("data-modo")->"creacion" ) {
+    @form(CSRF(routes.VideotecaController.save()), 'role->"form", 'id->"frmVTKCreate", 'name->"frmVTK" , Symbol("data-modo")->"creacion", 'onsubmit->"javascript:agregaJSON();" ) {
         @videotecaSecuencia2Form(forma, auxCreditos)
         <br/><br/>
         <div class="row">
@@ -39,6 +39,8 @@
                 </div>
             </div>
         </div>
+
+        <textarea id="txtLosCreditos" name="txtLosCreditos"></textarea>
     }
 }
 
@@ -148,16 +150,6 @@
         $('[data-toggle="popover"]').popover()
         //agregarAbrir();
 
-
-
-
-
-
-
-
-
-
-
         $('[data-toggle="tooltip"]').tooltip();
     });  // fin del $(function()
 
@@ -203,7 +195,7 @@
 <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("bootstrap-select/css/bootstrap-select.min.css")">
 <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/videoteca.css")">
 
-<script src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
+<script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
 
 
 <script src="@routes.Assets.at("javascripts/videoteca.js")"></script>

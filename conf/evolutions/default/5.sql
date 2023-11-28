@@ -39,6 +39,21 @@ INSERT INTO nivel (id, audit_insert, audit_update, descripcion) VALUES(4, '2023-
 INSERT INTO tipo_grabacion (id, audit_insert, audit_update, descripcion) VALUES(1, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Master');
 INSERT INTO tipo_grabacion (id, audit_insert, audit_update, descripcion) VALUES(2, '2023-10-23 00:00:00.000', '2023-10-23 00:00:00.000', 'Copia');
 
+INSERT INTO tipo_audio (id, audit_insert, audit_update, descripcion) VALUES(1, '2023-11-23 00:00:00.000', '2023-11-23 00:00:00.000', 'Stereo ACC -64kbps – 32/44,1/48  kHz   -16 Bits');
+INSERT INTO tipo_audio (id, audit_insert, audit_update, descripcion) VALUES(2, '2023-11-23 00:00:00.000', '2023-11-23 00:00:00.000', 'Stereo ACC - 32 kbps – 32/44,1/48  kHz   -16 Bits');
+INSERT INTO tipo_audio (id, audit_insert, audit_update, descripcion) VALUES(3, '2023-11-23 00:00:00.000', '2023-11-23 00:00:00.000', 'Stereo ACC - 48 kbps – 32/44,1/48  kHz   -16 Bits');
+INSERT INTO tipo_audio (id, audit_insert, audit_update, descripcion) VALUES(4, '2023-11-23 00:00:00.000', '2023-11-23 00:00:00.000', 'Stereo ACC- 88.2 kbps – 32/44,1/48  kHz   -16 Bits');
+INSERT INTO tipo_audio (id, audit_insert, audit_update, descripcion) VALUES(5, '2023-11-23 00:00:00.000', '2023-11-23 00:00:00.000', 'Stereo ACC -96 kbps – 32/44,1/48  kHz   -16 Bits');
+INSERT INTO tipo_audio (id, audit_insert, audit_update, descripcion) VALUES(6, '2023-11-23 00:00:00.000', '2023-11-23 00:00:00.000', 'Stereo ACC - 176 kbps – 32/44,1/48  kHz   -16 Bits');
+INSERT INTO tipo_audio (id, audit_insert, audit_update, descripcion) VALUES(7, '2023-11-23 00:00:00.000', '2023-11-23 00:00:00.000', 'Stereo ACC - 192 kbps – 32/44,1/48  kHz   -16 Bits');
+INSERT INTO tipo_audio (id, audit_insert, audit_update, descripcion) VALUES(8, '2023-11-23 00:00:00.000', '2023-11-23 00:00:00.000', 'Mono ACC -64kbps – 32/44,1/48  kHz   -16 Bits');
+INSERT INTO tipo_audio (id, audit_insert, audit_update, descripcion) VALUES(10, '2023-11-23 00:00:00.000', '2023-11-23 00:00:00.000', 'Mono ACC - 32 kbps – 32/44,1/48  kHz   -16 Bits');
+INSERT INTO tipo_audio (id, audit_insert, audit_update, descripcion) VALUES(11, '2023-11-23 00:00:00.000', '2023-11-23 00:00:00.000', 'Mono ACC - 48 kbps – 32/44,1/48  kHz   -16 Bits');
+INSERT INTO tipo_audio (id, audit_insert, audit_update, descripcion) VALUES(12, '2023-11-23 00:00:00.000', '2023-11-23 00:00:00.000', 'Mono ACC- 88.2 kbps – 32/44,1/48  kHz   -16 Bits');
+INSERT INTO tipo_audio (id, audit_insert, audit_update, descripcion) VALUES(13, '2023-11-23 00:00:00.000', '2023-11-23 00:00:00.000', 'Mono ACC -96 kbps – 32/44,1/48  kHz   -16 Bits');
+INSERT INTO tipo_audio (id, audit_insert, audit_update, descripcion) VALUES(14, '2023-11-23 00:00:00.000', '2023-11-23 00:00:00.000', 'Mono ACC - 176 kbps – 32/44,1/48  kHz   -16 Bits');
+INSERT INTO tipo_audio (id, audit_insert, audit_update, descripcion) VALUES(15, '2023-11-23 00:00:00.000', '2023-11-23 00:00:00.000', 'Mono ACC - 192 kbps – 44,1 32/44,1/48  kHz   -16 Bits');
+
 INSERT INTO tipo_video (id, audit_insert, audit_update, descripcion) VALUES(1, '2023-11-15 00:00:00.000', '2023-11-15 00:00:00.000', 'NTSC 1920x1080 (FHD) H.264 16:9');
 INSERT INTO tipo_video (id, audit_insert, audit_update, descripcion) VALUES(2, '2023-11-15 00:00:00.000', '2023-11-15 00:00:00.000', 'NTSC 1280x720 (HD) H.264 16:9');
 INSERT INTO tipo_video (id, audit_insert, audit_update, descripcion) VALUES(3, '2023-11-15 00:00:00.000', '2023-11-15 00:00:00.000', 'NTSC 854x480 (SD) H.264 16:9');
@@ -81,7 +96,7 @@ INSERT INTO vtk_campo (id, audit_insert, audit_update, "label", nombre, indicaci
 INSERT INTO vtk_campo (id, audit_insert, audit_update, "label", nombre, indicaciones) VALUES(27, '2023-11-16 00:00:00.000', '2023-11-16 00:00:00.000', 'auxGrado', 'Grado', 'Grado académico del personaje que aparece en el video.<br><br>Por ejemplo: Lic');
 INSERT INTO vtk_campo (id, audit_insert, audit_update, "label", nombre, indicaciones) VALUES(28, '2023-11-16 00:00:00.000', '2023-11-16 00:00:00.000', 'auxCargo', 'Cargo', 'Cargo del personaje que aparece en el video.<br><br>Por ejemplo: Director de la ESIME Azcapotzalco');
 INSERT INTO vtk_campo (id, audit_insert, audit_update, "label", nombre, indicaciones) VALUES(29, '2023-11-16 00:00:00.000', '2023-11-16 00:00:00.000', 'auxTema', 'Título o tema', 'Escriba el título o tema que desarrollan dentro de los tiempos <i>inicio</i> y <i>término</i>.');
-INSERT INTO vtk_campo (id, audit_insert, audit_update, "label", nombre, indicaciones) VALUES(30, '2023-11-16 00:00:00.000', '2023-11-16 00:00:00.000', 'audio', 'Audio', 'Escriba las especificaciones del audio(bits, estado, calidad, etc)');
+INSERT INTO vtk_campo (id, audit_insert, audit_update, "label", nombre, indicaciones) VALUES(30, '2023-11-16 00:00:00.000', '2023-11-16 00:00:00.000', 'audio_id', 'Audio', 'Escriba las especificaciones del audio(bits, estado, calidad, etc)');
 INSERT INTO vtk_campo (id, audit_insert, audit_update, "label", nombre, indicaciones) VALUES(31, '2023-11-16 00:00:00.000', '2023-11-16 00:00:00.000', 'video_id', 'Video', 'Seleccione de la lista el tipo de video correspondiente.');
 INSERT INTO vtk_campo (id, audit_insert, audit_update, "label", nombre, indicaciones) VALUES(32, '2023-11-16 00:00:00.000', '2023-11-16 00:00:00.000', 'observaciones', 'Observaciones', 'Si tiene observaciones que resaltar referentes al material grabado, escríbalas aqui.');
 
@@ -102,7 +117,8 @@ drop table if exists nivel cascade;
 drop table if exists produccion cascade;
 drop table if exists tipo_credito cascade;
 drop table if exists tipo_grabacion cascade;
-drop table if exists tipo_grabacion cascade;
+drop table if exists tipo_audio cascade;
+drop table if exists tipo_video cascade;
 drop table if exists vtk_campo cascade;
 drop table if exists vtk_formato cascade;
 
@@ -113,5 +129,6 @@ drop sequence if exists nivel_seq;
 drop sequence if exists produccion_seq;
 drop sequence if exists tipo_credito_seq;
 drop sequence if exists tipo_grabacion_seq;
+drop sequence if exists tipo_audio_seq;
 drop sequence if exists tipo_video_seq;
 drop sequence if exists vtk_campo_seq;

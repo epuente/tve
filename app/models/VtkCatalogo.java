@@ -62,6 +62,11 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     @ManyToOne
     public Idioma idioma;
 
+    // Soporte de ayuda para personas con debilidad auditiva (sordos). Incluye lenguaje de señas.
+    public boolean accesibilidadAudio;
+
+    // Soporte de ayuda para personas con debilidad visual (ciegos). Incluye subtítulos descriptivos.
+    public boolean accesibilidadVideo;
     @ManyToOne
     public TipoGrabacion tipograbacion;
 
@@ -98,11 +103,18 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     public List<VtkTimeLine> timeline;
 
     @Column(length = 150)
-    public String audio;
+    @ManyToOne
+    public TipoAudio audio;
+
+    @Column(length = 1)
+    public String calidadAudio;
 
     @NotNull
     @ManyToOne
     public TipoVideo video;
+
+    @Column(length = 1)
+    public String calidadVideo;
 
     @Column(length = 3000)
     @NotNull

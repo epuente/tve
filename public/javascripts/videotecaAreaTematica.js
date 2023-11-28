@@ -10,7 +10,8 @@ $("#areatematicaDescripcion").on("keyup", function(){
     if (cadena.length >= 1 ){
 
         console.debug("cadena "+cadena)
-        $("#btnNuevaAreaTematica").toggle(cadena.length>2);
+        //$("#btnNuevaAreaTematica").toggle(cadena.length>2);
+        $("#btnNuevaAreaTematica").show();
         if (cadena.length==0){
             console.log("búsqueda vacía");
         } else {

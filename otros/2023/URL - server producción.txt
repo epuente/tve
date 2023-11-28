@@ -1,0 +1,4 @@
+La IP del server es 148.204.111.26
+
+El dominio es:
+videoteca.dev.ipn.mx

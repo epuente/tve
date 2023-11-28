@@ -2,7 +2,7 @@
 
 @import helper._
 
-Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">color oscuro</label> son obligatorios
+Los campos en <label class="campoRequerido">color oscuro</label> son obligatorios
 
 <fieldset>
     @inputText(forma("id"), '_label -> "", 'class->"", 'type->"hidden" )
@@ -11,7 +11,7 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                     <div class="form-group">
-                        @inputText(forma("folio"), '_label -> "1. Folio", 'class->"form-control campoRequerido", 'maxlength->"30",  'placeholder->"Ejem. DIRGRAL980125", '_help->"" )
+                        @inputText(forma("folio"), '_label -> "1. Folio", 'class->"form-control campoRequerido", 'maxlength->"30",  'placeholder->"Ejem. DIRGRAL980125", '_help->"", 'required->true )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -124,15 +124,15 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                     <div class="form-group">
                         @inputText(forma("folioDEV"), '_label -> "6. Folio DEV",  'maxlength->"30",  'class->"form-control",  'placeholder->"Ejem. 0225689", '_help->"" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
                     <div class="form-group">
                         <div id="divResultadoBusqueda" style="display:none">
                             <dt class=" ">
@@ -180,6 +180,40 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
             <!-- 8 -->
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <label for="creditos">8. Créditos</label>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading panel-heading-nav">
+                                <!-- Nav tabs -->
+                                    <ul class="nav nav-tabs" role="tablist" id="navTabs">
+                                        @for( s <- auxCreditos) {
+                                        <li role="presentation" @if(s.id==1){class="active"}><a href="#@s.id"  id="tab@s.id"  role="tab" data-toggle="tab">8.@s.id @s.descripcion</a></li>
+                                        }
+                                    </ul>
+
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                        @for(s <- auxCreditos) {
+                                        <div role="tabpanel" class="tab-pane @if(s.id==1){ active}" id="@s.id" name="losTabs">
+                                            <textarea id="ta@s.id" name="tasCreditos" class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Escriba los nombres de las personas que participaron en @s.accion"></textarea>
+                                        </div>
+                                        }
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            @*   8. anterior
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12"><h2>8. Créditos</h2></div>
                     </div>
@@ -210,6 +244,7 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                     </div>
                 </div>
             </div>
+            *@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
                     <div class="form-group">
@@ -237,7 +272,7 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-10 col-lg-6">
+                <div class="col-xs-12 col-sm-12 col-md-10 col-lg-4">
                             <div class="form-group">
                                 <div id="divResultadoBusquedaProduccion" style="display:none">
                                     <dt class=" ">
@@ -250,7 +285,7 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                                     <dl class=" " id="produccionDescripcion_field">
                                         <dt><label for="produccionDescripcion">13. Producción</label></dt>
                                         <dd>
-                                            <input type="text" id="produccionDescripcion" value=""  maxlength="100" autocomplete="off"  class="form-control" placeholder="Ejem. ">
+                                            <input type="text" id="produccionDescripcion" value=""  maxlength="100" autocomplete="off"  class="form-control" placeholder="Ejem. Departamento de Televisión Educativa">
                                         </dd>
                                     </dl>
                                     <div class="help-block with-errors"></div>
@@ -287,7 +322,7 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                         </div>
                     </div>
                 <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                <div class="form-group">
+                    <div class="form-group">
                         @select(
                         forma("idioma.id"),
                         options(Idioma.options),
@@ -297,16 +332,34 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                         )
                         <div class="help-block with-errors"></div>
                     </div>
-
-
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        <dl class=" " id="accesibilidad_audio_field">
+                            <dt><label for="accesibilidad_audio">15. Accesibilidad</label></dt>
+                            <dd>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="accesibilidad_audio" name="accesibilidad_audio" value=1 class="input-block-level" data-name="cbAccesibilidad" >
+                                    <span style="margin-right:20px;" >Lenguaje de señas</span>
+                                </div>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="accesibilidad_video" name="accesibilidad_video" value=1 class="input-block-level" data-name="cbAccesibilidad">
+                                    <span>Subtítulos descriptivos</span>
+                                </div>
+                            </dd>
+                            <dd class="info"> </dd>
+                        </dl>
+                    </div>
+                </div>
             </div>
+
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <div class="form-group">
                         @select(
                         forma("tipograbacion.id"),
                         options(models.TipoGrabacion.options),
-                        '_label -> "15. Grabación", '_default -> "-- Seleccione --",
+                        '_label -> "16. Grabación", '_default -> "-- Seleccione --",
                         '_showConstraints -> false,
                         'class->"form-control"
                         )
@@ -315,13 +368,13 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <div class="form-group">
-                        @inputText(forma("fechaProduccion"), '_label -> "16. Fecha producción", 'class->"form-control", '_help->"", 'placeholder->"Ejem. 04/11/2001" )
+                        @inputText(forma("fechaProduccion"), '_label -> "17. Fecha producción", 'class->"form-control", '_help->"", 'placeholder->"Ejem. 04/11/2001" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <div class="form-group">
-                        @inputText(forma("fechaPublicacion"), '_label -> "17. Fecha publicación", 'class->"form-control", '_help->"", 'placeholder->"Ejem. 02/12/2001" )
+                        @inputText(forma("fechaPublicacion"), '_label -> "18. Fecha publicación", 'class->"form-control", '_help->"", 'placeholder->"Ejem. 02/12/2001" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -332,26 +385,26 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                         @select(
                         forma("disponibilidad.id"),
                         options(models.Disponibilidad.options),
-                        '_label -> "18. Disponibilidad", '_default -> "-- Seleccione --",
+                        '_label -> "19. Disponibilidad", '_default -> "-- Seleccione --",
                         '_showConstraints -> false,
                         'class->"form-control"
                         )
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-4">
                     <div class="form-group">
                         <div id="divResultadoBusquedaAreaTematica" style="display:none">
                             <dt class=" ">
-                            <dt><label for="areatematicaDescripcion"  class="campoRequerido">19. Área temática</label>
+                            <dt><label for="areatematicaDescripcion"  class="campoRequerido">20. Área temática</label>
                             </dt>
                             <input type="hidden" id="areatematica_id" name="areatematica.id">
                             <div id="textAreaTematica">???</div>
                         </div>
                         <div id="divBusquedaAreaTematica">
                             <dl class=" " id="descripcionAreaTematica_field">
-                                <dt><label for="areatematicaDescripcion" class="campoRequerido">19. Área temática</label></dt>
+                                <dt><label for="areatematicaDescripcion" class="campoRequerido">20. Área temática</label></dt>
                                 <dd>
-                                    <input type="text" id="areatematicaDescripcion" value=""  maxlength="100" autocomplete="off"  class="form-control" placeholder="Ejem. ---"  required>
+                                    <input type="text" id="areatematicaDescripcion" value=""  maxlength="100" autocomplete="off"  class="form-control" placeholder="Ejem. Ciencias Sociales y Administrativas"  required>
                                 </dd>
                             </dl>
                             <div class="help-block with-errors"></div>
@@ -380,13 +433,12 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
 
                     </div>
                 </div>
-
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <div class="form-group">
                         @select(
                         forma("formato.id"),
                         options(VtkFormato.options),
-                        '_label -> "20. Formato", '_default -> "-- Seleccione --",
+                        '_label -> "21. Formato", '_default -> "-- Seleccione --",
                         '_showConstraints -> false,
                         'class->"form-control",
                         'required->true
@@ -397,7 +449,7 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="form-group">
-                        @textarea(forma("sinopsis"), '_label -> "21. Sinópsis",  'maxlength->"3000", 'class->"form-control", 'rows->2, 'cols->"300"  , 'required->true, 'placeholder->"Notas: Expo-Profesionfráfica 1998, convenio revision salarial, convenio de colaboración IPN- Instituto de Aviación" )
+                        @textarea(forma("sinopsis"), '_label -> "22. Sinópsis",  'maxlength->"3000", 'class->"form-control", 'rows->2, 'cols->"300"  , 'required->true, 'placeholder->"Notas: Expo-Profesionfráfica 1998, convenio revision salarial, convenio de colaboración IPN- Instituto de Aviación" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
@@ -407,20 +459,22 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
     </div>
     <div class="panel panel-default">
         <div class="panel-body">
+            <!-- TimeLine -->
+            <textarea style='display:none;' name='txaTimeLine' id='txaTimeLine'></textarea>
             <div id="abc">
                 <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12"> <label for="auxIntervencion">22. Intervención de personajes</label> <span data-toggle="popover" data-trigger="hover" data-content="Agregar renglón de intervención de personajes"><a href="javascript:agregarTimeLine();" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a> </span> </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12"> <label for="auxIntervencion">23. Intervención de personajes</label> <span data-toggle="popover" data-trigger="hover" data-content="Agregar renglón de intervención de personajes"><a href="javascript:agregarTimeLine();" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a> </span> </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-2 col-md-2 col-lg-2" style="text-align: center;"><label for="auxTiempo">23. Tiempo</label></div>
+                    <div class="col-sm-2 col-md-2 col-lg-2" style="text-align: center;"><label for="auxTiempo">24. Tiempo</label></div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 col-md-1 col-lg-1"><span class="small"><label for="auxInicio">24. Inicio</label></div>
-                    <div class="col-sm-12 col-md-1 col-lg-1"><span class="small"><label for="auxTermino">25. Término</label></span></div>
-                    <div class="col-sm-12 col-md-2 col-lg-2"><span class="small"><label for="auxNombre">26. Nombre</label></span></div>
-                    <div class="col-sm-12 col-md-1 col-lg-1"><span class="small"><label for="auxGrado">27. Grado</label></span></div>
-                    <div class="col-sm-12 col-md-1 col-lg-1"><span class="small"><label for="auxCargo">28. Cargo</label></span></div>
-                    <div class="col-sm-12 col-md-5 col-lg-5"><span class="small"><label for="auxTema">29. Título o tema</label></span></div>
+                    <div class="col-sm-12 col-md-1 col-lg-1"><span class="small"><label for="auxInicio">25. Inicio</label></div>
+                    <div class="col-sm-12 col-md-1 col-lg-1"><span class="small"><label for="auxTermino">26. Término</label></span></div>
+                    <div class="col-sm-12 col-md-2 col-lg-2"><span class="small"><label for="auxNombre">27. Nombre</label></span></div>
+                    <div class="col-sm-12 col-md-1 col-lg-1"><span class="small"><label for="auxGrado">28. Grado</label></span></div>
+                    <div class="col-sm-12 col-md-1 col-lg-1"><span class="small"><label for="auxCargo">29. Cargo</label></span></div>
+                    <div class="col-sm-12 col-md-5 col-lg-5"><span class="small"><label for="auxTema">30. Título o tema</label></span></div>
                     <div class="col-sm-12 col-md-1 col-lg-1"></div>
                 </div>
             </div>
@@ -431,18 +485,42 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                     <div class="form-group">
-                        @textarea(forma("audio"), '_label -> "30. Audio",  'maxlength->"200", 'class->"form-control", 'rows->3, 'cols->"300"  , 'placeholder->"Ejem. Stereo 48000Hz 16bits Bueno" )
+                        @select(
+                        forma("audio.id"),
+                        options(models.TipoAudio.options),
+                        '_label -> "31. Audio", '_default -> "-- Seleccione --",
+                        '_showConstraints -> false,
+                        'class->"form-control"
+                        )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <dl class=" " id="calidad_audio_field">
+                            <dt><label for="calidad_audio_b">32. Calidad audio</label></dt>
+                            <dd>
+                                <div class="checkbox-group">
+                                    <input type="radio" id="calidad_audio_B" name="calidadAudio" value="B" class="input-block-level" data-name="rbCalidadAudio">
+                                    <span style="margin-right:20px;">Buena</span>
+                                </div>
+                                <div class="checkbox-group">
+                                    <input type="radio" id="calidad_audio_M" name="calidadAudio" value="M" class="input-block-level" data-name="rbCalidadAudio">
+                                    <span style="margin-right:20px;">Mala</span>
+                                </div>
+                            </dd>
+                            <dd class="info"> </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                     <div class="form-group">
                         @select(
                         forma("video.id"),
                         options(models.TipoVideo.options),
-                        '_label -> "31. Video", '_default -> "-- Seleccione --",
+                        '_label -> "33. Video", '_default -> "-- Seleccione --",
                         '_showConstraints -> false,
                         'class->"form-control",
                         'required->true
@@ -450,11 +528,29 @@ Los campos en <label class="campoRequerido" xmlns="http://www.w3.org/1999/html">
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
+                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <dl class=" " id="calidad_video_field">
+                            <dt><label for="calidad_video_B">34. Calidad video</label></dt>
+                            <dd>
+                                <div class="checkbox-group">
+                                    <input type="radio" id="calidad_video_B" name="calidadVideo" value="B" class="input-block-level" data-name="rbCalidadVideo">
+                                    <span style="margin-right:20px;">Buena</span>
+                                </div>
+                                <div class="checkbox-group">
+                                    <input type="radio" id="calidad_video_M" name="calidadVideo" value="M" class="input-block-level" data-name="rbCalidadVideo">
+                                    <span>Mala</span>
+                                </div>
+                            </dd>
+                            <dd class="info"> </dd>
+                        </dl>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="form-group">
-                        @textarea(forma("observaciones"), '_label -> "32. Observaciones", 'maxlength->"300", 'class->"form-control", 'rows->3, 'cols->"300",  'placeholder->"Ejem. El ponente original no se presentó y en su lugar se contó con el Director de la escuela" )
+                        @textarea(forma("observaciones"), '_label -> "35. Observaciones", 'maxlength->"300", 'class->"form-control", 'rows->3, 'cols->"300",  'placeholder->"Ejem. El ponente original no se presentó y en su lugar se contó con el Director de la escuela" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>

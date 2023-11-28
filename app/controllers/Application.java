@@ -141,7 +141,7 @@ public class Application extends Controller {
 		Ebean.createJsonContext();
 		Long usuarioId =  Long.decode(session("usuario"));
 		List<CuentaRol> roles = CuentaRol.find.where().eq("cuenta.personal.id", usuarioId).findList();
-		new JSONObject();
+		//new JSONObject();
 		JSONArray jaRoles = new JSONArray();
 		for(CuentaRol rol:roles) {
 			JSONObject jo = new JSONObject();

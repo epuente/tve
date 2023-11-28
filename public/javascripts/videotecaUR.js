@@ -6,7 +6,8 @@ $("#URDescripcion").on("keyup", function(){
     var cadena = $("#URDescripcion").val();
     $("#panelCoincidenciasUR").toggle(cadena.length>0);
     if (cadena.length >= 1 ){
-        $("#btnNuevaUR").toggle(cadena.length>2);
+        //$("#btnNuevaUR").toggle(cadena.length>2);
+        $("#btnNuevaUR").show();
         if (cadena.length==0){
             console.log("búsqueda vacía");
         } else {

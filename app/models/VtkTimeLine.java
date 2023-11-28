@@ -25,4 +25,8 @@ public class VtkTimeLine extends models.utils.PlantillaModelo{
 
     @Column(length = 200)
     public String tema;
+
+    @ManyToOne (optional = false)
+    public Personal catalogador;
+
 }

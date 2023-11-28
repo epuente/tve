@@ -122,17 +122,16 @@ $(document).ready(function() {
 			
 			return false;
 		} else {
+			console.log("antes de enviar...........")
 			$.ajax({
 				  url: "@routes.Application.autentica()",
 				  data: {usuario: $("#usuario").val(),   password: $("#password").val()},
 				  dataType: "json"
 				}).done(function(data) {
-					console.log(data)
 					if (data == null){
 						$('#msgLogin').html( "Usuario y/o password no válidos." ).addClass("error").css('visibility', 'visible');
 						return false;
 					} else {
-						
 						var $roles = LlamadaAjax("/rolesUsuario","POST", JSON.stringify({}));
 						$.when($roles).done(function(data){
 							console.dir(data)

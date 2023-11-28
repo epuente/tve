@@ -8,7 +8,8 @@ $("#serieDescripcion").on("keyup", function(){
     $("#panelCoincidenciasSerie").toggle(cadena.length>0);
     if (cadena.length >= 1 ){
         console.debug("cadena "+cadena)
-        $("#btnNuevaSerie").toggle(cadena.length>2);
+        //$("#btnNuevaSerie").toggle(cadena.length>2);
+        $("#btnNuevaSerie").show();
         if (cadena.length==0){
             console.log("búsqueda vacía");
         } else {

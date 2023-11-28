@@ -8,7 +8,8 @@ $("#produccionDescripcion").on("keyup", function(){
     $("#panelCoincidenciasProduccion").toggle(cadena.length>0);
     if (cadena.length >= 1 ){
         console.debug("cadena "+cadena)
-        $("#btnNuevaProduccion").toggle(cadena.length>2);
+        //$("#btnNuevaProduccion").toggle(cadena.length>2);
+        $("#btnNuevaProduccion").show();
         if (cadena.length==0){
             console.log("búsqueda vacía");
         } else {

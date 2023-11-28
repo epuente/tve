@@ -83,6 +83,7 @@ select nextval('pre_agenda_vehiculo_seq');
 select nextval('rol_seq');
 select nextval('rol_derecho_seq');
 select nextval('rol_fase_seq');
+select nextval('registro_acceso_seq');
 select nextval('sala_seq');
 select nextval('sala_mantenimiento_seq');
 select nextval('servicio_seq');

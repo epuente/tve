@@ -14,6 +14,11 @@ $("#btnModalGuardar").on("click", function(){
 
 function agregaJSON(){
     console.log(" - agregaJSON -")
+        var aux4 = valoresCreditos2();
+
+        $("#txtLosCreditos").val(   aux4   );
+        $("#txaTimeLine").val(JSON.stringify(valoresTimeLine()));
+
 }
 
 
@@ -135,85 +140,116 @@ $("form[name='frmVTK']").submit(function(event){
     }
 
 
-    if ( !$("#clave").val() )
-        msgError+="No se ha seleccionado un ID.<br>";
-     if ($("*[data-name='cbEvento']:checked").length==0)
-        msgError+="Seleccione al menos un evento<br>";
-    if ( $("*[data-name='cbNivelAcademico']:checked").length==0)
-        msgError+="Seleccione al menos un nivel<br>";
-    if ( !$("#sinopsis").val())
-        msgError+="No se ha escrito la sinópsis<br>";
-    if ( !$("#formato_id").val())
-        msgError+="No se ha seleccionado el formato<br>";
-    if ( !$("#areatematica_id").val())
-        msgError+="No se ha seleccionado el área temática<br>";
-    if ( !$("#palabrasClaveStr").val()){
-            msgError+="No se han definido las palabras clave<br>";
-            $("#palabrasclave").closest("div.form-group").addClass("has-error has-danger");
+    var $uf = LlamadaAjax("/vtkBuscaFolio", "POST", JSON.stringify( {"folio":$("#folio").val()}));
+    var $ui = LlamadaAjax("/vtkBuscaClaveID", "POST", JSON.stringify( {"id":$("#clave").val()}));
+    $.when( $uf, $ui  ).done(function(dataf, datai){
+        console.log("DOS")
+        console.dir(dataf)
+        console.dir(datai)
+        console.log(  dataf.estado=="correcto"  )
+        if (dataf.estado!="correcto"){
+            msgError+="El folio ya esta registrado.<br>";
         }
-    if ( $("#video").val())
-        msgError+="No se han escrito las características del video<br>";
+        if (datai.estado!="correcto"){
+            msgError+="El ID ya esta registrado.<br>";
+        }
 
-    if (msgError.length>0){
-            event.preventDefault();
-            msgError.length==1? msgError+="<br><br>Complete el campo faltante" : msgError+="<br><br>Complete los campos faltantes";
+        if ( !$("#clave").val() )
+            msgError+="No se ha seleccionado un ID.<br>";
+         if ($("*[data-name='cbEvento']:checked").length==0)
+            msgError+="Seleccione al menos un evento<br>";
+        if ( $("*[data-name='cbNivelAcademico']:checked").length==0)
+            msgError+="Seleccione al menos un nivel<br>";
+        if ( !$("#sinopsis").val())
+            msgError+="No se ha escrito la sinópsis<br>";
+        if ( !$("#formato_id").val())
+            msgError+="No se ha seleccionado el formato<br>";
+        if ( !$("#areatematica_id").val())
+            msgError+="No se ha seleccionado el área temática<br>";
+        if ( !$("#palabrasClaveStr").val()){
+                msgError+="No se han definido las palabras clave<br>";
+                $("#palabrasclave").closest("div.form-group").addClass("has-error has-danger");
+            }
+        if ( $("#video").val())
+            msgError+="No se han escrito las características del video<br>";
 
-            swal({
-                    title: "Aviso",
-                    html: msgError,
-                    type: "warning",
-                    confirmButtonText: "Aceptar"
+        if (msgError.length>0){
+                event.preventDefault();
+                msgError.length==1? msgError+="<br><br>Complete el campo faltante" : msgError+="<br><br>Complete los campos faltantes";
+
+                swal({
+                        title: "Aviso",
+                        html: msgError,
+                        type: "warning",
+                        confirmButtonText: "Aceptar"
+                });
+                return false;
+        }
+        else {
+            //swal("En construcción", "Faltan algunas definiciones para completar esta funcionalidad","warning");
+            //event.preventDefault();
+
+            $("#cuentas_username").attr('name', 'cuentas[0].username');
+            $("#cuentas_password").attr('name', 'cuentas[0].password');
+
+            $("[type='checkbox'][id^='auxRoles_']:checked").each(function(i,e){
+                $(this).attr("name","cuentas[0].roles["+i+"].rol.id");
             });
-            return false;
-    }
-    else {
-        //swal("En construcción", "Faltan algunas definiciones para completar esta funcionalidad","warning");
-        //event.preventDefault();
-
-        $("#cuentas_username").attr('name', 'cuentas[0].username');
-        $("#cuentas_password").attr('name', 'cuentas[0].password');
-
-        $("[type='checkbox'][id^='auxRoles_']:checked").each(function(i,e){
-            $(this).attr("name","cuentas[0].roles["+i+"].rol.id");
-        });
 
 
-        var x = {};
-        //var ppcc = {};
-        //x['losDatos']=valoresCreditos();
-        x=valoresCreditos();
-        //ppcc['lasPalabras'] = valoresPalabrasClave();
+            var x = {};
+            x=valoresCreditos();
+
+            console.log("creditos x")
+            console.log(x)
+            console.dir(x)
+
+/*
+            var x2 = {};
+            x2=valoresCreditos2();
+
+                        console.log("creditos x2")
+                        console.dir(x2)
+*/
+
+            var xEventos = {};
+            xEventos = valoresEventos();
+
+            var xNiveles = {};
+            xNiveles = valoresNiveles();
 
 
-        var x2 = {};
-        x2=valoresCreditos2();
+            $("<textarea style='padding-left:100px; display:none;' name='txaEventos' id='txaEventos'>"+JSON.stringify(xEventos)+"</textarea>").appendTo("form[name='frmVTK']");
+            $("<textarea style='padding-left:100px; display:none;' name='txaNiveles' id='txaNiveles'>"+JSON.stringify(xNiveles)+"</textarea>").appendTo("form[name='frmVTK']");
+            $("<textarea style='padding-left:100px; display:none;' name='txaCreditos' id='txaCreditos'>"+JSON.stringify(x)+"</textarea>").appendTo("form[name='frmVTK']");
+            //$("<textarea style='padding-left:100px; display:none;' name='txaCreditos2' id='txaCreditos2'>"+JSON.stringify(x2)+"</textarea>").appendTo("form[name='frmVTK']");
+            $("#txaPalabrasClave").val(JSON.stringify(valoresPalabrasClave()));
+
+            $("#tasCreditos").val(  JSON.stringify(x)  );
 
 
-        var xEventos = {};
-        xEventos = valoresEventos();
-
-        var xNiveles = {};
-        xNiveles = valoresNiveles();
+            console.log(">>>>>>>>>>>>>>>>>>>>>>")
+            console.log(  JSON.stringify(x)   );
 
 
-        $("<textarea style='padding-left:100px; display:none;' name='txaEventos' id='txaEventos'>"+JSON.stringify(xEventos)+"</textarea>").appendTo("form[name='frmVTK']");
-        $("<textarea style='padding-left:100px; display:none;' name='txaNiveles' id='txaNiveles'>"+JSON.stringify(xNiveles)+"</textarea>").appendTo("form[name='frmVTK']");
-        $("<textarea style='padding-left:100px; display:none;' name='txaCreditos' id='txaCreditos'>"+JSON.stringify(x)+"</textarea>").appendTo("form[name='frmVTK']");
-        $("<textarea style='padding-left:100px; display:none;' name='txaCreditos2' id='txaCreditos2'>"+JSON.stringify(x2)+"</textarea>").appendTo("form[name='frmVTK']");
-        $("#txaPalabrasClave").val(JSON.stringify(valoresPalabrasClave()));
-        $("#txaTimeLine").val(JSON.stringify(valoresTimeLine()));
 
-        console.log(">>>>>>>>>>>>>>>>>>>>>>")
-        console.dir(x2)
 
-        //event.preventDefault();
-        //return false;
-    }
+
+
+            //event.preventDefault();
+            //return false;
+        }
+
+    });
+
+
+
 });
 
 
 function valoresCreditos(){
     var j=[];
+    var general = "";
     $("#navTabs>li>a").each(function(index, element){
         var id = $(element).attr("id").substring(3);
         console.log("  id "+id)
@@ -229,21 +265,26 @@ function valoresCreditos(){
                 cadena+=value.value+",";
             });
             cadena = cadena.substring(0, cadena.length-1);
+            general += cadena;
             console.log("    cadena:"+cadena)
             tipo["creditos"]=cadena;
             j.push(tipo);
         }
     });
-    return j;
+    return general;
 }
 
 
 function valoresCreditos2(){
     var j=[];
+    var general="";
     $("#navTabs>li>a").each(function(index, element){
         var id = $(element).attr("id").substring(3);
         console.log("  id "+id)
         var tipo={};
+
+
+
 
         aux= $("#ta"+id).val();
         console.log("    aux:"+aux+"("+aux.length+")")
@@ -262,6 +303,7 @@ function valoresCreditos2(){
             console.log("arrString "+arrString+"("+arrString.length+")")
             for (var i=0; i < arrString.length-1; i++){
                 tipox={tipoCredito:{id:id}, personas:arrString[i]}
+                general += JSON.stringify(tipox)+",";
                 j.push(tipox);
             }
             console.log("");
@@ -273,7 +315,9 @@ function valoresCreditos2(){
     });
     console.log("->j")
     console.dir(j)
-    return j;
+                general = general.substring(0, general.length-1);
+
+    return   "["+ general+"]";
 }
 
 
@@ -457,5 +501,41 @@ function segundosACadena(seconds) {
   second = (second < 10)? '0' + second : second;
   return hour + ':' + minute + ':' + second;
 }
+
+$("#folio").blur(function(e){
+    console.log("   "+$(this).val())
+    if (  $(this).val().length!=0 ){
+        var $u = LlamadaAjax("/vtkBuscaFolio", "POST", JSON.stringify( {"folio":$(this).val()}));
+        $.when($u).done(function(data){
+            console.dir(data)
+            if (data.estado!="correcto"){
+                swal({
+                        title: "Advertencia",
+                        html: "El número de folio ya esta registrado<br><br>No se permite registrar mas de una vez el mismo folio.",
+                        type: "warning",
+                        showConfirmButton: true
+                });
+            }
+        });
+    }
+});
+
+$("#clave").blur(function(e){
+    console.log("   "+$(this).val())
+    if (  $(this).val().length!=0 ){
+        var $u = LlamadaAjax("/vtkBuscaClaveID", "POST", JSON.stringify( {"id":$(this).val()}));
+        $.when($u).done(function(data){
+            console.dir(data)
+            if (data.estado!="correcto"){
+                swal({
+                        title: "Advertencia",
+                        html: "El número de ID ya esta registrado<br><br>No se permite registrar mas de una vez el mismo ID.",
+                        type: "warning",
+                        showConfirmButton: true
+                });
+            }
+        });
+    }
+});
 
 

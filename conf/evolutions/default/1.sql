@@ -1018,6 +1018,14 @@ create table servicio (
   constraint pk_servicio primary key (id))
 ;
 
+create table tipo_audio (
+  id                        bigint not null,
+  audit_insert              timestamp,
+  audit_update              timestamp,
+  descripcion               varchar(100) not null,
+  constraint pk_tipo_audio primary key (id))
+;
+
 create table tipo_contrato (
   id                        bigint not null,
   audit_insert              timestamp,
@@ -1097,8 +1105,8 @@ create table video_personaje (
   id                        bigint not null,
   audit_insert              timestamp,
   audit_update              timestamp,
-  catalogo_id               bigint,
   nombre                    varchar(75),
+  catalogador_id            bigint not null,
   constraint pk_video_personaje primary key (id))
 ;
 
@@ -1126,6 +1134,8 @@ create table vtk_catalogo (
   obra                      varchar(5),
   formato_id                bigint not null,
   idioma_id                 bigint,
+  accesibilidad_audio       boolean,
+  accesibilidad_video       boolean,
   tipograbacion_id          bigint,
   produccion_id             bigint,
   duracion                  bigint,
@@ -1136,8 +1146,10 @@ create table vtk_catalogo (
   nresguardo                varchar(255),
   liga                      varchar(255),
   catalogador_id            bigint not null,
-  audio                     varchar(150),
+  audio_id                  bigint,
+  calidad_audio             varchar(1),
   video_id                  bigint not null,
+  calidad_video             varchar(1),
   observaciones             varchar(3000) not null,
   version                   bigint not null,
   constraint pk_vtk_catalogo primary key (id))
@@ -1181,6 +1193,7 @@ create table vtk_time_line (
   desde                     bigint,
   hasta                     bigint,
   tema                      varchar(200),
+  catalogador_id            bigint not null,
   constraint pk_vtk_time_line primary key (id))
 ;
 
@@ -1387,6 +1400,8 @@ create sequence sala_mantenimiento_seq;
 create sequence serie_seq;
 
 create sequence servicio_seq;
+
+create sequence tipo_audio_seq;
 
 create sequence tipo_contrato_seq;
 
@@ -1706,8 +1721,8 @@ alter table unidad_responsable add constraint fk_unidad_responsable_catalo_143 f
 create index ix_unidad_responsable_catalo_143 on unidad_responsable (catalogador_id);
 alter table vehiculo add constraint fk_vehiculo_estado_144 foreign key (estado_id) references estado_equipo_accesorio_vehiculo (id);
 create index ix_vehiculo_estado_144 on vehiculo (estado_id);
-alter table video_personaje add constraint fk_video_personaje_catalogo_145 foreign key (catalogo_id) references vtk_catalogo (id);
-create index ix_video_personaje_catalogo_145 on video_personaje (catalogo_id);
+alter table video_personaje add constraint fk_video_personaje_catalogad_145 foreign key (catalogador_id) references personal (id);
+create index ix_video_personaje_catalogad_145 on video_personaje (catalogador_id);
 alter table vtk_catalogo add constraint fk_vtk_catalogo_unidadrespon_146 foreign key (unidadresponsable_id) references unidad_responsable (id);
 create index ix_vtk_catalogo_unidadrespon_146 on vtk_catalogo (unidadresponsable_id);
 alter table vtk_catalogo add constraint fk_vtk_catalogo_serie_147 foreign key (serie_id) references serie (id);
@@ -1726,22 +1741,26 @@ alter table vtk_catalogo add constraint fk_vtk_catalogo_areatematica_153 foreign
 create index ix_vtk_catalogo_areatematica_153 on vtk_catalogo (areatematica_id);
 alter table vtk_catalogo add constraint fk_vtk_catalogo_catalogador_154 foreign key (catalogador_id) references personal (id);
 create index ix_vtk_catalogo_catalogador_154 on vtk_catalogo (catalogador_id);
-alter table vtk_catalogo add constraint fk_vtk_catalogo_video_155 foreign key (video_id) references tipo_video (id);
-create index ix_vtk_catalogo_video_155 on vtk_catalogo (video_id);
-alter table vtk_evento add constraint fk_vtk_evento_catalogo_156 foreign key (catalogo_id) references vtk_catalogo (id);
-create index ix_vtk_evento_catalogo_156 on vtk_evento (catalogo_id);
-alter table vtk_evento add constraint fk_vtk_evento_servicio_157 foreign key (servicio_id) references servicio (id);
-create index ix_vtk_evento_servicio_157 on vtk_evento (servicio_id);
-alter table vtk_formato add constraint fk_vtk_formato_usuario_158 foreign key (usuario_id) references personal (id);
-create index ix_vtk_formato_usuario_158 on vtk_formato (usuario_id);
-alter table vtk_nivel add constraint fk_vtk_nivel_catalogo_159 foreign key (catalogo_id) references vtk_catalogo (id);
-create index ix_vtk_nivel_catalogo_159 on vtk_nivel (catalogo_id);
-alter table vtk_nivel add constraint fk_vtk_nivel_nivel_160 foreign key (nivel_id) references nivel (id);
-create index ix_vtk_nivel_nivel_160 on vtk_nivel (nivel_id);
-alter table vtk_time_line add constraint fk_vtk_time_line_catalogo_161 foreign key (catalogo_id) references vtk_catalogo (id);
-create index ix_vtk_time_line_catalogo_161 on vtk_time_line (catalogo_id);
-alter table vtk_time_line add constraint fk_vtk_time_line_personaje_162 foreign key (personaje_id) references video_personaje (id);
-create index ix_vtk_time_line_personaje_162 on vtk_time_line (personaje_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_audio_155 foreign key (audio_id) references tipo_audio (id);
+create index ix_vtk_catalogo_audio_155 on vtk_catalogo (audio_id);
+alter table vtk_catalogo add constraint fk_vtk_catalogo_video_156 foreign key (video_id) references tipo_video (id);
+create index ix_vtk_catalogo_video_156 on vtk_catalogo (video_id);
+alter table vtk_evento add constraint fk_vtk_evento_catalogo_157 foreign key (catalogo_id) references vtk_catalogo (id);
+create index ix_vtk_evento_catalogo_157 on vtk_evento (catalogo_id);
+alter table vtk_evento add constraint fk_vtk_evento_servicio_158 foreign key (servicio_id) references servicio (id);
+create index ix_vtk_evento_servicio_158 on vtk_evento (servicio_id);
+alter table vtk_formato add constraint fk_vtk_formato_usuario_159 foreign key (usuario_id) references personal (id);
+create index ix_vtk_formato_usuario_159 on vtk_formato (usuario_id);
+alter table vtk_nivel add constraint fk_vtk_nivel_catalogo_160 foreign key (catalogo_id) references vtk_catalogo (id);
+create index ix_vtk_nivel_catalogo_160 on vtk_nivel (catalogo_id);
+alter table vtk_nivel add constraint fk_vtk_nivel_nivel_161 foreign key (nivel_id) references nivel (id);
+create index ix_vtk_nivel_nivel_161 on vtk_nivel (nivel_id);
+alter table vtk_time_line add constraint fk_vtk_time_line_catalogo_162 foreign key (catalogo_id) references vtk_catalogo (id);
+create index ix_vtk_time_line_catalogo_162 on vtk_time_line (catalogo_id);
+alter table vtk_time_line add constraint fk_vtk_time_line_personaje_163 foreign key (personaje_id) references video_personaje (id);
+create index ix_vtk_time_line_personaje_163 on vtk_time_line (personaje_id);
+alter table vtk_time_line add constraint fk_vtk_time_line_catalogador_164 foreign key (catalogador_id) references personal (id);
+create index ix_vtk_time_line_catalogador_164 on vtk_time_line (catalogador_id);
 
 
 
@@ -1950,6 +1969,8 @@ drop table if exists sala_mantenimiento cascade;
 drop table if exists serie cascade;
 
 drop table if exists servicio cascade;
+
+drop table if exists tipo_audio cascade;
 
 drop table if exists tipo_contrato cascade;
 
@@ -2184,6 +2205,8 @@ drop sequence if exists sala_mantenimiento_seq;
 drop sequence if exists serie_seq;
 
 drop sequence if exists servicio_seq;
+
+drop sequence if exists tipo_audio_seq;
 
 drop sequence if exists tipo_contrato_seq;
 

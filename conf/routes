@@ -310,3 +310,6 @@ POST    /supervisor/catalogadoresUpdate/:id controllers.SupCatalogadorController
 POST    /supervisor/catalogadoresDelete     controllers.SupCatalogadorController.delete()
 GET     /supervisor/tablero                 controllers.SupCatalogadorController.tablero()
 POST    /supervisor/ajaxTablero             controllers.SupCatalogadorController.ajaxTablero()
+
+POST    /vtkBuscaFolio                      controllers.VideotecaController.buscaFolio()
+POST    /vtkBuscaClaveID                    controllers.VideotecaController.buscaClaveID()

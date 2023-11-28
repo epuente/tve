@@ -69,3 +69,36 @@ run
 reload
 run 
 exit
+run
+dist
+ls
+run
+clean
+dist
+clean
+dist
+cleanrun
+run
+clean
+start
+clean
+reload
+compile
+run
+dist
+run
+clean
+reload
+compile
+run
+clean
+reload
+compile
+run
+run 9000
+exit
+run 9000
+reload
+run 9000
+run
+exit
