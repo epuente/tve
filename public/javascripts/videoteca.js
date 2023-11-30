@@ -152,11 +152,11 @@ $("form[name='frmVTK']").submit(function(event){
 
 
 
-        if (dataf.estado!="correcto"){
+        if (dataf.estado!="correcto"   && data.id !=  parseInt($("#id").val())){
             msgError+="El folio ya esta registrado.<br>";
            $("#folio").closest("div.form-group").addClass("has-error has-danger");
         }
-        if (datai.estado!="correcto"){
+        if (datai.estado!="correcto" && data.id !=  parseInt($("#id").val())){
             msgError+="El ID ya esta registrado.<br>";
             $("#clave").closest("div.form-group").addClass("has-error has-danger");
         }
@@ -571,14 +571,35 @@ $("#folio").blur(function(e){
         var $u = LlamadaAjax("/vtkBuscaFolio", "POST", JSON.stringify( {"folio":$(this).val()}));
         $.when($u).done(function(data){
             console.dir(data)
-            if (data.estado!="correcto"){
-                swal({
-                        title: "Advertencia",
-                        html: "El número de folio ya esta registrado<br><br>No se permite registrar mas de una vez el mismo folio.",
-                        type: "warning",
-                        showConfirmButton: true
-                });
+            var modo=$("form[name='frmVTK']").attr("data-modo");
+            console.log("modo:"+modo)
+            console.log(modo.localeCompare("creacion"))
+            console.log(modo.localeCompare("edicion"))
+            console.log("id vformulario:"+$("#id").val())
+            console.log("data.id:"+data.id)
+            console.log("---- "+data.id != $("#id").val())
+
+            var idCatalogo = parseInt( $("#id").val() );
+
+            console.log(  typeof data.id )
+            console.log(  typeof $("#id").val() )
+
+            console.log("--- "+  (data.id != idCatalogo) )
+            if (data.estado.localeCompare("correcto")!=0){
+                if ( modo.localeCompare("creacion")==0){
+                    var msg="";
+                    if (modo.localeCompare("edicion")==0  && (data.id != idCatalogo ) )
+                        msg="<br><br>El folio está asignado al ID "+data.clave;
+                    swal({
+                            title: "Advertencia1",
+                            html: "El número de folio ya esta registrado<br><br>No se permite registrar mas de una vez el mismo folio."+msg,
+                            type: "warning",
+                            showConfirmButton: true
+                    });
+                    return false;
+                }
             }
+
         });
     }
 });
@@ -589,13 +610,21 @@ $("#clave").blur(function(e){
         var $u = LlamadaAjax("/vtkBuscaClaveID", "POST", JSON.stringify( {"id":$(this).val()}));
         $.when($u).done(function(data){
             console.dir(data)
-            if (data.estado!="correcto"){
-                swal({
-                        title: "Advertencia",
-                        html: "El número de ID ya esta registrado<br><br>No se permite registrar mas de una vez el mismo ID.",
-                        type: "warning",
-                        showConfirmButton: true
-                });
+            var modo=$("form[name='frmVTK']").attr("data-modo");
+            var idClave = parseInt( $("#clave").val() );
+            if (data.estado.localeCompare("correcto")!=0){
+                if ( modo.localeCompare("creacion")==0){
+                    var msg="";
+                    if (modo.localeCompare("edicion")==0  && (data.clave != idClave ) )
+                        msg="<br><br>El ID ya está asignado.";
+                    swal({
+                            title: "Advertencia1",
+                            html: "El ID ya esta registrado<br><br>No se permite registrar mas de una vez el mismo ID."+msg,
+                            type: "warning",
+                            showConfirmButton: true
+                    });
+                    return false;
+                }
             }
         });
     }

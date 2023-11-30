@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdk.nashorn.internal.parser.JSONParser;
 import models.*;
+import org.apache.commons.logging.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -949,11 +950,15 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 vtk.palabrasClave = new ArrayList<>();
                 vtk.catalogador = usuarioActual;
                 Logger.debug("iniciando ciclo: ");
+                Logger.debug("tam jsonArr: "+jsonArr.length());
 
                 for (int x=0; x< jsonArr.length();x++){
                     PalabraClave pc = new PalabraClave();
-                    pc.descripcion = jsonArr.getJSONObject(x).get("value").toString();
-                    pc.catalogador.id = Personal.find.byId( Long.parseLong(session("usuario")) ).id;
+                    String valor = jsonArr.getJSONObject(x).get("value").toString();
+                    Logger.debug("valor:"+valor);
+                    pc.descripcion = valor;
+                    Logger.debug("usuarioActual:"+usuarioActual);
+                    pc.catalogador = usuarioActual;
                     Logger.debug(pc.descripcion+"  -  "+pc.catalogador.nombreCompleto());
                     vtk.palabrasClave.add(pc);
                 }
@@ -1269,11 +1274,14 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         JsonNode json = request().body().asJson();
         JSONObject jo = new JSONObject();
         jo.put("estado", "error");
-        String f = json.findValue("folio").toString();
+        String f = json.findValue("folio").asText();
+        Logger.debug("Buscando folio:"+f);
         VtkCatalogo c = VtkCatalogo.find.where().eq("folio", f).findUnique();
         if (c==null){
             jo.put("estado", "correcto");
-        }
+        } else
+            jo.put("id", c.id);
+
         return ok ( jo.toString()  );
     }
 
@@ -1281,10 +1289,15 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         JsonNode json = request().body().asJson();
         JSONObject jo = new JSONObject();
         jo.put("estado", "error");
-        String f = json.findValue("id").toString();
+        String f = json.findValue("id").asText();
+        Logger.debug("f:"+f);
         VtkCatalogo c = VtkCatalogo.find.where().eq("clave", f).findUnique();
+        Logger.debug("c:"+c);
         if (c==null){
             jo.put("estado", "correcto");
+        } else {
+            jo.put("id", c.id);
+            jo.put("clave", c.clave);
         }
         return ok ( jo.toString()  );
     }

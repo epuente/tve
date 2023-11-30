@@ -25,6 +25,7 @@
 
     @form(CSRF(routes.VideotecaController.update()), 'role->"form",'id->"frmVideoteca", 'name->"frmVTK", Symbol("data-modo")->"edicion", 'onsubmit->"javascript:agregaJSON();"){
         @videotecaSecuencia2Form(forma, auxCreditos)
+        <input type="hidden" name="id" id="id" value="@id">
         <br/><br/>
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
