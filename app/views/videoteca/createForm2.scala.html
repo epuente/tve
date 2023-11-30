@@ -128,9 +128,129 @@
 
 
 
+
+
+/*
+        IMask(document.getElementById('fechaProduccion'), {
+          mask: Date,
+          pattern: 'd-`m-`Y',
+          lazy: false,
+          blocks: {
+            d: {
+              mask: IMask.MaskedRange,
+              from: 1,
+              to: 31,
+              maxLength: 2,
+            },
+            m: {
+              mask: IMask.MaskedRange,
+              from: 1,
+              to: 12,
+              maxLength: 2,
+            },
+            Y: {
+              mask: IMask.MaskedRange,
+              from: 1995,
+              to: 2023,
+              maxLength: 4,
+            }
+          },
+
+
+
+  // define date -> str convertion
+  format: date => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+
+    if (day < 10) day = "0" + day;
+    if (month < 10) month = "0" + month;
+
+    return [year, month, day].join('-');
+  },
+
+  // define str -> date convertion
+  parse: str => {
+    const yearMonthDay = str.split('-');
+    return new Date(yearMonthDay[0], yearMonthDay[1] - 1, yearMonthDay[2]);
+  },
+
+
+
+        });
+*/
+
+/*
+
+// Importa la biblioteca imask.js
+//import IMask from 'imask';
+
+// Obtén el elemento de entrada de fecha
+const fechaProduccionInput = document.getElementById('fechaProduccion');
+
+
+
+
+// Define la máscara personalizada
+const fechaMask = IMask(fechaProduccionInput, {
+  mask: Date,
+  pattern: 'd{-}`m{-}`Y',
+  blocks: {
+    d: {
+      mask: IMask.MaskedRange,
+      from: 1,
+      to: 31,
+      maxLength: 2,
+    },
+    m: {
+      mask: IMask.MaskedRange,
+      from: 1,
+      to: 12,
+      maxLength: 2,
+    },
+    Y: {
+      mask: IMask.MaskedRange,
+      from: 1995,
+      to: 2023,
+    },
+  },
+  format: function (date) {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+
+    // Formato dd/mm/yyyy
+    if (day && month && year) {
+      return `${day}/${month}/${year}`;
+    }
+    // Formato mm/yyyy
+    else if (!day && month && year) {
+      return `${month}/${year}`;
+    }
+    // Formato yyyy
+    else if (!day && !month && year) {
+      return `${year}`;
+    }
+    // Formato inválido
+    else {
+      return '';
+    }
+  },
+    min: new Date(1995, 0, 1),  // defaults to `1900-01-01`
+  max: new Date(2023, 11, 31),  // defaults to `9999-01-01`
+  overwrite: true,
+  lazy: false
+
+
+});
+
+*/
+
+
+
+
         labelsCamposRequeridos();
-
-
 
         @for(c<-campos){
             $("label[for='@c.label']").append('<span class="spanIconoAyudaCampo"  data-html="true" data-toggle="popover" data-trigger="hover" title="Ayuda del campo @c.nombre" data-content="@c.indicaciones"   data-container="body"><i class="fas fa-question-circle"></i>    <a tabindex="0" class="iconoAyudaCampo" style="margin-left:10px;" role=""  id="botonAyudaCampo@c.id"  </a></span>');
@@ -183,7 +303,7 @@
 <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("bootstrap-select/css/bootstrap-select.min.css")">
 <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/videoteca.css")">
 
-<script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
+<script src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
 
 
 <script src="@routes.Assets.at("javascripts/videoteca.js")"></script>

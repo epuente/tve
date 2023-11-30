@@ -78,22 +78,22 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                    <div class="form-group">
+                    <div class="form-check">
                         <dl class=" " id="evento_field">
-                            <dt><label for="eventos_0_id">4. Evento</label></dt>
+                            <dt><label class="form-check-label" for="eventos_0_id">4. Evento</label></dt>
                             <dd>
-                                <div class="checkbox-group">
-                                    <input type="checkbox" id="eventos_0_id" name="eventos[0].servicio.id" value="1" class="input-block-level" data-name="cbEvento" >
+                                <div class="checkbox-group form-check">
+                                    <input type="checkbox" id="eventos_0_id" name="eventos[0].servicio.id" value="1" class="input-block-level form-check-input" data-name="cbEvento" >
                                     <span style="margin-right:20px;" > @models.Servicio.find.byId(1).descripcion</span>
                                 </div>
                                 <div class="checkbox-group">
-                                    <input type="checkbox" id="eventos_1_id" name="eventos[1].servicio.id" value="2" class="input-block-level" data-name="cbEvento">
+                                    <input type="checkbox" id="eventos_1_id" name="eventos[1].servicio.id" value="2" class="input-block-level form-check-input" data-name="cbEvento">
                                     <span>@models.Servicio.find.byId(2).descripcion</span>
                                 </div>
                             </dd>
                             <dd class="info"> </dd>
                         </dl>
-                        <div class="help-block with-errors"></div>
+                        <div class="help-block with-errors invalid-feedback"></div>
                     </div>
 
                 </div>
@@ -335,13 +335,13 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div class="form-group">
-                        @inputText(forma("fechaProduccion"), '_label -> "17. Fecha producción", 'class->"form-control", '_help->"", 'placeholder->"Ejem. 04/11/2001" )
+                        @inputText(forma("fechaProduccion"), '_label -> "17. Fecha producción", 'class->"form-control", '_help->"", 'placeholder->"Ejem. 04/11/2001")
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div class="form-group">
-                        @inputText(forma("fechaPublicacion"), '_label -> "18. Fecha publicación", 'class->"form-control", '_help->"", 'placeholder->"Ejem. 02/12/2001" )
+                        @inputText(forma("fechaPublicacion"), '_label -> "18. Fecha publicación", 'class->"form-control", '_help->"" )
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>

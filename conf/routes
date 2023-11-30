@@ -313,3 +313,5 @@ POST    /supervisor/ajaxTablero             controllers.SupCatalogadorController
 
 POST    /vtkBuscaFolio                      controllers.VideotecaController.buscaFolio()
 POST    /vtkBuscaClaveID                    controllers.VideotecaController.buscaClaveID()
+
+GET    /vtkManual                          controllers.VideotecaController.manual()

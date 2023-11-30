@@ -14,6 +14,7 @@ import java.util.List;
 import static play.mvc.Controller.session;
 
 @Entity
+@EntityConcurrencyMode(ConcurrencyMode.NONE)
 public class VtkCatalogo extends models.utils.PlantillaModelo{
 
     @ManyToOne
@@ -35,6 +36,7 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     public String folioDEV;
 
     @Column(length = 200)
+    @NotNull
     public String titulo;
 
     @Column(length = 3000)
@@ -104,9 +106,11 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
 
     @Column(length = 150)
     @ManyToOne
+    @NotNull
     public TipoAudio audio;
 
     @Column(length = 1)
+    @NotNull
     public String calidadAudio;
 
     @NotNull
@@ -114,6 +118,7 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     public TipoVideo video;
 
     @Column(length = 1)
+    @NotNull
     public String calidadVideo;
 
     @Column(length = 3000)
@@ -121,7 +126,7 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     public String observaciones;
 
     @Version
-    long version;
+    public java.util.Date version;
 
     public static Model.Finder<Long,VtkCatalogo> find = new Model.Finder<Long,VtkCatalogo>(Long.class, VtkCatalogo.class);
 

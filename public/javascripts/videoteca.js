@@ -130,7 +130,7 @@ $("form[name='frmVTK']").submit(function(event){
     console.clear()
     console.log("has-error:"+  $("div.has-error").length)
 
-
+    /*
     if (  $("div.has-error").length!=0  ){
 
         console.log("123")
@@ -139,7 +139,7 @@ $("form[name='frmVTK']").submit(function(event){
            msgError+="El campo "+$(e).attr("name")+" tiene error<br";
         });
     }
-
+    */
 
 
     var $uf = LlamadaAjax("/vtkBuscaFolio", "POST", JSON.stringify( {"folio":$("#folio").val()}));
@@ -149,43 +149,82 @@ $("form[name='frmVTK']").submit(function(event){
         console.dir(dataf)
         console.dir(datai)
         console.log(  dataf.estado=="correcto"  )
+
+
+
         if (dataf.estado!="correcto"){
             msgError+="El folio ya esta registrado.<br>";
+           $("#folio").closest("div.form-group").addClass("has-error has-danger");
         }
         if (datai.estado!="correcto"){
             msgError+="El ID ya esta registrado.<br>";
+            $("#clave").closest("div.form-group").addClass("has-error has-danger");
         }
 
-        if ( !$("#clave").val() )
+        if ( !$("#clave").val() ){
             msgError+="No se ha seleccionado un ID.<br>";
-         if ($("*[data-name='cbEvento']:checked").length==0)
+            $("#clave").closest("div.form-group").addClass("has-error has-danger");
+        }
+         if ($("*[data-name='cbEvento']:checked").length==0){
             msgError+="Seleccione al menos un evento<br>";
-        if ( $("*[data-name='cbNivelAcademico']:checked").length==0)
+            $("*[data-name='cbEvento']").closest("div.form-group").addClass("has-error has-danger");
+            }
+        if ( $("*[data-name='cbNivelAcademico']:checked").length==0){
             msgError+="Seleccione al menos un nivel<br>";
-        if ( !$("#titulo").val() )
+            $("*[data-name='cbNivelAcademico']").closest("div.form-group").addClass("has-error has-danger");
+            }
+        if ( !$("#titulo").val() ){
             msgError+="No se ha escrito el título<br>";
+            }
         if ( !$("#sinopsis").val())
             msgError+="No se ha escrito la sinópsis<br>";
-        if ( !$("#formato_id").val())
+        if ( !$("#formato_id").val()){
             msgError+="No se ha seleccionado el formato<br>";
-        if ( !$("#areatematica_id").val())
+            $("#formato_id").closest("div.form-group").addClass("has-error has-danger");
+            }
+
+        if ( $("#fechaProduccion").val().length!=0 ){
+            if (   moment($("#fechaProduccion").val()).year()<1995 ){
+                msgError+="El año de producción no puede ser anterior a 1995<br>";
+            }
+        }
+        if ( $("#fechaPublicacion").val().length!=0 ){
+            if (   moment($("#fechaPublicacion").val()).year()<1995 ){
+                msgError+="El año de publicacion no puede ser anterior a 1995<br>";
+            }
+        }
+
+
+        if ( !$("#areatematica_id").val()){
             msgError+="No se ha seleccionado el área temática<br>";
+            $("#areatematicaDescripcion").closest("div.form-group").addClass("has-error has-danger");
+            }
         if ( !$("#palabrasClaveStr").val()){
                 msgError+="No se han definido las palabras clave<br>";
                 $("#palabrasclave").closest("div.form-group").addClass("has-error has-danger");
             }
-        if ( $("#video_id option:selected").length==0)
+        if ( !$("#video_id").val()){
             msgError+="No se han escrito las características del video<br>";
-        if ( $("#audio_id option:selected").length==0 )
+            $("#video_id").closest("div.form-group").addClass("has-error has-danger");
+            }
+        if ( !$("#audio_id").val() ){
             msgError+="No se han escrito las características del audio<br>";
-        if (  $("input[name='calidadAudio']:checked").length==0  )
+            $("#audio_id").closest("div.form-group").addClass("has-error has-danger");
+            }
+
+        if (  $("input[name='calidadAudio']:checked").length==0  ){
             msgError+="Inidique la calidad del audio (bueno o malo)<br>";
+            $("#audio_id").closest("div.form-group").addClass("has-error has-danger");
+            }
         if (  $("input[name='calidadVideo']:checked").length==0  )
             msgError+="Inidique la calidad del video (bueno o malo)<br>";
-        if (  !$("#observaciones").val()  )
-            msgError+="Escriba sus observaciones<br>";
 
-        if (msgError.length>0){
+        if (  !$("#observaciones").val()  ){
+            msgError+="Escriba sus observaciones<br>";
+            $("#observaciones").closest("div.form-group").addClass("has-error has-danger");
+            }
+
+        if (msgError.length>1){
                 event.preventDefault();
                 msgError.length==1? msgError+="<br><br>Complete el campo faltante" : msgError+="<br><br>Complete los campos faltantes";
 
@@ -441,6 +480,8 @@ function agregarAbrir(label){
 $("#fechaProduccion, #fechaPublicacion").off("blur");
 $("#fechaProduccion, #fechaPublicacion").on("blur",  function(){
     var cadena = $(this).val();
+    console.log("La FECHA "+cadena)
+
     if (cadena.length!=0){
         if (!formatoFechaValido(cadena)){
             $(this).closest("div.form-group").addClass("has-error has-danger");
@@ -448,6 +489,15 @@ $("#fechaProduccion, #fechaPublicacion").on("blur",  function(){
         } else {
             $(this).closest("div.form-group").removeClass("has-error has-danger");
             $(this).closest("div.form-group").find("div.help-block").html('');
+            if (moment(cadena).year() < 1995){
+                swal({
+                        title: "Advertencia",
+                        html: "El año la fecha produccion/publicacion no puede ser anterior a 1995.",
+                        type: "warning",
+                        showConfirmButton: true
+                });
+                return false;
+            }
         }
     }
 } );

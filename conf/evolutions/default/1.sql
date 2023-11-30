@@ -1127,7 +1127,7 @@ create table vtk_catalogo (
   folio                     varchar(30),
   unidadresponsable_id      bigint,
   folio_dev                 varchar(30),
-  titulo                    varchar(200),
+  titulo                    varchar(200) not null,
   sinopsis                  varchar(3000) not null,
   serie_id                  bigint,
   clave                     varchar(30) not null,
@@ -1146,12 +1146,12 @@ create table vtk_catalogo (
   nresguardo                varchar(255),
   liga                      varchar(255),
   catalogador_id            bigint not null,
-  audio_id                  bigint,
-  calidad_audio             varchar(1),
+  audio_id                  bigint not null,
+  calidad_audio             varchar(1) not null,
   video_id                  bigint not null,
-  calidad_video             varchar(1),
+  calidad_video             varchar(1) not null,
   observaciones             varchar(3000) not null,
-  version                   bigint not null,
+  version                   timestamp not null,
   constraint pk_vtk_catalogo primary key (id))
 ;
 
