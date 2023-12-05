@@ -1,4 +1,11 @@
 EXPORT TODO
+pg_dump -U tve -W -c -F c -h localhost tveservicios2023_testnoviembre > tveservicios2023_testnoviembre.sql
+
+-U usuario
+-W pedira password del usuario
+-F formato
+   c tipo formato custom
+-h host
 
 EXPORT SOLO INSERTS
 pg_dump -U tve -W  --column-inserts --data-only -h localhost tveservicios2022_test > tveservicios2022_test.sql

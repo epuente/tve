@@ -4,7 +4,7 @@
 		module="tve2023_devnoviembre-build"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20231123112231"
+		publication="20231205081641"
 		e:sbtVersion="0.13" e:scalaVersion="2.10"
 	>
 		<description>

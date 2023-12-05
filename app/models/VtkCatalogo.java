@@ -138,11 +138,15 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
         Logger.debug("rolActual " + session("rolActual"));
         Logger.debug("usuario " + session("usuario"));
 
+        String predicados = "unaccent(upper(clave)) like unaccent(:cadena) OR unaccent(upper(serie.descripcion)) like unaccent(:cadena) OR unaccent(upper(titulo)) like unaccent(:cadena) OR unaccent(upper(obra)) like unaccent(:cadena) ";
+
+
         // Es supervisor de catalogadores?
         if (session("rolActual").compareTo("133")==0) {
             Logger.debug("camino 133");
              p = find
-                    .where("upper(sinopsis) like :cadena OR upper(titulo) like :cadena OR upper(serie.descripcion) like :cadena")
+//                    .where("upper(sinopsis) like :cadena OR upper(titulo) like :cadena OR upper(serie.descripcion) like :cadena")
+                    .where(  "unaccent(upper(catalogador.nombre)) like unaccent(:cadena) OR unaccent(upper(catalogador.paterno)) like unaccent(:cadena) OR unaccent(upper(catalogador.materno)) like unaccent(:cadena) OR " +   predicados )
                     .setParameter("cadena", "%" + filtro.toUpperCase() + "%")
                     .orderBy(columnaOrden + " " + tipoOrden)
                     .findPagingList(pageSize)
@@ -153,14 +157,15 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
         if (session("rolActual").compareTo("132")==0) {
             Logger.debug("camino 132");
             p = find
-                    .where("(catalogador.id = "+session("usuario")+") AND (upper(sinopsis) like :cadena OR upper(titulo) like :cadena OR upper(serie.descripcion) like :cadena)")
+                    .where("(catalogador.id = "+session("usuario")+") AND ("+predicados+")")
                     .setParameter("cadena", "%" + filtro.toUpperCase() + "%")
                     .orderBy(columnaOrden + " " + tipoOrden)
                     .findPagingList(pageSize)
                     .setFetchAhead(false)
                     .getPage(page);
         }
-        Logger.debug("\n\n\n\nVtlCatalogo Retornonado "+p.getList().size());
+        if (p!=null)
+            Logger.debug("\n\n\n\nVtlCatalogo Retornonado "+p.getList().size());
         return p;
     }
 

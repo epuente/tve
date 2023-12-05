@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Page;
+import play.Logger;
 import play.db.ebean.Model;
 
 import javax.persistence.Column;
@@ -77,6 +78,7 @@ public class Catalogador extends models.utils.PlantillaModelo{
 
 
       //  List<Long> ctasCatalogadores = Cuenta.find.where().ne("peronal.id", null).filterMany("roles").eq("id", 133).findList();
+        Logger.debug("Catalogador.page2 regresa:"+p.getList().size()+" registros");
         return p;
     }
 

@@ -479,6 +479,7 @@ function agregarAbrir(label){
 // Validar que los campos fecha de producción y fecha de grabación cumplan con alguno de los formatos estrablecidos
 $("#fechaProduccion, #fechaPublicacion").off("blur");
 $("#fechaProduccion, #fechaPublicacion").on("blur",  function(){
+    var componente = $(this);
     var cadena = $(this).val();
     console.log("La FECHA "+cadena)
 
@@ -492,9 +493,10 @@ $("#fechaProduccion, #fechaPublicacion").on("blur",  function(){
             if (moment(cadena).year() < 1995){
                 swal({
                         title: "Advertencia",
-                        html: "El año la fecha produccion/publicacion no puede ser anterior a 1995.",
+                        html: "El año de la fecha produccion/publicacion no puede ser anterior a 1995.",
                         type: "warning",
-                        showConfirmButton: true
+                        showConfirmButton: true,
+                        confirmButtonText: "Aceptar"
                 });
                 return false;
             }

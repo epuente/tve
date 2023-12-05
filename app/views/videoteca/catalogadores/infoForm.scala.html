@@ -1,0 +1,309 @@
+@(id: Long, forma: Form[VtkCatalogo], auxCreditos:List[TipoCredito], campos:List[VtkCampo], cDuracion:classes.Duracion)
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+
+
+@import helper._
+@anio = { @(new Date().format("yyyy"))}
+
+<script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify"></script>
+<script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+
+@main {
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+                <li><a href="@routes.SupCatalogadorController.catalogo()">Catálogo videoteca</a></li>
+                <li>Info</li>
+            </ol>
+        </div>
+    </div>
+
+    <h1>Detalle</h1>
+
+    @form(CSRF(routes.VideotecaController.update()), 'role->"form",'id->"frmVideoteca", 'name->"frmVTK", Symbol("data-modo")->"edicion", 'onsubmit->"javascript:agregaJSON();"){
+
+
+
+    }
+}
+
+
+<script type="text/javascript">
+    var texto="";
+    $(function() {
+        $('form').validator();
+        $("#serie_id").selectpicker({
+            title:"Escriba, seleccione o busque un número de oficio o descripción del oficio",
+            size: 10,
+            liveSearchNormalize: true,
+            liveSearch: true,
+            dropdownAlignRight: true,
+            header: "Puede hacer sroll en la lista y seleccionar la serie, o  puede iniciar a escribir la serie y se buscará en el catálogo existente",
+            liveSearchPlaceholder: "Aqui puede escribir la búsqueda de la serie",
+            noneSelectedText: "No se seleccionó ningúna serie",
+            noneResultsText : "La busqueda no regresó resultados. !!!!  <button id='btnAgregarCatVTK' type='button' class='btn btn-primary btn-sm' onclick='javascript:vvVtkCatalogoCrear();'>Agregar serie</button> "
+        });
+
+        $("div.bs-searchbox>input").on("keyup", function(){
+            console.log("desde acaaaa")
+            texto = $(this).val();
+        });
+
+        $("#formato_id label").each(function(i, e){
+            $(e).after("<br>");
+        });
+        $("#idioma_id label").each(function(i, e){
+            $(e).after("<br>");
+        });
+
+        $("#anioProduccion").prop("max","@anio");
+
+        // Palabras clave
+        var inputpc = document.querySelector("textarea[id='palabrasClaveStr']"),
+        tagifyPC = new Tagify(inputpc);
+
+
+        var listaBlanca=[];
+        @for( p<-models.Personal.nombresCompletos()) {
+            listaBlanca.push("@p.nombreCompleto()");
+        }
+
+
+
+        console.debug(listaBlanca)
+
+        var arrTabs = $("div[name='losTabs']").find("textarea");
+
+        console.log("arrrrr")
+        console.log(arrTabs)
+
+
+        $(arrTabs).each(function(i,e){
+            console.debug(e.id)
+            var inputx = document.querySelector("textarea[id='"+e.id+"']"),
+            tagify = new Tagify(inputx, {
+                whitelist: listaBlanca,
+                dropdown: {
+                    position: "inputx",
+                    enabled : 1,
+                    maxItems : @models.Personal.find.all().length
+                }
+            })
+        });
+
+
+        const mObra = IMask(document.getElementById('obra'), {
+                  mask: '00/00',
+                  lazy: false,
+                  autofix: true
+        });
+
+        const mDuracion = IMask(document.getElementById('duracionStr'), {
+                  mask: 'h:m:s',
+                  lazy: false,
+                  autofix: true,
+                  blocks: {
+                      h: {mask: IMask.MaskedRange, placeholderChar: 'h', from: 0, to: 999, maxLength: 3},
+                      m: {mask: IMask.MaskedRange, placeholderChar: 'm', from: 0, to: 59, maxLength: 2},
+                      s: {mask: IMask.MaskedRange, placeholderChar: 's', from: 0, to: 59, maxLength: 2}
+                  }
+        });
+
+        labelsCamposRequeridos();
+        leer();
+        @for(c<-campos){
+            $("label[for='@c.label']").append('<span class="spanIconoAyudaCampo"  data-html="true" data-toggle="popover" data-trigger="hover" title="Ayuda del campo @c.nombre" data-content="@c.indicaciones"   data-container="body"><i class="fas fa-question-circle"></i>    <a tabindex="0" class="iconoAyudaCampo" style="margin-left:10px;" role=""  id="botonAyudaCampo@c.id"  </a></span>');
+        }
+        $('[data-toggle="popover"]').popover()
+        //agregarAbrir();
+
+        $('[data-toggle="tooltip"]').tooltip();
+    });  // fin del $(function()
+
+
+
+    function leer(){
+        @if(forma.get().unidadresponsable!=null){
+            $("#unidadresponsable_id").val("@forma.get().unidadresponsable.id");
+            $("#URDescripcion").val("@forma.get().unidadresponsable.nombreLargo");
+        }
+
+        @if(forma.get().serie!=null){
+            $("#serie_id").val("@forma.get().serie.id");
+        }
+
+        @if(forma.get().serie!=null){
+            $("#serieDescripcion").val( "@forma.get().serie.descripcion"  );
+        }
+
+        console.log("duracion: @cDuracion.horas:@cDuracion.minutos:@cDuracion.segundos")
+        console.log("duracion cadena: @cDuracion.cadena()")
+        $("#duracion").val("@cDuracion.cadena()");
+        $("#duracionStr").val("@cDuracion.cadena()");
+
+
+        console.log("@forma.get().fechaProduccion")
+        console.log(moment("@forma.get().fechaProduccion").format("YYYY") )
+        console.log(moment("Thu Oct 01 00:00:00 CDT 1998", "ddd MMM DD HH:mm:ss z YYYY").format("YYYY") )
+
+        $("#fecha_produccion").val(   "@forma.get().fechaProduccion" );
+
+        // Evento (  Servicio en la DB  )
+        @if(forma.get().eventos.length>0){
+            @for(e<-forma.get().eventos){
+                @if(e.servicio!=null){
+                    console.log("-------------@e.id")
+                    $("#eventos_@(e.servicio.id-1)").val(@e.id);
+                    $("#eventos_@(e.servicio.id-1)_id").attr("checked", true);
+                }
+            }
+        }
+
+        // Nivel
+        @if(forma.get().niveles.size!=0){
+                @for(e<-forma.get().niveles){
+                    @if(e.nivel!=null){
+                        $("#nivel@(e.nivel.id)").attr("checked", true);
+                    }
+                }
+        }
+
+
+
+
+
+        // Palabras clave
+        var inputpc = document.querySelector("textarea[id='palabrasClaveStr']"),
+        tagifyPC = new Tagify(inputpc);
+        var arr = [];
+        @for(c<-forma.get().palabrasClave){
+            arr.push( {value:"@c.descripcion", id:@c.id} );
+        }
+        tagifyPC.addTags(arr);
+
+        // Produccion
+        @if(forma.get().produccion!=null){
+            $("#produccion_id").val(@forma.get().produccion.id);
+            $("#produccionDescripcion").val("@forma.get().produccion.descripcion");
+        }
+
+        // Área temática
+        @if(forma.get().areatematica!=null){
+            $("#areatematica_id").val("@forma.get().areatematica.id");
+            $("#areatematicaDescripcion").val("@forma.get().areatematica.descripcion");
+        }
+
+
+
+
+        // Creditos
+
+        console.log("creditos @forma.get().creditos.size()")
+        @for(c<-forma.get().creditos){
+            console.log("@c.tipoCredito.id  -  @c.personas");
+            var inputCred = document.querySelector("textarea[id='ta"+@c.tipoCredito.id+"']");
+            tagifyCreds = new Tagify(inputCred);
+            tagifyCreds.addTags("@c.personas");
+
+        }
+
+
+        // TimeLine
+        console.log("timeline @forma.get().timeline.size()")
+        @for(c<-forma.get().timeline){
+            agregarTimeLine();
+            var renglonesTL = $("div[id^='renglonTimeLine-']").length;
+            console.log("@c.desde  -  @c.hasta");
+            @if(c.desde!=null){
+                $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='desde']").val( segundosACadena("@c.desde") );
+            }
+            @if(c.hasta!=null){
+                $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='hasta']").val( segundosACadena("@c.hasta") );
+            }
+            @if(c.personaje.nombre.length>0){
+
+                $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='personaje']").val( "@c.personaje.nombre" );
+            }
+            @if(c.gradoacademico.length>0){
+                $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='grado']").val( "@c.gradoacademico" );
+            }
+            @if(c.cargo.length>0){
+                $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='cargo']").val( "@c.cargo" );
+            }
+            @if(c.tema.length>0){
+                $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='tema']").val( "@c.tema" );
+            }
+        }
+
+        $("#accesibilidad_audio").attr("checked",  @forma.get().accesibilidadAudio );
+        $("#accesibilidad_video").attr("checked",  @forma.get().accesibilidadVideo );
+
+
+        @if(forma.get().calidadAudio!=null){
+            $("#calidad_audio_@forma.get().calidadAudio").attr("checked", true);
+        }
+        @if(forma.get().calidadVideo!=null){
+            $("#calidad_video_@forma.get().calidadVideo").attr("checked", true);
+        }
+
+        $("#divRegistro").append("Registro/actualización :"+moment("@forma.get().auditInsert").format("DD-MM-YY HH:mm:ss")).show();
+
+    }
+
+
+    function vvVtkCatalogoCrear(){
+        console.debug("desde vvVtkCatalogoCrear()");
+        $("#serieDescripcion").val("");
+        $("#divCoincidencias div.list-group>button").remove();
+        $("#msgCoincidencias").html("");
+        $("#divIdTipoOperacion").text("1");
+        $('#myModal2').modal('show');
+        if ( texto != null && texto.length>0 ){
+            $("#serieDescripcion").val(   texto    );
+        }
+        $("#serieDescripcion").focus();
+
+    }
+
+
+    $(document).off("click","button[name='btnProductor']");
+    $(document).on("click","button[name='btnProductor']", function(){
+        var elId = $("div[name='losTabs'].active").attr("id");
+        var textoExistente = $("#ta"+elId).val().length >0;
+        $("#ta"+elId).val(  $("#ta"+elId).val()+(textoExistente?", ":"") + $(this).text()    );
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<script src="@routes.Assets.at("bootstrap-select/js/bootstrap-select.min.js")"></script>
+<script src="@routes.Assets.at("bootstrap-select/js/i18n/defaults-es_ES.min.js")"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("bootstrap-select/css/bootstrap-select.min.css")">
+<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/videoteca.css")">
+
+<script src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
+
+
+<script src="@routes.Assets.at("javascripts/videoteca.js")"></script>
+<script src="@routes.Assets.at("javascripts/videotecaUR.js")"></script>
+<script src="@routes.Assets.at("javascripts/videotecaSerie.js")"></script>
+<script src="@routes.Assets.at("javascripts/videotecaProduccion.js")"></script>
+<script src="@routes.Assets.at("javascripts/videotecaAreaTematica.js")"></script>
+<script src="https://unpkg.com/imask"></script>
+
+
+
+

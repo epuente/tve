@@ -113,3 +113,16 @@ run 8089
 clean
 exit
 run 
+run
+clean
+reload
+compile
+run
+compile
+run
+clean
+reload
+compile
+run
+clean
+exit

@@ -297,6 +297,7 @@ POST    /nuevaAreaTematica                  controllers.VideotecaController.nuev
 
 GET     /vtkcarga                           controllers.VideotecaController.cargaInicial()
 GET     /vtkCatalogo/edit/:id               controllers.VideotecaController.catalogoEdit(id:Long)
+
 POST    /vtkCatalogo/save                   controllers.VideotecaController.save()
 POST    /vtkCatalogo/update                 controllers.VideotecaController.update()
 POST    /vtkCatalogo/update2                controllers.VideotecaController.update2()
@@ -310,6 +311,10 @@ POST    /supervisor/catalogadoresUpdate/:id controllers.SupCatalogadorController
 POST    /supervisor/catalogadoresDelete     controllers.SupCatalogadorController.delete()
 GET     /supervisor/tablero                 controllers.SupCatalogadorController.tablero()
 POST    /supervisor/ajaxTablero             controllers.SupCatalogadorController.ajaxTablero()
+GET     /catalogoSup                        controllers.SupCatalogadorController.catalogo()
+GET     /vtkCatalogoDTSSSup                 controllers.SupCatalogadorController.catalogoDTSS()
+
+GET     /supervisor/info/:id                controllers.SupCatalogadorController.catalogoInfo(id:Long)
 
 POST    /vtkBuscaFolio                      controllers.VideotecaController.buscaFolio()
 POST    /vtkBuscaClaveID                    controllers.VideotecaController.buscaClaveID()

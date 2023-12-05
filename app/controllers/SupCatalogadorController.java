@@ -22,6 +22,7 @@ import views.html.videoteca.catalogadores.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -100,7 +101,7 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
             System.out.println("ERROR - SupCatalogador.catalogoDTSS ");
             e.printStackTrace();
         }
-        //System.out.println("retornando:  "+json2.toString());
+        System.out.println("retornando:  "+json2.toString());
         return ok( json2.toString() );
     }
 
@@ -402,5 +403,115 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
         return ok (retorno.toString());
 
     }
+
+
+
+    public static Result catalogo(){
+        Logger.debug("desde SupCatalogadorController.catalogo");
+        return ok( views.html.videoteca.catalogadores.catalogoVideotk.render());
+    }
+
+    public static Result catalogoDTSS(){
+        System.out.println("Desde SupCatalogadorController.catalogoDTSS............"+new Date());
+        System.out.println( "parametros 0:"+ request() );
+        System.out.println( "parametros draw:"+ request().getQueryString("draw"));
+        System.out.println( "parametros start:"+ request().getQueryString("start"));
+        System.out.println( "parametros length:"+ request().getQueryString("length"));
+        System.out.println( "parametros seach[value]:"+ request().getQueryString("search[value]"));
+
+        System.out.println( "parametros order[0][column]:"+ request().getQueryString("order[0][column]"));
+        System.out.println( "parametros order[0][dir]:"+ request().getQueryString("order[0][dir]"));
+
+
+        String filtro = request().getQueryString("search[value]");
+        String colOrden =  request().getQueryString("order[0][column]");
+        String tipoOrden = request().getQueryString("order[0][dir]");
+        String nombreColOrden = request().getQueryString("columns["+colOrden+"][data]");
+
+        List<VtkCatalogo> cat = null;
+        // Es supervisor de catalogadores?
+        if (session("rolActual").compareTo("133")==0){
+            cat = VtkCatalogo.find.all();
+        }
+
+
+
+
+
+        int numPag = 0;
+        if (Integer.parseInt(request().getQueryString("start")) != 0)
+            numPag = Integer.parseInt(request().getQueryString("start")) /   Integer.parseInt(request().getQueryString("length"));
+        com.avaje.ebean.Page<VtkCatalogo> pag = VtkCatalogo.page(numPag ,
+                Integer.parseInt(request().getQueryString("length"))
+                , filtro
+                , nombreColOrden
+                , tipoOrden
+        );
+        Logger.debug("pag: "+pag);
+        Logger.debug("pag getTotalRowCount: "+pag.getTotalRowCount());
+
+
+        response().setContentType("application/json");
+        JSONObject json2 = new JSONObject();
+        try {
+            json2.put("draw",  request().getQueryString("draw")+1  );
+            json2.put("recordsTotal", cat.size());
+            JSONArray losDatos = new JSONArray();
+
+            if (cat.isEmpty()){
+                json2.put("recordsFiltered", 0);
+                //losDatos.put(new JSONObject());
+                json2.put("data", new JSONArray());
+            } else {
+                json2.put("recordsFiltered", pag.getTotalRowCount());
+                if (pag.getTotalRowCount()==0) {
+                    json2.put("data", new JSONArray());
+                }
+                for( VtkCatalogo p : pag.getList()  ){
+                    JSONObject datoP = new JSONObject();
+                    datoP.put("id", p.id);
+                    datoP.put("clave", p.clave);
+                    datoP.put("sinopsis", p.sinopsis);
+                    datoP.put("titulo", p.titulo);
+                    datoP.put("catalogador", p.catalogador.nombreCompleto() );
+                    if (p.serie!=null)
+                        datoP.put("serie", p.serie.descripcion);
+                    datoP.put("obra", p.obra);
+                    losDatos.put(datoP);
+                    json2.put("data", losDatos);
+                }
+            }
+        } catch (JSONException e) {
+            System.out.println("ERROR - VideotecaController.catalogoDTSS ");
+            e.printStackTrace();
+        }
+        System.out.println("retornando:  "+json2.toString());
+        return ok( json2.toString() );
+    }
+
+
+    public static Result catalogoInfo(Long id){
+        System.out.println("\n\nDesde SupCatalogadorController.catalogoInfo");
+        VtkCatalogo catalogo = VtkCatalogo.find.byId(id);
+        //Logger.debug(  session("usuario") +"  -  "+ );
+
+        Logger.debug("001 id "+id);
+        Form<VtkCatalogo> forma = form(VtkCatalogo.class).fill(catalogo);
+        Logger.debug("002 FORMA "+forma);
+        Duracion d = new Duracion();
+        if (catalogo.duracion!=null)
+            d = new Duracion(catalogo.duracion);
+        else
+            d = new Duracion(0L);
+        Logger.debug("003 duracion " + d.horas+":"+d.minutos+":"+d.segundos);
+        List<TipoCredito> tipos = TipoCredito.find.all();
+        List<TipoCredito> tiposOrdenados = tipos.stream()
+                .sorted(Comparator.comparing(TipoCredito::getId))
+                .collect(Collectors.toList());
+
+        return ok( views.html.videoteca.catalogadores.infoForm.render(id, forma, tiposOrdenados, VtkCampo.find.all(), d )  );
+
+}
+
 
 }

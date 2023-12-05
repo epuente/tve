@@ -1,4 +1,4 @@
-name := """tve2024"""
+name := """tve2023"""
 version := "0.0.1-SNAPSHOT"
 scalaVersion := "2.11.4"
 libraryDependencies ++= Seq(
@@ -14,8 +14,8 @@ libraryDependencies ++= Seq(
   "org.webjars" % "animate.css" % "3.2.5",
   "org.json" % "org.json" % "chargebee-1.0",
   "org.webjars.bower" % "moment" % "2.29.4",
-  "com.sun.mail" % "javax.mail" % "1.6.2"
-  //"org.apache.commons" % "commons-lang3" % "3.13.0"
+  "com.sun.mail" % "javax.mail" % "1.6.2",
+  "org.apache.commons" % "commons-lang3" % "3.13.0"
 )
 libraryDependencies += filters
 
