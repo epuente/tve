@@ -86,3 +86,45 @@ dd.info {
     display: inline-block;
     margin-right: 17px;
 }
+
+
+.lineaSeparadora {
+  border-top: 1px solid #C0C0C0;
+  height: 2px;
+  padding: 0;
+  margin: 2px auto 0 auto;
+}
+
+.labelInfo {
+    font-weight: bold;
+}
+
+.bloqueAnterior {
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: top;
+    min-width: var(--tag--min-width);
+    max-width: var(--tag--max-width);
+    transition: .8s ease,.1s color;
+    background: #E5E5E5;
+    margin: 3px;
+    padding: 1px 10px;
+}
+
+
+.bloque {
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: top;
+    min-width: var(--tag--min-width);
+    max-width: var(--tag--max-width);
+    transition: .8s ease,.1s color;
+    //background: #E5E5E5;
+    margin: 0px;
+    padding: 0px 0px;
+    padding-right: 2.5em;
+}

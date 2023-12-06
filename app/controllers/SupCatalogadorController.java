@@ -199,10 +199,16 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
         nuevo.turno = "A";
         nuevo.tipocontrato = TipoContrato.find.byId(2L);
         nuevo.cuentas = new ArrayList<>();
+
+        PersonalCorreo correo = new PersonalCorreo();
+        correo.email = forma.get("email");
+        nuevo.correos.add(correo);
+
         CuentaRol cr = new CuentaRol();
         Cuenta cta = new Cuenta();
         cta.username = forma.get("username");
         cta.password = forma.get("password");
+
         Rol rol = new Rol();
         rol = Rol.find.byId(132L);
         cr.rol = rol;
@@ -221,8 +227,8 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
     }
 
     public static Result update(Long id) {
-        System.out.println("desde SupCatalogadorController.update");
-        //Form<Personal> forma = form(Personal.class).bindFromRequest();
+        System.out.println("\n\nDesde SupCatalogadorController.update");
+        Form<Personal> formaP = form(Personal.class).bindFromRequest();
         DynamicForm forma = form().bindFromRequest();
         System.out.println(forma);
         System.out.println("...000");
@@ -239,6 +245,16 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
         nvo.materno = forma.get("materno");
         nvo.cuentas.get(0).username = forma.get("username");
         nvo.cuentas.get(0).password = forma.get("password");
+
+        Logger.debug("correo-> "+forma.get("correos[0].email"));
+        Logger.debug("correo-> "+formaP.field("correos[0].email").value());
+
+
+        PersonalCorreo pcorreo = new PersonalCorreo();
+        pcorreo.email = formaP.field("correos[0].email").value();
+        nvo.correos.get(0).setEmail(formaP.field("correos[0].email").value());
+
+
         nvo.update(id);
         return redirect( routes.SupCatalogadorController.lista() );
     }
@@ -509,7 +525,7 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
                 .sorted(Comparator.comparing(TipoCredito::getId))
                 .collect(Collectors.toList());
 
-        return ok( views.html.videoteca.catalogadores.infoForm.render(id, forma, tiposOrdenados, VtkCampo.find.all(), d )  );
+        return ok( views.html.videoteca.catalogadores.infoForm.render(id, forma)  );
 
 }
 

@@ -5,4 +5,4 @@ Antes de hacer la version dist, Verificar en application.conf evolutionplugin=di
 
 En el supuesto que se hizo el deploy con sbt clean dist
 
-nohup bin/tve2023_devnoviembre -Dhttp.port=8089 -Dhttp.address=148.204.111.26 >> salida &
+nohup bin/tve2023 -Dhttp.port=disabled -Dhttps.port=8089 -Dhttps.keyStore=conf/videoteca.jks -Dhttps.keyStoreType=JKS -Dhttps.keyStorePassword=Le4MtTwo3W >> salida.log &

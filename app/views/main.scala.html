@@ -13,32 +13,6 @@
 	<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
 	<meta http-equiv="pragma" content="no-cache" />
     <title>TVEducativa | Inicio</title>
-	<link rel="icon" type="image/png" href="@routes.Assets.at("images/favicon.ico")">
-    <script defer src="@routes.Assets.at("lib/font-awesome/js/all.min.js")"></script>
-
-
-    <link rel="preload" href="@routes.Assets.at("lib/font-awesome/css/all.min.css")" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="@routes.Assets.at("lib/font-awesome/css/all.min.css")"></noscript>
-
-    <!-- NProgress -->
-    <link rel="preload" href="@routes.Assets.at("gentelella/vendors/nprogress/nprogress.css")"  as="style"  onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href='@routes.Assets.at("lib/bootstrap/css/bootstrap.min.css")' as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <!-- bootstrap-progressbar -->
-    <link href="@routes.Assets.at("gentelella/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css")" rel="stylesheet">    
-    <!-- Custom Theme Style -->
-    <link rel="preload" href='@routes.Assets.at("gentelella/build/css/custom.css")' as="style" onload="this.onload=null;this.rel='stylesheet'">
-
-    <link rel="preload" href="@routes.Assets.at("gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.css")" as="style" onload="this.onload=null;this.rel='stylesheet'">
-
-    <link href="@routes.Assets.at("gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.css")" rel="stylesheet">
-    <link href="@routes.Assets.at("gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.css")" rel="stylesheet">
-    <link href="@routes.Assets.at("gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.css")" rel="stylesheet">
-    <link href="@routes.Assets.at("gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.css")" rel="stylesheet">    
-    <link rel="stylesheet" type="text/css" href="@routes.Assets.at("sweetalert2/sweetalert2.min.css")" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("lib/animate.css/animate.min.css")">
-    <link href="@routes.Assets.at("stylesheets/main.css")" rel="stylesheet">
-    <link rel="stylesheet" href="@routes.Assets.at("horizontal-timeline/css/style.css")")> <!-- Resource style -->
-
 
     <style>
         dl {
@@ -91,11 +65,53 @@
            margin: -15% 0 0 -25%;
         }
     </style>
-        
-        
-    
-  </head>
 
+
+	<link rel="icon" type="image/png" href="@routes.Assets.at("images/favicon.ico")">
+    <script defer src="@routes.Assets.at("lib/font-awesome/js/all.min.js")"></script>
+
+
+    <link rel="preload" href="@routes.Assets.at("lib/font-awesome/css/all.min.css")" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="@routes.Assets.at("lib/font-awesome/css/all.min.css")"></noscript>
+
+    <!-- NProgress -->
+    <link rel="preload" href="@routes.Assets.at("gentelella/vendors/nprogress/nprogress.css")"  as="style"  onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href='@routes.Assets.at("lib/bootstrap/css/bootstrap.min.css")' as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <!-- bootstrap-progressbar -->
+    <link href="@routes.Assets.at("gentelella/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css")" rel="stylesheet">    
+    <!-- Custom Theme Style -->
+    <link rel="preload" href='@routes.Assets.at("gentelella/build/css/custom.css")' as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+    <link rel="preload" href="@routes.Assets.at("gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.css")" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+    <link href="@routes.Assets.at("gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.css")" rel="stylesheet">
+    <link href="@routes.Assets.at("gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.css")" rel="stylesheet">
+    <link href="@routes.Assets.at("gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.css")" rel="stylesheet">
+    <link href="@routes.Assets.at("gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.css")" rel="stylesheet">    
+    <link rel="stylesheet" type="text/css" href="@routes.Assets.at("sweetalert2/sweetalert2.min.css")" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("lib/animate.css/animate.min.css")">
+    <link href="@routes.Assets.at("stylesheets/main.css")" rel="stylesheet">
+    <link rel="stylesheet" href="@routes.Assets.at("horizontal-timeline/css/style.css")")> <!-- Resource style -->
+
+
+
+    <!-- Matomo -->
+    <script>
+      var _paq = window._paq = window._paq || [];
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="https://check.dev.ipn.mx/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '8']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
+    <noscript><p><img src="https://check.dev.ipn.mx/matomo.php?idsite=8&amp;rec=1" style="border:0;" alt="" /></p></noscript>
+    <!-- End Matomo Code -->
+  </head>
   <body class="nav-md">
     <div class="container body">
       <div class="main_container">

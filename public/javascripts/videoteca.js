@@ -485,11 +485,11 @@ $("#fechaProduccion, #fechaPublicacion").on("blur",  function(){
 
     if (cadena.length!=0){
         if (!formatoFechaValido(cadena)){
-            $(this).closest("div.form-group").addClass("has-error has-danger");
-            $(this).closest("div.form-group").find("div.help-block").html('<ul class="list-unstyled"><li>No cumple con formato</li></ul>');
+            $("#fechaProduccion, #fechaPublicacion").closest("div.form-group").addClass("has-error has-danger");
+            $("#fechaProduccion, #fechaPublicacion").closest("div.form-group").find("div.help-block").html('<ul class="list-unstyled"><li>No cumple con formato</li></ul>');
         } else {
-            $(this).closest("div.form-group").removeClass("has-error has-danger");
-            $(this).closest("div.form-group").find("div.help-block").html('');
+            $("#fechaProduccion, #fechaPublicacion").closest("div.form-group").removeClass("has-error has-danger");
+            $("#fechaProduccion, #fechaPublicacion").closest("div.form-group").find("div.help-block").html('');
             if (moment(cadena).year() < 1995){
                 swal({
                         title: "Advertencia",
@@ -499,6 +499,39 @@ $("#fechaProduccion, #fechaPublicacion").on("blur",  function(){
                         confirmButtonText: "Aceptar"
                 });
                 return false;
+            }
+            console.log(  moment(new Date()).format("DD-MM-YYYY")   )
+            console.log(  moment(cadena).isAfter(moment(new Date()).format("DD-MM-YYYY") )  )
+            if (moment(cadena).isAfter(moment(new Date()).format("DD-MM-YYYY"))){
+                swal({
+                        title: "Advertencia",
+                        html: "La fecha produccion/publicacion no puede mayor al día de hoy.",
+                        type: "warning",
+                        showConfirmButton: true,
+                        confirmButtonText: "Aceptar"
+                });
+                $(this).closest("div.form-group").addClass("has-error has-danger");
+                $(this).closest("div.form-group").find("div.help-block").html('<ul class="list-unstyled"><li>La fecha de producción/publicación no puede ser mayor al día de hoy.</li></ul>');
+                return false;
+            }
+
+            // Validar que fechaProduccion sea anterior a fechaPublicacion
+            // hay info en ambos?
+            if ( $("#fechaProduccion").val().length>=4  &&  $("#fechaPublicacion").val().length>=4){
+                var prod = moment($("#fechaProduccion").val());
+                var publ = moment($("#fechaPublicacion").val());
+                if (  prod.isAfter(publ)  ){
+                    swal({
+                            title: "Advertencia",
+                            html: "La fecha de publicación no puede ser anterior a la fecha de producción.",
+                            type: "warning",
+                            showConfirmButton: true,
+                            confirmButtonText: "Aceptar"
+                    });
+                    $("#fechaProduccion, #fechaPublicacion").closest("div.form-group").addClass("has-error has-danger");
+                    $("#fechaProduccion, #fechaPublicacion").closest("div.form-group").find("div.help-block").html('<ul class="list-unstyled"><li>Producción debe ser anterior a publicación</li></ul>');
+                    return false;
+                }
             }
         }
     }

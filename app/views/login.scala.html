@@ -2,47 +2,38 @@
 @import helper._
 
 <!DOCTYPE html>
-
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/login.css")"/>
-
-
 <style>
-body, html {
-    height: 100%;
-
-    margin: 0;
-
-    /* The image used */
-  /*  background-image: url("@routes.Assets.at("images/light_faded_background_85547_1920x1080.jpg")"); */
-
-
-    /* Center and scale the image nicely */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-     overflow: hidden;
-}
+	body, html {
+		height: 100%;
+		margin: 0;
+		/* Center and scale the image nicely */
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+		overflow: hidden;
+	}
 
 
-.tituloIPN{
-    float: right;
-    display: block;
-    text-align: right;
-    /*margin-right: 60px;*/
-    color: #807e82;
-    font-family: "Adobe Caslon Pro Bold" !important;
-    font-size: 1.2em;
-    line-height: 1em;
-}
+	.tituloIPN{
+		float: right;
+		display: block;
+		text-align: right;
+		/*margin-right: 60px;*/
+		color: #807e82;
+		font-family: "Adobe Caslon Pro Bold" !important;
+		font-size: 1.2em;
+		line-height: 1em;
+	}
 
-.subTituloIPN{
-    float: right;   
-    color: #807e82;
-    font-size: 1em;
-    font-family: "Adobe Caslon Pro Bold" !important;
-}
+	.subTituloIPN{
+		float: right;
+		color: #807e82;
+		font-size: 1em;
+		font-family: "Adobe Caslon Pro Bold" !important;
+	}
 
-select { width: 20em }
+	select { width: 20em }
 </style>
 
 
@@ -105,12 +96,10 @@ select { width: 20em }
 }
 
 <script type="text/javascript">
-$(document).ready(function() {	
-	$('#frmLogin').attr("data-toggle","validator");
-	$('#usuario').focus();
-
-	
-});
+	$(document).ready(function() {
+		$('#frmLogin').attr("data-toggle","validator");
+		$('#usuario').focus();
+	});
 
 
 	$("#btnLogin").click(function(e){
@@ -149,54 +138,11 @@ $(document).ready(function() {
 					}
 				});			
 		}
-	
-
 	});
 
 	
 	$("#aRecupera").click(function(e){
 		e.preventDefault();
-		/*
-		const { value: email } =  swal({
-			  title: 'Input email address',
-			  input: 'email',			
-			  inputPlaceholder: 'Enter your email address'
-			})
-console.log(email)
-			if (email) {
-				console.log("OKI")
-			  swal(`Entered email: ${email}`)
-			}		
-		*/
-		/*
-		swal({
-			  title: 'Ingrese su dirección de correo electrónico',
-			  text: 'Escriba la dirección de correo electrónico con la que esta registrado en el sistema.',
-			  input: 'email',			
-			  inputPlaceholder: 'Dirección electrónica',
-			  validationMessage: 'No es válido el formato de correo electrónico',
-			  preConfirm: function(q){
- 					  return new Promise(function (resolve, reject) {	
- 						  console.log("aqui")
- 						  console.log(q)
- 						  
- 						  var $ec=LlamadaAjax("/enviarPasswordCorreo", "POST",  JSON.stringify({email:q}) );
- 						  $.when($ec).done(function(data){
- 							  console.dir(data)
- 							  if (data.estado=="ok"){
- 								  alert("se envió el correo");
- 							  }
- 							 resolve();
- 						  });
- 						  
- 					  	
- 					  });
-			  }
-			});
-		*/
-		
-		
-		
 		swal({
 			  title: 'Ingrese su dirección de correo electrónico',
 			  text: 'Escriba la dirección de correo electrónico con la que esta registrado en el sistema.',
@@ -315,8 +261,6 @@ console.log(email)
 		});						
 
 	}	
-	
-	
 </script>
 
 <link rel="stylesheet" type="text/css" href="@routes.Assets.at("sweetalert2/sweetalert2.min.css")" rel="stylesheet">
