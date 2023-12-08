@@ -1,5 +1,7 @@
 package models;
 
+import classes.Duracion;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -28,5 +30,18 @@ public class VtkTimeLine extends models.utils.PlantillaModelo{
 
     @ManyToOne (optional = false)
     public Personal catalogador;
+
+
+    // Convierte  desde (segundos de tipo Long) a cadena con formato hhh:mm:ss
+
+    public String convierteACadena(Long segundos){
+        Duracion d = new Duracion( segundos);
+        return d.cadena();
+    }
+
+    public String duracion(){
+        Long d = this.hasta - this.desde;
+        return convierteACadena(d);
+    }
 
 }

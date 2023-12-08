@@ -385,13 +385,11 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
             JSONArray jaData = new JSONArray();
             for ( String f :labelsG2 ){
                 List<String> aux = sqlRows2.stream().filter(fil -> fil.getString("fecha").compareTo(f) == 0 && fil.getString("nombre").compareTo(c) == 0).map(m -> m.getString("total")).collect(Collectors.toList());
-                Logger.debug("     -=-> "+aux.size());
                 if (aux.size()==0){
                     jaData.put(0);
                 } else {
                     jaData.put( String.join(",", aux)   );
                 }
-
             }
             joDS.put("data", jaData);
             jaDatasets.put(joDS);

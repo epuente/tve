@@ -1,10 +1,9 @@
 @(id: Long, forma: Form[VtkCatalogo])
-@import helper._
 @main {
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <ol class="breadcrumb">
-                <li><a href="@routes.SupCatalogadorController.lista()">Catálogo videoteca</a></li>
+                <li><a href="@routes.SupCatalogadorController.catalogo()">Catálogo videoteca</a></li>
                 <li>Detalle</li>
             </ol>
         </div>
@@ -63,8 +62,8 @@
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6"><div class="labelInfo">Palabras clave</div> @for(pc<-forma.get().palabrasClave){<span class="bloque">@pc.descripcion</span>}</div>
-                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2"><div class="labelInfo">Producción</div> @forma.get().produccion.descripcion</div>
-                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2"><div class="labelInfo">Idioma</div> @forma.get().idioma.descripcion</div>
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2"><div class="labelInfo">Producción</div>    @if(forma.get().produccion!=null){@forma.get().produccion.descripcion}</div>
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2"><div class="labelInfo">Idioma</div> @if(forma.get().idioma!=null){@forma.get().idioma.descripcion}</div>
                 <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2"><div class="labelInfo">Accesibilidad</div> @if(forma.get().accesibilidadAudio){<span class="bloque">Lenguaje de señas</span>}@if(forma.get().accesibilidadVideo){<span class="bloque">Subtitulos descriptivos</span>}</div>
             </div>
             <div class="row">
@@ -73,7 +72,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Grabación</div> @forma.get().tipograbacion.descripcion</div>
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Grabación</div> @if(forma.get().tipograbacion!=null){@forma.get().tipograbacion.descripcion}</div>
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Fecha producción</div> @forma.get().fechaProduccion</div>
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Fecha publicación</div> @forma.get().fechaPublicacion</div>
             </div>
@@ -83,7 +82,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Disponibilidad</div> @forma.get().disponibilidad.descripcion</div>
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Disponibilidad</div> @if(forma.get().disponibilidad!=null){@forma.get().disponibilidad.descripcion}</div>
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Área temática</div> @forma.get().areatematica.descripcion</div>
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Formato</div> @forma.get().formato.descripcion</div>
             </div>
@@ -104,14 +103,26 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><div class="labelInfo">Intervención de personajes</div></div>
             </div>
             @if(forma.get().timeline.size>=1){
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-1"><div class="labelInfo">Inicio</div></div>
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-1"><div class="labelInfo">Término</div></div>
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-4"><div class="labelInfo">Nombre</div></div>
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="labelInfo">Grado</div></div>
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="labelInfo">Cargo</div></div>
-                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="labelInfo">Título o tema</div></div>
-            </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="labelInfo">Inicio</div></div>
+                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="labelInfo">Término</div></div>
+                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"><div class="labelInfo">Nombre</div></div>
+                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="labelInfo">Grado</div></div>
+                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="labelInfo">Cargo</div></div>
+                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="labelInfo">Título o tema</div></div>
+                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="labelInfo">Duración</div></div>
+                </div>
+                @for(tl<-forma.get().timeline){
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="">@tl.convierteACadena(tl.desde)</div></div>
+                        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="">@tl.convierteACadena(tl.hasta)</div></div>
+                        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"><div class="">@tl.personaje.nombre</div></div>
+                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="">@tl.gradoacademico</div></div>
+                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="">@tl.cargo</div></div>
+                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="">@tl.tema</div></div>
+                        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="">@if(tl.desde!=null&&tl.hasta!=null){@tl.duracion()}</div></div>
+                    </div>
+                }
             }
             <div class="row">
                 <div class="col-12">
@@ -151,26 +162,13 @@
 <script type="text/javascript">
     var texto="";
     $(function() {
-
-        $("#fechaRegistro").html(moment("@forma.get().auditInsert", "ddd MMM DD HH:mm:ss z YYYY").format("DD-MM-YYYY HH:mm:ss"));
-
-
-
+        $("#fechaRegistro").html(moment("@forma.get().auditInsert", "ddd MMM DD HH:mm:ss z YYYY").format("DD/MM/YYYY HH:mm:ss"));
     });  // fin del $(function()
-
-
 </script>
 
-<script src="@routes.Assets.at("bootstrap-select/js/bootstrap-select.min.js")"></script>
-<script src="@routes.Assets.at("bootstrap-select/js/i18n/defaults-es_ES.min.js")"></script>
 <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("bootstrap-select/css/bootstrap-select.min.css")">
 <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/videoteca.css")">
 
-<script src="@routes.Assets.at("javascripts/jquery.mask.min.js")"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify"></script>
-<script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 
 
 

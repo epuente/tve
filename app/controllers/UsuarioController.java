@@ -12,29 +12,29 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.impossibl.postgres.api.jdbc.PGConnection;
+
 import models.*;
 import models.utils.PlantillaArchivo;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import play.Logger;
-import play.db.DB;
+
 import play.db.ebean.Model;
 import play.libs.Json;
 import play.mvc.Result;
 import views.html.usuario.misServicios;
 import views.html.usuario.misServiciosAdmin;
 
-import javax.sql.DataSource;
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -68,22 +68,10 @@ public class UsuarioController extends ControladorSeguro{
         String filtro = request().getQueryString("search[value]").toLowerCase();
         int colOrden =   Integer.parseInt( request().getQueryString("order[0][column]")   );
         String tipoOrden = request().getQueryString("order[0][dir]");
-        /*
-        System.out.println( "parametros order[0][column]:"+ colOrden);
-        System.out.println( "parametros order[0][dir]:"+ tipoOrden);
-        System.out.println( "estado :"+ estado);
-        System.out.println( "filtrando :"+ filtro);
-        System.out.println("rolActual: "+session("rolActual"));
-        System.out.println("usuario: "+session("usuario"));
-        */
-
         int numPag = 0;
         if (Integer.parseInt(request().getQueryString("start")) != 0)
             numPag = Integer.parseInt(request().getQueryString("start")) /   Integer.parseInt(request().getQueryString("length"));
         int numRegistros = Integer.parseInt(request().getQueryString("length"));
-        //System.out.println("numPag: "+numPag);
-
-        //System.out.println("**************************************************************************************"       );
         Page<Oficio> pagOficio = null;
         Query<Folio> qSinFiltro = Folio.find
                 .fetch("oficio")
@@ -969,13 +957,8 @@ public class UsuarioController extends ControladorSeguro{
                     fpa.preagendas.add(obj);
                 }
             }
-
-
             obj.salidas.forEach(x-> System.out.println("salidaa; "+x.salida )  );
             obj.salidas.forEach(x-> System.out.println("auditInsert; "+x.auditInsert )  );
-
-
-
 
             System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++antes+++++++++++++++++++++");
             fpa.update();
@@ -997,9 +980,6 @@ public class UsuarioController extends ControladorSeguro{
                 }
             }
             System.out.println("... termina propiedades del objeto obj (de nuez)");
-
-
-
 
            // System.out.println(""+fpa.preagendas.get(0).salidas.get(0).salida);
             retorno=true;
@@ -3859,8 +3839,6 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
         ra.usuario = Personal.find.setId(  Long.decode(session("usuario"))  ).findUnique();
         ra.ip = request().remoteAddress();
         ra.ruta = ruta;
-        Logger.info("rolActual:"+session("rolActual")    );
-        Logger.info("rolActual:"+session("rolActual5")    );
         System.out.println( session("rolActual") != null   );
         if ( session("rolActual") != null )
             ra.rol = Rol.find.setId(  Long.decode(session("rolActual"))  ).findUnique();
@@ -3874,8 +3852,8 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
         JSONArray jsonArray = new JSONArray();
         Long faseId = json.findValue("faseId").asLong();
         List<RolFase> roles = RolFase.find.where().eq("fase.id", faseId).findList();
-       // AQUI ME QUEDE, HACE STREAM MAP PARA SCAR LOS IDS DE LOS RoleS Y REGRESARLOS COMO JSON
 
+       // HACE STREAM MAP PARA SACAR LOS IDS DE LOS RoleS Y REGRESARLOS COMO JSON
         List<Long> lstIds = roles.stream().map(m->m.rol.id).collect(Collectors.toList());
         for (Long value : lstIds) {
             jsonArray.put(value);
@@ -3895,6 +3873,80 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
         return ok(new FileInputStream(archivo)).as(mime);
     }
 
+
+    // Obtiene datos sobre la cuenta del usuario actual
+    public static Result miCuenta() throws JSONException {
+        System.out.println("\n\nDesde UsuarioController.miCuenta");
+        JsonContext jsonContext = Ebean.createJsonContext();
+
+        Personal persona = Personal.find
+                .fetch("cuentas")
+                .fetch("cuentas.roles")
+                .fetch("correos")
+                .where().eq("id", Long.parseLong(session("usuario")) )
+                .findUnique();
+
+        persona.cuentas.get(0).password="";
+
+        String retorno = jsonContext.toJsonString(persona);
+
+        JSONObject jo = new JSONObject();
+        JSONArray jaRoles = new JSONArray();
+        JSONArray jaCorreos = new JSONArray();
+
+        jo.put("nombre", persona.nombreCompleto());
+        jo.put("username", persona.cuentas.get(0).username.toString());
+        jo.put("activo", persona.activo);
+        jo.put("numEmpleado", persona.numEmpleado);
+        jo.put("tipoContrato", persona.tipocontrato.descripcion);
+        jo.put("turno", persona.turno);
+
+        for ( CuentaRol rol : persona.cuentas.get(0).roles  ){
+            JSONObject joRol = new JSONObject();
+            joRol.put("id", rol.rol.id);
+            joRol.put("descripcion", rol.rol.descripcion);
+            jaRoles.put(joRol);
+        }
+        jo.put("roles", jaRoles);
+        jo.put("rolActual",  Rol.find.byId( Long.parseLong(session("rolActual"))  ).descripcion   );
+
+        for (PersonalCorreo correo: persona.correos ){
+            JSONObject joPc = new JSONObject();
+            joPc.put("email", correo.email);
+            jaCorreos.put(joPc);
+        }
+        jo.put("correos", jaCorreos);
+
+
+        Logger.debug("retornando "+jo.toString());
+
+        return ok (  jo.toString() );
+    }
+
+
+    public static Result cambioMiCuenta() throws JSONException {
+        JsonNode json = request().body().asJson();
+        Logger.debug("recibe---");
+        //Logger.debug(json.toString());
+        String u = json.findValue("username").asText();
+        String p = json.findValue("password").asText();
+        JSONObject jo = new JSONObject();
+        jo.put("estado", "error");
+        // Primero verifica que el nuevo username no exista en la DB
+        List<Cuenta> existen = Cuenta.find.where().eq("username", u).ne("personal.id", session("usuario")).findList();
+        if (existen.size()>0){
+            jo.put("info", "El nombre de usuario al que desea cambiar ya existe.");
+        } else {
+            Personal usuario = Personal.find.byId(Long.parseLong(session("usuario")));
+            usuario.cuentas.get(0).username = u;
+            usuario.cuentas.get(0).password = p;
+            usuario.update();
+            jo.put("estado", "ok");
+            jo.put("info", "Se actualizó correctamente la información.");
+        }
+
+        return ok (jo.toString());
+    }
 
 }
 

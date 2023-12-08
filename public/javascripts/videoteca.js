@@ -1,24 +1,13 @@
-const ayudaCampos = ['ayuda del campo 1',
-                        'ayuda del campo2',
-                        'Escriba el nombre completo de la Instancia solicitante y se realizará automáticamente la búsqueda.<br><br>Si la Instancia que desea agregar aparece en la lista de coincidencias, elijala de la lista.<br><br>Si la Instancia es nueva, oprima el botón <strong>Nueva UR</strong>',
-                        'ayuda del campo 4'
-                    ]
-
-
 $("#btnModalGuardar").off("click");
 $("#btnModalGuardar").on("click", function(){
     console.debug("click! ")
 });
 
-
-
 function agregaJSON(){
     console.log(" - agregaJSON -")
         var aux4 = valoresCreditos2();
-
         $("#txtLosCreditos").val(   aux4   );
         $("#txaTimeLine").val(JSON.stringify(valoresTimeLine()));
-
 }
 
 
@@ -26,22 +15,17 @@ function agregaJSON2(){
     var json ={};
     var strEventos ="";
     var strNiveles ="";
-  //  console.clear();
     console.log("UR:"+$("#unidadresponsable_id").val())
     json["folio"] = $("#folio").val();
 
     if ($("#unidadresponsable_id").val()!="")
         json["unidadresponsable"] = {id: $("#unidadresponsable_id").val() }
 
-
-    //json["unidadresponsable"] = {id: $("#unidadresponsable_id").val() };
-    //json["eventos"] = JSON.parse('[{"id":1}, {"id":2}]');
     json["eventos"] = [];
     $("*[name^='eventos[']:checked").each(function(index, e){
            strEventos += '{"servicio":{"id":'+$(e).val()+' }},'
     });
 
-   // console.dir("strEventos:"+strEventos)
     if (strEventos.length>0)
         strEventos = strEventos.substring(0, strEventos.length-1);
     console.dir("strEventos:"+strEventos)
@@ -129,18 +113,6 @@ $("form[name='frmVTK']").submit(function(event){
     var msgError="";
     console.clear()
     console.log("has-error:"+  $("div.has-error").length)
-
-    /*
-    if (  $("div.has-error").length!=0  ){
-
-        console.log("123")
-        $("div.has-error").each(function(i,e){
-            console.log("456")
-           msgError+="El campo "+$(e).attr("name")+" tiene error<br";
-        });
-    }
-    */
-
 
     var $uf = LlamadaAjax("/vtkBuscaFolio", "POST", JSON.stringify( {"folio":$("#folio").val()}));
     var $ui = LlamadaAjax("/vtkBuscaClaveID", "POST", JSON.stringify( {"id":$("#clave").val()}));
@@ -254,15 +226,6 @@ $("form[name='frmVTK']").submit(function(event){
             console.log("creditos x")
             console.log(x)
             console.dir(x)
-
-/*
-            var x2 = {};
-            x2=valoresCreditos2();
-
-                        console.log("creditos x2")
-                        console.dir(x2)
-*/
-
             var xEventos = {};
             xEventos = valoresEventos();
 
@@ -277,24 +240,10 @@ $("form[name='frmVTK']").submit(function(event){
             $("#txaPalabrasClave").val(JSON.stringify(valoresPalabrasClave()));
 
             $("#tasCreditos").val(  JSON.stringify(x)  );
-
-
             console.log(">>>>>>>>>>>>>>>>>>>>>>")
             console.log(  JSON.stringify(x)   );
-
-
-
-
-
-
-            //event.preventDefault();
-            //return false;
         }
-
     });
-
-
-
 });
 
 
@@ -334,9 +283,6 @@ function valoresCreditos2(){
         console.log("  id "+id)
         var tipo={};
 
-
-
-
         aux= $("#ta"+id).val();
         console.log("    aux:"+aux+"("+aux.length+")")
         if (aux.length!=0){
@@ -345,8 +291,6 @@ function valoresCreditos2(){
             console.dir(obj)
             var todos = "";
             $.each(obj, function(key,value) {
-
-          //      alert(value.value);
                 todos += value.value+"|";
             });
             console.log("todos:"+todos)
@@ -357,17 +301,9 @@ function valoresCreditos2(){
                 general += JSON.stringify(tipox)+",";
                 j.push(tipox);
             }
-            console.log("");
-            console.log("");
-            console.log("");
-
-
         }
     });
-    console.log("->j")
-    console.dir(j)
-                general = general.substring(0, general.length-1);
-
+    general = general.substring(0, general.length-1);
     return   "["+ general+"]";
 }
 
@@ -398,31 +334,24 @@ function valoresNiveles(){
 
 function valoresPalabrasClave(){
     var j=[];
-  //  var palabraclave={};
-        aux= $("#palabrasClaveStr").val();
-        console.log("    aux:"+aux+"("+aux.length+")")
-        if (aux.length!=0){
-            obj = jQuery.parseJSON(aux);
-            console.log("    obj:"+obj)
-            cadena="";
-            $.each(obj, function(key,value) {
-                var k={};
-                k['descripcion'] = value.value;
-                //cadena+=value.value+",";
-                j.push(k);
-            });
-            //cadena = cadena.substring(0, cadena.length-1);
-            //console.log("    cadena:"+cadena)
-            //palabraclave["descripcion"]
-            //j.push(palabraclave);
-        }
-        console.dir(j)
+    aux= $("#palabrasClaveStr").val();
+    console.log("    aux:"+aux+"("+aux.length+")")
+    if (aux.length!=0){
+        obj = jQuery.parseJSON(aux);
+        console.log("    obj:"+obj)
+        cadena="";
+        $.each(obj, function(key,value) {
+            var k={};
+            k['descripcion'] = value.value;
+            j.push(k);
+        });
+    }
+    console.dir(j)
     return j;
 }
 
 function valoresTimeLine(){
     var j=[];
-
     $("div[id^='renglonTimeLine-']").each(function(i,e){
         var renglon = {};
         var auxDesde = $(e).find("input[name='desde']").val();
@@ -431,8 +360,6 @@ function valoresTimeLine(){
         var auxGrado = $(e).find("input[name='grado']").val();
         var auxCargo = $(e).find("input[name='cargo']").val();
         var auxTema = $(e).find("input[name='tema']").val();
-        console.log("auxDesde "+ auxDesde)
-        console.log("auxHasta "+ auxHasta)
         if (auxDesde.length!=0)
             renglon['desde'] = auxDesde;
         if (auxHasta.length!=0)
@@ -466,7 +393,6 @@ function labelsCamposRequeridos(){
 
         // Otros labels de componentes no convencionales
         $("label[for='eventos_0_id'], label[for='nivel1'], label[for='nivelesacademicos[0].nivel.id'], label[for='palabrasClaveStr'], label[for='areatematicaDescripcion'], label[for='areatematica_id'], label[for='calidad_audio_b'] , label[for='calidad_video_B']" ).addClass("campoRequerido");
-
 }
 
 function agregarAbrir(label){
@@ -544,10 +470,8 @@ function formatoFechaValido(cadena){
 
 
 function agregarTimeLine(){
-    console.log("------------------");
     var now = Date.now();
     $("#baseTimeLine").clone().attr("id", "renglonTimeLine-"+ now ).appendTo("#abc").find("div.row").css("display","block");
-
     $("*[name='desde']").each(function(i,e){
         var mMascaraDesde = IMask(e, {
                                      mask: 'h:m:s',
@@ -573,11 +497,6 @@ function agregarTimeLine(){
                                      }
                            });
     });
-
-
-
-
-
 }
 
 

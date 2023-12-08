@@ -1,15 +1,16 @@
 rm salida.log
-rm -rf target
-rm -rf tv2017-0.0.1-SNAPSHOT
+rm -r target
 sbt clean dist
-unzip target/universal/tv2017-0.0.1-SNAPSHOT.zip
-cd tv2017-0.0.1-SNAPSHOT
-#Detiene servicio
-sudo kill -9 $(sudo fuser 8089/tcp)
-#Elimina archivo generado
-rm -f RUNNING_PID
-#pwd
-bin/tv2017 -Dhttp.port=8089 > salida.log &
-
+rcp target/universal/tve2023-0.0.1-SNAPSHOT.zip eduardo@148.204.111.26:/home/eduardo/tve/dist3/
+ssh -t eduardo@148.204.111.26 'cd tve/dist3/;
+chmod a+x tve2023-0.0.1-SNAPSHOT.zip;
+unzip tve2023-0.0.1-SNAPSHOT.zip;
+cd tve2023-0.0.1-SNAPSHOT/;
+rm RUNNING_PID;
+sudo kill -9 $(sudo fuser 8089/tcp);
+sudo openssl pkcs12 -export -passout pass:Le4MtTwo3W -in /etc/letsencrypt/live/videoteca.dev.ipn.mx/fullchain.pem -inkey /etc/letsencrypt/live/videoteca.dev.ipn.mx/privkey.pem -CAfile /etc/letsencrypt/live/videoteca.dev.ipn.mx/chain.pem -out conf/fullchain_and_key.p12 -name playVTK;
+sudo chmod a+r conf/fullchain_and_key.p12;
+keytool -importkeystore -deststorepass Le4MtTwo3W -destkeypass Le4MtTwo3W -destkeystore conf/videoteca.jks -srckeystore conf/fullchain_and_key.p12 -srcstoretype PKCS12 -srcstorepass  Le4MtTwo3W -alias playVTK;
+nohup bin/tve2023 -Dhttp.port=disabled -Dhttps.port=8089 -Dhttps.keyStore=conf/videoteca.jks -Dhttps.keyStoreType=JKS -Dhttps.keyStorePassword=Le4MtTwo3W >> salida.log &'
 
 

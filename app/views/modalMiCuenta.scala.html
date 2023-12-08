@@ -1,0 +1,131 @@
+<style>
+	.nav>li>a { font-size: 0.8em;}
+	.nav-tabs>li>a {margin-right: -0.8em;}
+
+	.miniLabel {
+	    font-size: small;
+	    font-weight: bold;
+	}
+	.lineaSeparadora {
+      border-top: 1px solid #C0C0C0;
+      height: 2px;
+      padding: 0;
+      margin: 2px auto 0 auto;
+    }
+    .bloque {
+        white-space: pre-wrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+        vertical-align: top;
+        min-width: var(--tag--min-width);
+        max-width: var(--tag--max-width);
+        transition: .8s ease,.1s color;
+        //background: #E5E5E5;
+        margin: 0px;
+        padding: 0px 0px;
+        padding-right: 2.5em;
+    }
+
+</style>
+
+
+<div class="modal fade" id="miCuenta" tabindex="-1" role="dialog" aria-labelledby="miCuentaLabel" aria-hidden="true">
+    <div class="modal-dialog "  role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="miCuentaLabel">Mi cuenta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-5">
+                        <div class="miniLabel">Nombre</div> <span id="mcNombre"></span>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                        <div class="miniLabel">Nombre usuario</div> <span id="mcUsername"></span>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                        <div class="miniLabel">No. empleado</div> <span id="mcNumEmpleado"></span>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                        <div><a href="javascript:abrirCambioPass();">
+                            <i class='fas fa-user-edit'></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="miniLabel">Correos electrónicos</div> <span id="mcCorreos"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="lineaSeparadora"></div>
+                    </div>
+                </div>
+
+
+                <div id="panelCambioPassword" style="display:none; background: #eeeeee">
+                    <div class="row" style="background: #eeeeee">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="miniLabel">Cambiar username y/o password</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                             <div class="form-group form-group-sm">
+                                <label for="mcCambioUserName" class="col-form-label">Nuevo nombre de usuario:</label>
+                                <input type="text" class="form-control" id="mcCambioUserName">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group form-group-sm">
+                                <label for="mcCambioPassword" class="col-form-label">Nueva clave de acceso:</label>
+                                <input type="password" class="form-control" id="mcCambioPassword">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style=" text-align: center;">
+                            <button type="button" class="btn btn-primary btn-sm" id="btnActualizaMiCuenta">Actualizar</button>
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div id="msgActualizacion"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="lineaSeparadora"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                        <div class="miniLabel">Roles que tengo</div>
+                        <div id="mcRoles"></div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        <div class="miniLabel">Rol actual</div>
+                        <div id="mcRolActual"></div>
+                    </div>
+                </div>
+                <div class="row">
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+

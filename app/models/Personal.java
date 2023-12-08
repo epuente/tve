@@ -97,11 +97,12 @@ public class Personal  extends models.utils.PlantillaModelo{
     
     
     
-    
+    // Regresa una cadena, concatenados nombre, paterno y materno
     public String nombreCompleto(){
     	return this.nombre+" "+this.paterno+" "+this.materno;
     }
 
+	// Regresa un List<Personal> de la totalidad del personal ordenado por nombre
 	public static List<Personal> nombresCompletos() {
 		List<Personal> aux = Personal.find.all();
 		aux.sort(new Comparator<Personal>() {
@@ -113,18 +114,12 @@ public class Personal  extends models.utils.PlantillaModelo{
 		return aux;
 	}
 
-
-
-
-    
     public static Page<Personal> page(int page, int pageSize, String filtro, String columnaOrden, String tipoOrden) {
     	System.out.println(" * * * * * * * * filtr :"+filtro);    	
     	Page<Personal> p = find
     			.fetch("tipocontrato")
             .where("  numEmpleado like :cadena OR paterno like :cadena  OR  materno like :cadena  OR  nombre like :cadena  OR tipocontrato.descripcion like :cadena OR cuentas.roles.rol.descripcion like :cadena")
-           
-           
-/*            
+/*
             .where()
             .or(Expr.ilike("numEmpleado", ":cadena"), Expr.ilike("paterno", "%"+filtro+"%"))
             .or(Expr.ilike("materno", "%"+filtro+"%"), Expr.ilike("nombre", "%"+filtro+"%"))
@@ -137,11 +132,8 @@ public class Personal  extends models.utils.PlantillaModelo{
                 .findPagingList(pageSize)
                 .setFetchAhead(false)
                 .getPage(page);
-
-
     	System.out.println(" * * * * * * * * registros:"+p.getList().size());
         return p;
-            
     }    
     
     // Regresa el horario del personal en JSON

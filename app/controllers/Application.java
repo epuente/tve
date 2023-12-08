@@ -100,7 +100,6 @@ public class Application extends Controller {
 
 		// Productor
 		if (session("rolActual").compareTo("100")==0) {
-			System.out.println("rol 100");
 			return redirect(routes.UsuarioController.tablero());
 		}
 		//Administrador o Jefe depto
@@ -158,16 +157,11 @@ public class Application extends Controller {
 		String rolNuevo = json.findValue("rolId").asText();
 		Long usuarioId =  Long.decode(session("usuario"));
 		String edo;
-
-		System.out.println("usuario id "+usuarioId);
-
 		List<CuentaRol> roles = CuentaRol.find.where().eq("cuenta.personal.id", usuarioId).eq("rol.id", Long.decode(rolNuevo)).findList();
-
 		if (roles.size()>0) {
 			session("rolActual", rolNuevo);
 			System.out.println("Se cambio aal rol: "+rolNuevo);
 			edo="ok";
-
 			UsuarioController.registraAcceso(request().path());
 			/*
 			RegistroAcceso ra = new RegistroAcceso();
@@ -345,6 +339,11 @@ public class Application extends Controller {
 		correo.enviar();
 		*/
 		return ok( retorno.toString());
+	}
+
+
+	public static Result vacio(){
+		return ok(views.html.vacio.render());
 	}
 
 

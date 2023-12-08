@@ -1,0 +1,269 @@
+@(forma: Form[Application.Login])
+@import helper._
+
+<!DOCTYPE html>
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/login.css")"/>
+<style>
+	body, html {
+		height: 100%;
+		margin: 0;
+		/* Center and scale the image nicely */
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+		overflow: hidden;
+	}
+
+	.tituloIPN{
+		float: right;
+		display: block;
+		text-align: right;
+		/*margin-right: 60px;*/
+		color: #807e82;
+		font-family: "Adobe Caslon Pro Bold" !important;
+		font-size: 1.2em;
+		line-height: 1em;
+	}
+
+	.subTituloIPN{
+		float: right;
+		color: #807e82;
+		font-size: 1em;
+		font-family: "Adobe Caslon Pro Bold" !important;
+	}
+
+	select { width: 20em }
+</style>
+
+
+@layout{
+<div class="contenedor" style="width: 100%">
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-lg-12">
+			<div class="row">
+
+				<div class="col-xs-10 col-sm-0 col-md-0 col-lg-0">
+					<div class="row">
+						<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+							<div class="tituloIPN">INSTITUTO POLITÉCNICO NACIONAL</div>
+							<br>
+							<div class="subTituloIPN">"La Técnica al Servicio de la
+								Patria"</div>
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+							<img alt="Escudo IPN" src="@routes.Assets.at("images/IPNGrisT.png")" height="50px">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-lg-12">
+							<div class=""
+								style="text-align: center; padding-top: 40px; padding-bottom: 40px;">
+								<h3>Televisión Educativa</h3>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-0 col-sm-2 col-md-2 col-lg-2"></div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2 col-md-3 col-lg-4"></div>
+				<div class="col-sm-11">
+
+					<div class="" id="login">
+						<img class="select-img img-responsive center-block img-circle profile_img" src="@routes.Assets.at("images/user.webp")" alt="">
+						@form(routes.Application.autentica(), 'role -> "form", 'id->"frmLogin",	'class->"form-signin5") { 
+							<input type="text" class="form-control" placeholder="Nombre de usuario" required autofocus id="usuario" autocomplete="username">
+							<br>
+							<input type="password" class="form-control"	placeholder="Clave de acceso" required id="password" autocomplete="current-password">
+							<div id="msgLogin" style="visibility: hidden;">Mensajes</div>
+							<input type="submit" class="btn btn-lg btn-primary btn-block"
+							value="Iniciar sesión" id="btnLogin" />
+						}
+						<div style="margin-top: 15px;">
+							<a href="javascript:void();" id="aRecupera" class="text-muted" style="text-decoration: none;" >Olvidé mi clave de acceso</a>
+						</div>
+						
+						
+					</div>
+				</div>
+				<div class="col-sm-2 col-md-3 col-lg-4"></div>
+			</div>
+		</div>
+	</div>
+</div>
+}
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#frmLogin').attr("data-toggle","validator");
+		$('#usuario').focus();
+	});
+
+
+	$("#btnLogin").click(function(e){
+		e.preventDefault();
+		$('#msgLogin').css('visibility', 'hidden');
+		//$('#msgLogin').html( "");	
+		if($("#usuario").val()== "" || $("#password").val()==""){
+			$('#msgLogin').html( "Debe proporcionar usuario y password" ).addClass("error").css('visibility', 'visible');
+			
+			return false;
+		} else {
+			console.log("antes de enviar...........")
+			$.ajax({
+				  url: "@routes.Application.autentica()",
+				  data: {usuario: $("#usuario").val(),   password: $("#password").val()},
+				  dataType: "json"
+				}).done(function(data) {
+					if (data == null){
+						$('#msgLogin').html( "Usuario y/o password no válidos." ).addClass("error").css('visibility', 'visible');
+						return false;
+					} else {
+						var $roles = LlamadaAjax("/rolesUsuario","POST", JSON.stringify({}));
+						$.when($roles).done(function(data){
+							console.dir(data)
+							if (data.length==1){
+								$('#msgLogin').html( "Correcto, redireccionando..." ).removeClass("error").css('visibility', 'visible');
+								$("form").attr("action", "@routes.Application.redirecciona()");
+								$("form").submit();								
+							}else {
+								elegirRol(data);
+							}
+							
+						});
+
+
+					}
+				});			
+		}
+	});
+
+	
+	$("#aRecupera").click(function(e){
+		e.preventDefault();
+		swal({
+			  title: 'Ingrese su dirección de correo electrónico',
+			  text: 'Escriba la dirección de correo electrónico con la que esta registrado en el sistema.',
+			  html: "<div>Escriba la dirección de correo electrónico con la que esta registrado en el sistema.</div>"+
+			  		"<input type='email' id='htmlswEmail' class='form-control' placeholder='Dirección de correo electrónico' style='margin-top: 10px'>"+
+			  		"<div id='msg5' style='margin-top:15px'></div>",
+              preConfirm: function(){
+              		return new Promise(function (resolve, reject) { 	
+		  				console.log("..1..")
+		  				var $existe = LlamadaAjax("/existenciaCorreo", "POST", JSON.stringify({email: $("#htmlswEmail").val()}));
+		  				$.when($existe).done(function(datax){
+		  					console.dir(datax)
+							if (datax.existe==true){
+		 						  var $ec=LlamadaAjax("/enviarPasswordCorreo", "POST",  JSON.stringify({email:$("#htmlswEmail").val()}) );
+		 						  $.when($ec).done(function(data){
+		 							  console.dir(data)
+		 							  $("#msg5").text("Enviando...");
+		 							  if (data.estado=="ok"){
+		 						            $.notify({
+		 						                title: "<strong>Correcto:</strong><br>",
+		 						                message: "En breve recibirá el correo,<br><br>Revise su bandeja de correo, incluyendo la de spam (correo no deseado)"
+		 						            },{
+		 						                type: 'success'
+		 						            });  
+		 							  } else {
+		 								  reject('No se pudo enviar el correo');
+		 							  }
+		 							 resolve();
+		 						  });							
+				            } else {
+				              reject('Esa dirección de correo electrónico no esta registrado en el sistema');
+				            }		  					
+		  				});
+		  				
+			  		});
+              }
+		});
+	});
+		
+	
+	
+	function validateEmail(){
+		var emailField = $('#htmlswEmail').val();
+		var validEmail =  /^\w+([.-_+]?\w+)*@@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+		if( validEmail.test(emailField.value) ){
+			return true;
+		}else{
+			return false;
+		}
+	} 	
+	
+	
+	function elegirRol(roles){
+			console.dir(roles)
+			var cadena="";
+			for(x=0;x<roles.length;x++){
+				var aux = roles[x];
+				cadena+="<option value="+aux.id+">"+aux.descripcion+"";
+			}
+			swal({
+				  title: "Diversos roles",
+				  html: "Su cuenta tiene mas de un rol, elija de la lista con cual de ellos quiere iniciar."+"<div id=auxRoles></div><br><br><select id='elSelecto'  size="+roles.length+" class='custom-select'>"+cadena+"</select><br><br><div style='text-align:left; padding-left:2em; padding-right:2em;'><div>Si desea cambiar depues de rol podrá hacerlo en el menú izquierdo, en el botón que aparece debajo de su nombre completo."+
+				         "<div id='divSelectRol' style='height:2em'></div>",
+				  showCancelButton: true,
+			      allowOutsideClick: false,
+			      allowEscapeKey: false,
+			      showLoaderOnConfirm: true,
+				  animation: false,
+				  customClass: 'animated bounceInDown',
+				  inputPlaceholder: "Rol",
+				  width:"70%",
+				  confirmButtonText: "Aceptar",
+				  cancelButtonText:"Cerrar",
+				  onOpen: function(){
+				  },					  
+				  preConfirm: function (  ) {
+					    return new Promise(function (resolve, reject) {
+					    	var seleccion = $("#elSelecto") .val();
+					    	if (seleccion==null){
+					    		swal(
+					    			'Error',
+					    			'Faltan datos',
+					    			'error'					    			
+					    		)
+					    		reject('Debe seleccionar un rol de la lista');
+					    	} else {
+					    		cambiarRol( $("#elSelecto") .val());
+					    		resolve();
+					    	}
+					    });
+				  }
+			}).then(function(resultado){
+		        $.notify({
+		            title: "<strong>Correcto:</strong> ",
+		            message: "Se cambió el rol de usuario"
+		        },{
+		            type: 'success'
+		        });
+		   }).catch(swal.noop);
+	}
+	
+
+	function cambiarRol(rolId){
+		console.log("intentando rol "+rolId+".....")
+		var $cr = LlamadaAjax("/cambiarRol","POST",JSON.stringify({rolId:rolId}));
+		$.when($cr).done(function(data){
+			console.log(data)
+			if (data.estado=="ok"){
+				console.log("va.............")
+				$("form").attr("action", "@routes.Application.redirecciona()");
+				$("form").attr("method", "GET");
+				$("form").submit();
+			} else {
+				alert("No fue posible cambiar de rol");
+			}
+		});						
+
+	}	
+</script>
+
+<link rel="stylesheet" type="text/css" href="@routes.Assets.at("sweetalert2/sweetalert2.min.css")" rel="stylesheet">
+<script src="@routes.Assets.at("sweetalert2/sweetalert2.js")"></script>
+<script src="@routes.Assets.at("javascripts/async.js")"></script>	
+<script src="@routes.Assets.at("bootstrap-notify/bootstrap-notify.min.js")"></script>  
+

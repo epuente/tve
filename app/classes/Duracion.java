@@ -41,7 +41,7 @@ public class Duracion {
     }
 
 
-    // Regesa un string con la concatenacion de horas:muntos:segundos
+    // Regesa un string con la concatenacion de horas:minutos:segundos
     public String cadena(){
         String retorno="";
         if (horas<10 || horas==0)
