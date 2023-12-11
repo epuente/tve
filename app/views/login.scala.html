@@ -107,22 +107,18 @@
 	$("#btnLogin").click(function(e){
 		e.preventDefault();
 		$('#msgLogin').css('visibility', 'hidden');
-		//$('#msgLogin').html( "");	
 		if($("#usuario").val()== "" || $("#password").val()==""){
 			$('#msgLogin').html( "Debe proporcionar usuario y password" ).addClass("error").css('visibility', 'visible');
 			return false;
 		} else {
-			console.log("antes de enviar...........")
 			$l = LlamadaAjax("@routes.Application.autentica()", "POST", JSON.stringify({usuario: $("#usuario").val(),   password: $("#password").val()}));
 			$.when($l).done(function(data){
-				console.dir(data)
 				if (data==null){
 					$('#msgLogin').html( "Usuario y/o password no válidos." ).addClass("error").css('visibility', 'visible');
 					return false;
 				} else {
 						var $roles = LlamadaAjax("/rolesUsuario","POST", JSON.stringify({}));
 						$.when($roles).done(function(data){
-							console.dir(data)
 							if (data.length==1){
 								$('#msgLogin').html( "Correcto, redireccionando..." ).removeClass("error").css('visibility', 'visible');
 								$("form").attr("action", "@routes.Application.redirecciona()");
@@ -148,14 +144,12 @@
 			  confirmButtonText: "Aceptar",
               preConfirm: function(){
               		return new Promise(function (resolve, reject) { 	
-		  				console.log("..1..")
 		  				var $existe = LlamadaAjax("/existenciaCorreo", "POST", JSON.stringify({email: $("#htmlswEmail").val()}));
 		  				$.when($existe).done(function(datax){
 		  					console.dir(datax)
 							if (datax.existe==true){
 		 						  var $ec=LlamadaAjax("/enviarPasswordCorreo", "POST",  JSON.stringify({email:$("#htmlswEmail").val()}) );
 		 						  $.when($ec).done(function(data){
-		 							  console.dir(data)
 		 							  $("#msg5").text("Enviando...");
 		 							  if (data.estado=="ok"){
 		 						            $.notify({

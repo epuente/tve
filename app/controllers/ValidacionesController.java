@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-public class ValidacionesController extends Controller{
+public class ValidacionesController extends ControladorSeguro{
 	
 	
 	public static Result  ajaxValidaCantidadPerfiles() throws JSONException {

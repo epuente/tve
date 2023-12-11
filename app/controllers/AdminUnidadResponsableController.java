@@ -14,7 +14,7 @@ import java.util.List;
 
 import static play.data.Form.form;
 
-public class AdminUnidadResponsableController extends Controller{
+public class AdminUnidadResponsableController extends ControladorDefault{
 	
     public static Result list() {
         return ok(list.render());

@@ -18,7 +18,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FolioController extends Controller{
+public class FolioController extends ControladorDefault{
 
     public static Result ajaxBuscarOficioPorId(Long id){
 		System.out.println(  "Llegando a FolioController.ajaxBuscarOficioPorId"  );

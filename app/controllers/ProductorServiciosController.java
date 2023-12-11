@@ -19,7 +19,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.usuario.*;
 
-public class ProductorServiciosController extends Controller{
+public class ProductorServiciosController extends ControladorDefault{
 	
 	public static Result agenda() throws JSONException{
 		System.out.println("desde ProductorServicioController.agenda");

@@ -15,7 +15,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 
-public class OficioController extends Controller{
+public class OficioController extends ControladorDefault{
 	
 
 

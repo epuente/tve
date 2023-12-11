@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 import static play.data.Form.form;
 
-public class Application extends Controller {
+public class Application extends ControladorDefault {
 	public static class Login {
 		String usuario;
 		String password;

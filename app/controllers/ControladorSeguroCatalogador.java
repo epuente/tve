@@ -2,10 +2,11 @@ package controllers;
 
 import actions.Autenticar;
 import actions.ConfirmarCatalogador;
+import actions.Encabezados;
 import play.mvc.Controller;
 import play.mvc.With;
 
-@With({Autenticar.class, ConfirmarCatalogador.class})
+@With({Encabezados.class, Autenticar.class, ConfirmarCatalogador.class})
 public abstract class ControladorSeguroCatalogador extends Controller {
 
 }
