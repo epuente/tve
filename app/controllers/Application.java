@@ -52,11 +52,28 @@ public class Application extends Controller {
 	// Si es válido almacena en sesion: usuario (id de usuario), nombre (nombre real del usuario),  roles (rol o roles qye tenga asignados)
 	public static Result autentica() {
 		JsonContext jsonContext = Ebean.createJsonContext();
-		session().clear();
+
 		System.out.println("...desde Application.autentica.");
+
+
+		JsonNode json = request().body().asJson();
+		System.out.println("json:"+json);
+
+
+		JsonNode jRequest = request().body().asJson();
+		Logger.debug("--");
+		Logger.debug(""+jRequest);
+		String usuario = jRequest.findValue("usuario").asText().trim();
+		String password = jRequest.findValue("password").asText().trim();
+
+		Logger.debug(usuario);
+		Logger.debug(password);
+		session().clear();
+		/*
 		DynamicForm requestData = form().bindFromRequest();
 		String usuario = requestData.get("usuario").trim();
 		String password = requestData.get("password").trim();
+		 */
 		Personal u = Cuenta.autenticar(usuario, password);
 		if (u != null) {
 			System.out.println("Ingresando " + u.nombreCompleto());
@@ -77,18 +94,16 @@ public class Application extends Controller {
 				session("rolActual", u.cuentas.get(0).roles.get(0).rol.id.toString());
 
 			UsuarioController.registraAcceso(request().path());
-			/*
+
 			RegistroAcceso ra = new RegistroAcceso();
 			ra.usuario = u;
 			ra.ruta = request().path();
 			ra.ip = request().remoteAddress();
 			ra.save();
-			 */
+
 		} else {
 			System.out.println( ColorConsola.ANSI_RED_BACKGROUND+"    Usuario y/o password no valido    (usuario: "+usuario+")    "+ColorConsola.ANSI_RESET);
-//			Notificacion noti = new Notificacion();
 			Logger.info(ColorConsola.ANSI_PURPLE+"Error de login !!!!!!!!!!!!!!!!!"+ColorConsola.ANSI_RESET);
-
 		}
 		return ok(jsonContext.toJsonString(u));
 	}

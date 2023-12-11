@@ -1,2 +1,10 @@
 run
 exit
+run
+clean
+exit
+run
+clean
+reload
+compile
+run

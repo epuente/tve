@@ -12,7 +12,9 @@ function LlamadaAjax(ur,metodo, parametrosJson){
 	  method: metodo,
 	  type: metodo,
 	  data: parametrosJson,
+	  // Tipo enviado al server
 	  contentType: "application/json; charset=utf-8",
+	  // Tipo que se recibe desde el server
 	  dataType: "json"
 	}).done(function(data) {
 		d.resolve(data);

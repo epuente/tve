@@ -81,9 +81,11 @@
 							<input type="submit" class="btn btn-lg btn-primary btn-block"
 							value="Iniciar sesión" id="btnLogin" />
 						}
+						@if(models.Ctacorreo.find.all.size!=0){
 						<div style="margin-top: 15px;">
 							<a href="javascript:void();" id="aRecupera" class="text-muted" style="text-decoration: none;" >Olvidé mi clave de acceso</a>
 						</div>
+						}
 						
 						
 					</div>
@@ -108,35 +110,29 @@
 		//$('#msgLogin').html( "");	
 		if($("#usuario").val()== "" || $("#password").val()==""){
 			$('#msgLogin').html( "Debe proporcionar usuario y password" ).addClass("error").css('visibility', 'visible');
-			
 			return false;
 		} else {
 			console.log("antes de enviar...........")
-			$.ajax({
-				  url: "@routes.Application.autentica()",
-				  data: {usuario: $("#usuario").val(),   password: $("#password").val()},
-				  dataType: "json"
-				}).done(function(data) {
-					if (data == null){
-						$('#msgLogin').html( "Usuario y/o password no válidos." ).addClass("error").css('visibility', 'visible');
-						return false;
-					} else {
+			$l = LlamadaAjax("@routes.Application.autentica()", "POST", JSON.stringify({usuario: $("#usuario").val(),   password: $("#password").val()}));
+			$.when($l).done(function(data){
+				console.dir(data)
+				if (data==null){
+					$('#msgLogin').html( "Usuario y/o password no válidos." ).addClass("error").css('visibility', 'visible');
+					return false;
+				} else {
 						var $roles = LlamadaAjax("/rolesUsuario","POST", JSON.stringify({}));
 						$.when($roles).done(function(data){
 							console.dir(data)
 							if (data.length==1){
 								$('#msgLogin').html( "Correcto, redireccionando..." ).removeClass("error").css('visibility', 'visible');
 								$("form").attr("action", "@routes.Application.redirecciona()");
-								$("form").submit();								
+								$("form").submit();
 							}else {
 								elegirRol(data);
 							}
-							
 						});
-
-
 					}
-				});			
+			});
 		}
 	});
 
@@ -149,6 +145,7 @@
 			  html: "<div>Escriba la dirección de correo electrónico con la que esta registrado en el sistema.</div>"+
 			  		"<input type='email' id='htmlswEmail' class='form-control' placeholder='Dirección de correo electrónico' style='margin-top: 10px'>"+
 			  		"<div id='msg5' style='margin-top:15px'></div>",
+			  confirmButtonText: "Aceptar",
               preConfirm: function(){
               		return new Promise(function (resolve, reject) { 	
 		  				console.log("..1..")
@@ -196,7 +193,6 @@
 	
 	
 	function elegirRol(roles){
-			console.dir(roles)
 			var cadena="";
 			for(x=0;x<roles.length;x++){
 				var aux = roles[x];
@@ -258,8 +254,7 @@
 			} else {
 				alert("No fue posible cambiar de rol");
 			}
-		});						
-
+		});
 	}	
 </script>
 

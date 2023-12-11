@@ -16,7 +16,7 @@ GET     /assets/*file                       controllers.Assets.at(path="/public"
 GET		/assets/*file    			        controllers.Assets.versioned(path="/public", file: Asset)
 
 GET		/login					            controllers.Application.login()
-GET		/atentica				            controllers.Application.autentica()
+POST	/atentica				            controllers.Application.autentica()
 GET     /redirecciona			            controllers.Application.redirecciona()
 POST	/cambiarRol				            controllers.Application.cambiarRol()
 POST	/rolesUsuario			            controllers.Application.rolesUsuario()
