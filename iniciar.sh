@@ -1,0 +1,2 @@
+cd tve/dist6/tve2023-0.0.1-SNAPSHOT/
+nohup bin/tve2023 -Dhttp.port=disabled -Dhttps.port=8089 -Dhttps.keyStore=conf/videoteca.jks -Dhttps.keyStoreType=JKS -Dhttps.keyStorePassword=Le4MtTwo3W >> salida.log &'

@@ -5,9 +5,14 @@
 
 @anio = { @(new Date().format("yyyy"))}
 
-<script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify"></script>
-<script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+
+
+<script src="@routes.Assets.at("tagify/tagify")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("tagify/tagify.polyfills.min.js")" nonce="@session.get("nonce")"></script>
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css"  nonce="@session.get("nonce")"/>
 
 
 @main {
@@ -298,21 +303,21 @@ const fechaMask = IMask(fechaProduccionInput, {
 
 </script>
 
-<script src="@routes.Assets.at("bootstrap-select/js/bootstrap-select.min.js")"></script>
-<script src="@routes.Assets.at("bootstrap-select/js/i18n/defaults-es_ES.min.js")"></script>
+<script src="@routes.Assets.at("bootstrap-select/js/bootstrap-select.min.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("bootstrap-select/js/i18n/defaults-es_ES.min.js")" nonce="@session.get("nonce")"></script>
 <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("bootstrap-select/css/bootstrap-select.min.css")">
 <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/videoteca.css")">
 
 <!--script src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script-->
-<script src="@routes.Assets.at("javascripts/jquery.mask.min.js")"></script>
+<script src="@routes.Assets.at("javascripts/jquery.mask.min.js")" nonce="@session.get("nonce")"></script>
 
 
-<script src="@routes.Assets.at("javascripts/videoteca.js")"></script>
-<script src="@routes.Assets.at("javascripts/videotecaUR.js")"></script>
-<script src="@routes.Assets.at("javascripts/videotecaSerie.js")"></script>
-<script src="@routes.Assets.at("javascripts/videotecaProduccion.js")"></script>
-<script src="@routes.Assets.at("javascripts/videotecaAreaTematica.js")"></script>
-<script src="@routes.Assets.at("javascripts/imask.js")"></script>
+<script src="@routes.Assets.at("javascripts/videoteca.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("javascripts/videotecaUR.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("javascripts/videotecaSerie.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("javascripts/videotecaProduccion.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("javascripts/videotecaAreaTematica.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("javascripts/imask.js")" nonce="@session.get("nonce")"></script>
 
 
 

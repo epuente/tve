@@ -6,8 +6,11 @@
 @import helper._
 @anio = { @(new Date().format("yyyy"))}
 
-<script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify"></script>
-<script src="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+<script src="@routes.Assets.at("tagify/tagify")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("tagify/tagify.polyfills.min.js")" nonce="@session.get("nonce")"></script>
+<link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css"  nonce="@session.get("nonce")"/>
+
+
 <link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 
 @main {

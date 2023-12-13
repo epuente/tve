@@ -1,5 +1,7 @@
 package actions;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import play.libs.F;
 import play.mvc.Action;
 import play.mvc.Result;
@@ -8,23 +10,42 @@ public class Encabezados  extends Action.Simple{
 
 	@Override
 	 public F.Promise<Result> call(play.mvc.Http.Context ctx) throws Throwable {
-		
-		
 		pruebaToken x = new pruebaToken();
 		String y = x.generateSafeToken();
-		
-		 ctx.response().setHeader("Referrer-Policy", "same-origin");		 
-		 ctx.response().setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
-		 ctx.response().setHeader("X-Frame-Options", "sameorigin");
-		 ctx.response().setHeader("Feature-Policy", "camera 'none'");
-		 
+		play.mvc.Controller.session("nonce", y);
+		Config conf = ConfigFactory.load();
+		String url ="http://148.204.111.41:8080";
+		url = conf.getString("urlProduccion");
+
+
+		ctx.response().setHeader("Referrer-Policy", "same-origin");
+	 	ctx.response().setHeader("Strict-Transport-Security", "max-age=31536000");
+		ctx.response().setHeader("X-Frame-Options", "sameorigin");
+		ctx.response().setHeader("Permissions-Policy", "camera 'none'");
+
+		ctx.response().setHeader("Content-Security-Policy", "script-src 'nonce-"+y+"'");
+		ctx.response().setHeader("Content-Security-Policy", "default-src 'self'");
+
+
+		ctx.response().setHeader("Content-Security-Policy", "script-src 'unsafe-inline' " +
+				url+" " +
+				url+"/assets/gentelella/vendors/jquery/dist/jquery.min.js " +
+				"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js " +
+				"https://check.dev.ipn.mx/matomo.js");
+
+		ctx.response().setHeader("X-Content-Type-Options", "nosniff");
+		ctx.response().setHeader("Permissions-Policy", "geolocation=(self \""+url+"\"), microphone=()");
+		ctx.response().setHeader("Set-Cookie", "PLAY_SESSION=123; path=/; SameSite");
+		ctx.response().setHeader("Set-Cookie", "PLAY_FLASH=456; path=/; SameSite");
+
+
 
 /*		 
  * 
  *  HEADERS QUE PRODUCE
  *  
  *  
- *  comando wget -q -S -O - localhost:8080 | :
+ *  comando wget -q -S -O - localhost:9000 | :
  *  
  *  Content-Security-Policy: script-src localhost:8080 https://evaluardd.upev.ipn.mx:8080 'unsafe-inline'
 			  Content-Type: text/html; charset=utf-8

@@ -124,11 +124,11 @@ $("form[name='frmVTK']").submit(function(event){
 
 
 
-        if (dataf.estado!="correcto"   && data.id !=  parseInt($("#id").val())){
+        if ($("#folio").val().length!=0 && dataf.estado!="correcto"   && dataf.id !=  parseInt($("#id").val())){
             msgError+="El folio ya esta registrado.<br>";
            $("#folio").closest("div.form-group").addClass("has-error has-danger");
         }
-        if (datai.estado!="correcto" && data.id !=  parseInt($("#id").val())){
+        if (datai.estado!="correcto" && datai.id !=  parseInt($("#id").val())){
             msgError+="El ID ya esta registrado.<br>";
             $("#clave").closest("div.form-group").addClass("has-error has-danger");
         }

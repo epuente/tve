@@ -97,7 +97,7 @@
 </div>
 }
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="@session.get("nonce")">
 	$(document).ready(function() {
 		$('#frmLogin').attr("data-toggle","validator");
 		$('#usuario').focus();
@@ -253,7 +253,7 @@
 </script>
 
 <link rel="stylesheet" type="text/css" href="@routes.Assets.at("sweetalert2/sweetalert2.min.css")" rel="stylesheet">
-<script src="@routes.Assets.at("sweetalert2/sweetalert2.js")"></script>
-<script src="@routes.Assets.at("javascripts/async.js")"></script>	
-<script src="@routes.Assets.at("bootstrap-notify/bootstrap-notify.min.js")"></script>  
+<script src="@routes.Assets.at("sweetalert2/sweetalert2.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("javascripts/async.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("bootstrap-notify/bootstrap-notify.min.js")" nonce="@session.get("nonce")"></script>
 

@@ -2,8 +2,8 @@
 
 <html>
     <body>
-    <script src="/assets/gentelella/vendors/jquery/dist/jquery.min.js"></script>
-    <script src="/assets/javascripts/async.js"></script>
+    <script src="/assets/gentelella/vendors/jquery/dist/jquery.min.js" nonce="@session.get("nonce")"></script>
+    <script src="/assets/javascripts/async.js" nonce="@session.get("nonce")"></script>
     Registros: @lista.size()
     </br></br></br>
     <button onclick="javascript:recargar()">Recargar</button>

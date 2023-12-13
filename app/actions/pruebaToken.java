@@ -16,7 +16,7 @@ public class pruebaToken {
         random.nextBytes(bytes);
         Encoder encoder = Base64.getUrlEncoder().withoutPadding();
         String token = encoder.encodeToString(bytes);
-        return "nonce-"+token;
+        return token;
     }   	
 
     

@@ -6,9 +6,9 @@
         <link rel='stylesheet' href='@routes.Assets.at("lib/bootstrap/css/bootstrap.min.css")'>
 
         <!-- jQuery -->
-        <script src="@routes.Assets.at("gentelella/vendors/jquery/dist/jquery.min.js")"></script>
+        <script src="@routes.Assets.at("gentelella/vendors/jquery/dist/jquery.min.js")"   nonce="@session.get("nonce")"></script>
         <!-- Bootstrap -->
-        <script src="@routes.Assets.at("gentelella/vendors/bootstrap/dist/js/bootstrap.min.js")"></script>
+        <script src="@routes.Assets.at("gentelella/vendors/bootstrap/dist/js/bootstrap.min.js")" nonce="@session.get("nonce")"></script>
 
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")"/> 
 	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -41,7 +41,7 @@
 
         <!-- Matomo -->
 
-        <script>
+        <script nonce="@session.get("nonce")">
               var _paq = window._paq = window._paq || [];
               /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
               _paq.push(['trackPageView']);
@@ -55,6 +55,7 @@
               })();
         </script>
         <noscript><p><img src="https://check.dev.ipn.mx/matomo.php?idsite=8&amp;rec=1" style="border:0;" alt="" /></p></noscript>
+
         <!-- End Matomo Code -->
     </head>
     <body>
