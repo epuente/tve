@@ -18,7 +18,7 @@
 	    <meta charset="utf-8">
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge">        
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
+        <style nonce="@session.get("nonce")">
             .Aligner {
               display: flex;
               align-items: center;
@@ -60,7 +60,7 @@
     </head>
     <body>
         <section id="layout">
-        	<div class="row center-block" style="width: 100%">
+        	<div class="row center-block" style="width: 100%" >
         		<div class="col-sm-12 col-md-12 col-lg-12" id="divContent" class="center-block">@content</div>
         	</div>
         </section>

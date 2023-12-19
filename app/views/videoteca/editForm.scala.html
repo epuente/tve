@@ -8,10 +8,10 @@
 
 <script src="@routes.Assets.at("tagify/tagify")" nonce="@session.get("nonce")"></script>
 <script src="@routes.Assets.at("tagify/tagify.polyfills.min.js")" nonce="@session.get("nonce")"></script>
-<link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css"  nonce="@session.get("nonce")"/>
+<link href="@routes.Assets.at("tagify/tagify.css")" rel="stylesheet" type="text/css"  nonce="@session.get("nonce")"/>
 
 
-<link href="https://cdn.jsdelivr.net/npm/@@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+<link href="@routes.Assets.at("tagify/tagify.css")" rel="stylesheet" type="text/css"  nonce="@session.get("nonce")"/>
 
 @main {
     @ventanasModales()

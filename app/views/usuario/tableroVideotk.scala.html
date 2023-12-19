@@ -8,7 +8,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"  nonce="@session.get("nonce")" />
 
 <!-- Resource style -->
-<style>
+<style nonce="@session.get("nonce")">
 .row.vdivide [class*='col-']:not (:last-child ):after {
 	background: #e0e0e0;
 	width: 1px;
@@ -242,7 +242,7 @@
 
 }
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="@session.get("nonce")">
   const coloresChart = ["#707e8d", "#c9b8d0",  "#BDC3C7", "#7fd2c1", "#9cd1f5", "#e6e6ab"     ,"#ddabe6", "#6a665a", "#635e85"];
   var data = {
     labels: [],

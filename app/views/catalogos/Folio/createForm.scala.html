@@ -2,7 +2,7 @@
 @import helper._
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
 
-<style>
+<style nonce="@session.get("nonce")">
     .panel{
     margin-bottom:-5px;
     }

@@ -1,4 +1,4 @@
-package actions;
+package classes;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -8,6 +8,8 @@ import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Base64.Encoder;
 
+
+// Token para generar el id de nonce en los scripts
 public class pruebaToken {
 
     public String generateSafeToken() {

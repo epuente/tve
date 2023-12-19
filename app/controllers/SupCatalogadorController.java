@@ -201,7 +201,8 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
         nuevo.cuentas = new ArrayList<>();
 
         PersonalCorreo correo = new PersonalCorreo();
-        correo.email = forma.get("email");
+        correo.email = forma.get("correos[0");
+
         nuevo.correos.add(correo);
 
         CuentaRol cr = new CuentaRol();

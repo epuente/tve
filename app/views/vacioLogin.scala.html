@@ -3,7 +3,7 @@
 
 <!DOCTYPE html>
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/login.css")"/>
-<style>
+<style nonce="@session.get("nonce")">
 	body, html {
 		height: 100%;
 		margin: 0;

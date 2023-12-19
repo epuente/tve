@@ -21,4 +21,11 @@
     /*filter: alpha(opacity=50);*/ 
 }
 
+.error {
+    color: #ff0000 !important;
+}
+
+.correcto {
+    color: #74bd46 !important;
+}
 

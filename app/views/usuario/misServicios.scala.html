@@ -1,7 +1,7 @@
 @(estado:Long, numFolio:Long)
 @import helper._
 @main{
-	<style>
+	<style nonce="@session.get("nonce")">
 	.vbottom{
 	    position: relative;
 	    top: 100%;

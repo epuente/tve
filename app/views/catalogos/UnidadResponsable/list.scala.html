@@ -74,7 +74,11 @@
                 	  return '<u><a href="/ur/'+row.id+'">'+data+"</a></u>";
                   }
                 },
-                { "data": "nombreCorto" }
+                {   "data": "nombreCorto",
+                    "render": function(data, type, row, meta){
+                        return data==null?"<small>No definido</small>": data;
+                    }
+                 }
               ]             
         } );   
     	

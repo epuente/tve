@@ -14,7 +14,7 @@
     <meta http-equiv="pragma" content="no-cache" />
     <title>TVEducativa | Inicio</title>
 
-    <style>
+    <style nonce="@session.get("nonce")">
         dl {
           margin-top: 0;
           margin-bottom: 0px;
@@ -96,7 +96,7 @@
 
 
     <!-- Matomo -->
-    <script>
+    <script nonce="@session.get("nonce")">
       var _paq = window._paq = window._paq || [];
       /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
       _paq.push(['trackPageView']);
@@ -238,7 +238,7 @@
 
 
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="@session.get("nonce")">
 
     Array.prototype.contains = function ( needle ) {
        for (i in this) {
@@ -277,7 +277,7 @@
 </html>
 
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="@session.get("nonce")">
 
         $(function() {
               console.log("...")

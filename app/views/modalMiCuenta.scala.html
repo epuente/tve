@@ -1,4 +1,4 @@
-<style>
+<style nonce="@session.get("nonce")">
 	.nav>li>a { font-size: 0.8em;}
 	.nav-tabs>li>a {margin-right: -0.8em;}
 
@@ -67,44 +67,51 @@
                 </div>
 
 
-                <div id="panelCambioPassword" style="display:none; background: #eeeeee">
-                    <div class="row" style="background: #eeeeee">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="miniLabel">Cambiar username y/o password</div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                             <div class="form-group form-group-sm">
-                                <label for="mcCambioUserName" class="col-form-label">Nuevo nombre de usuario:</label>
-                                <input type="text" class="form-control" id="mcCambioUserName">
+                <div class="row" style="background: rgb(238, 238, 238);">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div id="panelCambioPassword" style="display:none;">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="miniLabel">Cambiar username y/o password</div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <div class="form-group form-group-sm">
-                                <label for="mcCambioPassword" class="col-form-label">Nueva clave de acceso:</label>
-                                <input type="password" class="form-control" id="mcCambioPassword">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group form-group-sm">
+                                    <label for="mcCambioUserName" class="col-form-label">Nuevo nombre de usuario:</label>
+                                    <input type="text" class="form-control" id="mcCambioUserName">
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group form-group-sm">
+                                    <label for="mcCambioPassword" class="col-form-label">Nueva clave de acceso:</label>
+                                    <input type="password" class="form-control" id="mcCambioPassword">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row" >
-                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style=" text-align: center;">
-                            <button type="button" class="btn btn-primary btn-sm" id="btnActualizaMiCuenta">Actualizar</button>
+                        <div class="row" >
+                            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+                            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style=" text-align: center;">
+                                <button type="button" class="btn btn-primary btn-sm" id="btnActualizaMiCuenta">Actualizar</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row" >
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div id="msgActualizacion"></div>
+                        <div class="row" >
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div id="msgActualizacion"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="lineaSeparadora"></div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="lineaSeparadora"></div>
+                            </div>
                         </div>
+                    </div>
                     </div>
                 </div>
+
+
+
 
 
                 <div class="row">

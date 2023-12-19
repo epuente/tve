@@ -1,7 +1,7 @@
 @(forma: Form[Folio], oficio:Oficio)
 @import helper._  
 
-<style>
+<style nonce="@session.get("nonce")">
 	dd.info {
 		font-size: 0.8em !important;
 	}

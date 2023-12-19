@@ -22,7 +22,7 @@ public class SSEController extends ControladorSeguro {
     }
 
     public static Result stream() throws UnsupportedEncodingException {
-       // System.out.println("Desde SSEController.stream");
+        //System.out.println("Desde SSEController.stream");
         long elUsuario = Long.decode(session("usuario"));
         long elRol      = Long.decode(session("rolActual"));
         //System.out.println("usuario:"+session("usuario"));

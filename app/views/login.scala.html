@@ -3,7 +3,7 @@
 
 <!DOCTYPE html>
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/login.css")"/>
-<style>
+<style nonce="@session.get("nonce")">
 	body, html {
 		height: 100%;
 		margin: 0;
@@ -48,8 +48,7 @@
 						<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
 							<div class="tituloIPN">INSTITUTO POLITÉCNICO NACIONAL</div>
 							<br>
-							<div class="subTituloIPN">"La Técnica al Servicio de la
-								Patria"</div>
+							<div class="subTituloIPN">"La Técnica al Servicio de la Patria"</div>
 						</div>
 						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
 							<img alt="Escudo IPN" src="@routes.Assets.at("images/IPNGrisT.png")" height="50px">
@@ -73,21 +72,20 @@
 
 					<div class="" id="login">
 						<img class="select-img img-responsive center-block img-circle profile_img" src="@routes.Assets.at("images/user.webp")" alt="">
-						@form(routes.Application.autentica(), 'role -> "form", 'id->"frmLogin",	'class->"form-signin5") { 
+						@form( CSRF(routes.Application.autentica()), 'role -> "form", 'id->"frmLogin",	'class->"form-signin5") {
 							<input type="text" class="form-control" placeholder="Nombre de usuario" required autofocus id="usuario" autocomplete="username">
 							<br>
 							<input type="password" class="form-control"	placeholder="Clave de acceso" required id="password" autocomplete="current-password">
-							<div id="msgLogin" style="visibility: hidden;">Mensajes</div>
-							<input type="submit" class="btn btn-lg btn-primary btn-block"
-							value="Iniciar sesión" id="btnLogin" />
+							<div id="msgLogin" style="visibility: hidden; padding:10px;">Mensajes</div>
+							<input type="submit" class="btn btn-lg btn-primary btn-block" value="Iniciar sesión" id="btnLogin" />
 						}
 						@if(models.Ctacorreo.find.all.size!=0){
 						<div style="margin-top: 15px;">
 							<a href="javascript:void();" id="aRecupera" class="text-muted" style="text-decoration: none;" >Olvidé mi clave de acceso</a>
 						</div>
 						}
-						
-						
+
+
 					</div>
 				</div>
 				<div class="col-sm-2 col-md-3 col-lg-4"></div>
@@ -117,11 +115,16 @@
 					$('#msgLogin').html( "Usuario y/o password no válidos." ).addClass("error").css('visibility', 'visible');
 					return false;
 				} else {
+						$('#msgLogin').html( "Acceso correcto." ).addClass("correcto").css('visibility', 'visible');
 						var $roles = LlamadaAjax("/rolesUsuario","POST", JSON.stringify({}));
 						$.when($roles).done(function(data){
 							if (data.length==1){
 								$('#msgLogin').html( "Correcto, redireccionando..." ).removeClass("error").css('visibility', 'visible');
+
+
+
 								$("form").attr("action", "@routes.Application.redirecciona()");
+								$("form").attr("method", "GET");
 								$("form").submit();
 							}else {
 								elegirRol(data);
@@ -132,7 +135,7 @@
 		}
 	});
 
-	
+
 	$("#aRecupera").click(function(e){
 		e.preventDefault();
 		swal({
@@ -143,7 +146,7 @@
 			  		"<div id='msg5' style='margin-top:15px'></div>",
 			  confirmButtonText: "Aceptar",
               preConfirm: function(){
-              		return new Promise(function (resolve, reject) { 	
+              		return new Promise(function (resolve, reject) {
 		  				var $existe = LlamadaAjax("/existenciaCorreo", "POST", JSON.stringify({email: $("#htmlswEmail").val()}));
 		  				$.when($existe).done(function(datax){
 		  					console.dir(datax)
@@ -157,24 +160,24 @@
 		 						                message: "En breve recibirá el correo,<br><br>Revise su bandeja de correo, incluyendo la de spam (correo no deseado)"
 		 						            },{
 		 						                type: 'success'
-		 						            });  
+		 						            });
 		 							  } else {
 		 								  reject('No se pudo enviar el correo');
 		 							  }
 		 							 resolve();
-		 						  });							
+		 						  });
 				            } else {
 				              reject('Esa dirección de correo electrónico no esta registrado en el sistema');
-				            }		  					
+				            }
 		  				});
-		  				
+
 			  		});
               }
 		});
 	});
-		
-	
-	
+
+
+
 	function validateEmail(){
 		var emailField = $('#htmlswEmail').val();
 		var validEmail =  /^\w+([.-_+]?\w+)*@@\w+([.-]?\w+)*(\.\w{2,10})+$/;
@@ -183,9 +186,9 @@
 		}else{
 			return false;
 		}
-	} 	
-	
-	
+	}
+
+
 	function elegirRol(roles){
 			var cadena="";
 			for(x=0;x<roles.length;x++){
@@ -207,7 +210,7 @@
 				  confirmButtonText: "Aceptar",
 				  cancelButtonText:"Cerrar",
 				  onOpen: function(){
-				  },					  
+				  },
 				  preConfirm: function (  ) {
 					    return new Promise(function (resolve, reject) {
 					    	var seleccion = $("#elSelecto") .val();
@@ -215,7 +218,7 @@
 					    		swal(
 					    			'Error',
 					    			'Faltan datos',
-					    			'error'					    			
+					    			'error'
 					    		)
 					    		reject('Debe seleccionar un rol de la lista');
 					    	} else {
@@ -233,7 +236,7 @@
 		        });
 		   }).catch(swal.noop);
 	}
-	
+
 
 	function cambiarRol(rolId){
 		console.log("intentando rol "+rolId+".....")
@@ -249,7 +252,10 @@
 				alert("No fue posible cambiar de rol");
 			}
 		});
-	}	
+	}
+
+
+
 </script>
 
 <link rel="stylesheet" type="text/css" href="@routes.Assets.at("sweetalert2/sweetalert2.min.css")" rel="stylesheet">

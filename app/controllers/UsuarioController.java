@@ -851,7 +851,7 @@ public class UsuarioController extends ControladorSeguro{
                 Calendar c = Calendar.getInstance();
                 c.setTime(hoy);
                 System.out.println("calendar c   "+ sdf.format(c.getTime()));
-                c.add(Calendar.HOUR_OF_DAY,-1);
+                //c.add(Calendar.HOUR_OF_DAY,-1);
                 System.out.println("calendar c-1 "+ sdf.format(c.getTime()));
 /*
                 obj.salidas.get(     obj.salidas.size()-1  ).auditInsert = c.getTime();

@@ -31,7 +31,7 @@ public class Notificacion {
             Notificacion noti = Notificacion.getInstance();
             Calendar c = Calendar.getInstance();
             c.setTime( new Date()  );
-            c.add(Calendar.HOUR,-1);
+            //c.add(Calendar.HOUR,-1);
             List<FolioProductorAsignado> fpas = FolioProductorAsignado.find.all();
             //System.out.println(ColorConsola.ANSI_BLUE+"elUsuario "+elUsuario+"    elRolActual:"+elRolActual+ColorConsola.ANSI_RESET+ColorConsola.ANSI_RESET);
 
