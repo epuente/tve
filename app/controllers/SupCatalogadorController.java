@@ -299,6 +299,32 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
         return ok (  jo.toString()    );
     }
 
+
+    public static Result toggleActivo() throws JSONException {
+        System.out.println("\n\n\nDesde SupCatalogadorController.toggleActivo");
+        JsonNode json = request().body().asJson();
+        System.out.println(json);
+        Long id = json.findValue("id").asLong();
+        JSONObject jo = new JSONObject().put("estado", "indefinido");
+
+
+        Personal nvo = Personal.find.byId(id);
+        Logger.debug("activo:"+nvo.activo);
+        if (nvo.activo.compareTo("S") ==0) {
+            Logger.debug("ruta S");
+            nvo.activo = "N";
+            jo.put( "resultado", "inactivo");
+        } else
+            if (nvo.activo.compareTo("N")==0) {
+                Logger.debug("ruta N");
+                nvo.activo = "S";
+                jo.put( "resultado", "activo");
+            }
+        jo.put("estado", "correcto");
+        nvo.update();
+        return ok (jo.toString());
+    }
+
     public static Result tablero(){
         Logger.debug("desde SupCatalogadorController.tablero");
         return ok( views.html.videoteca.catalogadores.tablero.render());

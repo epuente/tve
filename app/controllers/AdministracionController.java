@@ -957,10 +957,14 @@ System.out.println(json);
 	
 	
 	// Se envía un correo de prueba desde la creación / edicion de cuentas de correo de salida
-	public static Result envioCorreoPrueba() {
+	public static Result envioCorreoPrueba() throws JSONException {
 		System.out.println("Desde AdministracionController.envioCorreoPrueba....");
 		JsonNode json = request().body().asJson();
-		System.out.println(json);
+		JSONObject jRetorno = new JSONObject();
+		//System.out.println(json);
+
+
+
 		Properties properties = System.getProperties();    
 		properties.setProperty("mail.smtp.host", json.findValue("host").asText()  );		
 		properties.setProperty("mail.smtp.port", json.findValue("puerto").asText()); 
@@ -982,19 +986,19 @@ System.out.println(json);
 		};
 		Session session = Session.getInstance(properties, auth);
 		MimeMessage message = new MimeMessage(session);
-		String mensajeoperacion;
+		String mensajeoperacion = "No fue posible enviar el correo de prueba";
 		boolean enviado = false;
 		try{
 			message.setFrom(new InternetAddress(json.findValue("cuenta").asText()));
 			for(String destino :  Arrays.asList(json.findValue("para").asText())){
 				System.out.println("-------------------------------"+destino);
-				System.out.println("intento   para        "+destino);
+				System.out.println("intento de envío de correo para "+destino +"  "+new Date());
 				if (destino!= null)
 						message.addRecipient(Message.RecipientType.TO, new InternetAddress(destino));	
 			}			
 			message.setSubject(asunto, "UTF-8");
 			
-			System.out.println("Envio de correo a las "+new Date());			
+
             MimeBodyPart textBodyPart = new MimeBodyPart();
             //textBodyPart.setText(this.mensaje);
             textBodyPart.setContent(mensaje,"text/html; charset=utf-8");
@@ -1017,7 +1021,7 @@ System.out.println(json);
             message.setContent(multipart);
             
 			Transport.send(message);
-			System.out.print("      Se envió correctamente a ");
+			System.out.print("      Se envió correctamente a las "+new Date()+" a los siguientes destinatarios: ");
 			
 			for (Address a : message.getAllRecipients()) {
 				System.out.print(a.toString()+"  ");
@@ -1027,15 +1031,20 @@ System.out.println(json);
 			mensajeoperacion="Se envió correctamente";
 			enviado = true;
 		} catch(MessagingException e){
-			System.out.println("error: "+e.getMessage());	
+			System.out.println("error (MessagingException): "+e.getMessage());
 			mensajeoperacion=e.getLocalizedMessage();
+		} catch (RuntimeException rte){
+			System.out.println("error (RuntimeException): "+rte.getMessage());
 		}
+
+		jRetorno.put("mensaje", mensajeoperacion);
+		jRetorno.put("enviado", enviado);
 		
 		
 		
-		
-		return ok(  Json.parse("{\"mensaje\" : \""+mensajeoperacion+"\", \"enviado\":"+enviado+"}")   );
+		//return ok(  Json.parse("{\"mensaje\" : \""+mensajeoperacion+"\", \"enviado\":"+enviado+"}")   );
+		return ok( jRetorno.toString()  );
 	}
-	
-	
+
+
 }

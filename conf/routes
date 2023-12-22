@@ -309,6 +309,8 @@ POST    /supervisor/catalogadoresInsert     controllers.SupCatalogadorController
 GET     /supervisor/catalogadoresEdit/:id   controllers.SupCatalogadorController.edit(id:Long)
 POST    /supervisor/catalogadoresUpdate/:id controllers.SupCatalogadorController.update(id:Long)
 POST    /supervisor/catalogadoresDelete     controllers.SupCatalogadorController.delete()
+POST    /supervisor/toggleActivo            controllers.SupCatalogadorController.toggleActivo()
+
 GET     /supervisor/tablero                 controllers.SupCatalogadorController.tablero()
 POST    /supervisor/ajaxTablero             controllers.SupCatalogadorController.ajaxTablero()
 GET     /catalogoSup                        controllers.SupCatalogadorController.catalogo()

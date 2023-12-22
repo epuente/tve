@@ -2,6 +2,7 @@
 
 @import helper._
 
+@forma.get().activo
 @main {
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -25,7 +26,12 @@
             </div>
             <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <div style="width: 80%" class="center-block">
-                    <a onclick="javascript:valida(@id)" class="btn btn-danger btn-block">Eliminar</a>
+                    @if(forma.get().activo=="S"){
+                        <a onclick="javascript:valida(@id)" class="btn btn-danger btn-block">Marcar como inactivo</a>
+                    }
+                    @if(forma.get().activo=="N"){
+                        <a onclick="javascript:valida(@id)" class="btn btn-danger btn-block">Marcar Activo</a>
+                    }
                 </div>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
@@ -48,7 +54,7 @@
     function valida(){
         console.log("desde valida")
         $.ajax({
-            url: '/supervisor/catalogadoresDelete',
+            url: '/supervisor/toggleActivo',
             method: 'POST',
             data: JSON.stringify( {id: @id}),
             contentType: "application/json; charset=utf-8",
@@ -56,11 +62,14 @@
         }).success(function(data){
             console.dir(data)
             console.dir(data.estado)            
-            if (data.estado=="borrado"){
-                swal("Correcto",
-                    "Se eliminó la cuenta del usuario "+data.eliminado,
-                    "info");
+            if (data.estado=="correcto"){
 
+                swal({
+                    title: "Correcto",
+                    html: "Estado de la cuenta "+data.resultado,
+                    type: "info",
+                    confirmButtonText: "Aceptar"
+                });
                 setTimeout(
                   function()
                   {

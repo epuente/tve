@@ -34,16 +34,12 @@ public class miCorreo2 extends Thread{
 
 	public void enviar()  {
 		Ctacorreo cc =Ctacorreo.find.where().eq("activa", true).findUnique();
-		
 		if (cc!=null) {
 			this.host = cc.hostname;
-			
-			
 			//this.host = "smtp.gmail.com";
 			this.de = cc.cuenta;
-		//	this.de = "eduardo.puente72@gmail.com";
+			//	this.de = "eduardo.puente72@gmail.com";
 			//this.de = "tveServicios";
-			
 			String user = cc.cuenta;
 			String pass = cc.contrasenia;
 			String puerto = cc.puerto;
@@ -57,11 +53,7 @@ public class miCorreo2 extends Thread{
 			System.out.println("**  enviado:"+this.enviado+"  **");
 			System.out.println("**  mensajeoperacion:"+this.mensajeoperacion+"  **");
 			System.out.println("**********************************************************************");
-			
-			
-			
-			
-			
+
 		//	roliwzjcuxsncjsd
 			
 			

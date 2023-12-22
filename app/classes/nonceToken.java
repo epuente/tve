@@ -10,7 +10,7 @@ import java.util.Base64.Encoder;
 
 
 // Token para generar el id de nonce en los scripts
-public class pruebaToken {
+public class nonceToken {
 
     public String generateSafeToken() {
         SecureRandom random = new SecureRandom();
