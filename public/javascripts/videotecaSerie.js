@@ -52,11 +52,29 @@ function abrirSeries(){
 
 $(document).off("click","#btnNuevaSerie");
 $(document).on("click","#btnNuevaSerie", function(e){
+    const excepcionesSerie=["especiales", "espesiales", "espeziales", "especialez", "espesialez", "espezialez",
+                            "ezpeciales", "ezpesiales", "ezpeziales", "ezpecialez", "ezpesialez",
+                            "especial", "espesial", "espezial",
+                            "ezpecial", "ezpesial", "ezpezial"];
+
     console.log("abc")
     e.preventDefault();
+    var laNueva = $("#serieDescripcion").val();
+    if ( excepcionesSerie.includes(laNueva.trim().toLowerCase())){
+        swal({
+              title:  'Aviso',
+              html:  'El nombre para la serie que desea agregar (<strong>'+laNueva+'</strong>) no es aceptado.<br><br>Sea más descriptivo en cuanto a la naturaleza de la serie.',
+              type:  'warning',
+              confirmButtonText: "Aceptar"
+          });
+          $("#serieDescripcion").focus();
+          return false;
+    }
+
+
     $("#divBusqueda, #divCoincidencias, #msgCoincidencias").show();
     $("#divResultadoBusqueda").hide();
-    var laNueva = $("#serieDescripcion").val();
+
     var $f = LlamadaAjax("/textsearchCampoCompleto", "POST", JSON.stringify({campo:"serie",cadena:laNueva}));
     $.when($f).done(function(dataTS){
         if (dataTS.coincidencias>0){

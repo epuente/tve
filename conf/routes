@@ -282,7 +282,7 @@ GET     /tableroVideoTK                     controllers.VideotecaController.tabl
 GET     /ajaxTableroVideoTK                 controllers.VideotecaController.ajaxTablero()
 GET     /catalogo                           controllers.VideotecaController.catalogo()
 GET     /vtkCatalogoDTSS                    controllers.VideotecaController.catalogoDTSS()
-GET     /vtkCatalogo/create                 controllers.VideotecaController.catalogoCreate()
+#GET     /vtkCatalogo/create                 controllers.VideotecaController.catalogoCreate()
 GET     /vtkCatalogo/create2                controllers.VideotecaController.catalogoCreate2()
 POST    /vtkCatalogo/delete                 controllers.VideotecaController.catalogoDelete()
 
@@ -292,10 +292,10 @@ POST    /textsearchCampoCompleto            controllers.VideotecaController.text
 
 
 POST    /nuevaUR                            controllers.VideotecaController.nuevaUR()
-POST    /nuevaProduccion                    controllers.VideotecaController.nuevaProduccion()
+#POST    /nuevaProduccion                    controllers.VideotecaController.nuevaProduccion()
 POST    /nuevaAreaTematica                  controllers.VideotecaController.nuevaAreaTematica()
 
-GET     /vtkcarga                           controllers.VideotecaController.cargaInicial()
+#GET     /vtkcarga                           controllers.VideotecaController.cargaInicial()
 GET     /vtkCatalogo/edit/:id               controllers.VideotecaController.catalogoEdit(id:Long)
 
 POST    /vtkCatalogo/save                   controllers.VideotecaController.save()
@@ -327,3 +327,4 @@ POST    /miCuenta                           controllers.UsuarioController.miCuen
 POST    /cambioMiCuenta                     controllers.UsuarioController.cambioMiCuenta()
 
 GET     /vacio                              controllers.Application.vacio()
+

@@ -1,4 +1,4 @@
-@(id: Long, forma: Form[VtkCatalogo])
+@(id: Long, forma: Form[models.videoteca.VtkCatalogo])
 @main {
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -14,9 +14,9 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"><div class="labelInfo">Folio</div> @forma.get().folio</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"><div class="labelInfo">Folio PD</div> @forma.get().folio</div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"><div class="labelInfo">ID</div> @forma.get().clave</div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6"><div class="labelInfo">Instancia solicitante</div> @forma.get().unidadresponsable.nombreLargo</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6"><div class="labelInfo">Instancia solicitante</div>@if(forma.get().unidadresponsable!=null){@forma.get().unidadresponsable.nombreLargo}</div>
             </div>
             <div class="row">
                 <div class="col-12">
@@ -34,7 +34,8 @@
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><div class="labelInfo">Folio DEV</div> @forma.get().folioDEV</div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-8"><div class="labelInfo">Serie</div> @forma.get().serie.descripcion</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-8"><div class="labelInfo">Serie</div> @if(forma.get().serie!=null){@forma.get().serie.descripcion}</div>
+
             </div>
             <div class="row">
                 <div class="col-12">
@@ -83,7 +84,12 @@
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Disponibilidad</div> @if(forma.get().disponibilidad!=null){@forma.get().disponibilidad.descripcion}</div>
-                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Área temática</div> @forma.get().areatematica.descripcion</div>
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Área temática</div>
+                    @for(at<-forma.get().areastematicas){
+                        <span class="bloque">@at.areatematica.descripcion</span>
+                        @if(at.areatematica.id==999 && forma.get().areaTematicaOtra!=null){<span class="bloque">@forma.get().areaTematicaOtra</span>}
+                    }
+                </div>
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Formato</div> @forma.get().formato.descripcion</div>
             </div>
             <div class="row">
@@ -123,6 +129,8 @@
                         <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="">@if(tl.desde!=null&&tl.hasta!=null){@tl.duracion()}</div></div>
                     </div>
                 }
+            }else{
+                <div>No se definieron intervenciones de personajes.</div>
             }
             <div class="row">
                 <div class="col-12">
@@ -131,9 +139,9 @@
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><div class="labelInfo">Audio</div> @forma.get().audio.descripcion</div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2"><div class="labelInfo">Calidad audio</div> @if(forma.get().calidadAudio=="B"){Buena}@if(forma.get().calidadAudio=="M"){Mala}</div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><div class="labelInfo">Video</div> @forma.get().video.descripcion</div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2"><div class="labelInfo">Calidad video</div> @if(forma.get().calidadVideo=="B"){Buena}@if(forma.get().calidadVideo=="M"){Mala}</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2"><div class="labelInfo">Calidad audio</div> @if(forma.get().calidadAudio=="B"){Buena}@if(forma.get().calidadAudio=="M"){Mala}@if(forma.get().calidadAudio=="FO"){Fallas de orígen}</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><div class="labelInfo">Resolución video</div> @forma.get().video.descripcion</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2"><div class="labelInfo">Calidad video</div> @if(forma.get().calidadVideo=="B"){Buena}@if(forma.get().calidadVideo=="M"){Mala}@if(forma.get().calidadVideo=="FO"){Fallas de orígen}</div>
             </div>
             <div class="row">
                 <div class="col-12">

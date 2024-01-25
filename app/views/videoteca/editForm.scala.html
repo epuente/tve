@@ -1,4 +1,4 @@
-@(id: Long, forma: Form[VtkCatalogo], auxCreditos:List[TipoCredito], campos:List[VtkCampo], cDuracion:classes.Duracion)
+@(id: Long, forma: Form[models.videoteca.VtkCatalogo], auxCreditos:List[models.videoteca.TipoCredito], campos:List[models.videoteca.VtkCampo], cDuracion:classes.Duracion)
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
 
@@ -27,7 +27,7 @@
     <h1>Edición del catálogo de videoteca</h1>
 
     @form(CSRF(routes.VideotecaController.update()), 'role->"form",'id->"frmVideoteca", 'name->"frmVTK", Symbol("data-modo")->"edicion", 'onsubmit->"javascript:agregaJSON();"){
-        @videotecaSecuencia2Form(forma, auxCreditos)
+        @videotecaSecuencia3Form(forma, auxCreditos)
         <input type="hidden" name="id" id="id" value="@id">
         <br/><br/>
         <div class="row">
@@ -63,7 +63,7 @@
             liveSearchNormalize: true,
             liveSearch: true,
             dropdownAlignRight: true,
-            header: "Puede hacer sroll en la lista y seleccionar la serie, o  puede iniciar a escribir la serie y se buscará en el catálogo existente",
+            header: "Puede hacer scroll en la lista y seleccionar la serie, o  puede iniciar a escribir la serie y se buscará en el catálogo existente",
             liveSearchPlaceholder: "Aqui puede escribir la búsqueda de la serie",
             noneSelectedText: "No se seleccionó ningúna serie",
             noneResultsText : "La busqueda no regresó resultados. !!!!  <button id='btnAgregarCatVTK' type='button' class='btn btn-primary btn-sm' onclick='javascript:vvVtkCatalogoCrear();'>Agregar serie</button> "
@@ -128,7 +128,7 @@
                   lazy: false,
                   autofix: true,
                   blocks: {
-                      h: {mask: IMask.MaskedRange, placeholderChar: 'h', from: 0, to: 999, maxLength: 3},
+                      h: {mask: IMask.MaskedRange, placeholderChar: 'h', from: 0, to: 99, maxLength: 2},
                       m: {mask: IMask.MaskedRange, placeholderChar: 'm', from: 0, to: 59, maxLength: 2},
                       s: {mask: IMask.MaskedRange, placeholderChar: 's', from: 0, to: 59, maxLength: 2}
                   }
@@ -166,11 +166,6 @@
         $("#duracion").val("@cDuracion.cadena()");
         $("#duracionStr").val("@cDuracion.cadena()");
 
-
-        console.log("@forma.get().fechaProduccion")
-        console.log(moment("@forma.get().fechaProduccion").format("YYYY") )
-        console.log(moment("Thu Oct 01 00:00:00 CDT 1998", "ddd MMM DD HH:mm:ss z YYYY").format("YYYY") )
-
         $("#fecha_produccion").val(   "@forma.get().fechaProduccion" );
 
         // Evento (  Servicio en la DB  )
@@ -199,7 +194,26 @@
 
         // Palabras clave
         var inputpc = document.querySelector("textarea[id='palabrasClaveStr']"),
-        tagifyPC = new Tagify(inputpc);
+        tagifyPC = new Tagify(inputpc,{
+            callbacks:{
+                change: (e)=>{
+                    console.log("change de tagify "+e.detail)
+                    x = valoresPalabrasClave();
+                    if (  x.length==0 ){
+                        console.log("sin valores")
+                        $("#palabrasClaveStr").parent().find("tags").css("border","1px solid #b94a48");
+                        //$("#palabrasClaveStr").parent().find("tags").css("--tags-hover-border-color","#b94a48");
+                    } else {
+                        console.log("con valores")
+                        $("#palabrasClaveStr").parent().find("tags").css("border","1px solid #DDD");
+                        //$("#palabrasClaveStr").parent().find("tags").css("outline","1px solid #DDD");
+                        }
+                }
+            }
+        });
+
+
+
         var arr = [];
         @for(c<-forma.get().palabrasClave){
             arr.push( {value:"@c.descripcion", id:@c.id} );
@@ -213,12 +227,20 @@
         }
 
         // Área temática
-        @if(forma.get().areatematica!=null){
-            $("#areatematica_id").val("@forma.get().areatematica.id");
-            $("#areatematicaDescripcion").val("@forma.get().areatematica.descripcion");
+        console.dir("@forma.get().areastematicas.size()")
+        @for(at<-forma.get().areastematicas){
+            @if(at.areatematica!=null){
+                console.log("at: @at.id "+ "@at.areatematica.id")
+                @if(at.areatematica.id==999){
+                     $("#area999").prop("checked", true);
+                     console.log("----->@forma.get().areaTematicaOtra"+ "  -   "+@(models.videoteca.Areatematica.find.all.size()-1));
+                     $("#areaTematicaOtra").val("@forma.get().areaTematicaOtra");
+                     $("#divAreaTematicaOtra").show();
+                }else{
+                    $("#area@at.areatematica.id").prop("checked", true);
+                }
+            }
         }
-
-
 
 
         // Creditos
@@ -299,17 +321,60 @@
     });
 
 
-
-
-
-
-
-
-
-
-
-
-
+    function eliminarCatalogo(id){
+        swal({
+          title: 'Confirmar',
+          text: '¿Desea eliminar este registro?',
+          type: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Eliminarlo',
+          cancelButtonText: 'Conservarlo',
+          confirmButtonColor: "#d33",
+          cancelButtonColor: '#3085d6',
+          preConfirm: () => {
+            return new Promise((resolve) => {
+                resolve();
+            });
+          }
+        }).then((result) => {
+            console.dir(result)
+                  if (result) {
+                    $.ajax({
+                            url:"@routes.VideotecaController.catalogoDelete()",
+                            method: 'POST',
+                            data: JSON.stringify( {  id: @id}),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json"
+                    }).success(function(data){
+                        if (data.estado=="eliminado"){
+                            swal({
+                                title: 'Eliminado',
+                                html: "Se eliminó correctamente el registro<br><br><hr><small>Redirigiendo...</small>",
+                                type: 'success',
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                footer: "pie"
+                            }).catch(swal.noop);
+                            setTimeout(function(){
+                                    $("#frmVideoteca").validator('destroy');
+                                    $("#frmVideoteca").attr("action", "@routes.VideotecaController.catalogo()");
+                                    $("#frmVideoteca").attr("method", "GET");
+                                    $("#frmVideoteca").submit();
+                                }
+                            , 5000);
+                        }
+                    }).error(function(xhr, status, error) {
+                        console.log("no eliminado")
+                    });
+                  } else {
+                    swal('Cancelado', 'Se canceló la eliminación', 'error');
+                  }
+        }
+        ,function (dismiss) {
+                console.log("dm")
+                swal('Cancelado', 'Se canceló la eliminación. Se conserva el registro.', 'info');
+        }).catch(swal.noop);
+    }
 </script>
 
 <script src="@routes.Assets.at("bootstrap-select/js/bootstrap-select.min.js")"></script>

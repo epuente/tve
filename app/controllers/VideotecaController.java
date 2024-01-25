@@ -6,12 +6,9 @@ import com.avaje.ebean.Ebean;
 import com.avaje.ebean.RawSql;
 import com.avaje.ebean.RawSqlBuilder;
 import com.avaje.ebean.SqlRow;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.nashorn.internal.parser.JSONParser;
 import models.*;
-import org.apache.commons.logging.Log;
+import models.videoteca.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,16 +17,16 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Result;
-import views.html.videoteca.createForm;
+import views.html.videoteca.createForm3;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+
 
 import static play.data.Form.form;
 
@@ -75,8 +72,9 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         for (Areatematica at : Areatematica.find.all()){
             //arrAreaLabels.put(org.apache.commons.lang3.text.WordUtils.capitalizeFully( at.descripcion));
             //arrAreaLabels.put( new CapitalizaCadena(at.descripcion).modificado());
+            Logger.debug(at.id +" - "+at.descripcion);
             arrAreaLabels.put( at.descripcion);
-            arrAreaDatos.put(  VtkCatalogo.find.where().eq("areatematica.id", at.id).findRowCount() );
+            arrAreaDatos.put(  VtkCatalogo.find.where().eq("areastematicas.areatematica.id", at.id).findRowCount() );
         }
 
         for (VtkFormato f : VtkFormato.find.all()){
@@ -87,7 +85,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         }
 
         for (Produccion p: Produccion.find.all()){
-            arrProdLabels.put( p.sigla );
+            arrProdLabels.put( p.descripcion );
             arrProdDatos.put( VtkCatalogo.find.where().eq("produccion.id", p.id).findRowCount());
         }
 
@@ -222,46 +220,6 @@ public class VideotecaController extends ControladorSeguroVideoteca{
     }
 
 
-    public static Result catalogoCreate(){
-        Form<VtkCatalogo> forma = play.data.Form.form(VtkCatalogo.class);
-        /*
-        List<String> arrCreditos = Arrays.asList("Productores", "Asistentes", "Ponentes", "Realizadores", "Audio" , "Edición");
-
-        List<AuxVTKCredito> lstAuxVTKCreditos = new ArrayList<>();
-
-        lstAuxVTKCreditos.add(  new AuxVTKCredito(1L, "Productores", "producción")  );
-        lstAuxVTKCreditos.add(  new AuxVTKCredito(2L, "Asistentes", "asistencia")  );
-        lstAuxVTKCreditos.add(  new AuxVTKCredito(3L, "Ponentes", "ponencia")  );
-        lstAuxVTKCreditos.add(  new AuxVTKCredito(4L, "Realizadores", "realización")  );
-        lstAuxVTKCreditos.add(  new AuxVTKCredito(5L, "Locutores / voz", "Locución o voz")  );
-        lstAuxVTKCreditos.add(  new AuxVTKCredito(6L, "Camarógrafos", "grabación de video / levantamiento de imágen")  );
-        lstAuxVTKCreditos.add(  new AuxVTKCredito(7L, "Editores", "edición de audio y/o video")  );
-        lstAuxVTKCreditos.add(  new AuxVTKCredito(8L, "Postproducción", "postproducción")  );
-        lstAuxVTKCreditos.add(  new AuxVTKCredito(9L, "Calificadores", "calificación")  );
-        lstAuxVTKCreditos.add(  new AuxVTKCredito(10L, "Guionistas", "guión")  );
-        lstAuxVTKCreditos.add(  new AuxVTKCredito(99L, "Otros", "postproducción")  );
-
-
-        List<TipoCredito> lstTc =new ArrayList<>();
-
-        lstAuxVTKCreditos.forEach(tc->{
-            TipoCredito tc0 = new TipoCredito();
-            tc0.id = tc.id;
-            tc0.descripcion = tc.descripcion;
-            tc0.accion = tc.accion;
-            tc0.save();
-        });
-*/
-        List<TipoCredito> tipos = TipoCredito.find.all();
-        List<TipoCredito> tiposOrdenados = tipos.stream()
-                .sorted(Comparator.comparing(TipoCredito::getId))
-                .collect(Collectors.toList());
-        List<VtkCampo> campos = VtkCampo.find.all();
-        return ok(
-                views.html.videoteca.createForm.render(forma, tiposOrdenados, campos)
-        );
-    }
-
 
     public static Result catalogoCreate2(){
         Form<VtkCatalogo> forma = play.data.Form.form(VtkCatalogo.class);
@@ -271,7 +229,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 .collect(Collectors.toList());
         List<VtkCampo> campos = VtkCampo.find.all();
         return ok(
-                views.html.videoteca.createForm2.render(forma, tiposOrdenados, campos)
+                views.html.videoteca.createForm3.render(forma, tiposOrdenados, campos)
         );
     }
 
@@ -480,6 +438,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         return ok (joRetorno.toString());
     }
 
+    /*
     public static Result nuevaProduccion() throws JSONException {
         Logger.debug("Desde VideotecaController.nuevaProduccion");
         JSONObject joRetorno = new JSONObject();
@@ -496,6 +455,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         joRetorno.put("descripcion", p.descripcion);
         return ok (joRetorno.toString());
     }
+     */
 
     public static Result nuevaAreaTematica() throws JSONException {
         Logger.debug("Desde VideotecaController.nuevaAreaTematica");
@@ -565,98 +525,6 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
 
 
-    public static Result cargaInicial() throws ParseException {
-
-        String query ="select * from temporal order by id";
-        List<SqlRow> sqlRows = Ebean.createSqlQuery(query).findList();
-        int total = sqlRows.size();
-
-        String formatoFecha = "yyyy-MM-dd'T'HH:mm:ss";
-
-        SimpleDateFormat sdf = new SimpleDateFormat(formatoFecha);
-
-        for (SqlRow r :sqlRows ){
-            VtkCatalogo catalogo = new VtkCatalogo();
-            Long id = r.getLong("id");
-            Long serie = r.getLong("serie");
-            System.out.println("   id -->"+r.getString("id")+" serie "+serie+ " "+r.getString("titulo"));
-
-            catalogo.id = id;
-            catalogo.serie =  Serie.find.byId(serie);
-            catalogo.titulo = r.getString("titulo");
-            catalogo.sinopsis = r.getString("sinopsis");
-            catalogo.clave = r.getString("clave");
-            catalogo.obra = r.getString("numobra");
-            catalogo.formato = VtkFormato.find.byId(r.getLong("formato"));
-
-            // PALABRAS CLAVE
-            String strPalabrasClave = r.getString("palabrasclave");
-            // Convertir un texto con comas a un arreglo
-            String[] arrPalabrasClave = strPalabrasClave.split(",");
-            for (String pc : arrPalabrasClave){
-                PalabraClave palabraClave = new PalabraClave();
-                palabraClave.descripcion = pc.trim();
-                //palabraClave.save();
-                System.out.println("                "+palabraClave.descripcion);
-                catalogo.palabrasClave.add(palabraClave);
-            }
-
-
-            /*
-            // CREDITOS
-            String aux = r.getString("creditos");
-
-            while (aux.length()>1){
-
-                // Encontrar PRODUCTOR ó PRODUCTORES ó PRODUCCION en la cadena hasta el fin de la linea ó , o .
-                if ( aux.toUpperCase().contains("PRODUCTOR:") || aux.toUpperCase().contains("PRODUCTORES:") || aux.toUpperCase().contains("PRODUCCION:")) {
-                    aux.replace("PRODUCTOR:", "");
-                    aux.replace("PRODUCTORES:", "");
-                    aux.replace("PRODUCCION:", "");
-                    int sub = aux.indexOf(",");
-                    if (sub == -1) {
-                        sub = aux.indexOf(".");
-                        if (sub == -1) {
-                            sub = aux.indexOf(" ");
-                            if (sub == -1) {
-
-                            }
-
-                        }
-                    }
-                }
-
-            }
-
-
-            */
-
-
-            System.out.println("     duracion "+r.getString("duracion"));
-            Duracion duracion = new Duracion();
-            duracion.convertir(r.getString("duracion"));
-
-            catalogo.duracion =  duracion.totalSegundos();
-            catalogo.idioma = Idioma.find.byId(r.getLong("idioma"));
-
-            catalogo.produccion = Produccion.find.byId(  r.getLong("produccion"));
-
-
-
-
-            catalogo.fechaProduccion =   r.getString("anioproduccion");
-            if (r.getLong("disponibilidad")!=null)
-                catalogo.disponibilidad = Disponibilidad.find.byId(r.getLong("disponibilidad"));
-
-            catalogo.areatematica = Areatematica.find.byId(r.getLong("areatematica"));
-
-            catalogo.save();
-
-        }
-
-        return ok ( views.html.videoteca.vtkCargaInicial.render(total)  );
-    }
-
 
 
     public static Result catalogoEdit(Long id){
@@ -688,17 +556,19 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
 
     public static Result save() throws JSONException {
+        System.out.println("\n\n\nDesde VideotecaController.save...");
+        DynamicForm fd = DynamicForm.form().bindFromRequest();
+        System.out.println(fd);
+        System.out.println("--------------------------");
+        Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
+        System.out.println(forma);
+
         Ebean.beginTransaction();
         try {
-            System.out.println("\n\n\nDesde VideotecaController.save");
-            Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
-            DynamicForm fd = DynamicForm.form().bindFromRequest();
-            System.out.println(forma);
-            System.out.println("--------------------------");
-            System.out.println(fd);
+
 
             if (forma.hasErrors()) {
-                return badRequest(createForm.render(forma, TipoCredito.find.all(), VtkCampo.find.all()));
+                return badRequest(createForm3.render(forma, TipoCredito.find.all(), VtkCampo.find.all()));
             }
 
 
@@ -811,7 +681,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
         // Convertir duracion (hh:mm:ss) a segundos
         Logger.debug(forma.field("duracionStr").value());
-        if (  forma.field("duracionStr").value().compareTo("hhh:mm:ss")!=0 ) {
+        if (  forma.field("duracionStr").value().compareTo("hh:mm:ss")!=0 ) {
             Duracion duracion = new Duracion();
             duracion.convertir(forma.field("duracionStr").value());
             vtk.duracion = duracion.totalSegundos();
@@ -966,7 +836,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
             // Convertir duracion (hh:mm:ss) a segundos
             Logger.debug(forma.field("duracionStr").value());
-            if (  forma.field("duracionStr").value().compareTo("hhh:mm:ss")!=0 ) {
+            if (  forma.field("duracionStr").value().compareTo("hh:mm:ss")!=0 ) {
                 Duracion duracion = new Duracion();
                 duracion.convertir(forma.field("duracionStr").value());
                 vtk.duracion = duracion.totalSegundos();
@@ -1212,7 +1082,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         DynamicForm fd = DynamicForm.form().bindFromRequest();
 
         if(forma.hasErrors()) {
-            return badRequest(createForm.render(forma, TipoCredito.find.all(), VtkCampo.find.findList() ));
+            return badRequest(createForm3.render(forma, TipoCredito.find.all(), VtkCampo.find.findList() ));
         }
 
 
@@ -1229,7 +1099,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
         // Convertir duracion (hh:mm:ss) a segundos
         Logger.debug(forma.field("duracionStr").value());
-        if (  forma.field("duracionStr").value().compareTo("hhh:mm:ss")!=0 ) {
+        if (  forma.field("duracionStr").value().compareTo("hh:mm:ss")!=0 ) {
             Duracion duracion = new Duracion();
             duracion.convertir(forma.field("duracionStr").value());
             vtk.duracion = duracion.totalSegundos();
@@ -1418,6 +1288,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             jo.put("id", c.id);
             jo.put("clave", c.clave);
         }
+        Logger.debug(jo.toString());
         return ok ( jo.toString()  );
     }
 
@@ -1429,8 +1300,11 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 .collect(Collectors.toList());
         List<VtkCampo> campos = VtkCampo.find.all();
         return ok(
-                views.html.videoteca.createForm2.render(forma, tiposOrdenados, campos)
+                views.html.videoteca.createForm3.render(forma, tiposOrdenados, campos)
         );
     }
+
+
+
 
 }

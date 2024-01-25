@@ -1,0 +1,21 @@
+EXPORT (dump) en formato custom
+
+pg_dump -U tve -W -F c -h localhost -c --if-exists tveservicios > tveservicios`date +%Y%m%d_%H%M`.dump
+
+
+-U Usuario de la DB
+-W pide password
+-F Formato
+	c Custom
+-h host
+-c clean, aplica DROP antes de la creacion de la tabla
+--if-exists    Aplicable con -c, aplica el DROP antes de la creacion de la tabla solo si la tabla existe
+
+tveservicios`date +%Y%m%d_%H%M`.dump
+el archivo de salida será tveservicios<fechaHora>.dump
+
+
+ 	
+RESTAURAR
+---------
+pg_restore -U tve -W -F c --create --clean -h localhost -d tveservicios < tveservicios20240124_0934.dump

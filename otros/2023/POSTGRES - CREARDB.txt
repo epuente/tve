@@ -3,17 +3,18 @@ Postgresql
 $ sudo -i -u postgres psql
 
 create user tve with password 'tve';
-create database tveservicios2023_dev owner tve;
-grant all privileges on database tveservicios2023_dev to tve;
-alter database tveservicios2023_dev owner to tve;
+create database tveservicios owner tve;
+grant all privileges on database tveservicios to tve;
+alter database tveservicios owner to tve;
 
 
-INSTALAR EXTENSION UNACCENT
----------------------------------
-\c tveservicios2023_devnoviembre
+INSTALAR EXTENSION UNACCENT y pg_trgm
+-------------------------------------
+set role tve;
+\c tveservicios;
 
 CREATE EXTENSION unaccent;
-
+CREATE EXTENSION pg_trgm;
 
 
 --------------------------------------

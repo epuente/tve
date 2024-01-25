@@ -1,3 +1,14 @@
+$("form[name='frmVTK']").off("keypress");
+$("form[name='frmVTK']").on("keypress", function(e){
+    console.log("serieDescripcion keypress")
+            if (e.which == 13) {
+                console.log("13!!!!!!!!!!!!1")
+                e.stopPropagation();
+                return false;
+            }
+});
+
+
 $("#btnModalGuardar").off("click");
 $("#btnModalGuardar").on("click", function(){
     console.debug("click! ")
@@ -5,9 +16,306 @@ $("#btnModalGuardar").on("click", function(){
 
 function agregaJSON(){
     console.log(" - agregaJSON -")
+
+
+
         var aux4 = valoresCreditos2();
         $("#txtLosCreditos").val(   aux4   );
         $("#txaTimeLine").val(JSON.stringify(valoresTimeLine()));
+
+        /////////////////////////
+        var msgError="";
+        //console.clear()
+        console.log("has-error:"+  $("div.has-error").length)
+
+        var $uf = LlamadaAjax("/vtkBuscaFolio", "POST", JSON.stringify( {"folio":$("#folio").val()}));
+        var $ui = LlamadaAjax("/vtkBuscaClaveID", "POST", JSON.stringify( {"id":$("#clave").val()}));
+        $.when( $uf, $ui  ).done(function(dataf, datai){
+            console.log("DOS")
+            console.dir(dataf)
+            console.dir(datai)
+            console.log(  dataf.estado=="correcto"  )
+
+
+
+            if ($("#folio").val().length!=0 && dataf.estado!="correcto"   && dataf.id !=  parseInt($("#id").val())){
+                msgError+="El folio ya esta registrado.<br>";
+               $("#folio").closest("div.form-group").addClass("has-error has-danger");
+            }
+            if (datai.estado!="correcto" && datai.id !=  parseInt($("#id").val())){
+                msgError+="El ID ya esta registrado.<br>";
+                $("#clave").closest("div.form-group").addClass("has-error has-danger");
+            }
+
+            if ( !$("#clave").val() ){
+                msgError+="No se ha seleccionado un ID.<br>";
+                $("#clave").closest("div.form-group").addClass("has-error has-danger");
+            }
+             if ($("*[data-name='cbEvento']:checked").length==0){
+                msgError+="Seleccione al menos un evento<br>";
+                $("*[data-name='cbEvento']").closest("div.form-group").addClass("has-error has-danger");
+                }
+            if ( $("*[data-name='cbNivelAcademico']:checked").length==0){
+                msgError+="Seleccione al menos un nivel<br>";
+                $("*[data-name='cbNivelAcademico']").closest("div.form-group").addClass("has-error has-danger");
+                }
+            if ( !$("#titulo").val() ){
+                msgError+="No se ha escrito el título<br>";
+                }
+            if ( !$("#sinopsis").val())
+                msgError+="No se ha escrito la sinópsis<br>";
+
+
+            if ( $("#fechaProduccion").val().length!=0 ){
+                if (   moment($("#fechaProduccion").val()).year()<1995 ){
+                    msgError+="El año de producción no puede ser anterior a 1995<br>";
+                }
+            }
+            if ( $("#fechaPublicacion").val().length!=0 ){
+                if (   moment($("#fechaPublicacion").val()).year()<1995 ){
+                    msgError+="El año de publicacion no puede ser anterior a 1995<br>";
+                }
+            }
+
+
+            if ( !$("#palabrasClaveStr").val()){
+                    msgError+="No se han definido las palabras clave<br>";
+                   // $("#palabrasClaveStr").parent().find("tags").css("outline","1px solid #b94a48");
+                }
+
+            if ( $("[type='checkbox'][name^='areastematicas']:checked").length==0){
+                msgError+="No se ha seleccionado el área TEMATICA<br>";
+                $("#areatematica_id_field").parent().addClass("has-error has-danger");
+                }
+
+            if ( $("#formato_id option:selected").length==0 || $("#formato_id option:selected").val().length==0 ){
+                msgError+="No se ha seleccionado el FORMATO<br>";
+                $("#formato_id").closest("div.form-group").addClass("has-error has-danger");
+                }
+
+            //Audio y video
+            //audio
+            if ( $("#audio_id option:selected").length==0 || $("#audio_id option:selected").val().length==0 ){
+                msgError+="No se ha seleccionado el audio<br>";
+                $("#audio_id").closest("div.form-group").addClass("has-error has-danger");
+                }
+            // calidad audio
+            if (  $("input[name='calidadAudio']:checked").length==0  ){
+                msgError+="Inidique la calidad del audio (bueno o malo)<br>";
+                $("#calidad_audio_B").closest("div.form-group").addClass("has-error has-danger");
+                }
+            // resolución video
+            if ( $("#video_id option:selected").length==0 || $("#video_id option:selected").val().length==0 ){
+                msgError+="No se ha selecionado la resolución del video<br>";
+                $("#video_id").closest("div.form-group").addClass("has-error has-danger");
+                }
+            // calidad video
+            if (  $("input[name='calidadVideo']:checked").length==0  ){
+                msgError+="Inidique la calidad del video (bueno o malo)<br>";
+                $("#calidad_video_B").closest("div.form-group").addClass("has-error has-danger");
+                }
+
+
+
+            if (  !$("#observaciones").val()  ){
+                msgError+="Escriba sus observaciones<br>";
+                $("#observaciones").closest("div.form-group").addClass("has-error has-danger");
+                }
+
+            if (msgError.length>1){
+                    event.preventDefault();
+                    msgError.length==1? msgError+="<br><br>Complete el campo faltante" : msgError+="<br><br>Complete los campos faltantes";
+
+                    swal({
+                            title: "Aviso",
+                            html: msgError,
+                            type: "warning",
+                            confirmButtonText: "Aceptar"
+                    });
+                    return false;
+            }
+            else {
+                //swal("En construcción", "Faltan algunas definiciones para completar esta funcionalidad","warning");
+                //event.preventDefault();
+
+                $("#cuentas_username").attr('name', 'cuentas[0].username');
+                $("#cuentas_password").attr('name', 'cuentas[0].password');
+
+                $("[type='checkbox'][id^='auxRoles_']:checked").each(function(i,e){
+                    $(this).attr("name","cuentas[0].roles["+i+"].rol.id");
+                });
+
+
+                var x = {};
+                x=valoresCreditos();
+
+                console.log("creditos x")
+                console.log(x)
+                console.dir(x)
+                var xEventos = {};
+                xEventos = valoresEventos();
+
+                var xNiveles = {};
+                xNiveles = valoresNiveles();
+
+
+                $("<textarea style='padding-left:100px; display:none;' name='txaEventos' id='txaEventos'>"+JSON.stringify(xEventos)+"</textarea>").appendTo("form[name='frmVTK']");
+                $("<textarea style='padding-left:100px; display:none;' name='txaNiveles' id='txaNiveles'>"+JSON.stringify(xNiveles)+"</textarea>").appendTo("form[name='frmVTK']");
+                $("<textarea style='padding-left:100px; display:none;' name='txaCreditos' id='txaCreditos'>"+JSON.stringify(x)+"</textarea>").appendTo("form[name='frmVTK']");
+                //$("<textarea style='padding-left:100px; display:none;' name='txaCreditos2' id='txaCreditos2'>"+JSON.stringify(x2)+"</textarea>").appendTo("form[name='frmVTK']");
+                $("#txaPalabrasClave").val(JSON.stringify(valoresPalabrasClave()));
+
+            }
+        });
+        /////////////////////////
+
+
+
+
+}
+
+function agregaJSONX(){
+    console.log(" - agregaJSONX -")
+        var aux4 = valoresCreditos2();
+        $("#txtLosCreditos").val(   aux4   );
+        $("#txaTimeLine").val(JSON.stringify(valoresTimeLine()));
+        console.log("- lo del submit -")
+
+    var msgError="";
+    //console.clear()
+    console.log("has-error:"+  $("div.has-error").length)
+
+    var $uf = LlamadaAjax("/vtkBuscaFolio", "POST", JSON.stringify( {"folio":$("#folio").val()}));
+    var $ui = LlamadaAjax("/vtkBuscaClaveID", "POST", JSON.stringify( {"id":$("#clave").val()}));
+    $.when( $uf, $ui  ).done(function(dataf, datai){
+        console.log("DOS")
+        console.dir(dataf)
+        console.dir(datai)
+        console.log(  dataf.estado=="correcto"  )
+
+
+
+        if ($("#folio").val().length!=0 && dataf.estado!="correcto"   && dataf.id !=  parseInt($("#id").val())){
+            msgError+="El folio ya esta registrado.<br>";
+           $("#folio").closest("div.form-group").addClass("has-error has-danger");
+        }
+        if (datai.estado!="correcto" && datai.id !=  parseInt($("#id").val())){
+            msgError+="El ID ya esta registrado.<br>";
+            $("#clave").closest("div.form-group").addClass("has-error has-danger");
+        }
+
+        if ( !$("#clave").val() ){
+            msgError+="No se ha seleccionado un ID.<br>";
+            $("#clave").closest("div.form-group").addClass("has-error has-danger");
+        }
+         if ($("*[data-name='cbEvento']:checked").length==0){
+            msgError+="Seleccione al menos un evento<br>";
+            $("*[data-name='cbEvento']").closest("div.form-group").addClass("has-error has-danger");
+            }
+        if ( $("*[data-name='cbNivelAcademico']:checked").length==0){
+            msgError+="Seleccione al menos un nivel<br>";
+            $("*[data-name='cbNivelAcademico']").closest("div.form-group").addClass("has-error has-danger");
+            }
+        if ( !$("#titulo").val() ){
+            msgError+="No se ha escrito el título<br>";
+            }
+        if ( !$("#sinopsis").val())
+            msgError+="No se ha escrito la sinópsis<br>";
+        if ( !$("#formato_id").val()){
+            msgError+="No se ha seleccionado el formato<br>";
+            $("#formato_id").closest("div.form-group").addClass("has-error has-danger");
+            }
+
+        if ( $("#fechaProduccion").val().length!=0 ){
+            if (   moment($("#fechaProduccion").val()).year()<1995 ){
+                msgError+="El año de producción no puede ser anterior a 1995<br>";
+            }
+        }
+        if ( $("#fechaPublicacion").val().length!=0 ){
+            if (   moment($("#fechaPublicacion").val()).year()<1995 ){
+                msgError+="El año de publicacion no puede ser anterior a 1995<br>";
+            }
+        }
+
+
+        if ( !$("#palabrasClaveStr").val()){
+                msgError+="No se han definido las palabras clave<br>";
+                $("#palabrasclave").closest("div.form-group").addClass("has-error has-danger");
+            }
+        if ( !$("#video_id").val()){
+            msgError+="No se han escrito las características del video<br>";
+            $("#video_id").closest("div.form-group").addClass("has-error has-danger");
+            }
+
+
+        if (  $("input[name='calidadAudio']:checked").length==0  ){
+            msgError+="Inidique la calidad del audio (bueno o malo)<br>";
+            $("#calidad_audio_B").closest("div.form-group").addClass("has-error has-danger");
+            }
+        if (  $("input[name='calidadVideo']:checked").length==0  )
+            msgError+="Inidique la calidad del video (bueno o malo)<br>";
+
+        if (  !$("#observaciones").val()  ){
+            msgError+="Escriba sus observaciones<br>";
+            $("#observaciones").closest("div.form-group").addClass("has-error has-danger");
+            }
+
+        if (msgError.length>1){
+                event.preventDefault();
+                msgError.length==1? msgError+="<br><br>Complete el campo faltante" : msgError+="<br><br>Complete los campos faltantes";
+
+                swal({
+                        title: "Aviso",
+                        html: msgError,
+                        type: "warning",
+                        confirmButtonText: "Aceptar"
+                });
+                return false;
+        }
+        else {
+            //swal("En construcción", "Faltan algunas definiciones para completar esta funcionalidad","warning");
+            //event.preventDefault();
+
+            $("#cuentas_username").attr('name', 'cuentas[0].username');
+            $("#cuentas_password").attr('name', 'cuentas[0].password');
+
+            $("[type='checkbox'][id^='auxRoles_']:checked").each(function(i,e){
+                $(this).attr("name","cuentas[0].roles["+i+"].rol.id");
+            });
+
+
+            var x = {};
+            x=valoresCreditos();
+
+            console.log("creditos x")
+            console.log(x)
+            console.dir(x)
+            var xEventos = {};
+            xEventos = valoresEventos();
+
+            var xNiveles = {};
+            xNiveles = valoresNiveles();
+
+
+            $("<textarea style='padding-left:100px; display:none;' name='txaEventos' id='txaEventos'>"+JSON.stringify(xEventos)+"</textarea>").appendTo("form[name='frmVTK']");
+            $("<textarea style='padding-left:100px; display:none;' name='txaNiveles' id='txaNiveles'>"+JSON.stringify(xNiveles)+"</textarea>").appendTo("form[name='frmVTK']");
+            $("<textarea style='padding-left:100px; display:none;' name='txaCreditos' id='txaCreditos'>"+JSON.stringify(x)+"</textarea>").appendTo("form[name='frmVTK']");
+            //$("<textarea style='padding-left:100px; display:none;' name='txaCreditos2' id='txaCreditos2'>"+JSON.stringify(x2)+"</textarea>").appendTo("form[name='frmVTK']");
+            $("#txaPalabrasClave").val(JSON.stringify(valoresPalabrasClave()));
+
+            $("#tasCreditos").val(  JSON.stringify(x)  );
+            console.log(">>>>>>>>>>>>>>>>>>>>>>")
+            console.log(  JSON.stringify(x)   );
+
+            console.log(" - se hace el submit -")
+
+            $("#frmVTKCreate").attr("action", "/vtkCatalogo/save");
+            $("#frmVTKCreate").attr("method", "POST");
+            $("#frmVTKCreate").submit();
+
+        }
+    });
+
 }
 
 
@@ -106,12 +414,12 @@ function agregaJSON2(){
 
 }
 
-
+/*
 $("form[name='frmVTK']").submit(function(event){
     //event.preventDefault();
     console.log(" - submit -")
     var msgError="";
-    console.clear()
+    //console.clear()
     console.log("has-error:"+  $("div.has-error").length)
 
     var $uf = LlamadaAjax("/vtkBuscaFolio", "POST", JSON.stringify( {"folio":$("#folio").val()}));
@@ -179,14 +487,11 @@ $("form[name='frmVTK']").submit(function(event){
             msgError+="No se han escrito las características del video<br>";
             $("#video_id").closest("div.form-group").addClass("has-error has-danger");
             }
-        if ( !$("#audio_id").val() ){
-            msgError+="No se han escrito las características del audio<br>";
-            $("#audio_id").closest("div.form-group").addClass("has-error has-danger");
-            }
+
 
         if (  $("input[name='calidadAudio']:checked").length==0  ){
             msgError+="Inidique la calidad del audio (bueno o malo)<br>";
-            $("#audio_id").closest("div.form-group").addClass("has-error has-danger");
+            $("#calidad_audio_B").closest("div.form-group").addClass("has-error has-danger");
             }
         if (  $("input[name='calidadVideo']:checked").length==0  )
             msgError+="Inidique la calidad del video (bueno o malo)<br>";
@@ -245,7 +550,7 @@ $("form[name='frmVTK']").submit(function(event){
         }
     });
 });
-
+*/
 
 function valoresCreditos(){
     var j=[];
@@ -384,7 +689,6 @@ function valoresTimeLine(){
 function labelsCamposRequeridos(){
         $("label").each(function( index, e ) {
             var aux = $(e).attr("for");
-            console.log("for "+aux);
             if (   $("#"+aux).attr("required")  ){
                 console.log("    requerido" )
                 $("label[for='"+aux+"']").addClass("campoRequerido");
@@ -392,7 +696,7 @@ function labelsCamposRequeridos(){
         });
 
         // Otros labels de componentes no convencionales
-        $("label[for='eventos_0_id'], label[for='nivel1'], label[for='nivelesacademicos[0].nivel.id'], label[for='palabrasClaveStr'], label[for='areatematicaDescripcion'], label[for='areatematica_id'], label[for='calidad_audio_b'] , label[for='calidad_video_B']" ).addClass("campoRequerido");
+        $("label[for='eventos_0_id'], label[for='nivel1'], label[for='nivelesacademicos[0].nivel.id'], label[for='palabrasClaveStr'], label[for='areatematicaDescripcion'], label[for='areatematica_id'], label[for='calidad_audio_B'] , label[for='calidad_video_B']" ).addClass("campoRequerido");
 }
 
 function agregarAbrir(label){
@@ -478,7 +782,7 @@ function agregarTimeLine(){
                                      lazy: false,
                                      autofix: true,
                                      blocks: {
-                                         h: {mask: IMask.MaskedRange, placeholderChar: 'h', from: 0, to: 999, maxLength: 3},
+                                         h: {mask: IMask.MaskedRange, placeholderChar: 'h', from: 0, to: 99, maxLength: 2},
                                          m: {mask: IMask.MaskedRange, placeholderChar: 'm', from: 0, to: 59, maxLength: 2},
                                          s: {mask: IMask.MaskedRange, placeholderChar: 's', from: 0, to: 59, maxLength: 2}
                                      }
@@ -491,7 +795,7 @@ function agregarTimeLine(){
                                      lazy: false,
                                      autofix: true,
                                      blocks: {
-                                         h: {mask: IMask.MaskedRange, placeholderChar: 'h', from: 0, to: 999, maxLength: 3},
+                                         h: {mask: IMask.MaskedRange, placeholderChar: 'h', from: 0, to: 99, maxLength: 2},
                                          m: {mask: IMask.MaskedRange, placeholderChar: 'm', from: 0, to: 59, maxLength: 2},
                                          s: {mask: IMask.MaskedRange, placeholderChar: 's', from: 0, to: 59, maxLength: 2}
                                      }
@@ -545,10 +849,11 @@ $("#folio").blur(function(e){
                     if (modo.localeCompare("edicion")==0  && (data.id != idCatalogo ) )
                         msg="<br><br>El folio está asignado al ID "+data.clave;
                     swal({
-                            title: "Advertencia1",
-                            html: "El número de folio ya esta registrado<br><br>No se permite registrar mas de una vez el mismo folio."+msg,
+                            title: "Advertencia",
+                            html: "El número de folio dp ya esta registrado<br><br>No se permite registrar mas de una vez el mismo folio."+msg,
                             type: "warning",
-                            showConfirmButton: true
+                            showConfirmButton: true,
+                            confirmButtonText: "Aceptar"
                     });
                     return false;
                 }
@@ -572,10 +877,11 @@ $("#clave").blur(function(e){
                     if (modo.localeCompare("edicion")==0  && (data.clave != idClave ) )
                         msg="<br><br>El ID ya está asignado.";
                     swal({
-                            title: "Advertencia1",
+                            title: "Advertencia",
                             html: "El ID ya esta registrado<br><br>No se permite registrar mas de una vez el mismo ID."+msg,
                             type: "warning",
-                            showConfirmButton: true
+                            showConfirmButton: true,
+                            confirmButtonText: "Aceptar"
                     });
                     return false;
                 }
@@ -583,5 +889,21 @@ $("#clave").blur(function(e){
         });
     }
 });
+
+
+// Cuando se seleccione 'Otra' en Área temática, mostrar un input para especificarla
+$("input[data-name='cbArea'][value=999]").change(function(){
+    if ( $(this).prop("checked")==true ){
+        $("#divAreaTematicaOtra").show();
+    } else
+        $("#divAreaTematicaOtra").hide();
+});
+
+
+
+
+
+
+
 
 

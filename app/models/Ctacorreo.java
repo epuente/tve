@@ -72,7 +72,7 @@ public class Ctacorreo  extends models.utils.PlantillaModelo  {
         return p;
     }
 
-
+	// Pone todas las cuentas de correo registradas como NO ACTIVAS
 	public void resetActiva() {
 		//for( Ctacorreo cta: find.where().eq("activa", true).findList()) {
 		for( Ctacorreo cta: Ebean.find(Ctacorreo.class).where().eq("activa", true).findList()) {
@@ -80,6 +80,14 @@ public class Ctacorreo  extends models.utils.PlantillaModelo  {
 			cta.update();
 		}
 	}
+
+
+	// Regresa true si una de las cuentas se encuenta activa
+	public static boolean hayCtaActiva(){
+		List<Ctacorreo> x = Ebean.find(Ctacorreo.class).where().eq("activa", true).findList();
+		return x.size()>0;
+	}
+
 
 
 }

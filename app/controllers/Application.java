@@ -139,7 +139,7 @@ public class Application extends ControladorDefault {
 		}
 		// Catalogador de Videoteca
 		if (session("rolActual").compareTo("132")==0) {
-			return redirect(routes.VideotecaController.tablero());
+			return redirect(routes.VideotecaController.catalogo());
 		}
 
 		// Supervisor de Catalogadores de Videoteca
@@ -317,10 +317,13 @@ public class Application extends ControladorDefault {
 		String url = conf.getString("urlProduccion");
 		correo.para = Arrays.asList(pc.email);
 		correo.asunto="Clave de acceso al sistema de TVEducativa";
-		correo.mensaje="El día "+sHoy+" a las "+sHora+" se solicitó la recuperación de su clave de acceso al sistema de TVEducativa.<br><br>Su nombre de usuario es: <b>"+c.username +"</b> y la clave de acceso es: <b>"+c.password+"</b>";
+		correo.mensaje="<strong>SOLICITUD DE RECUPERACIÓN DE ACCESO</strong><br><br>";
+		correo.mensaje+="El día "+sHoy+" a las "+sHora+" se recibió una solucitud de recuperación de su usuario y/o clave de acceso al sistema de TVEducativa.<br><br>Su nombre de usuario es: <b>"+c.username +"</b> y la clave de acceso es: <b>"+c.password+"</b>";
 		correo.mensaje+="<br>";
 		correo.mensaje+="<br>";
-		correo.mensaje+="Ingrese al <a href='"+url+"' target=\"_blank\">sistema con la siguiente dirección:&nbsp;&nbsp;&nbsp;</a>http://" +url;
+		correo.mensaje+="Ingrese al sistema con la siguiente dirección: <a href='"+url+"' target=\"_blank\">"+url+"</a>";
+		correo.mensaje+="<br><br><br>";
+		correo.mensaje+="<div><small>Correo generado automáticamente por el sistema de TVEducativa</small></div>";
 		//	correo.mensaje+="<button type='button' onclick='alert('Hello world!')'>Click Me!</button>";
 
 		// OJO Aqui tiene que ser un https

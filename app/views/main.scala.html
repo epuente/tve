@@ -104,7 +104,7 @@
       (function() {
         var u="https://check.dev.ipn.mx/";
         _paq.push(['setTrackerUrl', u+'matomo.php']);
-        _paq.push(['setSiteId', '8']);
+        _paq.push(['setSiteId', '9']);
         var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
         g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
       })();
@@ -301,23 +301,6 @@
                             var fecha2 = now = moment();
                             var diferencia =  moment.duration(fecha2.diff(fecha1));
                             var x = strFormatoDiferencia(diferencia);
-                            //console.log("hoy  :"+moment(fecha2).format("dddd, MMMM Do YYYY, h:mm:ss a") )
-                            //console.log("fecha:"+moment(fecha1).format("dddd, MMMM Do YYYY, h:mm:ss a") )
-                            //console.log("diferencia:"+diferencia)
-                            @*
-                            lista+='<li class="not-'+oj.datos[i].tipoNotificacion+'" > ';
-                            lista+="    <span style='float:left'>";
-                            lista+="     "+oj.datos[i].descripcion;
-                            lista+="    </span>";
-                            lista+="    <span style='font-size:small'>";
-                            lista+="     "+oj.datos[i].fase;
-                            lista+="    </span>";
-                            lista+="      <span style='float:right; font-size:smaller'>Hace "+x+"</span>";
-                            lista+="</li>";
-                            *@
-
-
-
 
                             lista+='<li class="not-'+oj.datos[i].tipoNotificacion+'" > ';
                             lista+="  <div class='row'>";
@@ -443,7 +426,8 @@
                 roles+="<div class='bloque'>"+value.descripcion+"</div>";
               });
               $("#mcRoles").append(roles);
-              $("#mcRolActual").text(data.rolActual);
+              $("#mcRolActual").html("");
+              $("#mcRolActual").append("<div class='bloque'>"+data.rolActual+"</div>");
               $("#mcCambioUserName").val(data.username);
 
               $.each(data.correos, function(key,value) {
@@ -458,7 +442,7 @@
         }
 
         function abrirCambioPass(){
-          $("#panelCambioPassword").toggle();
+          $("#panelCambioPassword").fadeToggle("slow", "linear");
         }
 
 

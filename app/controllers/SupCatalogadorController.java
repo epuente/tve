@@ -1,26 +1,22 @@
 package controllers;
 
-import classes.CapitalizaCadena;
 import classes.Duracion;
-import com.avaje.ebean.*;
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Page;
+import com.avaje.ebean.SqlRow;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.*;
-import org.apache.commons.logging.Log;
+import models.videoteca.TipoCredito;
+import models.videoteca.VtkCatalogo;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
-import play.libs.Json;
 import play.mvc.Result;
-
-
 import views.html.videoteca.catalogadores.*;
 
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -545,14 +541,15 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
         else
             d = new Duracion(0L);
         Logger.debug("003 duracion " + d.horas+":"+d.minutos+":"+d.segundos);
+        /*
         List<TipoCredito> tipos = TipoCredito.find.all();
         List<TipoCredito> tiposOrdenados = tipos.stream()
                 .sorted(Comparator.comparing(TipoCredito::getId))
                 .collect(Collectors.toList());
-
+*/
         return ok( views.html.videoteca.catalogadores.infoForm.render(id, forma)  );
 
-}
+    }
 
 
 }

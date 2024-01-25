@@ -55,5 +55,31 @@ section {
     animation: flickerAnimation 1s infinite;
 }
 
+.sobre::before {
+   font-family: "Font Awesome 5 Free";
+   content: "\f0e0";
+   display: inline-block;
+   padding-right: 3px;
+   vertical-align: middle;
+   font-weight: 900;
+}
+.lineaSeparadora {
+    border-top: 1px solid #C0C0C0;
+    height: 2px;
+    padding: 0;
+    margin: 2px auto 0 auto;
+}
 
-
+.bloque {
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    min-width: var(--tag--min-width);
+    max-width: var(--tag--max-width);
+    margin: 2px;
+    padding: 0.2em 0.4em;
+    border: thin solid #dbdbdb;
+}

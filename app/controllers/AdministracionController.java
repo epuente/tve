@@ -971,9 +971,12 @@ System.out.println(json);
 		properties.setProperty("mail.smtp.auth", "true");
 		properties.setProperty("mail.smtp.starttls.enable", "true");		
 		properties.setProperty("mail.smtp.ssl.protocols","TLSv1.2");
-		
+
+
+		String h = "<span style= \"background-color:green; color:white; padding:10px; margin:10px;\">Correcto</span>";
+
 		String asunto ="Prueba de correo de salida";
-		String mensaje ="PRUEBA DE ENVÍO<br><br>Si esta leyendo este mensaje es un indicador de que la configuración que especificó es correcta para ser usada como cuenta de correo saliente para el sistema de Televisión educativa.<br><br><br>";
+		String mensaje ="PRUEBA DE ENVÍO"+h+"<br><br>Si esta leyendo este mensaje es un indicador de que la configuración que especificó es correcta para ser usada como cuenta de correo saliente para el sistema de Televisión educativa.<br><br><br>";
 		mensaje+= "hostname: "+json.findValue("host").asText()+"<br>";
 		mensaje += "puerto: "+json.findValue("puerto").asText()+"<br>";
 		mensaje += "cuenta de salida: "+json.findValue("cuenta").asText()+"<br>";

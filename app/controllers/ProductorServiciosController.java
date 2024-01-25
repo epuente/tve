@@ -128,9 +128,7 @@ public class ProductorServiciosController extends ControladorDefault{
 				.or( Expr.between("inicio", dtInicio,   dtFin  ),  Expr.between("fin", dtInicio,   dtFin  ))
 			.findList();
 		
-		
-	//	AAAAHHHHHHHHHHHHHHHHHHHHHHHH
-	//	System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
 		System.out.println("registros en eAgenda: "+eAgenda.size());
 		
 		List<SalaMantenimiento> eMantto = SalaMantenimiento

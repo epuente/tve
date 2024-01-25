@@ -1,0 +1,594 @@
+@(forma: Form[models.videoteca.VtkCatalogo], auxCreditos:List[models.videoteca.TipoCredito])
+
+@import helper._
+
+Los campos en <label class="campoRequerido">color oscuro</label> son obligatorios
+
+<fieldset>
+    @*inputText(forma("id"), '_label -> "", 'class->"", 'type->"hidden" )*@
+    <input type="hidden" id="id" name="id" value="" class="">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <!-- 1 a 3 -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                    <div class="form-group">
+                        @inputText(forma("folio"), '_label -> "1. Folio DP", 'class->"form-control", 'maxlength->"30",  'placeholder->"Ejem. S/N", '_help->"")
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                    <div class="form-group">
+                        @inputText(forma("clave"), '_label -> "2. ID", 'class->"form-control", 'required->true, 'maxlength->"30", 'placeholder->"Ejem. BCT-00081-30",  '_help->"" )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-5 col-lg-6   ">
+                    <div class="form-group">
+                        <div id="divResultadoBusquedaUR" style="display:none">
+                            <dt class=" ">
+                            <dt><label for="URDescripcion">Instancia solicitante</label>
+                            </dt>
+                            <dd>
+                                <input type="hidden" id="unidadresponsable_id" name="unidadresponsable.id">
+                            </dd>
+                            <div id="textUR">???</div>
+                        </div>
+                        <div id="divBusquedaUR">
+                            <dl class=" " id="descripcionUR_field">
+                                <dt><label for="URDescripcion">3. Instancia solicitante</label></dt>
+                                <dd>
+                                    <input type="text" id="URDescripcion" value="" autocomplete="off" maxlength="150",  class="form-control" placeholder="Ejem. Escuela Nacional de Biblioteconomía y Archivonomía">
+                                </dd>
+                            </dl>
+                            <div class="help-block with-errors"></div>
+
+                            <div id="panelCoincidenciasUR"
+                                 style="margin-top:5px;
+                                        margin-bottom:5px;
+                                        width: 100%;
+                                        max-height: 50ex;
+                                        z-index: 40;
+                                        position: absolute;
+                                        overflow: auto;
+                                        background-color: white ;
+                                        padding: 20px;
+                                        border:1px solid #C0C0C0;
+                                        display: none;
+                                        "
+                                    >
+                                        <div id="msgCoincidenciasUR" style="with:100%; margin-bottom:5px;"></div>
+                                        <div id="divCoincidenciasUR" style="with:100%">
+                                            <div class="list-group" style="font-size: small">
+                                            </div>
+                                        </div>
+                                        <div style="text-align:center;" id="divBtnNuevaUR">  <input class="btn btn-default" type="button" role="button" id="btnNuevaUR" value="Nueva Instancia"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 4 a 5 -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <dl class=" " id="evento_field">
+                            <dt style="margin-bottom:-10px;"><label for="eventos_0_id">4. Evento</label></dt>
+                            <dd>
+                                <div class="checkbox checkbox-group">
+                                    <input type="checkbox" id="eventos_0_id" name="eventos[0].servicio.id" value="1" class="input-block-level form-check-input" data-name="cbEvento" style="margin-left:0px;">
+                                    <span style="margin-left:20px; margin-right:20px;" > @models.Servicio.find.byId(1).descripcion</span>
+                                </div>
+                                <div class="checkbox checkbox-group">
+                                    <input type="checkbox" id="eventos_1_id" name="eventos[1].servicio.id" value="2" class="input-block-level form-check-input" data-name="cbEvento">
+                                    <span style="margin-left:20px; margin-right:20px;">@models.Servicio.find.byId(2).descripcion</span>
+                                </div>
+                            </dd>
+                            <dd class="info"> </dd>
+                        </dl>
+                        <div class="help-block with-errors invalid-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <dl class=" " id="niverlacademico_field">
+                            <dt style="margin-bottom:-10px;"><label for="nivel1">5. Nivel</label></dt>
+                            <dd>
+                                @for(n<-models.Nivel.find.all){
+                                <div class="checkbox checkbox-group">
+                                    <input type="checkbox" id="nivel@n.id" name="niveles[@(n.id-1)].nivel.id" value="@n.id"  style="margin-left:0px;" class="input-block-level" data-name="cbNivelAcademico">
+                                    <span style="margin-left:20px; margin-right:20px;" > @n.descripcion</span>
+                                </div>
+                                }
+                            </dd>
+                            <dd class="info"> </dd>
+                        </dl>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+
+
+
+                @*
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <dl class=" " id="niverlacademico_field">
+                            <dt><label for="nivel1">5. Nivel</label></dt>
+                            <dd>
+                                @for(n<-models.Nivel.find.all){
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="nivel@n.id" name="niveles[@(n.id-1)].nivel.id" value="@n.id" class="input-block-level" data-name="cbNivelAcademico">
+                                        <span style="margin-right:20px;" > @n.descripcion</span>
+                                    </div>
+                                }
+                            </dd>
+                            <dd class="info"> </dd>
+                        </dl>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                *@
+            </div>
+
+            <!-- 6 a 7 -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                    <div class="form-group">
+                        @inputText(forma("folioDEV"), '_label -> "6. Folio DEV",  'maxlength->"30",  'class->"form-control",  'placeholder->"Ejem. 0225689", '_help->"" )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-9 col-lg-9">
+                    <div class="form-group">
+                        <div id="divResultadoBusqueda" style="display:none">
+                            <dt class=" ">
+                            <dt><label for="serieDescripcion">7. Serie</label>
+                            </dt>
+                            <input type="hidden" id="serie_id" name="serie.id">
+                            <div id="textSerie">???</div>
+                        </div>
+                        <div id="divBusqueda">
+                            <dl class=" " id="descripcion_field">
+                                <dt><label for="serieDescripcion">7. Serie</label></dt>
+                                <dd>
+                                    <input type="text" id="serieDescripcion" value=""  maxlength="500" autocomplete="off"  class="form-control" placeholder="Ejem. Agenda Politécnica">
+                                </dd>
+                            </dl>
+                            <div class="help-block with-errors"></div>
+
+                            <div id="panelCoincidenciasSerie"
+                                 style="margin-top:5px;
+                                        margin-bottom:5px;
+                                        width: 100%;
+                                        max-height: 50ex;
+                                        z-index: 40;
+                                        position: absolute;
+                                        overflow: auto;
+                                        background-color: white ;
+                                        padding: 20px;
+                                        border:1px solid #C0C0C0;
+                                        display: none;">
+                                <div id="msgCoincidencias" style="margin-top:5px; margin-bottom:5px;"></div>
+                                <div id="divCoincidencias">
+                                    <div class="list-group" style="font-size: small">
+                                    </div>
+                                </div>
+                                <div style="text-align:center;" id="divBtnNuevaSerie">  <input class="btn btn-default" type="button" role="button" id="btnNuevaSerie" value="Nueva Serie"></div>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 8 -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <label>8. Créditos</label>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading panel-heading-nav">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist" id="navTabs">
+                                @for( s <- auxCreditos) {
+                                <li role="presentation" @if(s.id==1){class="active"}><a href="#@s.id"  id="tab@s.id"  role="tab" data-toggle="tab">8.@s.id @s.descripcion</a></li>
+                                }
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                @for(s <- auxCreditos) {
+                                <div role="tabpanel" class="tab-pane @if(s.id==1){ active}" id="@s.id" name="losTabs">
+                                    <textarea id="ta@s.id" name="tasCreditos" class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Escriba los nombres de las personas que participaron en @s.accion"></textarea>
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9 a 11 -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                    <div class="form-group">
+                        @inputText(forma("titulo"), '_label -> "9. Título",  'maxlength->"200", 'class->"form-control", 'placeholder->"Ejem. Segundo programa" , 'required->true)
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                    @inputText(forma("obra"), '_label -> "10. Num. de obra", 'class->"form-control", '_help->"" )
+                </div>
+                <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        @inputText(forma("duracionStr"), '_label -> "11. Duración",  'class->"form-control", '_help->"" )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 12 a 15-->
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                    <textarea style='display:none;' name='txaPalabrasClave' id='txaPalabrasClave'></textarea>
+                    <input type="text" name="palabrasClave[0].descripcion" value="ladescripcion" style="display:none"></input>
+                    <label for="palabrasClaveStr">12. Palabras clave</label>
+                    <div class="form-group">
+                        <textarea id="palabrasClaveStr"  name="palabrasClaveStr"  class="tagify" style="margin-top:10px;"  rows="5" cols="300" placeholder="Ejemplo: Matemáticas discretas"></textarea>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        @select(
+                        forma("produccion.id"),
+                        options(models.videoteca.Produccion.options),
+                        '_label -> "13. Producción", '_default->"-- Seleccione --",
+                        '_showConstraints -> false,
+                        'class->"form-control"
+                        )
+                        <div class="help-block with-errors"></div>
+                    </div>
+
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-2">
+                    <div class="form-group">
+                        @select(
+                        forma("idioma.id"),
+                        options(Idioma.options),
+                        '_label -> "14. Idioma", '_default->"-- Seleccione --",
+                        '_showConstraints -> false,
+                        'class->"form-control"
+                        )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-2">
+                    <div class="form-group">
+                        <dl class=" " id="accesibilidad_audio_field">
+                            <dt><label for="accesibilidad_audio">15. Accesibilidad</label></dt>
+                            <dd>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="accesibilidad_audio" name="accesibilidad_audio" value=1 class="input-block-level" data-name="cbAccesibilidad" >
+                                    <span style="margin-right:20px;" >Lenguaje de señas</span>
+                                </div>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="accesibilidad_video" name="accesibilidad_video" value=1 class="input-block-level" data-name="cbAccesibilidad">
+                                    <span>Subtítulos descriptivos</span>
+                                </div>
+                            </dd>
+                            <dd class="info"> </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 16 a 18 -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        @select(
+                        forma("tipograbacion.id"),
+                        options(models.TipoGrabacion.options),
+                        '_label -> "16. Grabación", '_default -> "-- Seleccione --",
+                        '_showConstraints -> false,
+                        'class->"form-control"
+                        )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        @inputText(forma("fechaProduccion"), '_label -> "17. Fecha producción", 'class->"form-control", '_help->"", 'placeholder->"Ejem. 04/11/2001")
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        @inputText(forma("fechaPublicacion"), '_label -> "18. Fecha publicación", 'class->"form-control", '_help->"" )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 19 a 21 -->
+            <div class="row" style="margin-top:25px;">
+                <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        @select(
+                        forma("disponibilidad.id"),
+                        options(models.Disponibilidad.options),
+                        '_label -> "19. Disponibilidad", '_default -> "-- Seleccione --",
+                        '_showConstraints -> false,
+                        'class->"form-control"
+                        )
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                    <div class="form-group">
+                        <dl class=" " id="areatematica_id_field">
+                            <dt style="margin-bottom:-10px;"><label for="areatematica_id">20. Área temática</label></dt>
+                            <dd>
+                                @for(n<-models.videoteca.Areatematica.find.all){
+                                    <div class="checkbox checkbox-group">
+                                        <input type="checkbox" id="area@n.id" name="areastematicas[@if(n.id==999){@(models.videoteca.Areatematica.find.all.size()-1)}else{@(n.id-1)}].areatematica.id" value="@n.id" style="margin-left:0px;" class="input-block-level" data-name="cbArea">
+                                        <span style="margin-left:20px; margin-right:20px;" > @n.descripcion</span>
+                                    </div>
+                                }
+                            </dd>
+                            <dd class="info"> </dd>
+                        </dl>
+                        <div class="help-block with-errors"></div>
+                    </div>
+
+
+
+
+                    <div class="form-group">
+                        @*select(
+                        forma("areatematica.id"),
+                        options(models.videoteca.Areatematica.options),
+                        '_label -> "20. Área temática", '_default -> "-- Seleccione --",
+                        '_showConstraints -> false,
+                        'class->"form-control"
+                        )
+                        *@
+
+
+
+                    </div>
+                    <div id="divAreaTematicaOtra" style="display:none">
+                        <div>Especifique la otra área temática</div>
+                        <input type="text" id="areaTematicaOtra" name="areaTematicaOtra" maxlength="200" class="form-control" placeholder="Ejem. Otra área">
+                    </div>
+
+                </div>
+                <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                    <div class="form-group">
+                        @select(
+                        forma("formato.id"),
+                        options(models.videoteca.VtkFormato.options),
+                        '_label -> "21. Formato", '_default -> "-- Seleccione --",
+                        '_showConstraints -> false,
+                        'class->"form-control",
+                        'required->true
+                        )
+                    </div>
+                </div>
+            </div>
+
+            <!-- 22 -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        @textarea(forma("sinopsis"), '_label -> "22. Sinópsis",  'maxlength->"3000", 'class->"form-control", 'rows->2, 'cols->"300"  , 'required->true, 'placeholder->"Ejem. Expo-Profesionfráfica 1998, convenio revision salarial, convenio de colaboración IPN- Instituto de Aviación" )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+    <!-- 23 a 30 -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <!-- TimeLine -->
+            <textarea style='display:none;' name='txaTimeLine' id='txaTimeLine'></textarea>
+            <div id="abc">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12"> <label>23. Intervención de personajes</label> <span data-toggle="popover" data-trigger="hover" data-content="Agregar renglón de intervención de personajes"><a href="javascript:agregarTimeLine();" class="text-success">  <i class="fa fa-plus-circle" aria-hidden="true"></i> </a> </span> </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2 col-md-2 col-lg-2" style="text-align: center;"><label>24. Tiempo</label></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-1 col-lg-1"><span class="small"><label>25. Inicio</label></div>
+                    <div class="col-sm-12 col-md-1 col-lg-1"><span class="small"><label>26. Término</label></span></div>
+                    <div class="col-sm-12 col-md-2 col-lg-2"><span class="small"><label>27. Nombre</label></span></div>
+                    <div class="col-sm-12 col-md-1 col-lg-1"><span class="small"><label>28. Grado</label></span></div>
+                    <div class="col-sm-12 col-md-1 col-lg-1"><span class="small"><label>29. Cargo</label></span></div>
+                    <div class="col-sm-12 col-md-5 col-lg-5"><span class="small"><label>30. Título o tema</label></span></div>
+                    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 31 a 35 -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+                    <div class="form-group">
+                        @select(
+                        forma("audio.id"),
+                        options(models.videoteca.TipoAudio.options),
+                        '_label -> "31. Audio", '_default -> "-- Seleccione --",
+                        '_showConstraints -> false,
+                        'class->"form-control",
+                        'required->true
+                        )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <dl class=" " id="calidad_audio_field">
+                            <dt><label for="calidad_audio_B">32. Calidad audio</label></dt>
+                            <dd>
+                                <div class="checkbox checkbox-group">
+                                    <input type="radio" id="calidad_audio_B" name="calidadAudio" value="B" class="input-block-level" data-name="rbCalidadAudio">
+                                    <span style="margin-right:20px;">Buena</span>
+                                </div>
+                                <div class=checkbox "checkbox-group">
+                                    <input type="radio" id="calidad_audio_M" name="calidadAudio" value="M" class="input-block-level" data-name="rbCalidadAudio">
+                                    <span style="margin-right:20px;">Mala</span>
+                                </div>
+                                <div class="checkbox checkbox-group">
+                                    <input type="radio" id="calidad_audio_FO" name="calidadAudio" value="FO" class="input-block-level" data-name="rbCalidadAudio">
+                                    <span style="margin-right:20px;">Fallas de orígen</span>
+                                </div>
+                            </dd>
+                            <dd class="info"> </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+                    <div class="form-group">
+                        @select(
+                        forma("video.id"),
+                        options(models.videoteca.TipoVideo.options),
+                        '_label -> "33. Resolución video", '_default -> "-- Seleccione --",
+                        '_showConstraints -> false,
+                        'class->"form-control",
+                        'required->true
+                        )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+                    <div class="form-group">
+                        <dl class=" " id="calidad_video_field">
+                            <dt><label for="calidad_video_B">34. Calidad video</label></dt>
+                            <dd>
+                                <div class="checkbox checkbox-group">
+                                    <input type="radio" id="calidad_video_B" name="calidadVideo" value="B" class="input-block-level" data-name="rbCalidadVideo">
+                                    <span style="margin-right:20px;">Buena</span>
+                                </div>
+                                <div class="checkbox checkbox-group">
+                                    <input type="radio" id="calidad_video_M" name="calidadVideo" value="M" class="input-block-level" data-name="rbCalidadVideo">
+                                    <span>Mala</span>
+                                </div>
+                                <div class="checkbox checkbox-group">
+                                    <input type="radio" id="calidad_video_FO" name="calidadVideo" value="FO" class="input-block-level" data-name="rbCalidadVideo">
+                                    <span>Fallas de orígen</span>
+                                </div>
+                            </dd>
+                            <dd class="info"> </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        @textarea(forma("observaciones"), '_label -> "35. Observaciones", 'maxlength->"300", 'class->"form-control", 'rows->3, 'cols->"300",  'placeholder->"Ejem. El ponente original no se presentó y en su lugar se contó con el Director de la escuela", 'required->true )
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Catalogó  -->
+    <div class="panel panel-default" style="display:none5">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6">Catalogador: @models.Personal.find.byId( Long.parseLong(session.get("usuario"))).nombreCompleto()</div>
+                <div class="col-sm-12 col-md-6 col-lg-6 text-right" style="display:none;" id="divRegistro"></div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+
+<div id="baseTimeLine">
+    <div class="row row-participante"  style="display:none">
+        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+                <input type="text" name="desde"  value="" class="form-control">
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+                <input type="text" name="hasta"   value="" class="form-control">
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+            <div class="form-group">
+                <input type="text" name="personaje" value=""  maxlength="75"  class="form-control" placeholder="Ejem. Juán Pérez López">
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+                <input type="text"  name="grado" value=""  maxlength="50"  class="form-control" placeholder="Ejem. Lic.">
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+            <div class="form-group">
+                <input type="text"  name="cargo" value=""  maxlength="50"  class="form-control" placeholder="Ejem. Director">
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        @*
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-5">
+            <div class="form-group">
+                <input type="text"  name="tema" value=""  maxlength="200"  class="form-control" placeholder="Ejem. Antecedentes de la escuela">
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-1 col-md-1 col-lg-1" data-name="iconEliminar">
+            <h2 style="cursor:pointer;">
+                <a onclick="eliminarTimeLine(this)"><i class="fas fa-trash-alt"></i></a>
+            </h2>
+        </div>
+        *@
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="row">
+                <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                    <div class="form-group">
+                        <input type="text"  name="tema" value=""  maxlength="200"  class="form-control" placeholder="Ejem. Antecedentes de la escuela">
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" data-name="iconEliminar">
+                    <h2 style="cursor:pointer;">
+                        <a onclick="eliminarTimeLine(this)"><i class="fas fa-trash-alt"></i></a>
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+

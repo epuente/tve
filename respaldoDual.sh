@@ -27,8 +27,8 @@ else
     if [ -d !".git" ]; then
         git init
     fi
+    git branch -M main
     git add *
-    #git branch -M $1
     git commit -m "$1"
     if  [[ -z $(git remote) ]]; then
       git remote add origin https://github.com/epuente/tve.git
