@@ -266,7 +266,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.apache.commons#commons-lang3;3.1!commons-lang3.pom(pom.original) (237ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.apache.commons#commons-lang3;3.1!commons-lang3.pom(pom.original) (465ms)[0m
 [0m[[0minfo[0m] [0mResolving org.apache.commons#commons-parent;22 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.apache.commons#commons-parent;22 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.apache.commons#commons-parent;22[0m
@@ -458,7 +458,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/commons-io/commons-io/2.4/commons-io-2.4.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/commons-io/commons-io/2.4/commons-io-2.4.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/commons-io/commons-io/2.4/commons-io-2.4.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] commons-io#commons-io;2.4!commons-io.pom(pom.original) (220ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] commons-io#commons-io;2.4!commons-io.pom(pom.original) (417ms)[0m
 [0m[[0minfo[0m] [0mResolving org.apache.commons#commons-parent;25 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.apache.commons#commons-parent;25 {}[0m
 [0m[[0minfo[0m] [0mResolving org.apache.commons#commons-parent;25 ...[0m
@@ -478,7 +478,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-parent/25/commons-parent-25.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-parent/25/commons-parent-25.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/apache/commons/commons-parent/25/commons-parent-25.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.apache.commons#commons-parent;25!commons-parent.pom(pom.original) (292ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.apache.commons#commons-parent;25!commons-parent.pom(pom.original) (546ms)[0m
 [0m[[0minfo[0m] [0mResolving org.apache#apache;9 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.apache#apache;9 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.apache#apache;9[0m
@@ -515,7 +515,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-compress/1.7/commons-compress-1.7.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-compress/1.7/commons-compress-1.7.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/apache/commons/commons-compress/1.7/commons-compress-1.7.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.apache.commons#commons-compress;1.7!commons-compress.pom(pom.original) (247ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.apache.commons#commons-compress;1.7!commons-compress.pom(pom.original) (461ms)[0m
 [0m[[0minfo[0m] [0mResolving org.apache.commons#commons-parent;32 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.apache.commons#commons-parent;32 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.apache.commons#commons-parent;32[0m
@@ -591,7 +591,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-utils/3.0.17/plexus-utils-3.0.17.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-utils/3.0.17/plexus-utils-3.0.17.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-utils/3.0.17/plexus-utils-3.0.17.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.codehaus.plexus#plexus-utils;3.0.17!plexus-utils.pom(pom.original) (287ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.codehaus.plexus#plexus-utils;3.0.17!plexus-utils.pom(pom.original) (786ms)[0m
 [0m[[0minfo[0m] [0mResolving org.codehaus.plexus#plexus;3.3.1 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.codehaus.plexus#plexus;3.3.1 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.codehaus.plexus#plexus;3.3.1[0m
@@ -692,7 +692,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.sonatype.plexus#plexus-sec-dispatcher;1.3!plexus-sec-dispatcher.pom(pom.original) (267ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.sonatype.plexus#plexus-sec-dispatcher;1.3!plexus-sec-dispatcher.pom(pom.original) (373ms)[0m
 [0m[[0minfo[0m] [0mResolving org.sonatype.spice#spice-parent;12 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.sonatype.spice#spice-parent;12 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.sonatype.spice#spice-parent;12[0m
@@ -1213,7 +1213,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-classworlds/2.5.1/plexus-classworlds-2.5.1.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-classworlds/2.5.1/plexus-classworlds-2.5.1.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-classworlds/2.5.1/plexus-classworlds-2.5.1.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.codehaus.plexus#plexus-classworlds;2.5.1!plexus-classworlds.pom(pom.original) (274ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.codehaus.plexus#plexus-classworlds;2.5.1!plexus-classworlds.pom(pom.original) (451ms)[0m
 [0m[[0minfo[0m] [0mResolving org.codehaus.plexus#plexus;3.3.1 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.codehaus.plexus#plexus;3.3.1 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.codehaus.plexus#plexus;3.3.1[0m
@@ -2068,7 +2068,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.2/slf4j-api-1.7.2.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.2/slf4j-api-1.7.2.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.2/slf4j-api-1.7.2.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.slf4j#slf4j-api;1.7.2!slf4j-api.pom(pom.original) (240ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.slf4j#slf4j-api;1.7.2!slf4j-api.pom(pom.original) (457ms)[0m
 [0m[[0minfo[0m] [0mResolving org.slf4j#slf4j-parent;1.7.2 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.slf4j#slf4j-parent;1.7.2 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.slf4j#slf4j-parent;1.7.2[0m
@@ -2236,7 +2236,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.3.0/jackson-annotations-2.3.0.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.3.0/jackson-annotations-2.3.0.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.3.0/jackson-annotations-2.3.0.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] com.fasterxml.jackson.core#jackson-annotations;2.3.0!jackson-annotations.pom(pom.original) (302ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] com.fasterxml.jackson.core#jackson-annotations;2.3.0!jackson-annotations.pom(pom.original) (406ms)[0m
 [0m[[0minfo[0m] [0mResolving com.fasterxml#oss-parent;11 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: com.fasterxml#oss-parent;11 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: com.fasterxml#oss-parent;11[0m
@@ -2524,7 +2524,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/jvnet/mimepull/mimepull/1.9.4/mimepull-1.9.4.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/jvnet/mimepull/mimepull/1.9.4/mimepull-1.9.4.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/jvnet/mimepull/mimepull/1.9.4/mimepull-1.9.4.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.jvnet.mimepull#mimepull;1.9.4!mimepull.pom(pom.original) (338ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.jvnet.mimepull#mimepull;1.9.4!mimepull.pom(pom.original) (517ms)[0m
 [0m[[0minfo[0m] [0mResolving net.java#jvnet-parent;4 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: net.java#jvnet-parent;4 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: net.java#jvnet-parent;4[0m
@@ -2612,7 +2612,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/xalan/xalan/2.7.1/xalan-2.7.1.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/xalan/xalan/2.7.1/xalan-2.7.1.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/xalan/xalan/2.7.1/xalan-2.7.1.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] xalan#xalan;2.7.1!xalan.pom(pom.original) (313ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] xalan#xalan;2.7.1!xalan.pom(pom.original) (480ms)[0m
 [0m[[0minfo[0m] [0mResolving org.apache#apache;4 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.apache#apache;4 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.apache#apache;4[0m
@@ -2638,7 +2638,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/xalan/serializer/2.7.1/serializer-2.7.1.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/xalan/serializer/2.7.1/serializer-2.7.1.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/xalan/serializer/2.7.1/serializer-2.7.1.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] xalan#serializer;2.7.1!serializer.pom(pom.original) (298ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] xalan#serializer;2.7.1!serializer.pom(pom.original) (412ms)[0m
 [0m[[0minfo[0m] [0mResolving org.apache#apache;4 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.apache#apache;4 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.apache#apache;4[0m
@@ -2664,7 +2664,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] xml-apis#xml-apis;1.3.04!xml-apis.pom(pom.original) (311ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] xml-apis#xml-apis;1.3.04!xml-apis.pom(pom.original) (428ms)[0m
 [0m[[0minfo[0m] [0mResolving org.apache#apache;3 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.apache#apache;3 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.apache#apache;3[0m
@@ -2696,7 +2696,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] commons-collections#commons-collections;3.2.1!commons-collections.pom(pom.original) (287ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] commons-collections#commons-collections;3.2.1!commons-collections.pom(pom.original) (447ms)[0m
 [0m[[0minfo[0m] [0mResolving org.apache.commons#commons-parent;9 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.apache.commons#commons-parent;9 {}[0m
 [0m[[0minfo[0m] [0mResolving org.apache.commons#commons-parent;9 ...[0m
@@ -2716,7 +2716,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-parent/9/commons-parent-9.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-parent/9/commons-parent-9.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/apache/commons/commons-parent/9/commons-parent-9.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.apache.commons#commons-parent;9!commons-parent.pom(pom.original) (280ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.apache.commons#commons-parent;9!commons-parent.pom(pom.original) (485ms)[0m
 [0m[[0minfo[0m] [0mResolving org.apache#apache;4 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.apache#apache;4 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.apache#apache;4[0m
@@ -2751,7 +2751,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.2.1/commons-lang3-3.2.1.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.2.1/commons-lang3-3.2.1.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.2.1/commons-lang3-3.2.1.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.apache.commons#commons-lang3;3.2.1!commons-lang3.pom(pom.original) (365ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.apache.commons#commons-lang3;3.2.1!commons-lang3.pom(pom.original) (526ms)[0m
 [0m[[0minfo[0m] [0mResolving org.apache.commons#commons-parent;32 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.apache.commons#commons-parent;32 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.apache.commons#commons-parent;32[0m
@@ -2859,7 +2859,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/commons-codec/commons-codec/1.6/commons-codec-1.6.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/commons-codec/commons-codec/1.6/commons-codec-1.6.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/commons-codec/commons-codec/1.6/commons-codec-1.6.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] commons-codec#commons-codec;1.6!commons-codec.pom(pom.original) (281ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] commons-codec#commons-codec;1.6!commons-codec.pom(pom.original) (476ms)[0m
 [0m[[0minfo[0m] [0mResolving org.apache.commons#commons-parent;22 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.apache.commons#commons-parent;22 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.apache.commons#commons-parent;22[0m
@@ -2895,7 +2895,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/commons-codec/commons-codec/1.9/commons-codec-1.9.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/commons-codec/commons-codec/1.9/commons-codec-1.9.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/commons-codec/commons-codec/1.9/commons-codec-1.9.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] commons-codec#commons-codec;1.9!commons-codec.pom(pom.original) (333ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] commons-codec#commons-codec;1.9!commons-codec.pom(pom.original) (499ms)[0m
 [0m[[0minfo[0m] [0mResolving org.apache.commons#commons-parent;32 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.apache.commons#commons-parent;32 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.apache.commons#commons-parent;32[0m
@@ -15359,7 +15359,7 @@
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-sbt#apply-macro;0.13.7!apply-macro.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang#jline;2.10.4!jline.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.fusesource.jansi#jansi;1.4!jansi.jar[0m
-[0m[[0mdebug[0m] [0m:: resolution report :: resolve 31035ms :: artifacts dl 33ms[0m
+[0m[[0mdebug[0m] [0m:: resolution report :: resolve 36208ms :: artifacts dl 38ms[0m
 [0m[[0mdebug[0m] [0m	report for default#tve2024_devenero2-build;0.1-SNAPSHOT compile produced in /home/epuente/playFramework/tve2024_devEnero2/project/target/resolution-cache/reports/default-tve2024_devenero2-build-compile.xml[0m
 [0m[[0mdebug[0m] [0m	report for default#tve2024_devenero2-build;0.1-SNAPSHOT runtime produced in /home/epuente/playFramework/tve2024_devEnero2/project/target/resolution-cache/reports/default-tve2024_devenero2-build-runtime.xml[0m
 [0m[[0mdebug[0m] [0m	report for default#tve2024_devenero2-build;0.1-SNAPSHOT test produced in /home/epuente/playFramework/tve2024_devEnero2/project/target/resolution-cache/reports/default-tve2024_devenero2-build-test.xml[0m
@@ -15373,5 +15373,5 @@
 [0m[[0mdebug[0m] [0m	report for default#tve2024_devenero2-build;0.1-SNAPSHOT docs produced in /home/epuente/playFramework/tve2024_devEnero2/project/target/resolution-cache/reports/default-tve2024_devenero2-build-docs.xml[0m
 [0m[[0mdebug[0m] [0m	report for default#tve2024_devenero2-build;0.1-SNAPSHOT pom produced in /home/epuente/playFramework/tve2024_devEnero2/project/target/resolution-cache/reports/default-tve2024_devenero2-build-pom.xml[0m
 [0m[[0mdebug[0m] [0m	report for default#tve2024_devenero2-build;0.1-SNAPSHOT scala-tool produced in /home/epuente/playFramework/tve2024_devEnero2/project/target/resolution-cache/reports/default-tve2024_devenero2-build-scala-tool.xml[0m
-[0m[[0mdebug[0m] [0m	resolve done (31035ms resolve - 33ms download)[0m
+[0m[[0mdebug[0m] [0m	resolve done (36208ms resolve - 38ms download)[0m
 [0m[[0minfo[0m] [0mDone updating.[0m
