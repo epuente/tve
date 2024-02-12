@@ -16,6 +16,7 @@ import views.html.catalogos.Sala.createForm;
 import views.html.catalogos.Sala.editForm;
 import views.html.catalogos.Sala.list;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -147,7 +148,31 @@ System.out.println(forma);
 	
         flash("success", "Se agregó la sala "+forma.get().descripcion);
         return list();   	
-    }   
+    }
+
+
+	public static Result save2(){
+		System.out.println("\n\n\n\ndesde AdminSalaController.update2....");
+		JsonNode json = request().body().asJson();
+		ObjectMapper mapper = new ObjectMapper();
+		System.out.println(json);
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+		mapper.setDateFormat(df);
+
+
+		try {
+			Sala sala = mapper.readValue(json.traverse(), Sala.class);
+			sala.save();
+		} catch (IOException e) {
+			System.out.println("ERRRRROR "+e.getMessage());
+			throw new RuntimeException(e);
+		}
+
+		return ok("{\"estado\":\"creado\"}");
+
+
+	}
+
     
     
     public static Result edit(Long id) {

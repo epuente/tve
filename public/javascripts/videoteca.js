@@ -18,7 +18,6 @@ function agregaJSON(){
     console.log(" - agregaJSON -")
 
 
-
         var aux4 = valoresCreditos2();
         $("#txtLosCreditos").val(   aux4   );
         $("#txaTimeLine").val(JSON.stringify(valoresTimeLine()));
@@ -27,6 +26,13 @@ function agregaJSON(){
         var msgError="";
         //console.clear()
         console.log("has-error:"+  $("div.has-error").length)
+
+
+        return false;
+
+        if ($("form[name='frmVTK']").attr("data-modo")=="edicion"){
+            $("#id").val(  $("#id").val()   );
+        }
 
         var $uf = LlamadaAjax("/vtkBuscaFolio", "POST", JSON.stringify( {"folio":$("#folio").val()}));
         var $ui = LlamadaAjax("/vtkBuscaClaveID", "POST", JSON.stringify( {"id":$("#clave").val()}));

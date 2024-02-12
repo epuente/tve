@@ -105,6 +105,10 @@ GET     /accesoriosDTSS                     controllers.AdminAccesorioController
 GET     /salas                            	controllers.AdminSalaController.list()
 GET     /sala/create                      	controllers.AdminSalaController.create()
 POST    /sala/save                        	controllers.AdminSalaController.save()
+
+POST    /sala/save2                        	controllers.AdminSalaController.save2()
+
+
 GET     /sala/:id                         	controllers.AdminSalaController.edit(id:Long)
 #POST    /sala/update/:id                  		controllers.AdminSalaController.update(id:Long)
 POST    /salaupdate                  		controllers.AdminSalaController.update()
@@ -328,3 +332,7 @@ POST    /cambioMiCuenta                     controllers.UsuarioController.cambio
 
 GET     /vacio                              controllers.Application.vacio()
 
+GET     /pruebaEncrypt                      controllers.AdminCorreoController.pruebaEncrypt()
+
+GET     /productorVideoteca                 controllers.ProductorVideotecaController.list()
+GET     /productorVideotecaListDTSS                 controllers.ProductorVideotecaController.listDTSS()

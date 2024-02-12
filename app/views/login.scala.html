@@ -76,8 +76,9 @@
 							<input type="text" class="form-control" placeholder="Nombre de usuario" required autofocus id="usuario" autocomplete="username">
 							<br>
 							<input type="password" class="form-control"	placeholder="Clave de acceso" required id="password" autocomplete="current-password">
-							<div id="msgLogin" style="visibility: hidden; padding:10px;">Mensajes</div>
+							<div id="msgLogin" style="visibility: hidden; padding:10px; font-size:1.5em;">Mensajes</div>
 							<input type="submit" class="btn btn-lg btn-primary btn-block" value="Iniciar sesión" id="btnLogin" />
+
 						}
 
 						@if(models.Ctacorreo.hayCtaActiva()==true){
@@ -113,7 +114,7 @@
 			$l = LlamadaAjax("@routes.Application.autentica()", "POST", JSON.stringify({usuario: $("#usuario").val(),   password: $("#password").val()}));
 			$.when($l).done(function(data){
 				if (data==null){
-					$('#msgLogin').html( "Usuario y/o password no válidos." ).addClass("error").css('visibility', 'visible');
+					$('#msgLogin').html( "Usuario y/o password no válidos" ).addClass("error").css('visibility', 'visible');
 					return false;
 				} else {
 						$('#msgLogin').html( "Acceso correcto." ).addClass("correcto").css('visibility', 'visible');
@@ -263,4 +264,7 @@
 <script src="@routes.Assets.at("sweetalert2/sweetalert2.js")" nonce="@session.get("nonce")"></script>
 <script src="@routes.Assets.at("javascripts/async.js")" nonce="@session.get("nonce")"></script>
 <script src="@routes.Assets.at("bootstrap-notify/bootstrap-notify.min.js")" nonce="@session.get("nonce")"></script>
+
+
+
 

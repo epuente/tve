@@ -148,6 +148,9 @@
 
 
     function leer(){
+        @if(forma.get().id!=null){
+            $("#id").val(@forma.get().id);
+        }
         @if(forma.get().unidadresponsable!=null){
             $("#unidadresponsable_id").val("@forma.get().unidadresponsable.id");
             $("#URDescripcion").val("@forma.get().unidadresponsable.nombreLargo");
@@ -293,7 +296,7 @@
             $("#calidad_video_@forma.get().calidadVideo").attr("checked", true);
         }
 
-        $("#divRegistro").append("Registro/actualización :"+moment("@forma.get().auditInsert").format("DD-MM-YY HH:mm:ss")).show();
+        $("#divRegistro").append("Registro/actualización :"+moment("@forma.get().auditInsert").format("DD-MM-YYYY HH:mm:ss")).show();
 
     }
 
@@ -389,8 +392,6 @@
 <script src="@routes.Assets.at("javascripts/videoteca.js")"></script>
 <script src="@routes.Assets.at("javascripts/videotecaUR.js")"></script>
 <script src="@routes.Assets.at("javascripts/videotecaSerie.js")"></script>
-<script src="@routes.Assets.at("javascripts/videotecaProduccion.js")"></script>
-<script src="@routes.Assets.at("javascripts/videotecaAreaTematica.js")"></script>
 <script src="@routes.Assets.at("javascripts/imask.js")"></script>
 
 

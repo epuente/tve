@@ -34,16 +34,22 @@ $("#forma").submit(function(event){
 	$("input[name='auxRoles[]']").parent().find(".with-errors").html("");
 	$("input[name='auxRoles[]']").parent().removeClass("has-error");
 
+
+	// El número de empleado es obligatorio
+    if (!$("#numEmpleado").val()){
+
+    }
+
 	//¿ya existe el número de empleado?
 	var $d = LlamadaAjax("/ajaxEsNumEmpleadoDuplicado","post", JSON.stringify({ numero: $("#numEmpleado").val()}) );
-	$.when($d).done(function(data){	
+	$.when($d).done(function(data){
 		if (data.duplicado){
 			msj="El numero de empleado ya esta registrado";
-			mensaje+=mensaje+"<br>";	
-			$("#numEmpleado").closest("div.form-group").find("div.help-block").html("Es número de empleado ya existe");
+			mensaje+=mensaje+"<br>";
+			$("#numEmpleado").closest("div.form-group").find("div.help-block").html("Els número de empleado ya existe");
 			$("#numEmpleado").closest("div.form-group").addClass("has-error");
 		}
-		
+
 		//Turno y horarios requeridos para personal diferente a freelance
 		if ( $("#tipocontrato_id").val()==1 ){
 			if ($("input[name='turno']:checked").length==0){
@@ -63,22 +69,22 @@ $("#forma").submit(function(event){
 							 &&
 							(d!=""  || h!="" )
 							 ){
-						 conErrores=true;					 
+						 conErrores=true;
 						 mensajeHorarios="Al menos uno de los formatos de los horarios no es correcto o al menos una de las parejas desde/hasta no esta completa";
 						 mensaje+= mensajeHorarios+"<br>";
 					 }
 				}
 			}
 		}
-		   
-		
+
+
 		if ( $("input[name='auxRoles[]']:checked").length == 0){
 			console.log(".................")
 			console.log( $("input[name='auxRoles[]']").closest(".form-group").find("div.help-block").text() )
-			$("input[name='auxRoles[]']").closest(".form-group").find("div.help-block").html("Seleccione al menos un rol");			
+			$("input[name='auxRoles[]']").closest(".form-group").find("div.help-block").html("Seleccione al menos un rol");
 			$("#auxRoles_1").closest(".form-group").parent().toggleClass('has-danger has-error');
 			conErrores=true;
-			
+
 		} else {
 			$("input[name='auxRoles[]']").closest(".form-group").find("div.help-block").html("");
 			$("#auxRoles_1").closest(".form-group").parent().toggleClass('has-danger has-error');
@@ -93,7 +99,7 @@ $("#forma").submit(function(event){
 $('#forma').validator().off('submit');
 $('#forma').validator().on('submit', function (e) {
 	console.log("Desde forma.validator.submit")
-	  if (e.isDefaultPrevented()) {		  
+	  if (e.isDefaultPrevented()) {
 	    // handle the invalid form...
 		  console.log("Formulario con errores")
 	  } else {
@@ -113,7 +119,7 @@ $('#forma').validator().on('submit', function (e) {
 
 			// El personal de Freelance no requiere horario
 			if ( $("#tipocontrato_id").val()== "3" ||   $("#tipocontrato_id").val()== "2" ){
-				$("[id^='auxHorarios_']").attr("name","quitar");	
+				$("[id^='auxHorarios_']").attr("name","quitar");
 			} else {
 				$("[id^='auxHorarios_'][id$='_desde']").each(function(i, e){
 					//if ($(this).val()){
@@ -122,14 +128,14 @@ $('#forma').validator().on('submit', function (e) {
 						$("#auxHorarios_"+indice+"_hasta").attr("name", "horarios["+i+"].hasta");
 						$("#auxHorarios_"+indice+"_diasemana").attr("name", "horarios["+i+"].diasemana");
 					//}
-				});		
-				
+				});
+
 			}
 			// Correos
 			var indice = 0;
 			$("#divCorreos input[name='auxCorreos']").each(function(i,e){
 				if ( $(e).val().length!=0 ){
-					$(e).attr('name', 'correos['+(indice++)+'].email');					
+					$(e).attr('name', 'correos['+(indice++)+'].email');
 				}
 			});
 	  }

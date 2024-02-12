@@ -68,11 +68,14 @@
 
 
     <link rel="icon" type="image/png" href="@routes.Assets.at("images/favicon.ico")">
+    @*
     <script defer src="@routes.Assets.at("lib/font-awesome/js/all.min.js")"></script>
-
-
     <link rel="preload" href="@routes.Assets.at("lib/font-awesome/css/all.min.css")" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="@routes.Assets.at("lib/font-awesome/css/all.min.css")"></noscript>
+    *@
+    <link href="@routes.Assets.at("fontawesome/css/fontawesome.min.css")" rel="stylesheet">
+    <link href="@routes.Assets.at("fontawesome/css/solid.min.css")" rel="stylesheet">
+    <link href="@routes.Assets.at("fontawesome/css/brands.min.css")" rel="stylesheet">
 
     <!-- NProgress -->
     <link rel="preload" href="@routes.Assets.at("gentelella/vendors/nprogress/nprogress.css")"  as="style"  onload="this.onload=null;this.rel='stylesheet'">

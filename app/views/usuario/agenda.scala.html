@@ -454,7 +454,7 @@
                        		text:'Este evento es del productor '+event.productorNombre+', usted no puede modificarlo',
                        		type:"warning"
                      })
-		        	revertFunc();	
+		        	//revertFunc();
 	                return false;
 				}
 				console.log("enviando ...   event.resourceId:"+event.resourceId+"  start:"+event.start)
@@ -475,7 +475,7 @@
 					console.dir(r)
 					console.dir(r.productorDisponible)
 					if (!r.productorDisponible){
-						revertFunc();		
+						//revertFunc();
 						swal({
 							title: 'Error',
 							html:  r.error,
@@ -504,7 +504,7 @@
 		                            ,{
 		                            	type:"danger"
 		                            });  
-		                            revertFunc();
+		                            //revertFunc();
 		                    	} else {
 			                        if (data2.valido== true){
 			                        	$.when(LlamadaAjaxActualizaEvento(evento, "resize"))
@@ -536,7 +536,7 @@
 			                        	    title: "<strong>Colisiones:</strong> ",
 			                        	    message: "folios: "+data.servicios.conflictos.map(e=>{return e.numFolio+" "+e.descripcion+'</br>'})
 			                        	}, {type:'danger', showProgressbar:false});
-			                            revertFunc();
+			                            //revertFunc();
 			                        }
 		                    	}
 		                    });
@@ -789,7 +789,7 @@
 				console.dir(r)
 				console.dir(r.productorDisponible)
 				if (!r.productorDisponible){
-					revertFunc();
+					//revertFunc();
 					swal({
 						title: 'Error',
 						html:  r.error,

@@ -18,6 +18,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.validation.constraints.Size;
 
+import controllers.AdminCorreoController;
 import models.Ctacorreo;
 import play.data.validation.Constraints.MaxLength;
 
@@ -32,6 +33,9 @@ public class miCorreo2 extends Thread{
 	public Boolean enviado;
 	public String mensajeoperacion;
 
+	public Boolean passEncriptado;
+
+
 	public void enviar()  {
 		Ctacorreo cc =Ctacorreo.find.where().eq("activa", true).findUnique();
 		if (cc!=null) {
@@ -39,9 +43,8 @@ public class miCorreo2 extends Thread{
 			//this.host = "smtp.gmail.com";
 			this.de = cc.cuenta;
 			//	this.de = "eduardo.puente72@gmail.com";
-			//this.de = "tveServicios";
 			String user = cc.cuenta;
-			String pass = cc.contrasenia;
+			String pass =  this.passEncriptado==true? AdminCorreoController.decrypt(cc.contrasenia) : cc.contrasenia;
 			String puerto = cc.puerto;
 			
 			System.out.println("**********************************************************************");

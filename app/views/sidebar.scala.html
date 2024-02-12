@@ -3,192 +3,188 @@
 
 
 <!-- sidebar menu -->
-   <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-        @form(routes.ProductorServiciosController.agenda(), 'role->"form", 'id->"frmAuxMnu") {
-           @CSRF.formField
-        }
-	    <div class="btn-group" role="group">
-		    <div id="divRolesUsuario">
-		    	<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+	@form(routes.ProductorServiciosController.agenda(), 'role->"form", 'id->"frmAuxMnu") {
+	   @CSRF.formField
+	}
+	<div class="btn-group" role="group">
+		<div id="divRolesUsuario">
+			<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
 
-		    	</div>
-		    </div>
-	   </div>
+			</div>
+		</div>
+   </div>
 
 	<div class="text-center" >
-
-
-<!-- Split button -->
-<div class="btn-group">
-  <button id="btnGroupDrop1" type="button" class="btn btn-secondary">@models.Rol.find.where().eq("id",session.get("rolActual").toLong).findUnique().descripcion</button>
-  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <span class="caret"></span>
-    <span class="sr-only">Toggle Dropdown</span>
-  </button>
-  <ul class="dropdown-menu">
-   	@for(rol<-models.Personal.find.where().eq("id", session.get("usuario").toLong).findUnique().cuentas.get(0).roles){
-     	<li><a href="javascript:cambiarRol(@rol.rol.id)">@rol.rol.descripcion</a></li>
-  	}
-  </ul>
-</div>
-
+		<!-- Split button -->
+		<div class="btn-group">
+		  <button id="btnGroupDrop1" type="button" class="btn btn-secondary">@models.Rol.find.where().eq("id",session.get("rolActual").toLong).findUnique().descripcion</button>
+		  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<span class="caret"></span>
+			<span class="sr-only">Toggle Dropdown</span>
+		  </button>
+		  <ul class="dropdown-menu">
+			@for(rol<-models.Personal.find.where().eq("id", session.get("usuario").toLong).findUnique().cuentas.get(0).roles){
+				<li><a href="javascript:cambiarRol(@rol.rol.id)">@rol.rol.descripcion</a></li>
+			}
+		  </ul>
+		</div>
 	</div>
 
-       @if(session.get("rolActual").compareTo("1")==0){
-             <div class="menu_section">
-              <div class="menu_selection">
-              	<ul class="nav side-menu">
-              	    <li><a href="@routes.AdministracionController.tablero"><i class="fas fa-tachometer-alt"></i> Tablero </a></li>
+   @if(session.get("rolActual").compareTo("1")==0){
+		 <div class="menu_section">
+		  <div class="menu_selection">
+			<ul class="nav side-menu">
+				<li><a href="@routes.AdministracionController.tablero"><i class="fas fa-tachometer-alt"></i> Tablero </a></li>
 
 
-              		<li><a href="javascript:$('#frmAuxMnu').attr('action', '/productorServicios');$('#frmAuxMnu').attr('method','POST'); $('#frmAuxMnu').submit();"><i class="fas fa-table"></i> Agenda</a></li>
-	              	<li><a href="@routes.UsuarioController.misServiciosAdmin"><i class="fas fa-cogs"></i> Servicios </a></li>
+				<li><a href="javascript:$('#frmAuxMnu').attr('action', '/productorServicios');$('#frmAuxMnu').attr('method','POST'); $('#frmAuxMnu').submit();"><i class="fas fa-calendar-alt"></i> Agenda</a></li>
+				<li><a href="@routes.UsuarioController.misServiciosAdmin"><i class="fas fa-cogs"></i> Servicios </a></li>
 
 
-	                <ul class="nav side-menu">
-	                  <li><a><i class="fas fa-book"></i></i> Reportes <span class="fa fa-chevron-down"></span></a>
-	                    <ul class="nav child_menu">
-	                      <li><a href="@routes.ReporteController.sabana">Sábana</a></li>
-	                      <li>
-	                        <a href="@routes.ReporteController.list">Productor - folios</a>
-	                      </li>
+				<ul class="nav side-menu">
+				  <li><a><i class="fas fa-book"></i></i> Reportes <span class="fa-solid fa-chevron-down"></span></a>
+					<ul class="nav child_menu">
+					  <li><a href="@routes.ReporteController.sabana">Sábana</a></li>
+					  <li>
+						<a href="@routes.ReporteController.list">Productor - folios</a>
+					  </li>
 
-	                    </ul>
-	                  </li>
-	                </ul>
+					</ul>
+				  </li>
+				</ul>
 
-	                    <li><a href="@routes.AdminOficioController.list()"><i class="fas fa-file-alt"></i> Oficios</a></li>
-	              	<li><a href="@routes.AdminFolioController.list"><i class="fas fa-stamp"></i> Folios</a></li>
+					<li><a href="@routes.AdminOficioController.list()"><i class="fas fa-file-alt"></i> Oficios</a></li>
+				<li><a href="@routes.AdminFolioController.list"><i class="fas fa-stamp"></i> Folios</a></li>
 
-              	</ul>
-              </div>
-
-
-               <ul class="nav side-menu">
-                 <li><a><i class="fas fa-book"></i></i> Catálogos <span class="fa fa-chevron-down"></span></a>
-                   <ul class="nav child_menu">
-                     <li><a href="@routes.AdminUnidadResponsableController.list">Unidades responsables</a></li>
-                     <li>
-                       <a href="@routes.AdminPersonalController.list">Personal</a>
-                     </li>
-                     @*
-                     <li><a href="@routes.AdminEquipoController.list">Equipo</a></li>
-                     <li><a href="@routes.AdminAccesorioController.list">Accesorios</a></li>
-                     *@
-                     <li><a href="@routes.AdminSalaController.list">Salas</a></li>
-                     <li><a href="@routes.AdminVehiculoController.list">Vehículos</a></li>
-                     <li><a href="@routes.AdminFormatoController.list">Formatos</a></li>
-                   </ul>
-                 </li>
-               </ul>
-
-               <ul class="nav side-menu">
-                 <li><a><i class="fas fa-book"></i></i> Sistema <span class="fa fa-chevron-down"></span></a>
-                   <ul class="nav child_menu">
-                     <li><a href="@routes.AdminCorreoController.correosSalida">Correo electrónico</a></li>
-
-                   </ul>
-                 </li>
-               </ul>
-             </div>
-	   }
+			</ul>
+		  </div>
 
 
-		@* Productor *@
-		@if(session.get("rolActual").compareTo("100")==0){
-             <div class="menu_selection">
-             	<ul class="nav side-menu">
-             	     <li><a href="@routes.UsuarioController.tablero"><i class="fas fa-tachometer-alt"></i> Tablero </a></li>
-
-
-             		<li><a href="javascript:$('#frmAuxMnu').attr('action', '/productorServicios'); $('#frmAuxMnu').attr('method','POST'); $('#frmAuxMnu').submit();"><i class="far fa-calendar"></i> Agenda</a></li>
-              	<li><a href="@routes.UsuarioController.misServicios(4L,0L)"><i class="fas fa-cogs"></i> Mis servicios </a></li>
-
-             	    <li><a href="@routes.ReporteController.sabana"><i class="fas fa-tachometer-alt"></i> Sábana</a></li>
-
-             	</ul>
-             </div>
-		}
-
-		@* REsp. Digitalizado *@
-		@if(session.get("rolActual").compareTo("11")==0){
-             <div class="menu_selection">
-             	<ul class="nav side-menu">
-
-             	     <li><a href="@routes.UsuarioController.tablero"><i class="fas fa-tachometer-alt"></i> Tablero </a></li>
-
-             	@*
-             		<li><a href="javascript:$('#frmAuxMnu').attr('action', '/productorServicios'); $('#frmAuxMnu').attr('method','POST'); $('#frmAuxMnu').submit();"><i class="far fa-calendar"></i> Agenda</a></li>
-             		*@
-              	<li><a href="@routes.UsuarioController.misServicios(4L, 0L)"><i class="fas fa-cogs"></i> Mis servicios </a></li>
-
-             	    <li><a href="@routes.ReporteController.sabana"><i class="fas fa-tachometer-alt"></i> Sábana</a></li>
-
-             	</ul>
-             </div>
-		}
-
-		@* Admin. Equipo y Accesorios *@
-		@if(session.get("rolActual").compareTo("10")==0){
-             <div class="menu_selection">
-             	<ul class="nav side-menu">
-             	     <li><a href="@routes.AdminEAController.tableroEA"><i class="fas fa-tachometer-alt"></i> Tablero </a></li>
-             		<li><a href="javascript:$('#frmAuxMnu').attr('action', '/productorServicios'); $('#frmAuxMnu').attr('method','POST'); $('#frmAuxMnu').submit();"><i class="far fa-calendar"></i> Agenda</a></li>
-              		<li><a href="@routes.AdminEAController.misServicios"><i class="fas fa-cogs"></i> Mis servicios </a></li>
-             	    <li><a href="@routes.ReporteController.sabana"><i class="fas fa-tachometer-alt"></i> Sábana</a></li>
-             	</ul>
-               <ul class="nav side-menu">
-                 <li><a><i class="fas fa-book"></i></i> Catálogos <span class="fa fa-chevron-down"></span></a>
-                   <ul class="nav child_menu">
-                     <li><a href="@routes.AdminEquipoController.list">Equipo</a></li>
-                     <li><a href="@routes.AdminAccesorioController.list">Accesorios</a></li>
-                </ul>
-              </li>
-               </ul>
-             </div>
-		}
-
-	   @* Ingeniero *@
-	   @if(session.get("rolActual").compareTo("18")==0){
-	   <div class="menu_selection">
 		   <ul class="nav side-menu">
-			   <li><a href="@routes.IngenieriaController.tableroIng"><i class="fas fa-tachometer-alt"></i> Tablero </a></li>
-			   <li><a href="javascript:$('#frmAuxMnu').attr('action', '/productorServicios'); $('#frmAuxMnu').attr('method','POST'); $('#frmAuxMnu').submit();"><i class="far fa-calendar"></i> Agenda</a></li>
-			   <li><a href="@routes.IngenieriaController.misServicios"><i class="fas fa-cogs"></i> Mis servicios </a></li>
-
-			   <li><a href="@routes.ReporteController.sabana"><i class="fas fa-tachometer-alt"></i> Sábana</a></li>
-
-		   </ul>
-	   </div>
-	   }
-
-
-	   @* Operador Videoteca *@
-	   @if(session.get("rolActual").compareTo("131")==0  ||  session.get("rolActual").compareTo("132")==0 ){
-	   <div class="menu_selection">
-		   <ul class="nav side-menu">
-			   <li><a href="@routes.VideotecaController.tablero"><i class="fas fa-tachometer-alt"></i> Tablero </a></li>
-
-			   <li><a href="@routes.VideotecaController.catalogo"><i class="fas fa-table"></i> Catálogo </a></li>
-
-
-		   </ul>
-	   </div>
-	   }
-
-	   @* Supervisor de catalogadores *@
-	   @if(session.get("rolActual").compareTo("133")==0){
-		   <div class="menu_selection">
-			   <ul class="nav side-menu">
-				   <li><a href="@routes.SupCatalogadorController.tablero"><i class="fas fa-table"></i> tablero </a></li>
-				   <li><a href="@routes.SupCatalogadorController.lista"><i class="fas fa-table"></i> Catalogadores videoteca </a></li>
-				   <li><a href="@routes.SupCatalogadorController.catalogo"><i class="fas fa-table"></i> Catálogo </a></li>
+			 <li><a><i class="fas fa-book"></i></i> Catálogos <span class="fa-solid fa-chevron-down"></span></a>
+			   <ul class="nav child_menu">
+				 <li><a href="@routes.AdminUnidadResponsableController.list">Unidades responsables</a></li>
+				 <li>
+				   <a href="@routes.AdminPersonalController.list">Personal</a>
+				 </li>
+				 @*
+				 <li><a href="@routes.AdminEquipoController.list">Equipo</a></li>
+				 <li><a href="@routes.AdminAccesorioController.list">Accesorios</a></li>
+				 *@
+				 <li><a href="@routes.AdminSalaController.list">Salas</a></li>
+				 <li><a href="@routes.AdminVehiculoController.list">Vehículos</a></li>
+				 <li><a href="@routes.AdminFormatoController.list">Formatos</a></li>
 			   </ul>
-		   </div>
-	   }
+			 </li>
+		   </ul>
+
+		   <ul class="nav side-menu">
+			 <li><a><i class="fas fa-book"></i></i> Sistema <span class="fa-solid fa-chevron-down"></span></a>
+			   <ul class="nav child_menu">
+				 <li><a href="@routes.AdminCorreoController.correosSalida">Correo electrónico</a></li>
+
+			   </ul>
+			 </li>
+		   </ul>
+		 </div>
+   }
 
 
+	@* Productor *@
+	@if(session.get("rolActual").compareTo("100")==0){
+		 <div class="menu_selection">
+			<ul class="nav side-menu">
+				<li><a href="@routes.UsuarioController.tablero"><i class="fas fa-tachometer-alt"></i> Tablero </a></li>
+				<li><a href="javascript:$('#frmAuxMnu').attr('action', '/productorServicios'); $('#frmAuxMnu').attr('method','POST'); $('#frmAuxMnu').submit();"><i class="fas fa-calendar"></i> Agenda</a></li>
+				<li><a href="@routes.UsuarioController.misServicios(4L,0L)"><i class="fas fa-cogs"></i> Mis servicios </a></li>
+				<li><a href="@routes.ReporteController.sabana"><i class="fas fa-CALENDAR-alt"></i> Sábana</a></li>
+			</ul>
+		 </div>
 
+		 <div class="menu_selection">
+				<ul class="nav side-menu">
+					<li><a href="@routes.ProductorVideotecaController.list"><i class="fas fa-images"></i> Videoteca</a></li>
+				</ul>
+		 </div>
+	}
 
+	@* REsp. Digitalizado *@
+	@if(session.get("rolActual").compareTo("11")==0){
+		 <div class="menu_selection">
+			<ul class="nav side-menu">
+
+				 <li><a href="@routes.UsuarioController.tablero"><i class="fas fa-tachometer-alt"></i> Tablero </a></li>
+
+			@*
+				<li><a href="javascript:$('#frmAuxMnu').attr('action', '/productorServicios'); $('#frmAuxMnu').attr('method','POST'); $('#frmAuxMnu').submit();"><i class="far fa-calendar-alt"></i> Agenda</a></li>
+				*@
+			<li><a href="@routes.UsuarioController.misServicios(4L, 0L)"><i class="fas fa-cogs"></i> Mis servicios </a></li>
+
+				<li><a href="@routes.ReporteController.sabana"><i class="fas fa-tachometer-alt"></i> Sábana</a></li>
+
+			</ul>
+		 </div>
+	}
+
+	@* Admin. Equipo y Accesorios *@
+	@if(session.get("rolActual").compareTo("10")==0){
+		 <div class="menu_selection">
+			<ul class="nav side-menu">
+				 <li><a href="@routes.AdminEAController.tableroEA"><i class="fas fa-tachometer-alt"></i> Tablero </a></li>
+				<li><a href="javascript:$('#frmAuxMnu').attr('action', '/productorServicios'); $('#frmAuxMnu').attr('method','POST'); $('#frmAuxMnu').submit();"><i class="far fa-calendar"></i> Agenda</a></li>
+				<li><a href="@routes.AdminEAController.misServicios"><i class="fas fa-cogs"></i> Mis servicios </a></li>
+				<li><a href="@routes.ReporteController.sabana"><i class="fas fa-tachometer-alt"></i> Sábana</a></li>
+			</ul>
+		   <ul class="nav side-menu">
+			 <li><a><i class="fas fa-book"></i></i> Catálogos <span class="fa-solid fa-chevron-down"></span></a>
+			   <ul class="nav child_menu">
+				 <li><a href="@routes.AdminEquipoController.list">Equipo</a></li>
+				 <li><a href="@routes.AdminAccesorioController.list">Accesorios</a></li>
+			</ul>
+		  </li>
+		   </ul>
+		 </div>
+	}
+
+   @* Ingeniero *@
+   @if(session.get("rolActual").compareTo("18")==0){
+   <div class="menu_selection">
+	   <ul class="nav side-menu">
+		   <li><a href="@routes.IngenieriaController.tableroIng"><i class="fas fa-tachometer-alt"></i> Tablero </a></li>
+		   <li><a href="javascript:$('#frmAuxMnu').attr('action', '/productorServicios'); $('#frmAuxMnu').attr('method','POST'); $('#frmAuxMnu').submit();"><i class="far fa-calendar"></i> Agenda</a></li>
+		   <li><a href="@routes.IngenieriaController.misServicios"><i class="fas fa-cogs"></i> Mis servicios </a></li>
+
+		   <li><a href="@routes.ReporteController.sabana"><i class="fas fa-tachometer-alt"></i> Sábana</a></li>
+
+	   </ul>
    </div>
-   <!-- /sidebar menu -->
+   }
+
+
+   @* Operador Videoteca *@
+   @if(session.get("rolActual").compareTo("131")==0  ||  session.get("rolActual").compareTo("132")==0 ){
+   <div class="menu_selection">
+	   <ul class="nav side-menu">
+		   <li><a href="@routes.VideotecaController.tablero"><i class="fas fa-tachometer-alt"></i> Tablero </a></li>
+
+		   <li><a href="@routes.VideotecaController.catalogo"><i class="fas fa-table"></i> Catálogo </a></li>
+
+
+	   </ul>
+   </div>
+   }
+
+   @* Supervisor de catalogadores *@
+   @if(session.get("rolActual").compareTo("133")==0){
+	   <div class="menu_selection">
+		   <ul class="nav side-menu">
+			   <li><a href="@routes.SupCatalogadorController.tablero"><i class="fas fa-table"></i> tablero </a></li>
+			   <li><a href="@routes.SupCatalogadorController.lista"><i class="fas fa-table"></i> Catalogadores videoteca </a></li>
+			   <li><a href="@routes.SupCatalogadorController.catalogo"><i class="fas fa-table"></i> Catálogo </a></li>
+		   </ul>
+	   </div>
+   }
+
+</div>
+<!-- /sidebar menu -->

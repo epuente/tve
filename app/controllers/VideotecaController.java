@@ -801,14 +801,10 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
         Ebean.beginTransaction();
         try {
-
-
             VtkCatalogo db = VtkCatalogo.find.byId(forma.get().id);
 
             VtkCatalogo vtk = forma.get();
             vtk.catalogador = usuarioActual;
-
-
 
             // CREDITOS
             Logger.debug("--CREDITOS--");

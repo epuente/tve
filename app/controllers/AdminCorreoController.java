@@ -5,6 +5,7 @@ import static play.data.Form.form;
 import java.util.List;
 
 import classes.Notificaciones.Notificacion;
+import org.apache.commons.codec.binary.Base64;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +17,10 @@ import models.Ctacorreo;
 import play.data.Form;
 import play.mvc.Result;
 import views.html.admin.*;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 
 public class AdminCorreoController extends ControladorSeguroAdministrador{
@@ -53,7 +58,7 @@ System.out.println(forma);
         if (x.activa) {        	
         	x.resetActiva();
         }       
-        
+
         x.save();
 		Notificacion noti = Notificacion.getInstance();
 		noti.recargar();
@@ -198,8 +203,57 @@ System.out.println(forma);
 		System.out.println(cadena);
 		return ok (  cadena );
 	}
-	
-	
+
+
+
+	private static final String key = "aesEncryptionKey";
+	private static final String initVector = "encryptionIntVec";
+	public static String encrypt(String value) {
+		try {
+			IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
+			SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+
+			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+			cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+
+			byte[] encrypted = cipher.doFinal(value.getBytes());
+			return Base64.encodeBase64String(encrypted);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+
+
+	public static String decrypt(String encrypted) {
+		try {
+			IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
+			SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+
+			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+			cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
+			byte[] original = cipher.doFinal(Base64.decodeBase64(encrypted));
+
+			return new String(original);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return null;
+	}
+
+
+
+	public static Result pruebaEncrypt(){
+		String originalString = "password";
+		System.out.println("Original String to encrypt - " + originalString);
+		String encryptedString = encrypt(originalString);
+		System.out.println("Encrypted String - " + encryptedString);
+		String decryptedString = decrypt(encryptedString);
+		System.out.println("After decryption - " + decryptedString);
+		return ok("OK");
+	}
 	
 }
 

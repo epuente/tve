@@ -132,6 +132,9 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     @Version
     public java.util.Date version;
 
+    @ManyToOne
+    public Personal validador;
+
     public static Model.Finder<Long,VtkCatalogo> find = new Model.Finder<Long,VtkCatalogo>(Long.class, VtkCatalogo.class);
 
     public static Page<VtkCatalogo> page(int page, int pageSize, String filtro, String columnaOrden, String tipoOrden) {
