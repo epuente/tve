@@ -39,3 +39,4 @@ run
 clean
 dist
 exit
+run

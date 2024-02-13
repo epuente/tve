@@ -22,7 +22,7 @@ libraryDependencies += filters
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
-play.PlayImport.PlayKeys.playDefaultPort := 9000
+play.PlayImport.PlayKeys.playDefaultPort := 8089
 
 doc in Compile <<= target.map(_ / "none")
 

@@ -28,7 +28,7 @@
 
     <h1>Agregar al catálogo de videoteca</h1>
 
-    @form(CSRF(routes.VideotecaController.save()), 'role->"form", 'id->"frmVTKCreate", 'name->"frmVTK" , Symbol("data-modo")->"creacion", 'onsubmit->"javascript:agregaJSON();" ) {
+    @form(CSRF(routes.VideotecaController.save()), 'role->"form", 'id->"frmVTKCreate", 'name->"frmVTK" , Symbol("data-modo")->"creacion" ) {
         @videotecaSecuencia3Form(forma, auxCreditos)
         <br/><br/>
         <div class="row">
@@ -36,7 +36,7 @@
                 <div style="width: 80%" class="center-block">
                     <!--input type="button" onclick="javascript:agregaJSONX()" value="Agregar" class="btn btn-primary btn-block"-->
                     <!--input type="button"  onclick="javascript:agregaJSON2()"  value="Agregar json" class="btn btn-primary btn-block"-->
-                    <input type="submit"  value="Agregar" class="btn btn-primary btn-block">
+                    <input type="button"  value="Agregar" class="btn btn-primary btn-block" id="btnAgregar">
                 </div>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -120,6 +120,18 @@
 
         // DatePicker para fecha de producción
         $('#fechaProduccion').bootstrapMaterialDatePicker
+		({
+			format: 'DD/MM/YYYY',
+			time: false,
+			lang : 'es',
+			minDate : '01/01/1995',
+			cancelText: "Cancelar",
+			okText: "Aceptar"
+		}).on("change", function(e, date){
+		});
+
+        // DatePicker para fecha de publicacion
+        $('#fechaPublicacion').bootstrapMaterialDatePicker
 		({
 			format: 'DD/MM/YYYY',
 			time: false,

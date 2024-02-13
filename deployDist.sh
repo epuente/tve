@@ -5,14 +5,14 @@ fi
 rm -r target
 sbt clean dist
 dir="dist"
-rcp target/universal/tve2024-0.0.1-SNAPSHOT.zip eduardo@148.204.111.26:/home/eduardo/tve/$dir
+rcp target/universal/tve2024-0.0.2-SNAPSHOT.zip eduardo@148.204.111.26:/home/eduardo/tve/$dir
 ssh eduardo@148.204.111.26 '
 cd tve/dist;
 pwd;
-chmod a+x tve2024-0.0.1-SNAPSHOT.zip;
-unzip tve2024-0.0.1-SNAPSHOT.zip;'
-rcp iniciar.sh eduardo@148.204.111.26:/home/eduardo/tve/$dir/tve2024-0.0.1-SNAPSHOT
-rcp actualizarCertificado.sh eduardo@148.204.111.26:/home/eduardo/tve/$dir/tve2024-0.0.1-SNAPSHOT
+chmod a+x tve2024-0.0.2-SNAPSHOT.zip;
+unzip tve2024-0.0.2-SNAPSHOT.zip;'
+rcp iniciar.sh eduardo@148.204.111.26:/home/eduardo/tve/$dir/tve2024-0.0.2-SNAPSHOT
+#rcp actualizarCertificado.sh eduardo@148.204.111.26:/home/eduardo/tve/$dir/tve2024-0.0.2-SNAPSHOT
 #ssh -t eduardo@148.204.111.26 'cd tve/dist3/tve2023-0.0.1-SNAPSHOT/; sh actualizarCertificado.sh;'
 
 

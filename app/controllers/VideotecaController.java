@@ -20,10 +20,7 @@ import play.mvc.Result;
 import views.html.videoteca.createForm3;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -1256,18 +1253,24 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
 
     public static Result buscaFolio() throws JSONException {
+        List<String> excepciones = Arrays.asList("s/n");
         JsonNode json = request().body().asJson();
         JSONObject jo = new JSONObject();
-        jo.put("estado", "error");
         String f = json.findValue("folio").asText();
-        Logger.debug("Buscando folio:"+f);
-        VtkCatalogo c = VtkCatalogo.find.where().eq("folio", f).findUnique();
-        if (c==null){
-            jo.put("estado", "correcto");
-        } else
-            jo.put("id", c.id);
 
-        return ok ( jo.toString()  );
+        // El único número de folio que se permite repetido es S/N
+        if (excepciones.stream().noneMatch(str -> str.equals(  f.toUpperCase()  ))) {
+            return ok ( "{\"estado\":\"correcto\"}"  );
+        } else {
+            Logger.debug("Buscando folio:"+f);
+            VtkCatalogo c = VtkCatalogo.find.where().eq("folio", f).findUnique();
+            if (c==null){
+                jo.put("estado", "correcto");
+            } else
+                jo.put("id", c.id);
+
+            return ok ( jo.toString()  );
+        }
     }
 
     public static Result buscaClaveID() throws JSONException {
@@ -1287,6 +1290,10 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         Logger.debug(jo.toString());
         return ok ( jo.toString()  );
     }
+
+
+
+
 
     public static Result manual(){
         Form<VtkCatalogo> forma = play.data.Form.form(VtkCatalogo.class);

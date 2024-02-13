@@ -26,14 +26,14 @@
 
     <h1>Edición del catálogo de videoteca</h1>
 
-    @form(CSRF(routes.VideotecaController.update()), 'role->"form",'id->"frmVideoteca", 'name->"frmVTK", Symbol("data-modo")->"edicion", 'onsubmit->"javascript:agregaJSON();"){
+    @form(CSRF(routes.VideotecaController.update()), 'role->"form",'id->"frmVideoteca", 'name->"frmVTK", Symbol("data-modo")->"edicion"){
         @videotecaSecuencia3Form(forma, auxCreditos)
         <input type="hidden" name="id" id="id" value="@id">
         <br/><br/>
         <div class="row">
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                 <div style="width: 80%" class="center-block">
-                    <input type="submit" value="Actualizar" class="btn btn-primary btn-block">
+                    <input type="BUTTON" value="Actualizar" class="btn btn-primary btn-block" id="btnActualizar">
                 </div>
             </div>
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
@@ -73,6 +73,31 @@
             console.log("desde acaaaa")
             texto = $(this).val();
         });
+
+        // DatePicker para fecha de producción
+        $('#fechaProduccion').bootstrapMaterialDatePicker
+		({
+			format: 'DD/MM/YYYY',
+			time: false,
+			lang : 'es',
+			minDate : '01/01/1995',
+			cancelText: "Cancelar",
+			okText: "Aceptar"
+		}).on("change", function(e, date){
+		});
+
+        // DatePicker para fecha de publicacion
+        $('#fechaPublicacion').bootstrapMaterialDatePicker
+		({
+			format: 'DD/MM/YYYY',
+			time: false,
+			lang : 'es',
+			minDate : '01/01/1995',
+			cancelText: "Cancelar",
+			okText: "Aceptar"
+		}).on("change", function(e, date){
+		});
+
 
         $("#formato_id label").each(function(i, e){
             $(e).after("<br>");
@@ -170,6 +195,7 @@
         $("#duracionStr").val("@cDuracion.cadena()");
 
         $("#fecha_produccion").val(   "@forma.get().fechaProduccion" );
+        $("#fecha_publicacion").val(   "@forma.get().fechaPublicacion" );
 
         // Evento (  Servicio en la DB  )
         @if(forma.get().eventos.length>0){
@@ -394,6 +420,11 @@
 <script src="@routes.Assets.at("javascripts/videotecaSerie.js")"></script>
 <script src="@routes.Assets.at("javascripts/imask.js")"></script>
 
+<script type="text/javascript" src="https://momentjs.com/downloads/moment-with-locales.js"></script>
 
+<script type="text/javascript" src="@routes.Assets.at("bootstrap-material-datetimepicker-gh-pages/js/bootstrap-material-datetimepicker.js")" nonce="@session.get("nonce")"></script>
+<link rel="stylesheet" href="@routes.Assets.at("bootstrap-material-datetimepicker-gh-pages/css/bootstrap-material-datetimepicker.css")" nonce="@session.get("nonce")"/>
+<link rel="stylesheet" href="@routes.Assets.at("bootstrap-material-datetimepicker-gh-pages/css/googleApisMaterial.css")" nonce="@session.get("nonce")"/>
+<link rel="stylesheet" href="@routes.Assets.at("bootstrap-material-datetimepicker-gh-pages/css/googleApisRoboto.css")" nonce="@session.get("nonce")"/>
 
 

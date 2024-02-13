@@ -1,0 +1,3 @@
+alter table vtk_catalogo add COLUMN IF NOT exists validador_id int8 null;
+alter table vtk_catalogo add constraint fk_vtk_catalogo_validador_157 FOREIGN KEY (validador_id) REFERENCES public.personal(id);
+CREATE INDEX ix_vtk_catalogo_validador_157 ON public.vtk_catalogo USING btree (validador_id);

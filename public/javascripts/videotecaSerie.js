@@ -52,24 +52,40 @@ function abrirSeries(){
 
 $(document).off("click","#btnNuevaSerie");
 $(document).on("click","#btnNuevaSerie", function(e){
-    const excepcionesSerie=["especiales", "espesiales", "espeziales", "especialez", "espesialez", "espezialez",
-                            "ezpeciales", "ezpesiales", "ezpeziales", "ezpecialez", "ezpesialez",
-                            "especial", "espesial", "espezial",
-                            "ezpecial", "ezpesial", "ezpezial"];
-
+    const excepcionesSerieER=[/especiales/, /espesiales/, /espeziales/, /especialez/, /espesialez/, /espezialez/, /ezpezialez/,
+                                                          /ezpeciales/, /ezpesiales/, /ezpeziales/, /ezpecialez/, /ezpesialez/,
+                                                          /especial/, /espesial/, /espezial/,
+                                                          /ezpecial/, /ezpesial/, /ezpezial/];
+    var coincide = false;
     console.log("abc")
     e.preventDefault();
-    var laNueva = $("#serieDescripcion").val();
-    if ( excepcionesSerie.includes(laNueva.trim().toLowerCase())){
+    var laNueva = $("#serieDescripcion").val().trim().toLowerCase();
+    excepcionesSerieER.forEach(expresion => {
+        //coincide = coincide && expresion.test(laNueva);
+
+          if (expresion.test(laNueva)) {
+            console.log("La expresión regular coincide con la cadena."+ laNueva.match(expresion));
+            coincide = coincide || true;
+          } else {
+            console.log("La expresión regular no coincide con la cadena.");
+            coincide = coincide || false;
+          }
+
+    });
+
+    console.log("COINCIDE "+coincide)
+
+
+    if (coincide){
         swal({
               title:  'Aviso',
               html:  'El nombre para la serie que desea agregar (<strong>'+laNueva+'</strong>) no es aceptado.<br><br>Sea más descriptivo en cuanto a la naturaleza de la serie.',
               type:  'warning',
               confirmButtonText: "Aceptar"
           });
-          $("#serieDescripcion").focus();
           return false;
     }
+
 
 
     $("#divBusqueda, #divCoincidencias, #msgCoincidencias").show();
@@ -116,6 +132,19 @@ $(document).on("click","#btnNuevaSerie", function(e){
         }
     });
 });
+
+
+function excepcionSerie(mensaje){
+        swal({
+              title:  'Aviso',
+              html:  'El nombre para la serie que desea agregar (<strong>'+mensaje+'</strong>) no es aceptado.<br><br>Sea más descriptivo en cuanto a la naturaleza de la serie.',
+              type:  'warning',
+              confirmButtonText: "Aceptar"
+          });
+          $("#serieDescripcion").focus();
+          return false;
+}
+
 
 // Cuando se da click a un elemento de la lista de coincidencias de serie
 function seleccionaSerie(id, texto){
