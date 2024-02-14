@@ -1251,29 +1251,6 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         }
     }
 
-
-    public static Result buscaFolio() throws JSONException {
-        List<String> excepciones = Arrays.asList("s/n");
-        JsonNode json = request().body().asJson();
-        JSONObject jo = new JSONObject();
-        String f = json.findValue("folio").asText();
-        // El único número de folio que se permite repetido es S/N
-        if (  f.toUpperCase().compareTo("S/N")==0 ) {
-            return ok ( "{\"estado\":\"correcto\"}"  );
-        } else {
-            Logger.debug("Buscando folio:"+f);
-            VtkCatalogo c = VtkCatalogo.find.where().eq("folio", f).findUnique();
-            if (c==null){
-                jo.put("estado", "correcto");
-            } else {
-                jo.put("estado", "existente");
-                jo.put("id", c.id);
-                jo.put("clave", c.clave);
-            }
-            return ok ( jo.toString()  );
-        }
-    }
-
     public static Result buscaClaveID() throws JSONException {
         JsonNode json = request().body().asJson();
         JSONObject jo = new JSONObject();

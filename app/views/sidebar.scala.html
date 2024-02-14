@@ -31,6 +31,7 @@
 		</div>
 	</div>
 
+	@* Administrador *@
    @if(session.get("rolActual").compareTo("1")==0){
 		 <div class="menu_section">
 		  <div class="menu_selection">
@@ -101,7 +102,6 @@
 				<li><a href="@routes.ReporteController.sabana"><i class="fas fa-CALENDAR-alt"></i> Sábana</a></li>
 			</ul>
 		 </div>
-
 		 <div class="menu_selection">
 				<ul class="nav side-menu">
 					<li><a href="@routes.ProductorVideotecaController.list"><i class="fas fa-images"></i> Videoteca</a></li>

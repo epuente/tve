@@ -33,21 +33,16 @@ $("#btnActualizar, #btnAgregar").click(function(e){
         }
 //return false;
         // Validar que folio sea único (con excepcion de S/N)
-        var $uf = LlamadaAjax("/vtkBuscaFolio", "POST", JSON.stringify( {"folio":$("#folio").val()}));
+        //var $uf = LlamadaAjax("/vtkBuscaFolio", "POST", JSON.stringify( {"folio":$("#folio").val()}));
         // Validar que clave (ID) sea única
         var $ui = LlamadaAjax("/vtkBuscaClaveID", "POST", JSON.stringify( {"id":$("#clave").val()}));
         // Evitar que la sinopsis y el título sean iguales
         var tituloSinopsis = $("#titulo").val().trim().toUpperCase() == $("#sinopsis").val().trim().toUpperCase();
 
-        $.when( $uf, $ui ).done(function(dataf, datai){
+        $.when( $ui ).done(function(datai){
             console.log("DOS")
-            console.dir(dataf)
             console.dir(datai)
 
-            if ($("#folio").val().length!=0 && dataf.estado!="correcto"   && dataf.id !=  parseInt($("#id").val())){
-                msgError+="El folio ya esta registrado.<br>";
-               $("#folio").closest("div.form-group").addClass("has-error has-danger");
-            }
             if (datai.estado!="correcto" && datai.id !=  parseInt($("#id").val())){
                 msgError+="El ID ya esta registrado.<br>";
                 $("#clave").closest("div.form-group").addClass("has-error has-danger");
@@ -448,59 +443,6 @@ function segundosACadena(seconds) {
   var second = seconds % 60;
   second = (second < 10)? '0' + second : second;
   return hour + ':' + minute + ':' + second;
-}
-
-$("#folio").blur(function(e){
-    console.log("   "+$(this).val())
-    if (  $(this).val().length!=0 ){
-        var $u = LlamadaAjax("/vtkBuscaFolio", "POST", JSON.stringify( {"folio":$(this).val()}));
-        $.when($u).done(function(data){
-            console.dir(data)
-            var modo=$("form[name='frmVTK']").attr("data-modo");
-            console.log("modo:"+modo)
-            console.log(modo.localeCompare("creacion"))
-            console.log(modo.localeCompare("edicion"))
-            console.log("id vformulario:"+$("#id").val())
-            console.log("data.id:"+data.id)
-
-            console.log("---- "+data.id != $("#id").val())
-
-
-            var idCatalogo = parseInt( $("#id").val() );
-console.log("idCatalogo:"+idCatalogo)
-            console.log(  typeof data.id )
-            console.log(  typeof $("#id").val() )
-
-            console.log("--- "+  (data.id != idCatalogo) )
-
-            console.log(data.estado)
-            console.log(data.estado=="correcto")
-
-            if (data.estado=="existente"){
-                console.log("1")
-                console.log(modo)
-
-                console.log("creacion:"+modo=="creacion")
-                console.log("edicion:"+modo=="edicion")
-                console.log("data.id:"+data.id)
-                console.log("idCatalogo:"+idCatalogo)
-                var msg="";
-                if ( modo=="creacion"     ||   (modo=="edicion") && (data.id != idCatalogo )   ){
-                    muestraSWAL("<br><br>El folio está asignado al ID "+data.clave);
-                    }
-            }
-        });
-    }
-});
-
-function muestraSWAL(msg){
-                        swal({
-                                title: "Advertencia",
-                                html: "El número de folio dp ya esta registrado<br><br>No se permite registrar mas de una vez el mismo folio."+msg,
-                                type: "warning",
-                                showConfirmButton: true,
-                                confirmButtonText: "Aceptar"
-                        });
 }
 
 

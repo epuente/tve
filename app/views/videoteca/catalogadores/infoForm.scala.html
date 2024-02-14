@@ -91,8 +91,10 @@
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Disponibilidad</div> @if(forma.get().disponibilidad!=null){@forma.get().disponibilidad.descripcion}</div>
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Área temática</div>
                     @for(at<-forma.get().areastematicas){
-                        <span class="bloque">@at.areatematica.descripcion</span>
-                        @if(at.areatematica.id==999 && forma.get().areaTematicaOtra!=null){<span class="bloque">@forma.get().areaTematicaOtra</span>}
+                        @if(at.areatematica!=null){
+                            <span class="bloque">@at.areatematica.descripcion</span>
+                            @if(at.areatematica.id==999 && forma.get().areaTematicaOtra!=null){<span class="bloque">@forma.get().areaTematicaOtra</span>}
+                    }
                     }
                 </div>
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Formato</div> @forma.get().formato.descripcion</div>
