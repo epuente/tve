@@ -1,5 +1,5 @@
 name := """tve2024"""
-version := "0.0.2-SNAPSHOT"
+version := "0.0.3-SNAPSHOT"
 scalaVersion := "2.11.4"
 //sbt.version=0.13.7
 libraryDependencies ++= Seq(
