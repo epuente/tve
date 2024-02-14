@@ -1,0 +1,11 @@
+PARA USAR LA DB REMOTA DESDE EL PROYECTO LOCAL.
+===============================================0
+
+En el equipo local establecer el tunel con:
+
+$ ssh -L 1111:localhost:5432 eduardo@148.204.111.26
+
+En el archivo de configuración del proyecto (conf/application.conf) agregar el puerto 1111
+db.default.url="jdbc:pgsql://localhost:1111/tveservicios?protocol.message.size.max=500000000"
+
+

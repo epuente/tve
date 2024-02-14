@@ -326,6 +326,11 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
         return ok( views.html.videoteca.catalogadores.tablero.render());
     }
 
+    public static Result tablero2(){
+        Logger.debug("desde SupCatalogadorController.tablero");
+        return ok( views.html.videoteca.catalogadores.tablero2.render());
+    }
+
     public static Result ajaxTablero() throws JSONException {
         Logger.debug("Desde SupCatalogadorController.ajaxTablero");
         JSONObject retorno = new JSONObject();

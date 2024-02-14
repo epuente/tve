@@ -1257,18 +1257,18 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         JsonNode json = request().body().asJson();
         JSONObject jo = new JSONObject();
         String f = json.findValue("folio").asText();
-
         // El único número de folio que se permite repetido es S/N
-        if (excepciones.stream().noneMatch(str -> str.equals(  f.toUpperCase()  ))) {
+        if (  f.toUpperCase().compareTo("S/N")==0 ) {
             return ok ( "{\"estado\":\"correcto\"}"  );
         } else {
             Logger.debug("Buscando folio:"+f);
             VtkCatalogo c = VtkCatalogo.find.where().eq("folio", f).findUnique();
             if (c==null){
                 jo.put("estado", "correcto");
-            } else
+            } else {
+                jo.put("estado", "existente");
                 jo.put("id", c.id);
-
+            }
             return ok ( jo.toString()  );
         }
     }

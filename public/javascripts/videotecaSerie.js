@@ -74,12 +74,12 @@ $(document).on("click","#btnNuevaSerie", function(e){
     });
 
     console.log("COINCIDE "+coincide)
-
+    e.preventDefault();
 
     if (coincide){
         swal({
               title:  'Aviso',
-              html:  'El nombre para la serie que desea agregar (<strong>'+laNueva+'</strong>) no es aceptado.<br><br>Sea más descriptivo en cuanto a la naturaleza de la serie.',
+              html:  'El nombre para la serie que desea agregar (<strong>'+laNueva+'</strong>) no es aceptado.<br><br>No se acepta <b>especial</b> ni <b>especiales</b>.<br><br>Sea más descriptivo en cuanto a la naturaleza de la serie.',
               type:  'warning',
               confirmButtonText: "Aceptar"
           });
@@ -134,16 +134,7 @@ $(document).on("click","#btnNuevaSerie", function(e){
 });
 
 
-function excepcionSerie(mensaje){
-        swal({
-              title:  'Aviso',
-              html:  'El nombre para la serie que desea agregar (<strong>'+mensaje+'</strong>) no es aceptado.<br><br>Sea más descriptivo en cuanto a la naturaleza de la serie.',
-              type:  'warning',
-              confirmButtonText: "Aceptar"
-          });
-          $("#serieDescripcion").focus();
-          return false;
-}
+
 
 
 // Cuando se da click a un elemento de la lista de coincidencias de serie

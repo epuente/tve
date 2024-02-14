@@ -316,6 +316,7 @@ POST    /supervisor/catalogadoresDelete     controllers.SupCatalogadorController
 POST    /supervisor/toggleActivo            controllers.SupCatalogadorController.toggleActivo()
 
 GET     /supervisor/tablero                 controllers.SupCatalogadorController.tablero()
+GET     /supervisor/tablero2                 controllers.SupCatalogadorController.tablero2()
 POST    /supervisor/ajaxTablero             controllers.SupCatalogadorController.ajaxTablero()
 GET     /catalogoSup                        controllers.SupCatalogadorController.catalogo()
 GET     /vtkCatalogoDTSSSup                 controllers.SupCatalogadorController.catalogoDTSS()

@@ -14,6 +14,9 @@
     <meta http-equiv="pragma" content="no-cache" />
     <title>TVEducativa | Inicio</title>
 
+
+
+
     <style nonce="@session.get("nonce")">
         dl {
           margin-top: 0;
@@ -65,6 +68,26 @@
            margin: -15% 0 0 -25%;
         }
     </style>
+
+    <!-- jQuery -->
+    <script src="@routes.Assets.at("gentelella/vendors/jquery/dist/jquery.min.js")"  nonce="@session.get("nonce")"></script>
+    <!-- Bootstrap -->
+    <script src="@routes.Assets.at("gentelella/vendors/bootstrap/dist/js/bootstrap.min.js")" nonce="@session.get("nonce")"></script>
+
+    <!-- FastClick -->
+    <script src="@routes.Assets.at("gentelella/vendors/fastclick/lib/fastclick.js")" nonce="@session.get("nonce")"></script>
+    <!-- NProgress -->
+    <script src="@routes.Assets.at("gentelella/vendors/nprogress/nprogress.js")" nonce="@session.get("nonce")"></script>
+    <script src="@routes.Assets.at("sweetalert2/sweetalert2.js")" nonce="@session.get("nonce")"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="@routes.Assets.at("gentelella/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js")" nonce="@session.get("nonce")"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="@routes.Assets.at("gentelella/build/js/custom.js")" nonce="@session.get("nonce")"></script>
+    <script src="@routes.Assets.at("javascripts/validator.min.js")" nonce="@session.get("nonce")"></script>
+    <script src="@routes.Assets.at("javascripts/jquery.fullscreen.min.js")" nonce="@session.get("nonce")"></script>
+    <script src="@routes.Assets.at("javascripts/sidebar.js")" nonce="@session.get("nonce")"></script>
+    <script src="@routes.Assets.at("javascripts/async.js")" nonce="@session.get("nonce")"></script>
+    <script src="@routes.Assets.at("lib/moment/moment.js")" type="text/javascript" nonce="@session.get("nonce")"></script>
 
 
     <link rel="icon" type="image/png" href="@routes.Assets.at("images/favicon.ico")">
@@ -257,25 +280,7 @@
 
 
 
-<!-- jQuery -->
-<script src="@routes.Assets.at("gentelella/vendors/jquery/dist/jquery.min.js")"  nonce="@session.get("nonce")"></script>
-<!-- Bootstrap -->
-<script src="@routes.Assets.at("gentelella/vendors/bootstrap/dist/js/bootstrap.min.js")" nonce="@session.get("nonce")"></script>
 
-<!-- FastClick -->
-<script src="@routes.Assets.at("gentelella/vendors/fastclick/lib/fastclick.js")" nonce="@session.get("nonce")"></script>
-<!-- NProgress -->
-<script src="@routes.Assets.at("gentelella/vendors/nprogress/nprogress.js")" nonce="@session.get("nonce")"></script>
-<script src="@routes.Assets.at("sweetalert2/sweetalert2.js")" nonce="@session.get("nonce")"></script>
-<!-- bootstrap-progressbar -->
-<script src="@routes.Assets.at("gentelella/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js")" nonce="@session.get("nonce")"></script>
-<!-- Custom Theme Scripts -->
-<script src="@routes.Assets.at("gentelella/build/js/custom.js")" nonce="@session.get("nonce")"></script>
-<script src="@routes.Assets.at("javascripts/validator.min.js")" nonce="@session.get("nonce")"></script>
-<script src="@routes.Assets.at("javascripts/jquery.fullscreen.min.js")" nonce="@session.get("nonce")"></script>
-<script src="@routes.Assets.at("javascripts/sidebar.js")" nonce="@session.get("nonce")"></script>
-<script src="@routes.Assets.at("javascripts/async.js")" nonce="@session.get("nonce")"></script>
-<script src="@routes.Assets.at("lib/moment/moment.js")" type="text/javascript" nonce="@session.get("nonce")"></script>
 </body>
 </html>
 
