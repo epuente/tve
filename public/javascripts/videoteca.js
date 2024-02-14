@@ -462,33 +462,47 @@ $("#folio").blur(function(e){
             console.log(modo.localeCompare("edicion"))
             console.log("id vformulario:"+$("#id").val())
             console.log("data.id:"+data.id)
+
             console.log("---- "+data.id != $("#id").val())
 
-            var idCatalogo = parseInt( $("#id").val() );
 
+            var idCatalogo = parseInt( $("#id").val() );
+console.log("idCatalogo:"+idCatalogo)
             console.log(  typeof data.id )
             console.log(  typeof $("#id").val() )
 
             console.log("--- "+  (data.id != idCatalogo) )
-            if (data.estado.localeCompare("correcto")!=0){
-                if ( modo.localeCompare("creacion")==0){
-                    var msg="";
-                    if (modo.localeCompare("edicion")==0  && (data.id != idCatalogo ) )
-                        msg="<br><br>El folio está asignado al ID "+data.clave;
-                    swal({
-                            title: "Advertencia",
-                            html: "El número de folio dp ya esta registrado<br><br>No se permite registrar mas de una vez el mismo folio."+msg,
-                            type: "warning",
-                            showConfirmButton: true,
-                            confirmButtonText: "Aceptar"
-                    });
-                    return false;
-                }
-            }
 
+            console.log(data.estado)
+            console.log(data.estado=="correcto")
+
+            if (data.estado=="existente"){
+                console.log("1")
+                console.log(modo)
+
+                console.log("creacion:"+modo=="creacion")
+                console.log("edicion:"+modo=="edicion")
+                console.log("data.id:"+data.id)
+                console.log("idCatalogo:"+idCatalogo)
+                var msg="";
+                if ( modo=="creacion"     ||   (modo=="edicion") && (data.id != idCatalogo )   ){
+                    muestraSWAL("<br><br>El folio está asignado al ID "+data.clave);
+                    }
+            }
         });
     }
 });
+
+function muestraSWAL(msg){
+                        swal({
+                                title: "Advertencia",
+                                html: "El número de folio dp ya esta registrado<br><br>No se permite registrar mas de una vez el mismo folio."+msg,
+                                type: "warning",
+                                showConfirmButton: true,
+                                confirmButtonText: "Aceptar"
+                        });
+}
+
 
 $("#clave").blur(function(e){
     console.log("   "+$(this).val())

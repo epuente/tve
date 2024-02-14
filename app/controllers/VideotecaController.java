@@ -1268,6 +1268,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             } else {
                 jo.put("estado", "existente");
                 jo.put("id", c.id);
+                jo.put("clave", c.clave);
             }
             return ok ( jo.toString()  );
         }
