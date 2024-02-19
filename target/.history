@@ -1,2 +1,12 @@
 run
-exit
+run 
+run
+clean
+reload
+compile
+run
+reload
+compile
+run
+reload
+run

@@ -562,27 +562,16 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
         Ebean.beginTransaction();
         try {
-
-
             if (forma.hasErrors()) {
                 return badRequest(createForm3.render(forma, TipoCredito.find.all(), VtkCampo.find.all()));
             }
-
-
             //VtkCatalogo vtk = forma.get();
-
             VtkCatalogo vtk = losDatos(forma, fd);
-
             System.out.println("Despues de losDatos");
-
             vtk.eventos.removeIf(r -> r.servicio == null);
             vtk.niveles.removeIf(r -> r.nivel == null);
             vtk.timeline.clear();
-
             //
-
-
-
             System.out.println("Antes de save");
             Ebean.save(vtk);
             System.out.println("Despues de save");
@@ -653,8 +642,6 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
             vtk.timeline.forEach(tm->System.out.println("- - - -Desde "+tm.desde+" "+tm.hasta+" "+tm.personaje.nombre));
 
-            if (1!=1)
-                throw new RuntimeException("mi excepcion");
 
             //vtk.update();
             Ebean.update(vtk);

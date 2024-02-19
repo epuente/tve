@@ -20,6 +20,10 @@ public class Encabezados  extends Action.Simple {
 		url = conf.getString("urlProduccion");
 
 
+		//ctx.response().setHeader("Set-Cookie", String.format("%s; %s", "PLAY_SESSION", "SameSite=Strict"));
+
+
+
 		ctx.response().setHeader("Referrer-Policy", "same-origin");
 		ctx.response().setHeader("Strict-Transport-Security", "max-age=31536000");
 		ctx.response().setHeader("X-Frame-Options", "sameorigin");

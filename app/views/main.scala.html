@@ -14,80 +14,57 @@
     <meta http-equiv="pragma" content="no-cache" />
     <title>TVEducativa | Inicio</title>
 
-
-
-
     <style nonce="@session.get("nonce")">
         dl {
-          margin-top: 0;
-          margin-bottom: 0px;
+        margin-top: 0;
+        margin-bottom: 0px;
         }
         .swal2-popup {
-          font-size: 1.6rem !important;
+        font-size: 1.6rem !important;
         }
         .navbar-nav .open .dropdown-menu.msg_list {
-            width: 700px;
+        width: 700px;
         }
         .not-success {
-          padding: 3px;
-          border-left: 6px solid #ccc!important;
-          border-color: #3c763d !important;
+        padding: 3px;
+        border-left: 6px solid #ccc!important;
+        border-color: #3c763d !important;
         }
         .not-error {
-          border-left: 6px solid #ccc!important;
-          border-color: #a94442 !important;
+        border-left: 6px solid #ccc!important;
+        border-color: #a94442 !important;
         }
         .colUno {
-           display: inline-block;
-          width: 60%;
+        display: inline-block;
+        width: 60%;
         }
         .colDos {
-          display: inline-block;
-          width: 15%;
-          top: 50%;
-          text-align: center;
-          transform: translate(0, -50%);
+        display: inline-block;
+        width: 15%;
+        top: 50%;
+        text-align: center;
+        transform: translate(0, -50%);
         }
         .colTres {
-          display: inline-block;
-          text-align: center;
-          font-size:smaller;
-          float:right;
-          display: flex;
-           align-items: center
+        display: inline-block;
+        text-align: center;
+        font-size:smaller;
+        float:right;
+        display: flex;
+        align-items: center
         }
         .padre {
-           position: relative;
+        position: relative;
         }
         .hijo {
-           position: absolute;
-           top: 50%;
-           left: 50%;
-           height: 30%;
-           width: 50%;
-           margin: -15% 0 0 -25%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        height: 30%;
+        width: 50%;
+        margin: -15% 0 0 -25%;
         }
     </style>
-
-    <!-- jQuery -->
-    <script src="@routes.Assets.at("gentelella/vendors/jquery/dist/jquery.min.js")"  nonce="@session.get("nonce")"></script>
-    <!-- Bootstrap -->
-    <script src="@routes.Assets.at("gentelella/vendors/bootstrap/dist/js/bootstrap.min.js")" nonce="@session.get("nonce")"></script>
-
-    <!-- FastClick -->
-    <script src="@routes.Assets.at("gentelella/vendors/fastclick/lib/fastclick.js")" nonce="@session.get("nonce")"></script>
-    <!-- NProgress -->
-    <script src="@routes.Assets.at("gentelella/vendors/nprogress/nprogress.js")" nonce="@session.get("nonce")"></script>
-    <script src="@routes.Assets.at("sweetalert2/sweetalert2.js")" nonce="@session.get("nonce")"></script>
-    <!-- bootstrap-progressbar -->
-    <script src="@routes.Assets.at("gentelella/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js")" nonce="@session.get("nonce")"></script>
-    <!-- Custom Theme Scripts -->
-    <script src="@routes.Assets.at("gentelella/build/js/custom.js")" nonce="@session.get("nonce")"></script>
-    <script src="@routes.Assets.at("javascripts/validator.min.js")" nonce="@session.get("nonce")"></script>
-    <script src="@routes.Assets.at("javascripts/jquery.fullscreen.min.js")" nonce="@session.get("nonce")"></script>
-    <script src="@routes.Assets.at("javascripts/sidebar.js")" nonce="@session.get("nonce")"></script>
-    <script src="@routes.Assets.at("javascripts/async.js")" nonce="@session.get("nonce")"></script>
-    <script src="@routes.Assets.at("lib/moment/moment.js")" type="text/javascript" nonce="@session.get("nonce")"></script>
 
 
     <link rel="icon" type="image/png" href="@routes.Assets.at("images/favicon.ico")">
@@ -123,17 +100,17 @@
 
     <!-- Matomo -->
     <script nonce="@session.get("nonce")">
-      var _paq = window._paq = window._paq || [];
-      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      (function() {
-        var u="https://check.dev.ipn.mx/";
-        _paq.push(['setTrackerUrl', u+'matomo.php']);
-        _paq.push(['setSiteId', '9']);
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-      })();
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+    var u="https://check.dev.ipn.mx/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '9']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
     </script>
     <noscript><p><img src="https://check.dev.ipn.mx/matomo.php?idsite=8&amp;rec=1" style="border:0;" alt="" /></p></noscript>
     <!-- End Matomo Code -->
@@ -266,12 +243,12 @@
 
 <script type="text/javascript" nonce="@session.get("nonce")">
 
-    Array.prototype.contains = function ( needle ) {
-       for (i in this) {
-           if (this[i] === needle) return true;
-       }
-       return false;
-    }
+Array.prototype.contains = function ( needle ) {
+for (i in this) {
+if (this[i] === needle) return true;
+}
+return false;
+}
 
 
 </script>
@@ -280,199 +257,217 @@
 
 
 
+<!-- jQuery -->
+<script src="@routes.Assets.at("gentelella/vendors/jquery/dist/jquery.min.js")"  nonce="@session.get("nonce")"></script>
+<!-- Bootstrap -->
+<script src="@routes.Assets.at("gentelella/vendors/bootstrap/dist/js/bootstrap.min.js")" nonce="@session.get("nonce")"></script>
 
+<!-- FastClick -->
+<script src="@routes.Assets.at("gentelella/vendors/fastclick/lib/fastclick.js")" nonce="@session.get("nonce")"></script>
+<!-- NProgress -->
+<script src="@routes.Assets.at("gentelella/vendors/nprogress/nprogress.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("sweetalert2/sweetalert2.js")" nonce="@session.get("nonce")"></script>
+<!-- bootstrap-progressbar -->
+<script src="@routes.Assets.at("gentelella/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js")" nonce="@session.get("nonce")"></script>
+<!-- Custom Theme Scripts -->
+<script src="@routes.Assets.at("gentelella/build/js/custom.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("javascripts/validator.min.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("javascripts/jquery.fullscreen.min.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("javascripts/sidebar.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("javascripts/async.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("lib/moment/moment.js")" type="text/javascript" nonce="@session.get("nonce")"></script>
 </body>
 </html>
 
 
 <script type="text/javascript" nonce="@session.get("nonce")">
 
-        $(function() {
-              console.log("...")
-              if (!!window.EventSource) {
-                  //console.log("/java/eventSource/sse")
-                  var stringSource = new EventSource("/sse");
-                  // De la siguiente linea, "aviso" es el nombre del canal que escuchará
-                  stringSource.addEventListener("aviso-@session.get("rolActual")-@session.get("usuario")", ( e ) => {
-                    var oj = JSON.parse(e.data);
-                    console.log("aviso ")
-                    console.dir(oj.datos)
-                    //console.info(oj.datos.length)
-                    if (oj.datos.length>0){
-                        $("#bgNotificacion").addClass("badge bg-red").text(oj.datos.length);
-                        var lista = "";
-                        var ldiv="";
-                        for (i=0;i<oj.datos.length;i++){
-                            console.log("pre "+oj.datos[i].fecha)
-                            var fecha1 = moment(oj.datos[i].fecha);
-                            fecha1.add(1,'hour');
-                            var fecha2 = now = moment();
-                            var diferencia =  moment.duration(fecha2.diff(fecha1));
-                            var x = strFormatoDiferencia(diferencia);
+$(function() {
+console.log("...")
+if (!!window.EventSource) {
+//console.log("/java/eventSource/sse")
+var stringSource = new EventSource("/sse");
+// De la siguiente linea, "aviso" es el nombre del canal que escuchará
+stringSource.addEventListener("aviso-@session.get("rolActual")-@session.get("usuario")", ( e ) => {
+var oj = JSON.parse(e.data);
+console.log("aviso ")
+console.dir(oj.datos)
+//console.info(oj.datos.length)
+if (oj.datos.length>0){
+$("#bgNotificacion").addClass("badge bg-red").text(oj.datos.length);
+var lista = "";
+var ldiv="";
+for (i=0;i<oj.datos.length;i++){
+console.log("pre "+oj.datos[i].fecha)
+var fecha1 = moment(oj.datos[i].fecha);
+fecha1.add(1,'hour');
+var fecha2 = now = moment();
+var diferencia =  moment.duration(fecha2.diff(fecha1));
+var x = strFormatoDiferencia(diferencia);
 
-                            lista+='<li class="not-'+oj.datos[i].tipoNotificacion+'" > ';
-                            lista+="  <div class='row'>";
-                            lista+="    <div class='col-sm-8'>";
-                            lista+="     "+oj.datos[i].descripcion;
-                            lista+="    </div>";
-                            lista+="    <div class='col-sm-2'>";
-                            if (oj.datos[i].fase!=undefined)
-                              lista+="     <div class=''>"+oj.datos[i].fase+"</div>";
-                            lista+="    </div>";
-                            lista+="    <div class='col-sm-2'>";
-                            lista+="      <div class='small '>Hace "+x+"</div>";
-                            lista+="    </div>";
-                            lista+="  </div>";
-
-
-                            lista+="</li>";
-
-                        }
-                        $("#menu1").html(lista);
-                    }
-                  });
-              } else {
-                  $("#clock").html("Sorry. This browser doesn't seem to support Server sent event. Check <a href='http://html5test.com/compare/feature/communication-eventSource.html'>html5test</a> for browser compatibility.");
-              }
-
-        });
+lista+='<li class="not-'+oj.datos[i].tipoNotificacion+'" > ';
+    lista+="  <div class='row'>";
+        lista+="    <div class='col-sm-8'>";
+            lista+="     "+oj.datos[i].descripcion;
+            lista+="    </div>";
+        lista+="    <div class='col-sm-2'>";
+            if (oj.datos[i].fase!=undefined)
+            lista+="     <div class=''>"+oj.datos[i].fase+"</div>";
+            lista+="    </div>";
+        lista+="    <div class='col-sm-2'>";
+            lista+="      <div class='small '>Hace "+x+"</div>";
+            lista+="    </div>";
+        lista+="  </div>";
 
 
+    lista+="</li>";
+
+}
+$("#menu1").html(lista);
+}
+});
+} else {
+$("#clock").html("Sorry. This browser doesn't seem to support Server sent event. Check <a href='http://html5test.com/compare/feature/communication-eventSource.html'>html5test</a> for browser compatibility.");
+}
+
+});
 
 
-		function strFormatoDiferencia(diferencia){
-          //1,000             1 segundo
-          //60,000            1 minuto
-          //3,600,000         1 hora
-          //86,400,000        1 dia
-          //604,800,000       1 semana
-          //
-
-          var miliSegundo = 1000;
-          var miliMinuto =  miliSegundo * 60;
-          var miliHora =    miliMinuto * 60;
-          var miliDia =     miliHora * 24;
-          var miliSemana =  miliDia * 7;
-          var miliMes =     miliSemana * 4;
-          var miliAnio =    miliMes * 12;
-
-          var arrRetorno = new Array();
-
-          if (diferencia >=  miliAnio   ){
-		    arrRetorno.push(diferencia.get('years')+" años ");
-		  }
-          if (diferencia >=miliMes){
-		    arrRetorno.push(diferencia.get('months')+" meses ");
-		  }
-          if (diferencia >=miliSemana){
-		    arrRetorno.push(diferencia.get('weeks')+" semanas ");
-		  }
-          if (diferencia >=miliDia){
-		    arrRetorno.push(diferencia.get('days')+" días ");
-		  }
-		  if (diferencia >=miliHora){
-		    arrRetorno.push(diferencia.get('hours')+" horas ");
-		  }
-		  if (diferencia >=miliMinuto){
-		    arrRetorno.push(diferencia.get('minutes')+" minutos ");
-		  }
-		  if (diferencia >=miliSegundo){
-		    arrRetorno.push(diferencia.get('seconds')+" segundos ");
-		  }
-		  if (arrRetorno.length==1)
-		    arrRetorno.push("");
-		  return arrRetorno[0] + arrRetorno[1];
-		}
-
-		
-		$("#toggleFullScreen").click(function(){
-		    $('body').fullscreen();
-		      $.fullscreen.exit();
-		});
-		
-		
-		function cambiarRol(rolId){
-			console.log("intentando rol "+rolId+".....")
-			var $cr = LlamadaAjax("/cambiarRol","POST",JSON.stringify({rolId:rolId}));
-			$.when($cr).done(function(data){
-				console.log(data)
-				if (data.estado=="ok"){
-					$("form").attr("action", "@routes.Application.redirecciona()");
-					$("form").attr("method", "GET");
-					$("form").submit();
-				} else {
-					alert("No fue posible cambiar de rol");
-				}
-			}).fail(function(){alert("aguas");});						
-		}
-
-        // PAra cambiar acentos
-        $(document).on("keyup","form[name='frmVTK5ninguna'] input, form[name='frmVTKninguna'] textarea", function(t){
-          console.log("tecla "+t)
-          var cadena = $(this).val();
-          var retorno = cadena.normalize("NFD").replace(/\p{Diacritic}/gu, "")
-          //cadena.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-          $(this).val(retorno);
 
 
-          //const acentos = {'á':'a','é':'e','í':'i','ó':'o','ú':'u','Á':'A','É':'E','Í':'I','Ó':'O','Ú':'U'};
-	      //cadena.split('').map( letra => acentos[letra] || letra).join('').toString();
+function strFormatoDiferencia(diferencia){
+//1,000             1 segundo
+//60,000            1 minuto
+//3,600,000         1 hora
+//86,400,000        1 dia
+//604,800,000       1 semana
+//
 
-        });
+var miliSegundo = 1000;
+var miliMinuto =  miliSegundo * 60;
+var miliHora =    miliMinuto * 60;
+var miliDia =     miliHora * 24;
+var miliSemana =  miliDia * 7;
+var miliMes =     miliSemana * 4;
+var miliAnio =    miliMes * 12;
 
-        function miCuenta(){
-            var $c = LlamadaAjax("/miCuenta", "POST", JSON.stringify({}));
-            $.when($c).done(function(data){
-              console.dir(data)
-              $("#mcNombre").text(data.nombre);
-              $("#mcUsername").text(data.username);
-              $("#mcNumEmpleado").text(data.numEmpleado);
-              var roles="";
-              var correos="";
-              $("#mcRoles, #mcCorreos").text("");
-              $.each(data.roles, function(key,value) {
-                roles+="<div class='bloque'>"+value.descripcion+"</div>";
-              });
-              $("#mcRoles").append(roles);
-              $("#mcRolActual").html("");
-              $("#mcRolActual").append("<div class='bloque'>"+data.rolActual+"</div>");
-              $("#mcCambioUserName").val(data.username);
+var arrRetorno = new Array();
 
-              $.each(data.correos, function(key,value) {
-                correos+="<div class='bloque'>"+value.email+"</div>";
-              });
-              $("#mcCorreos").append(correos);
-
-
-              $('#miCuenta').modal('show');
-            });
-
-        }
-
-        function abrirCambioPass(){
-          $("#panelCambioPassword").fadeToggle("slow", "linear");
-        }
+if (diferencia >=  miliAnio   ){
+arrRetorno.push(diferencia.get('years')+" años ");
+}
+if (diferencia >=miliMes){
+arrRetorno.push(diferencia.get('months')+" meses ");
+}
+if (diferencia >=miliSemana){
+arrRetorno.push(diferencia.get('weeks')+" semanas ");
+}
+if (diferencia >=miliDia){
+arrRetorno.push(diferencia.get('days')+" días ");
+}
+if (diferencia >=miliHora){
+arrRetorno.push(diferencia.get('hours')+" horas ");
+}
+if (diferencia >=miliMinuto){
+arrRetorno.push(diferencia.get('minutes')+" minutos ");
+}
+if (diferencia >=miliSegundo){
+arrRetorno.push(diferencia.get('seconds')+" segundos ");
+}
+if (arrRetorno.length==1)
+arrRetorno.push("");
+return arrRetorno[0] + arrRetorno[1];
+}
 
 
-        $("#btnActualizaMiCuenta").click(function(e){
-            console.log("desde mcCambioPassword.click")
-            $("#msgActualizacion").html("");
-            if ( $("#mcCambioUserName").val()=="" || $("#mcCambioPassword").val()=="" ){
-                $("#msgActualizacion").html("Debe ingresar ambos campos");
-                return false;
-            }
-            if ( $("#mcCambioUserName").val().length<5 || $("#mcCambioPassword").val().length<5 ){
-                $("#msgActualizacion").html("Nombre de usuario y clave de acceso deben ser de al menos 5 caracteres");
-                return false;
-            }
+$("#toggleFullScreen").click(function(){
+$('body').fullscreen();
+$.fullscreen.exit();
+});
 
-            var $c = LlamadaAjax("/cambioMiCuenta", "POST", JSON.stringify({username:$("#mcCambioUserName").val(),  password:$("#mcCambioPassword").val()}));
-            $.when($c).done(function(data){
-                console.dir(data)
-                $("#msgActualizacion").html(data.info);
 
-            });
-        });
+function cambiarRol(rolId){
+console.log("intentando rol "+rolId+".....")
+var $cr = LlamadaAjax("/cambiarRol","POST",JSON.stringify({rolId:rolId}));
+$.when($cr).done(function(data){
+console.log(data)
+if (data.estado=="ok"){
+$("form").attr("action", "@routes.Application.redirecciona()");
+$("form").attr("method", "GET");
+$("form").submit();
+} else {
+alert("No fue posible cambiar de rol");
+}
+}).fail(function(){alert("aguas");});
+}
+
+// PAra cambiar acentos
+$(document).on("keyup","form[name='frmVTK5ninguna'] input, form[name='frmVTKninguna'] textarea", function(t){
+console.log("tecla "+t)
+var cadena = $(this).val();
+var retorno = cadena.normalize("NFD").replace(/\p{Diacritic}/gu, "")
+//cadena.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+$(this).val(retorno);
+
+
+//const acentos = {'á':'a','é':'e','í':'i','ó':'o','ú':'u','Á':'A','É':'E','Í':'I','Ó':'O','Ú':'U'};
+//cadena.split('').map( letra => acentos[letra] || letra).join('').toString();
+
+});
+
+function miCuenta(){
+var $c = LlamadaAjax("/miCuenta", "POST", JSON.stringify({}));
+$.when($c).done(function(data){
+console.dir(data)
+$("#mcNombre").text(data.nombre);
+$("#mcUsername").text(data.username);
+$("#mcNumEmpleado").text(data.numEmpleado);
+var roles="";
+var correos="";
+$("#mcRoles, #mcCorreos").text("");
+$.each(data.roles, function(key,value) {
+roles+="<div class='bloque'>"+value.descripcion+"</div>";
+});
+$("#mcRoles").append(roles);
+$("#mcRolActual").html("");
+$("#mcRolActual").append("<div class='bloque'>"+data.rolActual+"</div>");
+$("#mcCambioUserName").val(data.username);
+
+$.each(data.correos, function(key,value) {
+correos+="<div class='bloque'>"+value.email+"</div>";
+});
+$("#mcCorreos").append(correos);
+
+
+$('#miCuenta').modal('show');
+});
+
+}
+
+function abrirCambioPass(){
+$("#panelCambioPassword").fadeToggle("slow", "linear");
+}
+
+
+$("#btnActualizaMiCuenta").click(function(e){
+console.log("desde mcCambioPassword.click")
+$("#msgActualizacion").html("");
+if ( $("#mcCambioUserName").val()=="" || $("#mcCambioPassword").val()=="" ){
+$("#msgActualizacion").html("Debe ingresar ambos campos");
+return false;
+}
+if ( $("#mcCambioUserName").val().length<5 || $("#mcCambioPassword").val().length<5 ){
+$("#msgActualizacion").html("Nombre de usuario y clave de acceso deben ser de al menos 5 caracteres");
+return false;
+}
+
+var $c = LlamadaAjax("/cambioMiCuenta", "POST", JSON.stringify({username:$("#mcCambioUserName").val(),  password:$("#mcCambioPassword").val()}));
+$.when($c).done(function(data){
+console.dir(data)
+$("#msgActualizacion").html(data.info);
+
+});
+});
 
 
 </script>
