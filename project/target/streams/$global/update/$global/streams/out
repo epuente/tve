@@ -1,15 +1,15 @@
-[info] Updating {file:/home/epuente/playFramework/tve2024_devFebrero2/project/}tve2024_devfebrero2-build...
-[debug] :: resolving dependencies :: default#tve2024_devfebrero2-build;0.1-SNAPSHOT
+[info] Updating {file:/home/epuente/playFramework/tve2024_devMarzo/project/}tve2024_devmarzo-build...
+[debug] :: resolving dependencies :: default#tve2024_devmarzo-build;0.1-SNAPSHOT
 [debug] 	confs: [compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool]
 [debug] 	validate = true
 [debug] 	refresh = false
 [debug] resolving dependencies for configuration 'compile'
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
 [info] Resolving org.scala-sbt#global-plugins;0.0 ...
 [debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#global-plugins;0.0 {compile=[default(compile)]}
 [debug] 	found org.scala-sbt#global-plugins;0.0 in inter-project
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
 [info] Resolving com.typesafe.play#sbt-plugin;2.3.7 ...
 [debug] sbt-chain: Checking cache for: dependency: com.typesafe.play#sbt-plugin;2.3.7 {compile=[default(compile)]}
 [debug] sbt-chain: module revision found in cache: com.typesafe.play#sbt-plugin;2.3.7
@@ -266,7 +266,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.pom
-[debug] 	[SUCCESSFUL ] org.apache.commons#commons-lang3;3.1!commons-lang3.pom(pom.original) (149ms)
+[debug] 	[SUCCESSFUL ] org.apache.commons#commons-lang3;3.1!commons-lang3.pom(pom.original) (906ms)
 [info] Resolving org.apache.commons#commons-parent;22 ...
 [debug] sbt-chain: Checking cache for: dependency: org.apache.commons#commons-parent;22 {}
 [debug] sbt-chain: module revision found in cache: org.apache.commons#commons-parent;22
@@ -458,7 +458,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/commons-io/commons-io/2.4/commons-io-2.4.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/commons-io/commons-io/2.4/commons-io-2.4.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/commons-io/commons-io/2.4/commons-io-2.4.pom
-[debug] 	[SUCCESSFUL ] commons-io#commons-io;2.4!commons-io.pom(pom.original) (143ms)
+[debug] 	[SUCCESSFUL ] commons-io#commons-io;2.4!commons-io.pom(pom.original) (150ms)
 [info] Resolving org.apache.commons#commons-parent;25 ...
 [debug] sbt-chain: Checking cache for: dependency: org.apache.commons#commons-parent;25 {}
 [info] Resolving org.apache.commons#commons-parent;25 ...
@@ -478,7 +478,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-parent/25/commons-parent-25.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-parent/25/commons-parent-25.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/org/apache/commons/commons-parent/25/commons-parent-25.pom
-[debug] 	[SUCCESSFUL ] org.apache.commons#commons-parent;25!commons-parent.pom(pom.original) (160ms)
+[debug] 	[SUCCESSFUL ] org.apache.commons#commons-parent;25!commons-parent.pom(pom.original) (203ms)
 [info] Resolving org.apache#apache;9 ...
 [debug] sbt-chain: Checking cache for: dependency: org.apache#apache;9 {}
 [debug] sbt-chain: module revision found in cache: org.apache#apache;9
@@ -515,7 +515,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-compress/1.7/commons-compress-1.7.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-compress/1.7/commons-compress-1.7.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/org/apache/commons/commons-compress/1.7/commons-compress-1.7.pom
-[debug] 	[SUCCESSFUL ] org.apache.commons#commons-compress;1.7!commons-compress.pom(pom.original) (142ms)
+[debug] 	[SUCCESSFUL ] org.apache.commons#commons-compress;1.7!commons-compress.pom(pom.original) (152ms)
 [info] Resolving org.apache.commons#commons-parent;32 ...
 [debug] sbt-chain: Checking cache for: dependency: org.apache.commons#commons-parent;32 {}
 [debug] sbt-chain: module revision found in cache: org.apache.commons#commons-parent;32
@@ -591,7 +591,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-utils/3.0.17/plexus-utils-3.0.17.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-utils/3.0.17/plexus-utils-3.0.17.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-utils/3.0.17/plexus-utils-3.0.17.pom
-[debug] 	[SUCCESSFUL ] org.codehaus.plexus#plexus-utils;3.0.17!plexus-utils.pom(pom.original) (126ms)
+[debug] 	[SUCCESSFUL ] org.codehaus.plexus#plexus-utils;3.0.17!plexus-utils.pom(pom.original) (409ms)
 [info] Resolving org.codehaus.plexus#plexus;3.3.1 ...
 [debug] sbt-chain: Checking cache for: dependency: org.codehaus.plexus#plexus;3.3.1 {}
 [debug] sbt-chain: module revision found in cache: org.codehaus.plexus#plexus;3.3.1
@@ -692,7 +692,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.pom
-[debug] 	[SUCCESSFUL ] org.sonatype.plexus#plexus-sec-dispatcher;1.3!plexus-sec-dispatcher.pom(pom.original) (132ms)
+[debug] 	[SUCCESSFUL ] org.sonatype.plexus#plexus-sec-dispatcher;1.3!plexus-sec-dispatcher.pom(pom.original) (187ms)
 [info] Resolving org.sonatype.spice#spice-parent;12 ...
 [debug] sbt-chain: Checking cache for: dependency: org.sonatype.spice#spice-parent;12 {}
 [debug] sbt-chain: module revision found in cache: org.sonatype.spice#spice-parent;12
@@ -1213,7 +1213,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-classworlds/2.5.1/plexus-classworlds-2.5.1.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-classworlds/2.5.1/plexus-classworlds-2.5.1.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-classworlds/2.5.1/plexus-classworlds-2.5.1.pom
-[debug] 	[SUCCESSFUL ] org.codehaus.plexus#plexus-classworlds;2.5.1!plexus-classworlds.pom(pom.original) (128ms)
+[debug] 	[SUCCESSFUL ] org.codehaus.plexus#plexus-classworlds;2.5.1!plexus-classworlds.pom(pom.original) (634ms)
 [info] Resolving org.codehaus.plexus#plexus;3.3.1 ...
 [debug] sbt-chain: Checking cache for: dependency: org.codehaus.plexus#plexus;3.3.1 {}
 [debug] sbt-chain: module revision found in cache: org.codehaus.plexus#plexus;3.3.1
@@ -2068,7 +2068,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.2/slf4j-api-1.7.2.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.2/slf4j-api-1.7.2.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.2/slf4j-api-1.7.2.pom
-[debug] 	[SUCCESSFUL ] org.slf4j#slf4j-api;1.7.2!slf4j-api.pom(pom.original) (141ms)
+[debug] 	[SUCCESSFUL ] org.slf4j#slf4j-api;1.7.2!slf4j-api.pom(pom.original) (271ms)
 [info] Resolving org.slf4j#slf4j-parent;1.7.2 ...
 [debug] sbt-chain: Checking cache for: dependency: org.slf4j#slf4j-parent;1.7.2 {}
 [debug] sbt-chain: module revision found in cache: org.slf4j#slf4j-parent;1.7.2
@@ -2236,7 +2236,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.3.0/jackson-annotations-2.3.0.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.3.0/jackson-annotations-2.3.0.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.3.0/jackson-annotations-2.3.0.pom
-[debug] 	[SUCCESSFUL ] com.fasterxml.jackson.core#jackson-annotations;2.3.0!jackson-annotations.pom(pom.original) (134ms)
+[debug] 	[SUCCESSFUL ] com.fasterxml.jackson.core#jackson-annotations;2.3.0!jackson-annotations.pom(pom.original) (405ms)
 [info] Resolving com.fasterxml#oss-parent;11 ...
 [debug] sbt-chain: Checking cache for: dependency: com.fasterxml#oss-parent;11 {}
 [debug] sbt-chain: module revision found in cache: com.fasterxml#oss-parent;11
@@ -2524,7 +2524,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/jvnet/mimepull/mimepull/1.9.4/mimepull-1.9.4.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/jvnet/mimepull/mimepull/1.9.4/mimepull-1.9.4.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/org/jvnet/mimepull/mimepull/1.9.4/mimepull-1.9.4.pom
-[debug] 	[SUCCESSFUL ] org.jvnet.mimepull#mimepull;1.9.4!mimepull.pom(pom.original) (131ms)
+[debug] 	[SUCCESSFUL ] org.jvnet.mimepull#mimepull;1.9.4!mimepull.pom(pom.original) (223ms)
 [info] Resolving net.java#jvnet-parent;4 ...
 [debug] sbt-chain: Checking cache for: dependency: net.java#jvnet-parent;4 {}
 [debug] sbt-chain: module revision found in cache: net.java#jvnet-parent;4
@@ -2612,7 +2612,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/xalan/xalan/2.7.1/xalan-2.7.1.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/xalan/xalan/2.7.1/xalan-2.7.1.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/xalan/xalan/2.7.1/xalan-2.7.1.pom
-[debug] 	[SUCCESSFUL ] xalan#xalan;2.7.1!xalan.pom(pom.original) (119ms)
+[debug] 	[SUCCESSFUL ] xalan#xalan;2.7.1!xalan.pom(pom.original) (142ms)
 [info] Resolving org.apache#apache;4 ...
 [debug] sbt-chain: Checking cache for: dependency: org.apache#apache;4 {}
 [debug] sbt-chain: module revision found in cache: org.apache#apache;4
@@ -2638,7 +2638,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/xalan/serializer/2.7.1/serializer-2.7.1.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/xalan/serializer/2.7.1/serializer-2.7.1.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/xalan/serializer/2.7.1/serializer-2.7.1.pom
-[debug] 	[SUCCESSFUL ] xalan#serializer;2.7.1!serializer.pom(pom.original) (127ms)
+[debug] 	[SUCCESSFUL ] xalan#serializer;2.7.1!serializer.pom(pom.original) (178ms)
 [info] Resolving org.apache#apache;4 ...
 [debug] sbt-chain: Checking cache for: dependency: org.apache#apache;4 {}
 [debug] sbt-chain: module revision found in cache: org.apache#apache;4
@@ -2664,7 +2664,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.pom
-[debug] 	[SUCCESSFUL ] xml-apis#xml-apis;1.3.04!xml-apis.pom(pom.original) (126ms)
+[debug] 	[SUCCESSFUL ] xml-apis#xml-apis;1.3.04!xml-apis.pom(pom.original) (147ms)
 [info] Resolving org.apache#apache;3 ...
 [debug] sbt-chain: Checking cache for: dependency: org.apache#apache;3 {}
 [debug] sbt-chain: module revision found in cache: org.apache#apache;3
@@ -2696,7 +2696,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.pom
-[debug] 	[SUCCESSFUL ] commons-collections#commons-collections;3.2.1!commons-collections.pom(pom.original) (129ms)
+[debug] 	[SUCCESSFUL ] commons-collections#commons-collections;3.2.1!commons-collections.pom(pom.original) (151ms)
 [info] Resolving org.apache.commons#commons-parent;9 ...
 [debug] sbt-chain: Checking cache for: dependency: org.apache.commons#commons-parent;9 {}
 [info] Resolving org.apache.commons#commons-parent;9 ...
@@ -2716,7 +2716,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-parent/9/commons-parent-9.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-parent/9/commons-parent-9.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/org/apache/commons/commons-parent/9/commons-parent-9.pom
-[debug] 	[SUCCESSFUL ] org.apache.commons#commons-parent;9!commons-parent.pom(pom.original) (133ms)
+[debug] 	[SUCCESSFUL ] org.apache.commons#commons-parent;9!commons-parent.pom(pom.original) (165ms)
 [info] Resolving org.apache#apache;4 ...
 [debug] sbt-chain: Checking cache for: dependency: org.apache#apache;4 {}
 [debug] sbt-chain: module revision found in cache: org.apache#apache;4
@@ -2751,7 +2751,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.2.1/commons-lang3-3.2.1.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.2.1/commons-lang3-3.2.1.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.2.1/commons-lang3-3.2.1.pom
-[debug] 	[SUCCESSFUL ] org.apache.commons#commons-lang3;3.2.1!commons-lang3.pom(pom.original) (125ms)
+[debug] 	[SUCCESSFUL ] org.apache.commons#commons-lang3;3.2.1!commons-lang3.pom(pom.original) (196ms)
 [info] Resolving org.apache.commons#commons-parent;32 ...
 [debug] sbt-chain: Checking cache for: dependency: org.apache.commons#commons-parent;32 {}
 [debug] sbt-chain: module revision found in cache: org.apache.commons#commons-parent;32
@@ -2859,7 +2859,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/commons-codec/commons-codec/1.6/commons-codec-1.6.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/commons-codec/commons-codec/1.6/commons-codec-1.6.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/commons-codec/commons-codec/1.6/commons-codec-1.6.pom
-[debug] 	[SUCCESSFUL ] commons-codec#commons-codec;1.6!commons-codec.pom(pom.original) (125ms)
+[debug] 	[SUCCESSFUL ] commons-codec#commons-codec;1.6!commons-codec.pom(pom.original) (158ms)
 [info] Resolving org.apache.commons#commons-parent;22 ...
 [debug] sbt-chain: Checking cache for: dependency: org.apache.commons#commons-parent;22 {}
 [debug] sbt-chain: module revision found in cache: org.apache.commons#commons-parent;22
@@ -2895,7 +2895,7 @@
 [debug] 	public: downloading https://repo1.maven.org/maven2/commons-codec/commons-codec/1.9/commons-codec-1.9.pom
 [debug] 	public: downloading https://repo1.maven.org/maven2/commons-codec/commons-codec/1.9/commons-codec-1.9.pom.sha1
 [debug] sha1 OK for https://repo1.maven.org/maven2/commons-codec/commons-codec/1.9/commons-codec-1.9.pom
-[debug] 	[SUCCESSFUL ] commons-codec#commons-codec;1.9!commons-codec.pom(pom.original) (127ms)
+[debug] 	[SUCCESSFUL ] commons-codec#commons-codec;1.9!commons-codec.pom(pom.original) (150ms)
 [info] Resolving org.apache.commons#commons-parent;32 ...
 [debug] sbt-chain: Checking cache for: dependency: org.apache.commons#commons-parent;32 {}
 [debug] sbt-chain: module revision found in cache: org.apache.commons#commons-parent;32
@@ -3057,23 +3057,23 @@
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe#webdriver_2.10;1.0.0 [compile->master]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.0 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.2 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
 [info] Resolving org.javassist#javassist;3.20.0-GA ...
 [debug] sbt-chain: Checking cache for: dependency: org.javassist#javassist;3.20.0-GA {compile=[default(compile)]}
 [debug] sbt-chain: module revision found in cache: org.javassist#javassist;3.20.0-GA
 [debug] 	found org.javassist#javassist;3.20.0-GA in sbt-chain
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime(*)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile(*)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime(*)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile(*)]
 [debug] resolving dependencies for configuration 'runtime'
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [runtime]
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [runtime]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->runtime]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->compile]
@@ -5146,16 +5146,16 @@
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe#webdriver_2.10;1.0.0 [compile->master]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.0 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.2 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
 [debug] resolving dependencies for configuration 'test'
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [test]
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [runtime]
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [test]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [runtime]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->runtime]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->compile]
@@ -7228,17 +7228,17 @@
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe#webdriver_2.10;1.0.0 [compile->master]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.0 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.2 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
 [debug] resolving dependencies for configuration 'provided'
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [provided]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->runtime]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->master]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-sbt#sbt;0.13.7 [provided->default(compile)]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [provided]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->runtime]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->master]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-sbt#sbt;0.13.7 [provided->default(compile)]
 [info] Resolving org.scala-sbt#sbt;0.13.7 ...
 [debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#sbt;0.13.7 {provided=[default(compile)]}
 [debug] sbt-chain: module revision found in cache: org.scala-sbt#sbt;0.13.7
@@ -7922,12 +7922,12 @@
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-compiler;2.9.3 {provided=[default(compile)]} => dependency: org.scala-lang#scala-compiler;2.10.4 {provided=[default(compile)]}
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.9.3 {compile=[default(compile)]} => dependency: org.scala-lang#scala-library;2.10.4 {compile=[default(compile)]}
 [debug] resolving dependencies for configuration 'optional'
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [optional]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [optional]
 [debug] resolving dependencies for configuration 'compile-internal'
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [compile-internal]
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [compile-internal]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->runtime]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->compile]
@@ -10000,17 +10000,17 @@
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe#webdriver_2.10;1.0.0 [compile->master]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.0 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.2 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [optional]
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [provided]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->runtime]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->master]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-sbt#sbt;0.13.7 [provided->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [optional]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [provided]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->runtime]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->master]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-sbt#sbt;0.13.7 [provided->default(compile)]
 [debug] == resolving dependencies org.scala-sbt#sbt;0.13.7->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
 [debug] == resolving dependencies org.scala-sbt#sbt;0.13.7->org.scala-lang#scala-library;2.10.4 [compile->runtime]
 [debug] == resolving dependencies org.scala-sbt#sbt;0.13.7->org.scala-lang#scala-library;2.10.4 [compile->compile]
@@ -10486,11 +10486,11 @@
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-compiler;2.9.3 {provided=[default(compile)]} => dependency: org.scala-lang#scala-compiler;2.10.4 {provided=[default(compile)]}
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.9.3 {compile=[default(compile)]} => dependency: org.scala-lang#scala-library;2.10.4 {compile=[default(compile)]}
 [debug] resolving dependencies for configuration 'runtime-internal'
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [runtime-internal]
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [runtime]
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [runtime-internal]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [runtime]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->runtime]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->compile]
@@ -12563,18 +12563,18 @@
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe#webdriver_2.10;1.0.0 [compile->master]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.0 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.2 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [optional]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [optional]
 [debug] resolving dependencies for configuration 'test-internal'
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [test-internal]
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [test]
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [runtime]
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [test-internal]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [test]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [runtime]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->runtime]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->compile]
@@ -14647,17 +14647,17 @@
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe#webdriver_2.10;1.0.0 [compile->master]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.0 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.2 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [optional]
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [provided]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->default(compile)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->runtime]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->master]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-sbt#sbt;0.13.7 [provided->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [optional]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [provided]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->default(compile)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->runtime]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->master]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-sbt#sbt;0.13.7 [provided->default(compile)]
 [debug] == resolving dependencies org.scala-sbt#sbt;0.13.7->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
 [debug] == resolving dependencies org.scala-sbt#sbt;0.13.7->org.scala-lang#scala-library;2.10.4 [compile->runtime]
 [debug] == resolving dependencies org.scala-sbt#sbt;0.13.7->org.scala-lang#scala-library;2.10.4 [compile->compile]
@@ -15129,18 +15129,18 @@
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-compiler;2.9.3 {provided=[default(compile)]} => dependency: org.scala-lang#scala-compiler;2.10.4 {provided=[default(compile)]}
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.9.3 {compile=[default(compile)]} => dependency: org.scala-lang#scala-library;2.10.4 {compile=[default(compile)]}
 [debug] resolving dependencies for configuration 'plugin'
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [plugin]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [plugin]
 [debug] resolving dependencies for configuration 'sources'
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [sources]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [sources]
 [debug] resolving dependencies for configuration 'docs'
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [docs]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [docs]
 [debug] resolving dependencies for configuration 'pom'
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [pom]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [pom]
 [debug] resolving dependencies for configuration 'scala-tool'
-[debug] == resolving dependencies for default#tve2024_devfebrero2-build;0.1-SNAPSHOT [scala-tool]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->default]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->runtime]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->compile]
+[debug] == resolving dependencies for default#tve2024_devmarzo-build;0.1-SNAPSHOT [scala-tool]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->default]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->runtime]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->compile]
 [debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-library;2.10.4 [compile->master(compile)]
 [debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-library;2.10.4 [compile->compile(*)]
 [debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-library;2.10.4 [compile->default]
@@ -15158,8 +15158,8 @@
 [debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-reflect;2.10.4 [runtime->compile]
 [debug] == resolving dependencies org.scala-lang#scala-reflect;2.10.4->org.scala-lang#scala-library;2.10.4 [runtime->runtime(*)]
 [debug] == resolving dependencies org.scala-lang#scala-reflect;2.10.4->org.scala-lang#scala-library;2.10.4 [runtime->compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->master]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->optional(default)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->master]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->optional(default)]
 [debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#jline;2.10.4 [optional->master(compile)]
 [info] Resolving org.scala-lang#jline;2.10.4 ...
 [debug] sbt-chain: Checking cache for: dependency: org.scala-lang#jline;2.10.4 {optional=[compile(*), master(compile)]}
@@ -15172,11 +15172,11 @@
 [debug] sbt-chain: module revision found in cache: org.fusesource.jansi#jansi;1.4
 [debug] 	found org.fusesource.jansi#jansi;1.4 in sbt-chain
 [debug] == resolving dependencies org.scala-lang#jline;2.10.4->org.fusesource.jansi#jansi;1.4 [compile->compile(*)]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->default]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->runtime]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->compile]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->master]
-[debug] == resolving dependencies default#tve2024_devfebrero2-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->optional(default)]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->default]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->runtime]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->compile]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->master]
+[debug] == resolving dependencies default#tve2024_devmarzo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->optional(default)]
 [debug] all callers are evicted for org.scala-sbt#control;0.13.5: evicting too
 [debug] all callers are evicted for org.scala-sbt#control;0.13.5: evicting too
 [debug] 	resolved ivy file produced in cache
@@ -15359,19 +15359,19 @@
 [debug] 	[NOT REQUIRED] org.scala-sbt#apply-macro;0.13.7!apply-macro.jar
 [debug] 	[NOT REQUIRED] org.scala-lang#jline;2.10.4!jline.jar
 [debug] 	[NOT REQUIRED] org.fusesource.jansi#jansi;1.4!jansi.jar
-[debug] :: resolution report :: resolve 25499ms :: artifacts dl 62ms
-[debug] 	report for default#tve2024_devfebrero2-build;0.1-SNAPSHOT compile produced in /home/epuente/playFramework/tve2024_devFebrero2/project/target/resolution-cache/reports/default-tve2024_devfebrero2-build-compile.xml
-[debug] 	report for default#tve2024_devfebrero2-build;0.1-SNAPSHOT runtime produced in /home/epuente/playFramework/tve2024_devFebrero2/project/target/resolution-cache/reports/default-tve2024_devfebrero2-build-runtime.xml
-[debug] 	report for default#tve2024_devfebrero2-build;0.1-SNAPSHOT test produced in /home/epuente/playFramework/tve2024_devFebrero2/project/target/resolution-cache/reports/default-tve2024_devfebrero2-build-test.xml
-[debug] 	report for default#tve2024_devfebrero2-build;0.1-SNAPSHOT provided produced in /home/epuente/playFramework/tve2024_devFebrero2/project/target/resolution-cache/reports/default-tve2024_devfebrero2-build-provided.xml
-[debug] 	report for default#tve2024_devfebrero2-build;0.1-SNAPSHOT optional produced in /home/epuente/playFramework/tve2024_devFebrero2/project/target/resolution-cache/reports/default-tve2024_devfebrero2-build-optional.xml
-[debug] 	report for default#tve2024_devfebrero2-build;0.1-SNAPSHOT compile-internal produced in /home/epuente/playFramework/tve2024_devFebrero2/project/target/resolution-cache/reports/default-tve2024_devfebrero2-build-compile-internal.xml
-[debug] 	report for default#tve2024_devfebrero2-build;0.1-SNAPSHOT runtime-internal produced in /home/epuente/playFramework/tve2024_devFebrero2/project/target/resolution-cache/reports/default-tve2024_devfebrero2-build-runtime-internal.xml
-[debug] 	report for default#tve2024_devfebrero2-build;0.1-SNAPSHOT test-internal produced in /home/epuente/playFramework/tve2024_devFebrero2/project/target/resolution-cache/reports/default-tve2024_devfebrero2-build-test-internal.xml
-[debug] 	report for default#tve2024_devfebrero2-build;0.1-SNAPSHOT plugin produced in /home/epuente/playFramework/tve2024_devFebrero2/project/target/resolution-cache/reports/default-tve2024_devfebrero2-build-plugin.xml
-[debug] 	report for default#tve2024_devfebrero2-build;0.1-SNAPSHOT sources produced in /home/epuente/playFramework/tve2024_devFebrero2/project/target/resolution-cache/reports/default-tve2024_devfebrero2-build-sources.xml
-[debug] 	report for default#tve2024_devfebrero2-build;0.1-SNAPSHOT docs produced in /home/epuente/playFramework/tve2024_devFebrero2/project/target/resolution-cache/reports/default-tve2024_devfebrero2-build-docs.xml
-[debug] 	report for default#tve2024_devfebrero2-build;0.1-SNAPSHOT pom produced in /home/epuente/playFramework/tve2024_devFebrero2/project/target/resolution-cache/reports/default-tve2024_devfebrero2-build-pom.xml
-[debug] 	report for default#tve2024_devfebrero2-build;0.1-SNAPSHOT scala-tool produced in /home/epuente/playFramework/tve2024_devFebrero2/project/target/resolution-cache/reports/default-tve2024_devfebrero2-build-scala-tool.xml
-[debug] 	resolve done (25499ms resolve - 62ms download)
+[debug] :: resolution report :: resolve 51983ms :: artifacts dl 101ms
+[debug] 	report for default#tve2024_devmarzo-build;0.1-SNAPSHOT compile produced in /home/epuente/playFramework/tve2024_devMarzo/project/target/resolution-cache/reports/default-tve2024_devmarzo-build-compile.xml
+[debug] 	report for default#tve2024_devmarzo-build;0.1-SNAPSHOT runtime produced in /home/epuente/playFramework/tve2024_devMarzo/project/target/resolution-cache/reports/default-tve2024_devmarzo-build-runtime.xml
+[debug] 	report for default#tve2024_devmarzo-build;0.1-SNAPSHOT test produced in /home/epuente/playFramework/tve2024_devMarzo/project/target/resolution-cache/reports/default-tve2024_devmarzo-build-test.xml
+[debug] 	report for default#tve2024_devmarzo-build;0.1-SNAPSHOT provided produced in /home/epuente/playFramework/tve2024_devMarzo/project/target/resolution-cache/reports/default-tve2024_devmarzo-build-provided.xml
+[debug] 	report for default#tve2024_devmarzo-build;0.1-SNAPSHOT optional produced in /home/epuente/playFramework/tve2024_devMarzo/project/target/resolution-cache/reports/default-tve2024_devmarzo-build-optional.xml
+[debug] 	report for default#tve2024_devmarzo-build;0.1-SNAPSHOT compile-internal produced in /home/epuente/playFramework/tve2024_devMarzo/project/target/resolution-cache/reports/default-tve2024_devmarzo-build-compile-internal.xml
+[debug] 	report for default#tve2024_devmarzo-build;0.1-SNAPSHOT runtime-internal produced in /home/epuente/playFramework/tve2024_devMarzo/project/target/resolution-cache/reports/default-tve2024_devmarzo-build-runtime-internal.xml
+[debug] 	report for default#tve2024_devmarzo-build;0.1-SNAPSHOT test-internal produced in /home/epuente/playFramework/tve2024_devMarzo/project/target/resolution-cache/reports/default-tve2024_devmarzo-build-test-internal.xml
+[debug] 	report for default#tve2024_devmarzo-build;0.1-SNAPSHOT plugin produced in /home/epuente/playFramework/tve2024_devMarzo/project/target/resolution-cache/reports/default-tve2024_devmarzo-build-plugin.xml
+[debug] 	report for default#tve2024_devmarzo-build;0.1-SNAPSHOT sources produced in /home/epuente/playFramework/tve2024_devMarzo/project/target/resolution-cache/reports/default-tve2024_devmarzo-build-sources.xml
+[debug] 	report for default#tve2024_devmarzo-build;0.1-SNAPSHOT docs produced in /home/epuente/playFramework/tve2024_devMarzo/project/target/resolution-cache/reports/default-tve2024_devmarzo-build-docs.xml
+[debug] 	report for default#tve2024_devmarzo-build;0.1-SNAPSHOT pom produced in /home/epuente/playFramework/tve2024_devMarzo/project/target/resolution-cache/reports/default-tve2024_devmarzo-build-pom.xml
+[debug] 	report for default#tve2024_devmarzo-build;0.1-SNAPSHOT scala-tool produced in /home/epuente/playFramework/tve2024_devMarzo/project/target/resolution-cache/reports/default-tve2024_devmarzo-build-scala-tool.xml
+[debug] 	resolve done (51983ms resolve - 101ms download)
 [info] Done updating.

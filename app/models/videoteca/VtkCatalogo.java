@@ -137,6 +137,8 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
 
     public static Model.Finder<Long,VtkCatalogo> find = new Model.Finder<Long,VtkCatalogo>(Long.class, VtkCatalogo.class);
 
+
+
     public static Page<VtkCatalogo> page(int page, int pageSize, String filtro, String columnaOrden, String tipoOrden) {
         if (columnaOrden.compareTo("estado")==0 || columnaOrden.compareTo("tipo")==0)
             columnaOrden+=".descripcion";
@@ -147,6 +149,18 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
 
         String predicados = "unaccent(upper(clave)) like unaccent(:cadena) OR unaccent(upper(serie.descripcion)) like unaccent(:cadena) OR unaccent(upper(titulo)) like unaccent(:cadena) OR unaccent(upper(obra)) like unaccent(:cadena) ";
 
+        // Es administrador?
+        if (session("rolActual").compareTo("1")==0) {
+            Logger.debug("camino 1");
+            p = find
+//                    .where("upper(sinopsis) like :cadena OR upper(titulo) like :cadena OR upper(serie.descripcion) like :cadena")
+                    .where(  "unaccent(upper(catalogador.nombre)) like unaccent(:cadena) OR unaccent(upper(catalogador.paterno)) like unaccent(:cadena) OR unaccent(upper(catalogador.materno)) like unaccent(:cadena) OR " +   predicados )
+                    .setParameter("cadena", "%" + filtro.toUpperCase() + "%")
+                    .orderBy(columnaOrden + " " + tipoOrden)
+                    .findPagingList(pageSize)
+                    .setFetchAhead(false)
+                    .getPage(page);
+        }
 
         // Es supervisor de catalogadores?
         if (session("rolActual").compareTo("133")==0) {

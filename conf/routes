@@ -21,7 +21,7 @@ GET     /redirecciona			            controllers.Application.redirecciona()
 POST	/cambiarRol				            controllers.Application.cambiarRol()
 POST	/rolesUsuario			            controllers.Application.rolesUsuario()
 
-
+# Admin URs
 GET		/urs					            controllers.AdminUnidadResponsableController.list()
 GET		/ur						            controllers.AdminUnidadResponsableController.create()
 POST	/ur/save				            controllers.AdminUnidadResponsableController.save()
@@ -337,4 +337,12 @@ GET     /vacio                              controllers.Application.vacio()
 GET     /pruebaEncrypt                      controllers.AdminCorreoController.pruebaEncrypt()
 
 GET     /productorVideoteca                 controllers.ProductorVideotecaController.list()
-GET     /productorVideotecaListDTSS                 controllers.ProductorVideotecaController.listDTSS()
+GET     /productorVideotecaListDTSS         controllers.ProductorVideotecaController.listDTSS()
+
+
+# VIDEOTECA -admin
+GET     /videoteca/admin/list               controllers.AdminVideotecaController.list()
+GET     /videotecaAdminAjaxList             controllers.AdminVideotecaController.ajaxList()
+POST    /videotecaAdminCatalogoInfo         controllers.AdminVideotecaController.catalogoInfo()
+POST    /videotecaAdmin/asignarProductor    controllers.AdminVideotecaController.asignarProductor()
+

@@ -11,75 +11,31 @@
         <div class="col-md-2 col-sm-2 col-xs-2 vbottom" id="filtro5"  name="filtroEdo" style="padding-bottom:5px; cursor:pointer">Validados</div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-            <div class="x_panel">
-                <table class="table table-bordered table-striped jambo_table bulk_action order-column" id="tablaMisServicios">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Título</th>
-                        <th>Evento</th>
-                        <th>Nivel</th>
-
-                        <th>Estado</th>
-                    </tr>
-                    </thead>
-                </table>
-            </div>
-
-        </div>
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="min-height:300px;">
-            <div id="nav5" class="sidenav5" data-maximizado=false data-original-width="" data-original-height="" data-original-right="" data-original-top="" data-original-position="" data-original-padding="">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2 id="tituloDetalle"></h2>
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class=""></i></a>
-                            <li><a id="hrefCorreoVentanaDetalle"><i class="far fa-envelope fa-fw"></i></a>
-                            </li>
-                            </li>
-                            <li>
-                                <a id="hrefIconoToggle" onclick="javascript:toggleVentanaDetalle()"><i class="fa fa-expand fa-fw"></i></a>
-                            </li>
-                            <li>
-                                <a onclick="javascript:imprimirVentanaDetalle()"><i class="fas fa-print fa-fw" aria-hidden="true" ></i></a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x-content">
-                        <div id="observacionOficio"></div>
-                        <div id="observacionFolio"></div>
-                        <table class="table table-bordered table-striped jambo_table bulk_action order-column dataTable no-footer" id="tablaMisServiciosDetalle">
-                            <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Horario</th>
-                                <th>Detalle</th>
-                                <th>Estado</th>
-
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                            <tfoot>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="table-responsive">
+        <table id="tabla" class="table table-striped table-bordered"  cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <td>ID</td>
+                <td>Serie</td>
+                <td>Título</td>
+                <td>Obra</td>
+                <td>Catalogador</td>
+                <td>Estado</td>
+            </tr>
+            </thead>
+        </table>
     </div>
+
 }
 
 
 
 
 <script>
-        var laTablaDTSS;
-        var laTablaDTSSDetalle;
+        //var laTablaDTSS;
+        //var laTablaDTSSDetalle;
+
+        var tablaDT;
 
 
         $(function(){
@@ -89,6 +45,62 @@
                 z_index: 999000
             });
 
+
+         tablaDT =  $('#tabla').DataTable( {
+        	 "stateSave": true,
+             "language": {
+                 "url": "@routes.Assets.at("Spanish.json")"
+             },
+             "processing": false,
+             "serverSide": true,
+
+             "ajax": {
+                 "url":  "@routes.ProductorVideotecaController.listDTSS()",
+                 "contentType": "application/json; charset=utf-8",
+                 "dataType": "json"
+             },
+             "columns": [
+                 { "data": "clave",
+                   "render": function(data, type, row, meta){
+                         return "<a href=\"javascript:catalogoSoloInfo("+row.id+")\">"+data+"</a>";
+                   }
+                 },
+                 {"data": "serie"},
+                 { "data": "titulo"},
+                  { "data": "obra"},
+                  { "data": "catalogador"}
+               ],
+               "initComplete": function(settings, json) {
+            	   $(".rowInner:odd").css("background-color","#f0f0f5")
+            	   $("#tabla .row:odd").css("margin-left","-7px").css("margin-right","-7px");
+            }
+         } );
+
+
+         tablaDT.off( 'xhr');
+         tablaDT.on( 'xhr', function () {
+           //console.dir(tablaDT.ajax)
+             var json = tablaDT.ajax.json();
+             console.log("..........",json)
+           //  alert( json.data.length +' row(s) were loaded' );
+
+             var data = tablaDT.ajax.params();
+             //alert( 'Search term was: '+data.search.value )
+             console.dir(data)
+            $(".rowInner:odd").css("background-color", "#bbbbff" );
+         } );
+
+        tablaDT.off('mouseenter');
+        tablaDT.on('mouseenter', 'td', function () {
+            console.log("mouseover...")
+            tablaDT
+                .cells()
+                .nodes()
+                .each((el) => el.classList.add('highlight'));
+        });
+
+
+            @*
             laTablaDTSS = $('#tablaMisServicios').DataTable( {
                 pageLength: -1,
                 lengthMenu: [  [1,3, 5, 10, 25, 50, -1], [1,3, 5, 10, 25, 50, "Todos"]   ],
@@ -166,6 +178,7 @@
                 }
 
             } );   //  fin del datatables
+            *@
         }); // fin del function()
 
 

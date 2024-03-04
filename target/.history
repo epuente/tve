@@ -10,3 +10,16 @@ compile
 run
 reload
 run
+exit
+run
+exit
+run
+compile
+reload
+compile
+run
+run 8089
+exit
+run 8089
+run
+clean

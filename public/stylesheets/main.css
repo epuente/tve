@@ -82,4 +82,5 @@ section {
     margin: 2px;
     padding: 0.2em 0.4em;
     border: thin solid #dbdbdb;
+    border-radius: 5px;
 }

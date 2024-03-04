@@ -1,0 +1,326 @@
+<style nonce="@session.get("nonce")">
+	.nav>li>a { font-size: 0.8em;}
+	.nav-tabs>li>a {margin-right: -0.8em;}
+
+    .modal-dialog {
+      height: 80%; /* = 90% of the .modal-backdrop block = %90 of the screen */
+    }
+    .modal-content {
+        height: 100%; /* = 100% of the .modal-dialog block */
+        overflow:auto;
+    }
+
+    .campoLabel {
+        font-size: small;
+        color: #acaeb1;
+    }
+
+    .rowTablaRounded {
+        background: white;
+        border: thin solid #dbdbdb;
+        border-radius: 5px;
+        margin: 0.5rem;
+        padding: 0.5rem;
+    }
+
+    .rowTabla {
+        background: white;
+        border-bottom: thin solid #dbdbdb;
+        width:95%;
+        margin: 0.5rem;
+        padding: 0.5rem;
+    }
+    .borderTabla {
+        border-right: 1px solid black;
+    }
+
+
+
+    .rowClara {
+        border-bottom: thin solid #f0f0f0;
+    }
+
+
+
+</style>
+
+  <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document" style="width: 85%; height: 85%;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Asignar productor<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></h3>
+
+        </div>
+        <div class="modal-body ">
+            <div class="hidden">
+            tipoOperacion <div id="divIdTipoOperacion"></div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                    <div class="row rowTabla">
+                        <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                            <div class="campoLabel">ID</div><div id="datoID"></div>
+                        </div>
+                        <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+                            <div class="campoLabel">Título</div><div id="datoTitulo"></div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                            <div class="campoLabel">Formato</div><div id="datoFormato" class=""></div>
+                        </div>
+                    </div>
+                    <div class="row rowTabla">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="campoLabel">Sinópsis</div><div id="datoSinopsis" class=""></div>
+                        </div>
+                    </div>
+                    <div class="row rowTabla">
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                            <div class="campoLabel">Audio</div><div id="datoAudio" class=""></div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                            <div class="campoLabel">Calidad audio</div><div id="datoCalidadAudio" class=""></div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                            <div class="campoLabel">Video</div><div id="datoVideo" class=""></div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                            <div class="campoLabel">Calidad video</div><div id="datoCalidadVideo" class=""></div>
+                        </div>
+                    </div>
+                    <div class="row rowTabla">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="campoLabel">Observaciones</div><div id="datoObservaciones" class=""></div>
+                        </div>
+                    </div>
+                    <div class="row rowTabla">
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                            <div class="campoLabel">Folio DP</div><div id="datoFolio"></div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <div class="campoLabel">Instancia solicitante</div><div id="datoInstancia"></div>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                            <div class="campoLabel">Folio DEV</div><div id="datoFolioDEV"></div>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 colTabla">
+                            <div class="campoLabel">Serie</div><div id="datoSerie"></div>
+                        </div>
+                    </div>
+                    <div class="row rowTabla">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="row" >
+                                <div class="col-xs-3 col-sm-3 col-md-2 col-lg-2">
+                                    <div class="campoLabel">Núm. de obra</div><div id="datoObra"></div>
+                                </div>
+                                <div class="col-xs-3 col-sm-3 col-md-2 col-lg-2">
+                                    <div class="campoLabel">Duración</div><div id="datoDuracion"></div>
+                                </div>
+                                <div class="col-xs-3 col-sm-3 col-md-5 col-lg-5">
+                                    <div class="campoLabel">Producción</div><div id="datoProduccion"></div>
+                                </div>
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                    <div class="campoLabel">Idioma</div><div id="datoIdioma"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row rowTabla">
+                        <div class="col-xs-2 col-sm-2 col-md-3 col-lg-3">
+                            <div class="campoLabel">Grabación</div>
+                            <div id="datoGrabacion"></div>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-3 col-lg-3">
+                            <div class="campoLabel">Fecha producción</div>
+                            <div id="datoFechaProduccion"></div>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-3 col-lg-3">
+                            <div class="campoLabel">Fecha publicación</div>
+                            <div id="datoFechaPublicacion"></div>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-3 col-lg-3">
+                            <div class="campoLabel">Disponibilidad</div>
+                            <div id="datoDisponibilidad"></div>
+                        </div>
+                    </div>
+                    <div class="row rowTabla" style="padding-bottom:0rem;">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="campoLabel">Intervención de los personajes</div>
+                                </div>
+                            </div>
+                            <div class="row rowClara" id="headerTimeLine">
+                                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                                    <b>Desde</b>
+                                </div>
+                                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                                    <b>Hasta</b>
+                                </div>
+                                <div class="col-xs-1 col-sm-1 col-md-3 col-lg-3">
+                                    <b>Nombre</b>
+                                </div>
+                                <div class="col-xs-1 col-sm-1 col-md-2 col-lg-2">
+                                    <b>Grado</b>
+                                </div>
+                                <div class="col-xs-1 col-sm-1 col-md-2 col-lg-2">
+                                    <b>Cargo</b>
+                                </div>
+                                <div class="col-xs-1 col-sm-1 col-md-3 col-lg-3">
+                                    <b>Título o tema</b>
+                                </div>
+                            </div>
+                            <div id="divRenglonesTimeLine">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--
+                    <div class="row" style="margin: 0.5rem; padding: 0.5rem;">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <a href="javascript:toggleMasInfo();">
+                                <div id="divPregInfo" style="display:inline-block">Mostrar más info</div>
+                                <span id="iconito" ><i class="fa-solid fa-chevron-down"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                    -->
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <!-- Eventos -->
+                    <div class="row rowTabla">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="campoLabel">Evento</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div id="datoEventos"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Nivel -->
+                    <div class="row rowTabla">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="campoLabel">Nivel</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div id="datoNivel"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Palabras clave -->
+                    <div class="row rowTabla">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="campoLabel">Palabras clave</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div id="datoPalabrasClave"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- Áreas temáticas -->
+                    <div class="row rowTabla">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="campoLabel">Área temática</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div id="datoAreatematica"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- CREDITOS -->
+                    <div id="divCreditos" style="display:inline;">
+                        <div class="row rowTabla">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="row ">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="campoLabel">Creditos</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div id="datoCredito"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ACCESIBILIDAD-->
+                    <div class="row rowTabla">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="campoLabel">Accesibilidad</div><div id="datoAccesibilidad"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin:1rem; padding:1rem;" class="ocultable">
+                <div class="row" style="margin-bottom:2rem;">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <h3>Productores activos</h3>
+                        <div id="listaProductores"></div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 2em; margin-bottom: 1em;">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        Seleccione al productor que validará la ficha
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        @if(session.get("rolActual")=="1"){
+                        <button type="button" class="btn btn-success pull-right" id="btnModalAsignaProd" disabled aria-readonly="true" >Asignar productor</button>
+                        }
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <button type="button" class="btn btn-warning pull-left" id="btnModalCancelar" data-dismiss="modal" style="" >Cancelar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="VMBtnCerrar" style="margin-top:3rem;">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+                    <div style="width: 10rem" class="center-block">
+                        <button type="button" class="btn btn-success btn-block" data-dismiss="modal">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div id="fc_myModal2" data-toggle="modal" data-target="#myModal2"></div>
+
+
+<div id="baseRenglonesTimeLine">
+    <div class="row rowClara">
+        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1 " name="tlDesde"></div>
+        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1 " name="tlHasta"></div>
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 " name="tlNombre"></div>
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 " name="tlGrado"></div>
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 " name="tlCargo"></div>
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 " name="tlTitulo"></div>
+    </div>
+</div>
