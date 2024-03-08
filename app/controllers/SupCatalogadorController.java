@@ -556,5 +556,29 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
 
     }
 
+    public static Result catalogoInfo2(Long id){
+        System.out.println("\n\nDesde SupCatalogadorController.catalogoInfo");
+        VtkCatalogo catalogo = VtkCatalogo.find.byId(id);
+        //Logger.debug(  session("usuario") +"  -  "+ );
+
+        Logger.debug("001 id "+id);
+        Form<VtkCatalogo> forma = form(VtkCatalogo.class).fill(catalogo);
+        Logger.debug("002 FORMA "+forma);
+        Duracion d = new Duracion();
+        if (catalogo.duracion!=null)
+            d = new Duracion(catalogo.duracion);
+        else
+            d = new Duracion(0L);
+        Logger.debug("003 duracion " + d.horas+":"+d.minutos+":"+d.segundos);
+        /*
+        List<TipoCredito> tipos = TipoCredito.find.all();
+        List<TipoCredito> tiposOrdenados = tipos.stream()
+                .sorted(Comparator.comparing(TipoCredito::getId))
+                .collect(Collectors.toList());
+*/
+        return ok( views.html.videoteca.catalogadores.infoForm2.render(id, forma)  );
+
+    }
+
 
 }

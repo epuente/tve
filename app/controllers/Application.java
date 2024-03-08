@@ -17,6 +17,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.gobEncabezado;
 import views.html.login;
+import views.html.login2;
 import views.html.operacionNoPermitida;
 import views.html.usuarioSinAutenticar;
 
@@ -44,6 +45,10 @@ public class Application extends ControladorDefault {
 
 	public static Result login() {
 		return ok(login.render(form(Login.class)));
+	}
+
+	public static Result login2() {
+		return ok(login2.render(form(Login.class)));
 	}
 
 	// Recibe como parámetros usuario y password

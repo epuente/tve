@@ -871,7 +871,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
 
             /////////// TimeLine
-            Logger.debug("--->  Antes del return de losDatos " + forma.field("txaTimeLine").value());
+            Logger.debug("--->  Antes del return de losDatos - TIMELINE  " + forma.field("txaTimeLine").value());
 
 
             if (forma.field("txaTimeLine").value() != null   &&  forma.field("txaTimeLine").value()!="" ){
@@ -880,17 +880,21 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                     VtkTimeLine tl = new VtkTimeLine();
                     JSONObject objTL = jsonArrTimeLine.getJSONObject(i);
 
-                    if (objTL.get("desde").toString().length() != 0) {
+                    if (!objTL.isNull("desde") && objTL.get("desde").toString().length() != 0) {
                         Duracion dDesde = new Duracion();
+                        Logger.debug("enviando (desde) "+objTL.get("desde").toString());
                         dDesde.convertir(objTL.get("desde").toString());
                         tl.desde = dDesde.totalSegundos();
+                        Logger.debug("convertido (desde) "+tl.desde);
                     }
-                    if (objTL.get("hasta").toString().length() != 0) {
+                    if (!objTL.isNull("hasta") && objTL.get("hasta").toString().length() != 0) {
                         Duracion dHasta = new Duracion();
+                        Logger.debug("enviando (hasta) "+objTL.get("hasta").toString());
                         dHasta.convertir(objTL.get("hasta").toString());
                         tl.hasta = dHasta.totalSegundos();
+                        Logger.debug("convertido (hasta) "+tl.hasta);
                     }
-                    if (objTL.get("nombre").toString().length() != 0) {
+                    if (!objTL.isNull("nombre") && objTL.get("nombre").toString().length() != 0) {
                         Long idVP = null;
                         VideoPersonaje vp = new VideoPersonaje();
                         String elNombre = objTL.get("nombre").toString();
@@ -913,13 +917,14 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
 
                     }
-                    if (objTL.get("grado").toString().length() != 0) {
+
+                    if (!objTL.isNull("grado") &&  objTL.get("grado").toString().length() != 0) {
                         tl.gradoacademico = objTL.get("grado").toString();
                     }
-                    if (objTL.get("cargo").toString().length() != 0) {
+                    if (!objTL.isNull("cargo") && objTL.get("cargo").toString().length() != 0) {
                         tl.cargo = objTL.get("cargo").toString();
                     }
-                    if (objTL.get("tema").toString().length() != 0) {
+                    if (!objTL.isNull("tema") && objTL.get("tema").toString().length() != 0) {
                         tl.tema = objTL.get("tema").toString();
                     }
                     tl.catalogador = Personal.find.byId( Long.parseLong(session("usuario"))  );
@@ -928,15 +933,9 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             }
 
             vtk.timeline.forEach(tm->System.out.println("- - - -Desde "+tm.desde+" "+tm.hasta+" "+tm.personaje.nombre));
-
-
-
-
-
-
-
             Ebean.update(vtk);
             Ebean.commitTransaction();
+            flash("success", "Se actualizó al acervo ");
 
             /*
             System.out.println("\n\n\nDesde VideotecaController.update");
@@ -1043,15 +1042,16 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             flash("success", "Se actualizó el acervo");
             */
         } catch(Exception e) {
+            flash("danger", "No se aplicarón los cambios. No fué posible la actualización ");
             Ebean.rollbackTransaction();
-
             System.out.println(ColorConsola.ANSI_RED+"Ocurrió un error al intentar actualizar el registro. "+e+ColorConsola.ANSI_RESET);
+            e.printStackTrace();
 
+//            return redirect( routes.VideotecaController.catalogo() );
         }finally {
             Ebean.endTransaction();
         }
-        flash("success", "Se actualizó al acervo ");
-        return redirect( routes.VideotecaController.catalogo() );
+        return redirect( routes.VideotecaController.catalogo());
     }
 
 

@@ -1,5 +1,7 @@
 @(estado:Long, id:String)
 @main{
+    @views.html.videoteca.admin.ventanasModales()
+
     <br>
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><h1>Catálogo de videoteca</h1></div>
@@ -25,180 +27,257 @@
             </thead>
         </table>
     </div>
-
 }
 
-
-
-
 <script>
-        //var laTablaDTSS;
-        //var laTablaDTSSDetalle;
-
         var tablaDT;
-
-
         $(function(){
             $.notifyDefaults({
                 type: 'success',
                 newest_on_top: true,
                 z_index: 999000
             });
-
-
-         tablaDT =  $('#tabla').DataTable( {
-        	 "stateSave": true,
-             "language": {
-                 "url": "@routes.Assets.at("Spanish.json")"
-             },
-             "processing": false,
-             "serverSide": true,
-
-             "ajax": {
-                 "url":  "@routes.ProductorVideotecaController.listDTSS()",
-                 "contentType": "application/json; charset=utf-8",
-                 "dataType": "json"
-             },
-             "columns": [
-                 { "data": "clave",
-                   "render": function(data, type, row, meta){
-                         return "<a href=\"javascript:catalogoSoloInfo("+row.id+")\">"+data+"</a>";
-                   }
+             tablaDT =  $('#tabla').DataTable( {
+                 "stateSave": true,
+                 "language": {
+                     "url": "@routes.Assets.at("Spanish.json")"
                  },
-                 {"data": "serie"},
-                 { "data": "titulo"},
-                  { "data": "obra"},
-                  { "data": "catalogador"}
-               ],
-               "initComplete": function(settings, json) {
-            	   $(".rowInner:odd").css("background-color","#f0f0f5")
-            	   $("#tabla .row:odd").css("margin-left","-7px").css("margin-right","-7px");
-            }
-         } );
+                 "processing": false,
+                 "serverSide": true,
 
-
-         tablaDT.off( 'xhr');
-         tablaDT.on( 'xhr', function () {
-           //console.dir(tablaDT.ajax)
-             var json = tablaDT.ajax.json();
-             console.log("..........",json)
-           //  alert( json.data.length +' row(s) were loaded' );
-
-             var data = tablaDT.ajax.params();
-             //alert( 'Search term was: '+data.search.value )
-             console.dir(data)
-            $(".rowInner:odd").css("background-color", "#bbbbff" );
-         } );
-
-        tablaDT.off('mouseenter');
-        tablaDT.on('mouseenter', 'td', function () {
-            console.log("mouseover...")
-            tablaDT
-                .cells()
-                .nodes()
-                .each((el) => el.classList.add('highlight'));
-        });
-
-
-            @*
-            laTablaDTSS = $('#tablaMisServicios').DataTable( {
-                pageLength: -1,
-                lengthMenu: [  [1,3, 5, 10, 25, 50, -1], [1,3, 5, 10, 25, 50, "Todos"]   ],
-                language: {
-                    url: "@routes.Assets.at("Spanish.json")"
-                },
-                processing: false,
-                serverSide: true,
-                //scrollY: 400,
-                scrollY: '60vh',
-                scrollCollapse: true,
-                stateSave: true,
-                scrollX: false,
-                mark: true,
-                ajax: {
-                    url:  "@routes.ProductorVideotecaController.listDTSS",
-                    data: { estado: @estado },
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json"
-                },
-                deferRender: true,
-                "columns": [
-                    {"data": "folio",
+                 "ajax": {
+                     "url":  "@routes.ProductorVideotecaController.listDTSS()",
+                     "contentType": "application/json; charset=utf-8",
+                     "dataType": "json"
+                 },
+                 "columns": [
+                     { "data": "clave",
+                       "render": function(data, type, row, meta){
+                             return "<a href=\"javascript:catalogoSoloInfo("+row.id+")\">"+data+"</a>";
+                       }
+                     },
+                     { "data": "serie"},
+                     { "data": "titulo"},
+                     { "data": "obra"},
+                     { "data": "catalogador"},
+                     { "data": "validado",
                         "render": function(data, type, row, meta){
-                            var r = data;
-                            if ( row["tieneArchs"]==true ){
-                                 stacked=
-                                  '<div style="cursor:pointer"  data-toggle="tooltip"  title="Ver archivos del oficio"  data-placement="top"<div class="fa-stack fa-lg pull-right"><a onclick="javascript:modalVerArchivosOficio('+row["oficioId"]+')"><i class="fas fa-eye fa-stack-1x fa-lg" style="font-size: 1em;"></i><i class="far fa-file fa-stack-1x fa-lg"></i></a></div></div>  ';
-                              //  r+= "<div style=\"cursor:pointer; text-align:center;\"   data-toggle=\"tooltip\"     title=\"Ver archivos del oficio\"  data-placement=\"top\"   ><a onclick='javascript:modalVerArchivosOficio("+row["oficioId"]+")'><i class=\"fa fa-eye fa-lg\" aria-hidden=\"true\"></i></a></div>";
-                               r+=stacked;
-                            }
-                            return r;
+                            return data==false?"Sin validar":"validado";
                         }
-
-                    },
-                    {"data": "ur",          "visible": true,    "searchable": true},
-                    {"data": "descripcion"},
-                    {"data": "estado",      "visible": true,   "searchable": false,     "sortable":false},
-
-                    {"data": "id" , "visible": false, "searchable": false},
-                    {"data": "estadoId", "visible": false , "searchable": false}
-                  ],
-                "initComplete": function(){
-                    $("#tablaMisServicios_wrapper div.row div").removeClass("col-sm-6");
-                    $("#tablaMisServicios_wrapper div.row div:eq(0)").addClass("col-sm-4");
-                    $("#tablaMisServicios_wrapper div.row div:eq(2)").addClass("col-sm-8");
-                    $(".dataTables_filter").css("width","auto");
-
-
-                    //console.dir( laTablaDTSS.rows().data()  )
-
-
-                    @if(estado!=0){
-                        toggleFiltro( $("#filtro@estado") );
-                        @if(id!=""){
-                            $("#tablaMisServicios tbody tr").find("td:eq(0)").each(function(i,r){
-                                console.log("tablita..."+ r.innerHTML   )
-                                if (r.innerHTML == "@id"){
-                                    $(r).click();
-                                }
-                            });
-                        }
-                    }else{
-                        seleccionaPrimerRenlon();
+                     }
+                   ],
+                   "initComplete": function(settings, json) {
+                       $(".rowInner:odd").css("background-color","#f0f0f5")
+                       $("#tabla .row:odd").css("margin-left","-7px").css("margin-right","-7px");
                     }
+                 } );
 
 
+             tablaDT.off( 'xhr');
+             tablaDT.on( 'xhr', function () {
+               //console.dir(tablaDT.ajax)
+                 var json = tablaDT.ajax.json();
+                 console.log("..........",json)
+               //  alert( json.data.length +' row(s) were loaded' );
+
+                 var data = tablaDT.ajax.params();
+                 //alert( 'Search term was: '+data.search.value )
+                 console.dir(data)
+                $(".rowInner:odd").css("background-color", "#bbbbff" );
+         } );
+
+    }); // fin del function()
 
 
-
-
-
-                 //   $('div.dataTables_scrollBody').css("max-height", $(window).height()-400+"px" );
-
-                }
-
-            } );   //  fin del datatables
-            *@
-        }); // fin del function()
-
-
-    function seleccionaPrimerRenlon(){
-    	borrarContenidoDetalle();
-    	if ($("#tablaMisServicios tbody tr").length > 0){
-	        $("#tablaMisServicios tbody").find("tr:first td:eq(0)").click();
-	        console.log("seleccionado el primer renglon")
-    	}
+    function catalogoSoloInfo(id){
+        catalogoInfo(id);
+        $("#myModal2").find(".ocultable").hide();
+        $("#VMBtnCerrar").show();
+        $("#myModal2").modal('show');
     }
 
-	 function borrarContenidoDetalle(){
-	      $("#tablaMisServiciosDetalle tbody, #tablaMisServiciosDetalle tfoot").empty();
-	         $("#tituloDetalle, #observacionOficio, #observacionFolio").html("");
-	 }
 
-	 $('#tablaMisServicios').off( 'page.dt');
-	 $('#tablaMisServicios').on( 'page.dt', function () {
-		 borrarContenidoDetalle();
-		} );
+    function catalogoInfo(id){
+        var $m = LlamadaAjax("@routes.ProductorVideotecaController.catalogoInfo", "POST", JSON.stringify({id:id}));
+        $.when($m).done(function(data){
+            console.dir(data)
+            var i ="";
+            i += "ID: "+data.clave + " "+
+                "Título: "+data.titulo;
+
+            $("#info").html(i);
+            var cadena="";
+            cadena+="<div class=\"form-group\">";
+                @for((key, value) <- models.Personal.optionsProductoresActivos()) {
+                    cadena+="<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3\">";
+                    cadena+="	<table>";
+                    cadena+="		<tr>";
+                    cadena+="			<td valign=\"baseline\">";
+                    cadena+="				<input type=\"radio\" id=\"auxProductores_@key\" name=\"auxProductores[]\" value=\"@key\">&nbsp;";
+                    cadena+="			</td>";
+                    cadena+="			<td valign=\"baseline\">";
+                    cadena+="				@value";
+                    cadena+="			</td>";
+                    cadena+="		</tr>";
+                    cadena+="	</table>";
+                    cadena+="</div>";
+                }
+            cadena+="</div>";
+            $("#listaProductores").html(cadena);
+
+
+            $("#datoID").html(data.clave);
+            $("#datoTitulo").html(data.titulo);
+            var msgEventos="";
+            var msgNiveles="";
+            var msgAreas="";
+            var msgCreditos="";
+            var msgPalabras="";
+            var msgEventos="";
+            var msgNiveles="";
+            var msgAreas="";
+            var msgAccesibilidad="";
+
+            $("#datoFormato").html(data.formato);
+            $("#datoAudio").html(data.audio);
+            if (data.calidadaudio!=undefined){
+                var auxCA = "";
+                switch (data.calidadaudio) {
+                    case "B": auxCA="Buena"; break;
+                    case "M": auxCA="Mala"; break;
+                    case "FO": auxCA="Fallas de orígen"; break;
+                }
+                $("#datoCalidadAudio").html(auxCA);
+            }
+            $("#datoVideo").html(data.video);
+            if (data.calidadvideo!=undefined){
+                var auxCV = "";
+                switch (data.calidadvideo) {
+                    case "B": auxCV="Buena"; break;
+                    case "M": auxCV="Mala"; break;
+                    case "FO": auxCV="Fallas de orígen"; break;
+                }
+                $("#datoCalidadVideo").html(auxCV);
+            }
+
+
+            $("#datoFolio").html(data.folio);
+            $("#datoInstancia").html(data.instancia);
+            $("#datoSerie").html(data.serie);
+            $("#datoFolioDEV").html(data.folioDEV);
+
+            $("#datoGrabacion").html(data.grabacion);
+            $("#datoFechaProduccion").html(data.fechaproduccion);
+            $("#datoFechaPublicacion").html(data.fechapublicacion);
+            $("#datoDisponibilidad").html(data.disponibilidad);
+
+            $("#datoObservaciones").html(data.observaciones);
+
+            <!-- TimeLine -->
+            $("#divRenglonesTimeLine").html("");
+            if (data.timeline.length==0){
+                $("#headerTimeLine").html("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'><small><i>No se definieron intervenciones de personajes</i></small></div>");
+            } else {
+                $("#headerTimeLine").html("<div class='col-xs-1 col-sm-1 col-md-1 col-lg-1'> <b>Desde</b> </div> <div class='col-xs-1 col-sm-1 col-md-1 col-lg-1'> <b>Hasta</b> </div> <div class='col-xs-1 col-sm-1 col-md-2 col-lg-2'> <b>Nombre</b> </div> <div class='col-xs-1 col-sm-2 col-md-2 col-lg-2'> <b>Grado</b> </div> <div class='col-xs-1 col-sm-1 col-md-2 col-lg-2'> <b>Cargo</b> </div> <div class='col-xs-1 col-sm-1 col-md-4 col-lg-4'> <b>Título o tema</b> </div>");
+                data.timeline.forEach(function (tl, tlIndex) {
+                    // clonar baseRenglonesTimeLine
+                    console.log(tl.desde)
+                    var $clonado = $("#baseRenglonesTimeLine").clone();
+                    $clonado.attr("id", "renglonTL-"+tlIndex);
+                    //$clonado.addClass("small");
+                    $("#divRenglonesTimeLine").append($clonado);
+                    if (tl.desde!=undefined)
+                        $("#renglonTL-"+tlIndex).find("div[name='tlDesde']").text(tl.desde);
+                    if (tl.hasta!=undefined)
+                        $("#renglonTL-"+tlIndex).find("div[name='tlHasta']").text(tl.hasta);
+                    if (tl.nombre!=undefined)
+                        $("#renglonTL-"+tlIndex).find("div[name='tlNombre']").text(tl.nombre);
+                    if (tl.grado!=undefined)
+                        $("#renglonTL-"+tlIndex).find("div[name='tlGrado']").text(tl.grado);
+                    if (tl.cargo!=undefined)
+                        $("#renglonTL-"+tlIndex).find("div[name='tlCargo']").text(tl.cargo);
+                    if (tl.titulo!=undefined)
+                    $("#renglonTL-"+tlIndex).find("div[name='tlTitulo']").text(tl.titulo);
+                });
+            }
+
+            <!-- Evento -->
+            if (data.eventos.length>=1){
+                data.eventos.forEach(function (e) {
+                        msgEventos+=e.descripcion+", ";
+                });
+                msgEventos = msgEventos.substring(0, msgEventos.length - 2);
+                $("#datoEventos").html(msgEventos);
+            }
+            console.log(msgNiveles)
+            <!-- Niveles -->
+            if (data.niveles.length>=1){
+                data.niveles.forEach(function (n) {
+                    msgNiveles+=n.descripcion+", ";
+                });
+                msgNiveles = msgNiveles.substring(0, msgNiveles.length - 2);
+                $("#datoNivel").html(msgNiveles);
+            }
+
+            <!-- Área temática -->
+            if (data.areastematicas.length>=1){
+                data.areastematicas.forEach(function (n) {
+                    if (n.id== 999)
+                        msgAreas+=  n.descripcion+": "+data.areaTematicaOtra+"  ";
+                    else
+                        msgAreas+=n.descripcion+", ";
+                });
+                msgAreas = msgAreas.substring(0, msgAreas.length - 2);
+                $("#datoAreatematica").html(msgAreas);
+            }
+
+            <!-- creditos -->
+            if (data.creditos.length>=1){
+
+                data.creditos.forEach(function (c) {
+                    msgCreditos+="<span style='padding-right:1.3rem;'><b>"+c.grupo+": </b>";
+                    c.personas.forEach(function(ps){
+                        msgCreditos+=ps.persona+", ";
+                    });
+                    msgCreditos = msgCreditos.substring(0, msgCreditos.length - 2);
+                    msgCreditos+="</span>";
+                });
+            } else {
+                msgCreditos="<small><i>No se definieron créditos</i></small>";
+            }
+            $("#datoCredito").html(msgCreditos);
+
+            <!-- palabras clave -->
+            if (data.palabrasclave.length>=1){
+                data.palabrasclave.forEach(function (pc) {
+                    msgPalabras+="<span style='padding-right:1.3rem;'>"+pc.descripcion;
+                    msgPalabras+="</span>";
+                });
+                $("#datoPalabrasClave").html(msgPalabras);
+            }
+
+            data.numobra!=undefined?$("#datoObra").html(data.numobra):$("#datoObra").html("");
+            data.duracion!=undefined?$("#datoDuracion").html(data.duracion):$("#datoDuracion").html("");
+            data.produccion!=undefined?$("#datoProduccion").html(data.produccion):$("#datoProduccion").html("");
+            data.idioma!=undefined?$("#datoIdioma").html(data.idioma):$("#datoIdioma").html("");
+            if (data.accesibilidadAudio!=undefined || data.accesibilidadVideo!=undefined){
+                if (data.accesibilidadAudio!=undefined && data.accesibilidadAudio==true)
+                    msgAccesibilidad+="Lenguaje de señas ,";
+                if (data.accesibilidadVideo!=undefined && data.accesibilidadVideo==true)
+                    msgAccesibilidad+=" Subtítulos descriptivos ,";
+                if (data.accesibilidadAudio==false && data.accesibilidadVideo==false)
+                    msgAccesibilidad = "<small><i>Sin opciones de accesibilidad</i></small>  ";
+                msgAccesibilidad = msgAccesibilidad.substring(0, msgAccesibilidad.length - 2);
+            }
+            $("#datoAccesibilidad").html(msgAccesibilidad);
+
+            $("#datoSinopsis").html(data.sinopsis);
+            if (data.validador!=undefined)
+                $("#auxProductores_"+data.validador).prop("checked", true);
+
+        });
+    }
+
 
     </script>
 

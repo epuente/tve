@@ -272,8 +272,12 @@ console.log(msgNiveles)
             <!-- Área temática -->
             if (data.areastematicas.length>=1){
                 data.areastematicas.forEach(function (n) {
-                    msgAreas+=n.descripcion+", ";
+                    if (n.id== 999)
+                        msgAreas+=  n.descripcion+": "+data.areaTematicaOtra+"  ";
+                    else
+                        msgAreas+=n.descripcion+", ";
                 });
+
                 msgAreas = msgAreas.substring(0, msgAreas.length - 2);
                 $("#datoAreatematica").html(msgAreas);
             }

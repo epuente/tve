@@ -8,6 +8,7 @@ import play.db.DB;
 import play.filters.csrf.CSRFFilter;
 import play.filters.gzip.GzipFilter;
 import play.libs.F.Promise;
+import play.mvc.Http;
 import play.mvc.Http.RequestHeader;
 import play.mvc.Result;
 import views.html.errorPage;
@@ -36,6 +37,8 @@ public class Global extends GlobalSettings {
         SimpleDateFormat sdfDia = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm:ss:S");
         String modo  =  app.isDev()?"Desarrollo":app.isProd()?"Producción":"Prueba";
+        String puertoHTTP = System.getProperty("http.port");
+        String puertoHTTPS = System.getProperty("https.port");
         try {
             String DBvendor = DB.getConnection().getMetaData().getDatabaseProductName();
             String DBversion = DB.getConnection().getMetaData().getDatabaseProductVersion();
@@ -58,7 +61,10 @@ public class Global extends GlobalSettings {
         //System.out.println(    Play.application().configuration().getString("db.default.url")     );
         System.out.println(ColorConsola.SET_BOLD_TEXT+ColorConsola.ANSI_GREEN+"Iniciando aplicación en modo "+modo+" el "+sdfDia.format(c.getTime())+" a las "+  sdfHora.format(c.getTime())  +ColorConsola.ANSI_RESET);
         System.out.println(ColorConsola.SET_BOLD_TEXT+ColorConsola.ANSI_GREEN+"Ejecutable localizado en "+ruta +ColorConsola.ANSI_RESET);
-        System.out.println(ColorConsola.SET_BOLD_TEXT+ColorConsola.ANSI_GREEN+"Aplicación iniciada\n\n"+ColorConsola.ANSI_RESET);
+        System.out.println(ColorConsola.SET_BOLD_TEXT+ColorConsola.ANSI_GREEN+"Versión Play! "+play.core.PlayVersion.current());
+
+
+        System.out.println(ColorConsola.SET_BOLD_TEXT+ColorConsola.ANSI_GREEN+"Aplicación iniciada en ... puerto http:"+puertoHTTP+"    puerto https:"+puertoHTTPS+"\n\n"+ColorConsola.ANSI_RESET);
         Notificacion noti = Notificacion.getInstance();
         noti.recargar();
     }

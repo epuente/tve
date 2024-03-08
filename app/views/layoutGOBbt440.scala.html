@@ -1,0 +1,54 @@
+@(content: Html)
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sistema de servicios de Televisión Educativa</title>
+
+
+    <!-- CSS -->
+    <link href="/favicon.ico" rel="shortcut icon">
+    <link href="https://framework-gb.cdn.gob.mx/gm/v4/css/main.css" rel="stylesheet">
+
+    <!-- Respond.js soporte de media queries para Internet Explorer 8 -->
+    <!-- ie8.js EventTarget para cada nodo en Internet Explorer 8 -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ie8/0.2.2/ie8.js"></script>
+    <![endif]-->
+
+
+    <script src="@routes.Assets.at("gentelella/vendors/jquery/dist/jquery.min.js")"  nonce="@session.get("nonce")"></script>
+
+    <style>
+        body {
+            color: #545454 !important;
+        }
+    </style>
+    <!-- JS -->
+    <script src="https://framework-gb.cdn.gob.mx/gm/v4/js/gobmx.js"></script>
+
+    <link rel="icon" type="image/png" href="@routes.Assets.at("images/favicon.ico")">
+
+</head>
+<body>
+    <div class="row" style="  background: url('/assets/images/bandas.png'); background-repeat: repeat-y !important; background-position: center;" >
+        <div class="col-sm-12 col-md-12 col-ml-12">
+            <img alt="banner DEV" src="/assets/images/bannerS TVEBlanco.png" class="img-responsive" max-width="1280px" style="max-width: 1280px; max-height: 114px; margin: auto; display: block;">
+        </div>
+    </div>
+
+    <!-- Contenido -->
+    <main class="page">
+        <div class="container">
+            <section id="layoutGOB">
+                @content
+            </section>
+        </div>
+    </main>
+
+
+</body>
+</html>

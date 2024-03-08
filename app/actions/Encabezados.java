@@ -39,9 +39,15 @@ public class Encabezados  extends Action.Simple {
 				url + " " +
 				url + "/assets/gentelella/vendors/jquery/dist/jquery.min.js " +
 				"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js " +
-				"https://check.dev.ipn.mx/matomo.js");
+				"https://check.dev.ipn.mx/matomo.js " +
+				"https://framework-gb.cdn.gob.mx/gobmx.js"
+				);
 
-		ctx.response().setHeader("Content-Security-Policy", "style-src 'self' 'unsafe-inline'");
+		ctx.response().setHeader("Content-Security-Policy", "style-src 'self' 'unsafe-inline' "+
+				"https://framework-gb.cdn.gob.mx/assets/styles/main.css "+
+				"http://fonts.googleapis.com/css "+
+				"https://framework-gb.cdn.gob.mx/gm/v4/css/main.css"
+				);
 
 
 		ctx.response().setHeader("X-Content-Type-Options", "nosniff");
@@ -60,7 +66,7 @@ public class Encabezados  extends Action.Simple {
  *  HEADERS QUE PRODUCE
  *  
  *  
- *  comando: wget -q -S -O - localhost:9000 | :
+ *  comando: wget -q -S -O - localhost:8089 | :
  *
  * regresa:
  * 	HTTP/1.1 200 OK

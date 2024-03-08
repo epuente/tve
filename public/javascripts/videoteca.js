@@ -428,16 +428,16 @@ function agregarTimeLine(){
 
 function eliminarTimeLine(e){
     console.log("e "+$(e))
-    console.log("e "+$(e).attr("id"))
-    $(e).closest("div.row").remove();
+    console.dir("e "+$(e))
+    console.dir("e "+$(e).prop("id"))
+    //console.log("e "+$(e).attr("id"))
+    $(e).closest("div.row-participante").parent().remove();
 }
 
 
 function segundosACadena(seconds) {
   var hour = Math.floor(seconds / 3600);
   hour = (hour < 10)? '0' + hour : hour;
-  if (hour.length<3)
-    hour = "0"+hour;
   var minute = Math.floor((seconds / 60) % 60);
   minute = (minute < 10)? '0' + minute : minute;
   var second = seconds % 60;

@@ -197,10 +197,13 @@ public class AdminVideotecaController extends ControladorSeguroAdministrador {
 					JSONObject joAT = new JSONObject();
 					joAT.put("id", at.areatematica.id);
 					joAT.put("descripcion", at.areatematica.descripcion);
+					if (at.areatematica.id==999)
+						jo.put("areaTematicaOtra", c.areaTematicaOtra);
 					jaAreasTematicas.put(joAT);
 				}
 			}
 			jo.put("areastematicas", jaAreasTematicas);
+
 
 			jo.put("folio", c.folio!=null&&c.folio.length()>0?c.folio:noDefinido);
 			jo.put("instancia", c.unidadresponsable!=null?c.unidadresponsable.nombreLargo: noDefinida);

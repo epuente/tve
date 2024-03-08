@@ -691,7 +691,7 @@ create table palabra_clave (
   audit_insert              timestamp,
   audit_update              timestamp,
   catalogador_id            bigint not null,
-  descripcion               varchar(30) not null,
+  descripcion               varchar(80) not null,
   catalogo_id               bigint,
   constraint pk_palabra_clave primary key (id))
 ;
@@ -1158,6 +1158,7 @@ create table vtk_catalogo (
   calidad_video             varchar(2) not null,
   observaciones             varchar(3000) not null,
   validador_id              bigint,
+  validado                  boolean,
   version                   timestamp not null,
   constraint pk_vtk_catalogo primary key (id))
 ;

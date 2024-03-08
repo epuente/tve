@@ -23,3 +23,19 @@ exit
 run 8089
 run
 clean
+run
+exit
+run
+clean
+run
+CLEAN
+clean
+dist
+exit
+clean
+run
+exit
+run
+exit
+run
+exit

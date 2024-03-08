@@ -135,6 +135,8 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     @ManyToOne
     public Personal validador;
 
+    public boolean validado=false;
+
     public static Model.Finder<Long,VtkCatalogo> find = new Model.Finder<Long,VtkCatalogo>(Long.class, VtkCatalogo.class);
 
 
@@ -179,6 +181,18 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
             Logger.debug("camino 132");
             p = find
                     .where("(catalogador.id = "+session("usuario")+") AND ("+predicados+")")
+                    .setParameter("cadena", "%" + filtro.toUpperCase() + "%")
+                    .orderBy(columnaOrden + " " + tipoOrden)
+                    .findPagingList(pageSize)
+                    .setFetchAhead(false)
+                    .getPage(page);
+        }
+
+        // Es productor?
+        if (session("rolActual").compareTo("100")==0) {
+            Logger.debug("camino 100");
+            p = find
+                    .where("(validador.id = "+session("usuario")+") AND ("+predicados+")")
                     .setParameter("cadena", "%" + filtro.toUpperCase() + "%")
                     .orderBy(columnaOrden + " " + tipoOrden)
                     .findPagingList(pageSize)

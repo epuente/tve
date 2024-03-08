@@ -296,17 +296,17 @@
             @if(c.hasta!=null){
                 $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='hasta']").val( segundosACadena("@c.hasta") );
             }
-            @if(c.personaje.nombre.length>0){
+            @if(c.personaje.nombre!=null && c.personaje.nombre.length>0){
 
                 $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='personaje']").val( "@c.personaje.nombre" );
             }
-            @if(c.gradoacademico.length>0){
+            @if(c.gradoacademico!=null && c.gradoacademico.length>0){
                 $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='grado']").val( "@c.gradoacademico" );
             }
-            @if(c.cargo.length>0){
+            @if(c.cargo!=null && c.cargo.length>0){
                 $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='cargo']").val( "@c.cargo" );
             }
-            @if(c.tema.length>0){
+            @if(c.tema!=null && c.tema.length>0){
                 $("div[id^='renglonTimeLine-']").eq(renglonesTL-1).find("input[name='tema']").val( "@c.tema" );
             }
         }

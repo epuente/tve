@@ -1,5 +1,30 @@
 @(id: Long, forma: Form[models.videoteca.VtkCatalogo])
+
+@import scala.Predef; var x= 0
+@import scala.Predef; var msgAT= ""
+
+@msgAreasTematicas={
+    @for(at<-forma.get().areastematicas){
+        @(x=x+1)
+        @if(at.areatematica!=null){
+            @(msgAT= msgAT+at.areatematica.descripcion+", ")
+            <span class="bloque">@at.areatematica.descripcion</span>
+            @if(at.areatematica.id==999 && forma.get().areaTematicaOtra!=null){
+                <span class="bloque">@forma.get().areaTematicaOtra</span>
+            }
+        }
+    }
+}
+
 @main {
+    <style>
+        .campoLabel {
+            font-size: small;
+            color: #acaeb1;
+        }
+    </style>
+
+
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <ol class="breadcrumb">
@@ -9,14 +34,14 @@
         </div>
     </div>
 
-    <h1>Detalle del ID @forma.get().clave</h1>
+    <h1>(info2)Detalle del ID @forma.get().clave</h1>
 
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"><div class="labelInfo">Folio PD</div> @forma.get().folio</div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"><div class="labelInfo">ID</div> @forma.get().clave</div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6"><div class="labelInfo">Instancia solicitante</div>@if(forma.get().unidadresponsable!=null){@forma.get().unidadresponsable.nombreLargo}</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"><div class="campoLabel">1. Folio PD</div> @forma.get().folio</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"><div class="campoLabel">2. ID</div> @forma.get().clave</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6"><div class="campoLabel">3. Instancia solicitante</div>@if(forma.get().unidadresponsable!=null){@forma.get().unidadresponsable.nombreLargo}</div>
             </div>
             <div class="row">
                 <div class="col-12">
@@ -24,8 +49,8 @@
                 </div>
             </div>
             <div class="row ">
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6"><div class="labelInfo">Evento</div>@for(e<-forma.get().eventos){<span class="bloque">@e.servicio.descripcion</span>   }</div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6"><div class="labelInfo">Nivel</div> @for(e<-forma.get().niveles){<span class="bloque">@e.nivel.descripcion</span>}</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6"><div class="campoLabel">4. Evento</div>@for(e<-forma.get().eventos){<span class="bloque">@e.servicio.descripcion</span>   }</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6"><div class="campoLabel">5. Nivel</div> @for(e<-forma.get().niveles){<span class="bloque">@e.nivel.descripcion</span>}</div>
             </div>
             <div class="row">
                 <div class="col-12">
@@ -33,8 +58,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><div class="labelInfo">Folio DEV</div> @forma.get().folioDEV</div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-8"><div class="labelInfo">Serie</div> @if(forma.get().serie!=null){@forma.get().serie.descripcion}</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><div class="campoLabel">6. Folio DEV</div> @forma.get().folioDEV</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-8"><div class="campoLabel">7. Serie</div> @if(forma.get().serie!=null){@forma.get().serie.descripcion}</div>
 
             </div>
             <div class="row">
@@ -43,7 +68,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><div class="labelInfo">Créditos</div></div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><div class="campoLabel">8. Créditos</div></div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">@for(c<-forma.get().creditos){<span class="bloque">@c.tipoCredito.descripcion @c.personas</span>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       }</div>
             </div>
             <div class="row">
@@ -52,9 +77,9 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"><div class="labelInfo">Título</div> @forma.get().titulo</div>
-                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3"><div class="labelInfo">Num. de obra</div> @forma.get().obra</div>
-                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3"><div class="labelInfo">Duración</div> @forma.get().duracion</div>
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"><div class="campoLabel">9. Título</div> @forma.get().titulo</div>
+                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3"><div class="campoLabel">10. Num. de obra</div> @forma.get().obra</div>
+                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3"><div class="campoLabel">11. Duración</div> @forma.get().duracion</div>
             </div>
             <div class="row">
                 <div class="col-12">
@@ -62,10 +87,10 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6"><div class="labelInfo">Palabras clave</div> @for(pc<-forma.get().palabrasClave){<span class="bloque">@pc.descripcion</span>}</div>
-                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2"><div class="labelInfo">Producción</div>    @if(forma.get().produccion!=null){@forma.get().produccion.descripcion}</div>
-                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2"><div class="labelInfo">Idioma</div> @if(forma.get().idioma!=null){@forma.get().idioma.descripcion}</div>
-                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2"><div class="labelInfo">Accesibilidad</div> @if(forma.get().accesibilidadAudio){<span class="bloque">Lenguaje de señas</span>}@if(forma.get().accesibilidadVideo){<span class="bloque">Subtitulos descriptivos</span>}</div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6"><div class="campoLabel">12. Palabras clave</div> @for(pc<-forma.get().palabrasClave){<span class="bloque">@pc.descripcion</span>}</div>
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2"><div class="campoLabel">13. Producción</div>    @if(forma.get().produccion!=null){@forma.get().produccion.descripcion}</div>
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2"><div class="campoLabel">14. Idioma</div> @if(forma.get().idioma!=null){@forma.get().idioma.descripcion}</div>
+                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2"><div class="campoLabel">15. Accesibilidad</div> @if(forma.get().accesibilidadAudio){<span class="bloque">Lenguaje de señas</span>}@if(forma.get().accesibilidadVideo){<span class="bloque">Subtitulos descriptivos</span>}</div>
             </div>
             <div class="row">
                 <div class="col-12">
@@ -73,9 +98,9 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Grabación</div> @if(forma.get().tipograbacion!=null){@forma.get().tipograbacion.descripcion}</div>
-                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Fecha producción</div> @forma.get().fechaProduccion</div>
-                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Fecha publicación</div> @forma.get().fechaPublicacion</div>
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="campoLabel">16. Grabación</div> @if(forma.get().tipograbacion!=null){@forma.get().tipograbacion.descripcion}</div>
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="campoLabel">17. Fecha producción</div> @forma.get().fechaProduccion</div>
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="campoLabel">18. Fecha publicación</div> @forma.get().fechaPublicacion</div>
             </div>
             <div class="row">
                 <div class="col-12">
@@ -83,16 +108,18 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Disponibilidad</div> @if(forma.get().disponibilidad!=null){@forma.get().disponibilidad.descripcion}</div>
-                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Área temática</div>
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="campoLabel">19. Disponibilidad</div> @if(forma.get().disponibilidad!=null){@forma.get().disponibilidad.descripcion}</div>
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="campoLabel">20. Área temática</div>
+                    @msgAreasTematicas
+                    @msgAT
                     @for(at<-forma.get().areastematicas){
                         @if(at.areatematica!=null){
                             <span class="bloque">@at.areatematica.descripcion</span>
                             @if(at.areatematica.id==999 && forma.get().areaTematicaOtra!=null){<span class="bloque">@forma.get().areaTematicaOtra</span>}
-                    }
+                        }
                     }
                 </div>
-                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="labelInfo">Formato</div> @forma.get().formato.descripcion</div>
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="campoLabel">21. Formato</div> @forma.get().formato.descripcion</div>
             </div>
             <div class="row">
                 <div class="col-12">
@@ -100,7 +127,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><div class="labelInfo">Sinópsis</div> @forma.get().sinopsis</div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><div class="campoLabel">22. Sinópsis</div> @forma.get().sinopsis</div>
             </div>
             <div class="row">
                 <div class="col-12">
@@ -108,17 +135,17 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><div class="labelInfo">Intervención de personajes</div></div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><div class="campoLabel">23. Intervención de personajes</div></div>
             </div>
             @if(forma.get().timeline.size>=1){
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="labelInfo">Inicio</div></div>
-                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="labelInfo">Término</div></div>
-                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"><div class="labelInfo">Nombre</div></div>
-                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="labelInfo">Grado</div></div>
-                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="labelInfo">Cargo</div></div>
-                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="labelInfo">Título o tema</div></div>
-                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="labelInfo">Duración</div></div>
+                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="campoLabel">25. Inicio</div></div>
+                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="campoLabel">26. Término</div></div>
+                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"><div class="campoLabel">27. Nombre</div></div>
+                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="campoLabel">28. Grado</div></div>
+                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="campoLabel">29. Cargo</div></div>
+                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="campoLabel">30. Título o tema</div></div>
+                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="campoLabel">Duración</div></div>
                 </div>
                 @for(tl<-forma.get().timeline){
                     <div class="row">
@@ -140,10 +167,10 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><div class="labelInfo">Audio</div> @forma.get().audio.descripcion</div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2"><div class="labelInfo">Calidad audio</div> @if(forma.get().calidadAudio=="B"){Buena}@if(forma.get().calidadAudio=="M"){Mala}@if(forma.get().calidadAudio=="FO"){Fallas de orígen}</div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><div class="labelInfo">Resolución video</div> @forma.get().video.descripcion</div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2"><div class="labelInfo">Calidad video</div> @if(forma.get().calidadVideo=="B"){Buena}@if(forma.get().calidadVideo=="M"){Mala}@if(forma.get().calidadVideo=="FO"){Fallas de orígen}</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><div class="campoLabel">31. Audio</div> @forma.get().audio.descripcion</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2"><div class="campoLabel">32. Calidad audio</div> @if(forma.get().calidadAudio=="B"){Buena}@if(forma.get().calidadAudio=="M"){Mala}@if(forma.get().calidadAudio=="FO"){Fallas de orígen}</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><div class="campoLabel">33. Resolución video</div> @forma.get().video.descripcion</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2"><div class="campoLabel">34. Calidad video</div> @if(forma.get().calidadVideo=="B"){Buena}@if(forma.get().calidadVideo=="M"){Mala}@if(forma.get().calidadVideo=="FO"){Fallas de orígen}</div>
             </div>
             <div class="row">
                 <div class="col-12">
@@ -151,7 +178,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><div class="labelInfo">Observaciones</div> @forma.get().observaciones</div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><div class="campoLabel">35. Observaciones</div> @forma.get().observaciones</div>
             </div>
         </div>
     </div>

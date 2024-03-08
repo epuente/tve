@@ -16,6 +16,7 @@ GET     /assets/*file                       controllers.Assets.at(path="/public"
 GET		/assets/*file    			        controllers.Assets.versioned(path="/public", file: Asset)
 
 GET		/login					            controllers.Application.login()
+GET		/login2					            controllers.Application.login2()
 POST	/atentica				            controllers.Application.autentica()
 GET     /redirecciona			            controllers.Application.redirecciona()
 POST	/cambiarRol				            controllers.Application.cambiarRol()
@@ -314,7 +315,6 @@ GET     /supervisor/catalogadoresEdit/:id   controllers.SupCatalogadorController
 POST    /supervisor/catalogadoresUpdate/:id controllers.SupCatalogadorController.update(id:Long)
 POST    /supervisor/catalogadoresDelete     controllers.SupCatalogadorController.delete()
 POST    /supervisor/toggleActivo            controllers.SupCatalogadorController.toggleActivo()
-
 GET     /supervisor/tablero                 controllers.SupCatalogadorController.tablero()
 GET     /supervisor/tablero2                 controllers.SupCatalogadorController.tablero2()
 POST    /supervisor/ajaxTablero             controllers.SupCatalogadorController.ajaxTablero()
@@ -322,6 +322,7 @@ GET     /catalogoSup                        controllers.SupCatalogadorController
 GET     /vtkCatalogoDTSSSup                 controllers.SupCatalogadorController.catalogoDTSS()
 
 GET     /supervisor/info/:id                controllers.SupCatalogadorController.catalogoInfo(id:Long)
+GET     /supervisor/info2/:id                controllers.SupCatalogadorController.catalogoInfo2(id:Long)
 
 #POST    /vtkBuscaFolio                      controllers.VideotecaController.buscaFolio()
 POST    /vtkBuscaClaveID                    controllers.VideotecaController.buscaClaveID()
@@ -345,4 +346,10 @@ GET     /videoteca/admin/list               controllers.AdminVideotecaController
 GET     /videotecaAdminAjaxList             controllers.AdminVideotecaController.ajaxList()
 POST    /videotecaAdminCatalogoInfo         controllers.AdminVideotecaController.catalogoInfo()
 POST    /videotecaAdmin/asignarProductor    controllers.AdminVideotecaController.asignarProductor()
+
+# VIDEOTECA - productor
+# VIDEOTECA - productor
+POST    /videoteca/productor/catalogoInfo   controllers.ProductorVideotecaController.catalogoInfo()
+
+
 
