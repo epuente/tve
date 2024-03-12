@@ -1,19 +1,26 @@
 @(id: Long, forma: Form[models.videoteca.VtkCatalogo])
 
-@import scala.Predef; var x= 0
+
 @import scala.Predef; var msgAT= ""
+@import scala.Predef; var msgCred= ""
+
+
+@msgCreditos={
+    @for(cr<-forma.get().creditos){
+
+            @(msgCred= msgAT+cr.tipoCredito.descripcion+", ")
+
+    }
+    @msgCred.take(msgCred.length-2)
+}
 
 @msgAreasTematicas={
     @for(at<-forma.get().areastematicas){
-        @(x=x+1)
         @if(at.areatematica!=null){
             @(msgAT= msgAT+at.areatematica.descripcion+", ")
-            <span class="bloque">@at.areatematica.descripcion</span>
-            @if(at.areatematica.id==999 && forma.get().areaTematicaOtra!=null){
-                <span class="bloque">@forma.get().areaTematicaOtra</span>
-            }
         }
     }
+    @msgAT.take(msgAT.length-2)
 }
 
 @main {
@@ -111,13 +118,6 @@
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="campoLabel">19. Disponibilidad</div> @if(forma.get().disponibilidad!=null){@forma.get().disponibilidad.descripcion}</div>
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="campoLabel">20. Área temática</div>
                     @msgAreasTematicas
-                    @msgAT
-                    @for(at<-forma.get().areastematicas){
-                        @if(at.areatematica!=null){
-                            <span class="bloque">@at.areatematica.descripcion</span>
-                            @if(at.areatematica.id==999 && forma.get().areaTematicaOtra!=null){<span class="bloque">@forma.get().areaTematicaOtra</span>}
-                        }
-                    }
                 </div>
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="campoLabel">21. Formato</div> @forma.get().formato.descripcion</div>
             </div>

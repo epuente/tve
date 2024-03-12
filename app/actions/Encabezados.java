@@ -46,7 +46,9 @@ public class Encabezados  extends Action.Simple {
 		ctx.response().setHeader("Content-Security-Policy", "style-src 'self' 'unsafe-inline' "+
 				"https://framework-gb.cdn.gob.mx/assets/styles/main.css "+
 				"http://fonts.googleapis.com/css "+
-				"https://framework-gb.cdn.gob.mx/gm/v4/css/main.css"
+				"https://framework-gb.cdn.gob.mx/gm/v4/css/main.css "+
+				"https://www.ipn.mx/assets/files/main/css/estilo-compresion.min.css "+
+				"https://framework-gb.cdn.gob.mx/assets/styles/main.css"
 				);
 
 

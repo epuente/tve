@@ -557,7 +557,7 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
     }
 
     public static Result catalogoInfo2(Long id){
-        System.out.println("\n\nDesde SupCatalogadorController.catalogoInfo");
+        System.out.println("\n\nDesde SupCatalogadorController.catalogoInfo2");
         VtkCatalogo catalogo = VtkCatalogo.find.byId(id);
         //Logger.debug(  session("usuario") +"  -  "+ );
 
