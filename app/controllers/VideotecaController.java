@@ -553,7 +553,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
 
     public static Result save() throws JSONException {
-        System.out.println("\n\n\nDesde VideotecaController.save...");
+        System.out.println("\n\n\n\n\nDesde VideotecaController.save...");
         DynamicForm fd = DynamicForm.form().bindFromRequest();
         System.out.println(fd);
         System.out.println("--------------------------");
@@ -593,54 +593,69 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                     VtkTimeLine tl = new VtkTimeLine();
                     JSONObject objTL = jsonArrTimeLine.getJSONObject(i);
 
-                    if (objTL.get("desde").toString().length() != 0) {
-                        Duracion dDesde = new Duracion();
-                        dDesde.convertir(objTL.get("desde").toString());
-                        tl.desde = dDesde.totalSegundos();
-                    }
-                    if (objTL.get("hasta").toString().length() != 0) {
-                        Duracion dHasta = new Duracion();
-                        dHasta.convertir(objTL.get("hasta").toString());
-                        tl.hasta = dHasta.totalSegundos();
-                    }
-                    if (objTL.get("nombre").toString().length() != 0) {
-                        Long idVP = null;
-                        VideoPersonaje vp = new VideoPersonaje();
-                        String elNombre = objTL.get("nombre").toString();
-                        // Busca en VideoPersonaje que exista la persona, sino lo crea
-                        List<VideoPersonaje> existePersonaje = VideoPersonaje.find.where().ilike("nombre", elNombre).findList();
-                        if (existePersonaje.size() == 0) {
-                            //vp.catalogo = VtkCatalogo.find.byId(idVTK);
-                            vp.nombre = elNombre;
-                            vp.catalogador =  Personal.find.byId( Long.parseLong(session("usuario")));
-                            //vp.save();
-                            Ebean.save(vp);
-                            //vp.refresh();
-                            Ebean.refresh(vp);
-                            idVP = vp.id;
-                            tl.personaje = vp;
-                        }
-                        if (existePersonaje.size() != 0) {
-                            tl.personaje = existePersonaje.get(0);
-                        }
+                    Logger.debug("objTL");
+                    Logger.debug(objTL.toString());
 
-
+                    if (objTL.has("desde") && !Objects.equals(objTL.get("desde").toString(), "hh:mm:ss") && !objTL.get("desde").toString().isEmpty()){
+                            Logger.debug("campo desde 001");
+                            Duracion dDesde = new Duracion();
+                            dDesde.convertir(objTL.get("desde").toString());
+                            Logger.debug("campo desde 002");
+                            tl.desde = dDesde.totalSegundos();
+                            Logger.debug("campo desde 003");
+                        }
+                    if (objTL.has("hasta") && !Objects.equals(objTL.get("hasta").toString(), "hh:mm:ss"))
+                        if (objTL.get("hasta").toString().length() != 0) {
+                            Duracion dHasta = new Duracion();
+                            dHasta.convertir(objTL.get("hasta").toString());
+                            tl.hasta = dHasta.totalSegundos();
+                        }
+                    if (objTL.has("nombre")) {
+                        if (!objTL.get("nombre").toString().isEmpty()) {
+                            Logger.debug("deb020");
+                            Long idVP = null;
+                            VideoPersonaje vp = new VideoPersonaje();
+                            Logger.debug("deb040");
+                            String elNombre = objTL.get("nombre").toString();
+                            // Busca en VideoPersonaje que exista la persona, sino lo crea
+                            Logger.debug("deb050");
+                            List<VideoPersonaje> existePersonaje = VideoPersonaje.find.where().ilike("nombre", elNombre).findList();
+                            Logger.debug("deb060");
+                            if (existePersonaje.size() == 0) {
+                                Logger.debug("deb070");
+                                //vp.catalogo = VtkCatalogo.find.byId(idVTK);
+                                vp.nombre = elNombre;
+                                vp.catalogador = Personal.find.byId(Long.parseLong(session("usuario")));
+                                //vp.save();
+                                Ebean.save(vp);
+                                //vp.refresh();
+                                Ebean.refresh(vp);
+                                idVP = vp.id;
+                                tl.personaje = vp;
+                            }
+                            if (existePersonaje.size() != 0) {
+                                tl.personaje = existePersonaje.get(0);
+                            }
+                        }
                     }
-                    if (objTL.get("grado").toString().length() != 0) {
-                        tl.gradoacademico = objTL.get("grado").toString();
-                    }
-                    if (objTL.get("cargo").toString().length() != 0) {
-                        tl.cargo = objTL.get("cargo").toString();
-                    }
-                    if (objTL.get("tema").toString().length() != 0) {
-                        tl.tema = objTL.get("tema").toString();
-                    }
+                    if (objTL.has("grado"))
+                        if (objTL.get("grado").toString().length() != 0) {
+                            tl.gradoacademico = objTL.get("grado").toString();
+                        }
+                    if (objTL.has("cargo"))
+                        if (objTL.get("cargo").toString().length() != 0) {
+                            tl.cargo = objTL.get("cargo").toString();
+                        }
+                    if (objTL.has("tema"))
+                        if (objTL.get("tema").toString().length() != 0) {
+                            tl.tema = objTL.get("tema").toString();
+                        }
                     tl.catalogador = Personal.find.byId( Long.parseLong(session("usuario"))  );
                     vtk.timeline.add(tl);
                 }
             }
 
-            vtk.timeline.forEach(tm->System.out.println("- - - -Desde "+tm.desde+" "+tm.hasta+" "+tm.personaje.nombre));
+           // vtk.timeline.forEach(tm->System.out.println("- - - -Desde "+tm.desde+" "+tm.hasta+" "+tm.personaje.nombre));
 
 
             //vtk.update();
@@ -650,6 +665,9 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         } catch(Exception e) {
             Ebean.rollbackTransaction();
             System.out.println("Ocurrió un error al intentar grabar el registro. "+e);
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+            System.out.println("Se aplicó rollback a la transacción");
         }finally {
             Ebean.endTransaction();
         }
@@ -880,21 +898,21 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                     VtkTimeLine tl = new VtkTimeLine();
                     JSONObject objTL = jsonArrTimeLine.getJSONObject(i);
 
-                    if (!objTL.isNull("desde") && objTL.get("desde").toString().length() != 0) {
+                    if (objTL.has("desde") && !objTL.get("desde").toString().isEmpty() && !Objects.equals(objTL.get("desde").toString(), "hh:mm:ss")) {
                         Duracion dDesde = new Duracion();
                         Logger.debug("enviando (desde) "+objTL.get("desde").toString());
                         dDesde.convertir(objTL.get("desde").toString());
                         tl.desde = dDesde.totalSegundos();
                         Logger.debug("convertido (desde) "+tl.desde);
                     }
-                    if (!objTL.isNull("hasta") && objTL.get("hasta").toString().length() != 0) {
+                    if (objTL.has("hasta") && !objTL.get("hasta").toString().isEmpty() && !Objects.equals(objTL.get("hasta").toString(), "hh:mm:ss")) {
                         Duracion dHasta = new Duracion();
                         Logger.debug("enviando (hasta) "+objTL.get("hasta").toString());
                         dHasta.convertir(objTL.get("hasta").toString());
                         tl.hasta = dHasta.totalSegundos();
                         Logger.debug("convertido (hasta) "+tl.hasta);
                     }
-                    if (!objTL.isNull("nombre") && objTL.get("nombre").toString().length() != 0) {
+                    if (objTL.has("nombre") && !objTL.get("nombre").toString().isEmpty()) {
                         Long idVP = null;
                         VideoPersonaje vp = new VideoPersonaje();
                         String elNombre = objTL.get("nombre").toString();
@@ -914,17 +932,15 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                         if (existePersonaje.size() != 0) {
                             tl.personaje = existePersonaje.get(0);
                         }
-
-
                     }
 
-                    if (!objTL.isNull("grado") &&  objTL.get("grado").toString().length() != 0) {
+                    if (objTL.has("grado") && !objTL.get("grado").toString().isEmpty()) {
                         tl.gradoacademico = objTL.get("grado").toString();
                     }
-                    if (!objTL.isNull("cargo") && objTL.get("cargo").toString().length() != 0) {
+                    if (objTL.has("cargo") && !objTL.get("cargo").toString().isEmpty()) {
                         tl.cargo = objTL.get("cargo").toString();
                     }
-                    if (!objTL.isNull("tema") && objTL.get("tema").toString().length() != 0) {
+                    if (objTL.has("tema") && !objTL.get("tema").toString().isEmpty()) {
                         tl.tema = objTL.get("tema").toString();
                     }
                     tl.catalogador = Personal.find.byId( Long.parseLong(session("usuario"))  );
@@ -932,7 +948,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 }
             }
 
-            vtk.timeline.forEach(tm->System.out.println("- - - -Desde "+tm.desde+" "+tm.hasta+" "+tm.personaje.nombre));
+//            vtk.timeline.forEach(tm->System.out.println("- - - -Desde "+tm.desde+" "+tm.hasta+" "+tm.personaje.nombre));
             Ebean.update(vtk);
             Ebean.commitTransaction();
             flash("success", "Se actualizó al acervo ");

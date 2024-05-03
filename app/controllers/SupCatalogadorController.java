@@ -1,13 +1,14 @@
 package controllers;
 
 import classes.Duracion;
+import classes.ListaPersonal;
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Expr;
 import com.avaje.ebean.Page;
 import com.avaje.ebean.SqlRow;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.*;
-import models.videoteca.TipoCredito;
-import models.videoteca.VtkCatalogo;
+import models.videoteca.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +27,8 @@ import java.util.stream.Collectors;
 import static play.data.Form.form;
 
 public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
+
+
 
 
     public static Result lista(){
@@ -464,19 +467,28 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
         System.out.println( "parametros order[0][column]:"+ request().getQueryString("order[0][column]"));
         System.out.println( "parametros order[0][dir]:"+ request().getQueryString("order[0][dir]"));
 
+        System.out.println("  -  -  - - -1");
 
         String filtro = request().getQueryString("search[value]");
         String colOrden =  request().getQueryString("order[0][column]");
         String tipoOrden = request().getQueryString("order[0][dir]");
+        System.out.println("  -  -  - - -5");
         String nombreColOrden = request().getQueryString("columns["+colOrden+"][data]");
 
+        System.out.println("  -  -  - - -7");
+
         List<VtkCatalogo> cat = null;
+
+        System.out.println("  -  -  - - -rolActual "+session("rolActual"));
+
         // Es supervisor de catalogadores?
         if (session("rolActual").compareTo("133")==0){
+            System.out.println("  -  -  - - -10");
             cat = VtkCatalogo.find.all();
+            System.out.println("  -  -  - - -11");
         }
 
-
+        System.out.println("  -  -  - - -");
 
 
 
@@ -534,7 +546,10 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
 
     public static Result catalogoInfo(Long id){
         System.out.println("\n\nDesde SupCatalogadorController.catalogoInfo");
-        VtkCatalogo catalogo = VtkCatalogo.find.byId(id);
+        VtkCatalogo catalogo  = VtkCatalogo.find
+                .fetch("niveles")
+                .where().eq("id", id)
+                .findUnique();
         //Logger.debug(  session("usuario") +"  -  "+ );
 
         Logger.debug("001 id "+id);
@@ -551,8 +566,52 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
         List<TipoCredito> tiposOrdenados = tipos.stream()
                 .sorted(Comparator.comparing(TipoCredito::getId))
                 .collect(Collectors.toList());
-*/
-        return ok( views.html.videoteca.catalogadores.infoForm.render(id, forma)  );
+        */
+
+
+        StringBuilder losCreditos= new StringBuilder();
+
+        if (catalogo.creditos!=null) {
+            String sql ="select distinct tipo_credito_id, tc.descripcion  " +
+                    "from credito c inner join tipo_credito tc on c.tipo_credito_id = tc.id  " +
+                    "where catalogo_id =" + id + " "+
+                    "order by tipo_credito_id ";
+            List<SqlRow> sqlRows = Ebean.createSqlQuery(sql).findList();
+            for (SqlRow sqlRow : sqlRows) {
+                //JSONObject joGpo = new JSONObject();
+                //JSONArray jaGpo = new JSONArray();
+                List<Credito> creditos = Credito.find.setDistinct(true).where()
+                        .and(Expr.eq("catalogo_id", id), Expr.eq("tipoCredito.id", sqlRow.getLong("tipo_credito_id")))
+                        .findList();
+                //JSONArray jaPersonas = new JSONArray();
+                losCreditos.append("<strong>"+sqlRow.getString(("descripcion") )+": </strong>");
+                for ( Credito credito :creditos ) {
+                    //JSONObject jo1 = new JSONObject();
+
+                    //jo1.put("persona", credito.personas);
+                    //jaPersonas.put(jo1);
+                    losCreditos.append(  credito.personas +", " );
+                }
+                if (losCreditos.toString().length()>2)
+                    losCreditos.deleteCharAt(losCreditos.length() - 2);
+                losCreditos.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+
+
+                //joGpo.put("grupo", sqlRow.getString("descripcion"));
+                //joGpo.put("personas",jaPersonas);
+                //jaCreditos.put(joGpo);
+            }
+            //jo.put("creditos", jaCreditos);
+        }
+
+        if (!forma.get().niveles.isEmpty()) {
+            for (VtkNivel n : forma.get().niveles) {
+                Logger.debug(n.nivel.descripcion);
+            }
+        }
+
+        Logger.debug("retornando...");
+        return ok( views.html.videoteca.catalogadores.infoForm2.render(id, forma, losCreditos.toString())  );
 
     }
 
@@ -576,9 +635,64 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
                 .sorted(Comparator.comparing(TipoCredito::getId))
                 .collect(Collectors.toList());
 */
-        return ok( views.html.videoteca.catalogadores.infoForm2.render(id, forma)  );
+        return ok( views.html.videoteca.catalogadores.infoForm2.render(id, forma, "jajaaj")  );
 
     }
 
+
+    public static Result catalogoInfo3(Long id){
+        System.out.println("\n\nDesde SupCatalogadorController.catalogoInfo2");
+        VtkCatalogo catalogo = VtkCatalogo.find.byId(id);
+        //Logger.debug(  session("usuario") +"  -  "+ );
+
+        Logger.debug("001 id "+id);
+        Form<VtkCatalogo> forma = form(VtkCatalogo.class).fill(catalogo);
+        Logger.debug("002 FORMA "+forma);
+        Duracion d = new Duracion();
+        if (catalogo.duracion!=null)
+            d = new Duracion(catalogo.duracion);
+        else
+            d = new Duracion(0L);
+        Logger.debug("003 duracion " + d.horas+":"+d.minutos+":"+d.segundos);
+
+        StringBuilder losCreditos= new StringBuilder();
+
+        if (catalogo.creditos!=null) {
+            String sql ="select distinct tipo_credito_id, tc.descripcion  " +
+                    "from credito c inner join tipo_credito tc on c.tipo_credito_id = tc.id  " +
+                    "where catalogo_id =" + id +
+                    "order by c.tipo_credito_id ";
+            List<SqlRow> sqlRows = Ebean.createSqlQuery(sql).findList();
+            for (SqlRow sqlRow : sqlRows) {
+                //JSONObject joGpo = new JSONObject();
+                //JSONArray jaGpo = new JSONArray();
+                List<Credito> creditos = Credito.find.setDistinct(true).where()
+                        .and(Expr.eq("catalogo_id", id), Expr.eq("tipoCredito.id", sqlRow.getLong("tipo_credito_id")))
+                        .findList();
+                //JSONArray jaPersonas = new JSONArray();
+                losCreditos.append("<span class='bloque'><strong>"+sqlRow.getString(("descripcion") )+": </strong>");
+                for ( Credito credito :creditos ) {
+                    //JSONObject jo1 = new JSONObject();
+
+                    //jo1.put("persona", credito.personas);
+                    //jaPersonas.put(jo1);
+                    losCreditos.append(  credito.personas +", " );
+                }
+                if (losCreditos.toString().length()>2)
+                    losCreditos.deleteCharAt(losCreditos.length() - 2);
+
+
+                losCreditos.append("</span>");
+                //joGpo.put("grupo", sqlRow.getString("descripcion"));
+                //joGpo.put("personas",jaPersonas);
+                //jaCreditos.put(joGpo);
+            }
+            //jo.put("creditos", jaCreditos);
+        }
+
+
+        return ok( views.html.videoteca.catalogadores.infoForm3.render(id, forma, losCreditos.toString() )  );
+
+    }
 
 }

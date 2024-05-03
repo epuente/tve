@@ -1,28 +1,57 @@
-@(id: Long, forma: Form[models.videoteca.VtkCatalogo])
+@(id: Long, forma: Form[models.videoteca.VtkCatalogo], losCreditos:String)
 
-
+@import scala.Predef; var msgEv = ""
 @import scala.Predef; var msgAT= ""
 @import scala.Predef; var msgCred= ""
+@import scala.Predef; var msgNi= ""
+@import scala.Predef; var msgAcce = "";
 
+
+@msgEvento={
+    @for(e<-forma.get().eventos){
+        @(msgEv= msgEv+e.servicio.descripcion+", ")
+    }
+    @msgEv.take(msgEv.length-2)
+}
+
+@msgNivel={
+    @for(n<-forma.get().niveles){
+        @(msgNi= msgNi+n.nivel.descripcion+", ")
+    }
+    @msgNi.take(msgNi.length-2)
+}
 
 @msgCreditos={
     @for(cr<-forma.get().creditos){
-
-            @(msgCred= msgAT+cr.tipoCredito.descripcion+", ")
-
+        @(msgCred= msgCred+cr.tipoCredito.descripcion+", ")
     }
     @msgCred.take(msgCred.length-2)
+}
+
+@msgAccesible={
+    @if(forma.get().accesibilidadAudio==true){
+        @(msgAcce="Lenguaje de señas, ")
+    }
+    @if(forma.get().accesibilidadVideo==true){
+        @(msgAcce = msgAcce+"Subtítulos descriptivos  ")
+    }
+    @if(msgAcce.length>2){
+        @msgAcce.take(msgAcce.length-2)
+    }
 }
 
 @msgAreasTematicas={
     @for(at<-forma.get().areastematicas){
         @if(at.areatematica!=null){
             @(msgAT= msgAT+at.areatematica.descripcion+", ")
+            @if(at.areatematica.id==999){
+                @msgAT.take(msgAT.length-2)
+                @(msgAT= " - "+forma.get().areaTematicaOtra+"  ")
+            }
         }
     }
     @msgAT.take(msgAT.length-2)
 }
-
 @main {
     <style>
         .campoLabel {
@@ -41,7 +70,7 @@
         </div>
     </div>
 
-    <h1>(info2)Detalle del ID @forma.get().clave</h1>
+    <h1>Detalle del ID @forma.get().clave</h1>
 
     <div class="panel panel-default">
         <div class="panel-body">
@@ -56,8 +85,8 @@
                 </div>
             </div>
             <div class="row ">
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6"><div class="campoLabel">4. Evento</div>@for(e<-forma.get().eventos){<span class="bloque">@e.servicio.descripcion</span>   }</div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6"><div class="campoLabel">5. Nivel</div> @for(e<-forma.get().niveles){<span class="bloque">@e.nivel.descripcion</span>}</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6"><div class="campoLabel">4. Evento</div>@msgEvento</div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6"><div class="campoLabel">5. Nivel</div>@msgNivel</div>
             </div>
             <div class="row">
                 <div class="col-12">
@@ -76,7 +105,7 @@
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><div class="campoLabel">8. Créditos</div></div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">@for(c<-forma.get().creditos){<span class="bloque">@c.tipoCredito.descripcion @c.personas</span>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       }</div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">@Html(losCreditos)</div>
             </div>
             <div class="row">
                 <div class="col-12">
@@ -94,10 +123,10 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6"><div class="campoLabel">12. Palabras clave</div> @for(pc<-forma.get().palabrasClave){<span class="bloque">@pc.descripcion</span>}</div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6"><div class="campoLabel">12. Palabras clave</div> @for(pc<-forma.get().palabrasClave){@pc.descripcion&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</div>
                 <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2"><div class="campoLabel">13. Producción</div>    @if(forma.get().produccion!=null){@forma.get().produccion.descripcion}</div>
                 <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2"><div class="campoLabel">14. Idioma</div> @if(forma.get().idioma!=null){@forma.get().idioma.descripcion}</div>
-                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2"><div class="campoLabel">15. Accesibilidad</div> @if(forma.get().accesibilidadAudio){<span class="bloque">Lenguaje de señas</span>}@if(forma.get().accesibilidadVideo){<span class="bloque">Subtitulos descriptivos</span>}</div>
+                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2"><div class="campoLabel">15. Accesibilidad</div>@msgAccesible</div>
             </div>
             <div class="row">
                 <div class="col-12">
@@ -141,21 +170,21 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="campoLabel">25. Inicio</div></div>
                     <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="campoLabel">26. Término</div></div>
-                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"><div class="campoLabel">27. Nombre</div></div>
+                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="campoLabel">27. Nombre</div></div>
                     <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="campoLabel">28. Grado</div></div>
                     <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="campoLabel">29. Cargo</div></div>
-                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="campoLabel">30. Título o tema</div></div>
+                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"><div class="campoLabel">30. Título o tema</div></div>
                     <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="campoLabel">Duración</div></div>
                 </div>
                 @for(tl<-forma.get().timeline){
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="">@tl.convierteACadena(tl.desde)</div></div>
-                        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="">@tl.convierteACadena(tl.hasta)</div></div>
-                        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"><div class="">@tl.personaje.nombre</div></div>
+                        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="">@if(tl.desde==null){<i><small>no definido</small></i>}else{@tl.convierteACadena(tl.desde)}</div></div>
+                        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="">@if(tl.hasta==null){<i><small>no definido</small></i>}else{@tl.convierteACadena(tl.hasta)}</div></div>
+                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="">@tl.personaje.nombre</div></div>
                         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="">@tl.gradoacademico</div></div>
                         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="">@tl.cargo</div></div>
-                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="">@tl.tema</div></div>
-                        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="">@if(tl.desde!=null&&tl.hasta!=null){@tl.duracion()}</div></div>
+                        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"><div class="">@tl.tema</div></div>
+                        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="">@if(tl.desde!=null&&tl.hasta!=null){@tl.duracion()}else{<i><small>No calculable</small></i>}</div></div>
                     </div>
                 }
             }else{

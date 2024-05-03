@@ -67,6 +67,7 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
 
 
     // Soporte de ayuda para personas con debilidad auditiva (sordos). Incluye lenguaje de señas.
+
     public boolean accesibilidadAudio;
 
     // Soporte de ayuda para personas con debilidad visual (ciegos). Incluye subtítulos descriptivos.

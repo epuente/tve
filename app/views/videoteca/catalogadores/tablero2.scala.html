@@ -95,19 +95,34 @@
 
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js" />
+<!--script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js" /-->
+<script src="/assets/Chart/Chart.min.js"></script>
 <script defer src="@routes.Assets.at("lib/moment/min/moment.min.js")" type="text/javascript"></script>
 <script defer src="@routes.Assets.at("lib/moment/locale/es.js")" type="text/javascript"></script>
 <script defer src="@routes.Assets.at("bootstrap-notify/bootstrap-notify.min.js")"></script>
+<script src="/assets/gentelella/vendors/jquery/dist/jquery.min.js"  nonce="lWHiQVmBqnwntNj1PupMRyCbyvg"></script>
 <script type="text/javascript">
   const coloresChart = ["#707e8d", "#c9b8d0",  "#BDC3C7", "#7fd2c1", "#9cd1f5", "#e6e6ab"     ,"#ddabe6", "#6a665a", "#635e85"];
-  var data = {
-    labels: [],
-    datasets: [{
-      data: [],
-	      backgroundColor: coloresChart
-    }],
-  };
+      var data = {
+        labels: [],
+        datasets: [{
+          data: [],
+              backgroundColor: coloresChart
+        }],
+      };
+
+
+  $(function() {
+	  moment.locale('es');
+	  $("#cargando").html("<i class='fas fa-sync-alt fa-spin fa-5x center-block'></i>");
+	  $("#cargando").fadeIn("slow");
+      actualiza();
+      $.notifyDefaults({
+          type: 'success',
+          newest_on_top: true,
+          z_index: 999000
+      });
+  });
 
 
 
@@ -163,17 +178,7 @@
 
 
 
-  $(function() {
-	  moment.locale('es');
-	  $("#cargando").html("<i class='fas fa-sync-alt fa-spin fa-5x center-block'></i>");
-	  $("#cargando").fadeIn("slow");
-      actualiza();
-      $.notifyDefaults({
-          type: 'success',
-          newest_on_top: true,
-          z_index: 999000
-      });
-  });
+
 
 
   function actualiza(){
@@ -206,6 +211,9 @@
 
 			// Por añio mes y catalogador
 			myChart2.data.labels = data.grafica2.labels;
+			console.log("dataset de mes")
+			console.dir(data.grafica2.datasets)
+
 			myChart2.data.datasets = data.grafica2.datasets;
 			myChart2.update();
 

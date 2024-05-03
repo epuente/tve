@@ -323,6 +323,7 @@ GET     /vtkCatalogoDTSSSup                 controllers.SupCatalogadorController
 
 GET     /supervisor/info/:id                controllers.SupCatalogadorController.catalogoInfo(id:Long)
 GET     /supervisor/info2/:id                controllers.SupCatalogadorController.catalogoInfo2(id:Long)
+GET     /supervisor/info3/:id                controllers.SupCatalogadorController.catalogoInfo3(id:Long)
 
 #POST    /vtkBuscaFolio                      controllers.VideotecaController.buscaFolio()
 POST    /vtkBuscaClaveID                    controllers.VideotecaController.buscaClaveID()

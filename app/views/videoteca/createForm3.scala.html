@@ -1,21 +1,21 @@
 @(forma: Form[models.videoteca.VtkCatalogo], auxCreditos:List[models.videoteca.TipoCredito], campos:List[models.videoteca.VtkCampo])
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
-
 @import helper._
-
 @anio = { @(new Date().format("yyyy"))}
-
-
 
 <script src="@routes.Assets.at("tagify/tagify")" nonce="@session.get("nonce")"></script>
 <script src="@routes.Assets.at("tagify/tagify.polyfills.min.js")" nonce="@session.get("nonce")"></script>
-
-
-
 <link href="@routes.Assets.at("tagify/tagify.css")" rel="stylesheet" type="text/css"  nonce="@session.get("nonce")"/>
 <link href="@routes.Assets.at("tagify/tagify.css")" rel="stylesheet" type="text/css"  nonce="@session.get("nonce")"/>
 
 @main {
+    <style>
+        .form-control:focus {
+        border-color: #66afe9;
+        outline: 0;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6) ! important;
+    }
+    </style>
     @ventanasModales()
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -100,19 +100,12 @@
             }
         });
 
-
-
-
-
         //Seleccionar Español
         $("#idioma_id option[value=1]").prop("selected", true);
         //Seleccionar la primera opcion de Audio (31)
         $("#audio_id option[value=1]").prop("selected", true);
         //Seleccionar la primera opcion de Video (33)
         $("#video_id option[value=1]").prop("selected", true);
-
-
-
 
 
         //Predeterminar numero de obra como 01/01
@@ -145,14 +138,7 @@
         //Seleccionar .mp4 como predeterminada en formato
         $("#formato_id option[value=2]").prop("selected", true);
 
-
-
-
-
-
-
         // Intervencion de personajes
-
         var listaBlanca=[];
         @for( p<-models.Personal.nombresCompletos()) {
             listaBlanca.push("@p.nombreCompleto()");
@@ -187,23 +173,12 @@
                       s: {mask: IMask.MaskedRange, placeholderChar: 's', from: 0, to: 59, maxLength: 2}
                   }
         });
-
-
-
-
-
-
-
-
-
         labelsCamposRequeridos();
-
         @for(c<-campos){
             $("label[for='@c.label']").append('<span class="spanIconoAyudaCampo"  data-html="true" data-toggle="popover" data-trigger="hover" title="Ayuda del campo @c.nombre" data-content="@c.indicaciones"   data-container="body"><i class="fas fa-question-circle"></i>    <a tabindex="0" class="iconoAyudaCampo" style="margin-left:10px;" role=""  id="botonAyudaCampo@c.id"  </a></span>');
         }
         $('[data-toggle="popover"]').popover()
         //agregarAbrir();
-
         $('[data-toggle="tooltip"]').tooltip();
     });  // fin del $(function()
 
@@ -229,18 +204,6 @@
         var textoExistente = $("#ta"+elId).val().length >0;
         $("#ta"+elId).val(  $("#ta"+elId).val()+(textoExistente?", ":"") + $(this).text()    );
     });
-
-
-
-
-
-
-
-
-
-
-
-
 
 </script>
 

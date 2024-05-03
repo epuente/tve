@@ -4,7 +4,7 @@
 		module="tve2024_devmarzo-build"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20240304122859"
+		publication="20240502111746"
 		e:sbtVersion="0.13" e:scalaVersion="2.10"
 	>
 		<description>

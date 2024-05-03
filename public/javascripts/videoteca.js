@@ -24,6 +24,9 @@ $("#btnActualizar, #btnAgregar").click(function(e){
         $("#txtLosCreditos").val(   aux4   );
         $("#txaTimeLine").val(JSON.stringify(valoresTimeLine()));
 
+        console.debug(    JSON.stringify(valoresTimeLine())   );
+
+
         var msgError="";
 
         console.log("has-error:"+  $("div.has-error").length)

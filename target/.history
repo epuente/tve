@@ -1,42 +1,17 @@
-run
-run 
-run
+clean
+reload
+compile
+exit
 clean
 reload
 compile
 run
-reload
-compile
-run
-reload
-run
+run 9090
 exit
-run
-exit
-run
-compile
-reload
-compile
-run
-run 8089
-exit
-run 8089
-run
-clean
-run
-exit
-run
-clean
-run
-CLEAN
+run 9091
 clean
 dist
+sbt
+run 9091
+EXIT
 exit
-clean
-run
-exit
-run
-exit
-run
-exit
-run

@@ -2,6 +2,7 @@ package models.videoteca;
 
 import classes.Duracion;
 import models.Personal;
+import play.Logger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,12 +14,13 @@ public class VtkTimeLine extends models.utils.PlantillaModelo{
     public VtkCatalogo catalogo;
 
     @ManyToOne
+    @Column(nullable = true)
     public VideoPersonaje personaje;
 
-    @Column(length = 50)
+    @Column(length = 50, nullable = true)
     public String gradoacademico;
 
-    @Column(length = 50)
+    @Column(length = 50, nullable = true)
     public String cargo;
 
 
@@ -35,8 +37,14 @@ public class VtkTimeLine extends models.utils.PlantillaModelo{
     // Convierte  desde (segundos de tipo Long) a cadena con formato hh:mm:ss
 
     public String convierteACadena(Long segundos){
-        Duracion d = new Duracion( segundos);
-        return d.cadena();
+        String retorno;
+        Logger.debug("time "+segundos);
+        if (segundos != null) {
+            Duracion d = new Duracion(segundos);
+            retorno = d.cadena();
+        } else
+            retorno = "";
+        return retorno;
     }
 
     public String duracion(){

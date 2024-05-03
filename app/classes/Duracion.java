@@ -23,7 +23,7 @@ public class Duracion {
         long cantidad = cadena.chars().filter(c -> c == ':').count();
         if (cantidad==2){
             String[] arr = cadena.split(":");
-            System.out.println("arr "+arr.length);
+            //System.out.println("arr "+arr.length);
             horas = Long.parseLong( arr[0] );
             minutos = Long.parseLong(arr[1]);
             segundos = Long.parseLong(arr[2]);

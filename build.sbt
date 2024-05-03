@@ -1,5 +1,5 @@
 name := """tve2024"""
-version := "0.0.3-SNAPSHOT"
+version := "0.0.4-SNAPSHOT"
 scalaVersion := "2.11.4"
 //sbt.version=0.13.7
 libraryDependencies ++= Seq(
@@ -22,7 +22,7 @@ libraryDependencies += filters
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
-play.PlayImport.PlayKeys.playDefaultPort := 8089
+play.PlayImport.PlayKeys.playDefaultPort := 8080
 
 doc in Compile <<= target.map(_ / "none")
 
