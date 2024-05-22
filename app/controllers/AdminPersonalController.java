@@ -7,14 +7,17 @@ import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.text.json.JsonContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.*;
+import models.videoteca.Serie;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Result;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import views.html.personal.*;
 
@@ -68,16 +71,13 @@ System.out.println(forma);
 
     public static Result update(Long id) {
 		System.out.println("desde AdminPersonalController.update");
-		System.out.println("desde AdminPersonalController.update");
+
 		Form<Personal> forma = form(Personal.class).bindFromRequest();
 		System.out.println(forma);
 		System.out.println("...000");
 		if(forma.hasErrors()) {
 			System.out.println("...forma con errores");
 			System.out.println(forma);
-
-
-
 			return badRequest(editForm.render(id, forma, Rol.find.all() ));
 		}
 		System.out.println("...forma sin errores");
@@ -88,16 +88,55 @@ System.out.println(forma);
 			forma.get().horarios.clear();
 		}
 
+
 		forma.data().forEach((k,v)->System.out.println("campo : " + k + " valor : " + v));
 
 		Personal nvo = forma.get();
+        Personal dbP = Personal.find.byId(id);
 
 		//for	nvo.cuentas
+        Ebean.beginTransaction();
+        try {
+            dbP.numEmpleado = nvo.numEmpleado;
+            dbP.paterno = nvo.paterno;
+            dbP.materno = nvo.materno;
+            dbP.nombre = nvo.nombre;
+            dbP.tipocontrato = nvo.tipocontrato;
+            dbP.activo = nvo.activo;
+            dbP.turno = nvo.turno;
+
+            // Horarios
+            Ebean.delete(dbP.horarios);
+            dbP.horarios = nvo.horarios;
+
+            // Correos
+            Ebean.delete(dbP.correos);
+            dbP.correos = nvo.correos;
+
+            // Cuentas
+            Ebean.delete(dbP.cuentas.get(0).roles);
+            dbP.cuentas.get(0).roles = nvo.cuentas.get(0).roles.stream().filter(f->f.rol!=null).collect(Collectors.toList());
+            Ebean.update(dbP);
+            Ebean.commitTransaction();
+        } catch(Exception e) {
+            Ebean.rollbackTransaction();
+            System.out.println("Ocurrió un error al intentar actualizar al personal "+nvo.nombreCompleto()+" "+e);
+            throw new RuntimeException(e);
+        }finally {
+            Ebean.endTransaction();
+        }
 
 
-		nvo.update(id);
 
+		//nvo.update();
+        /*
+        for (CuentaRol cr : nvo.cuentas.get(0).roles){
+            System.out.println("cr: "+cr.rol);
+            if (cr.rol==null)
+                CuentaRol.find.setId(cr.id).findUnique().delete();
+        }
 
+         */
 
         return GO_HOME;
     }    
@@ -221,13 +260,17 @@ System.out.println(forma);
 		int pas = PreAgendaLocutor.find.where().eq("personal.id", id).findRowCount();
 		int aspr = AgendaCuentaRol.find.where().eq("id", id).findRowCount();
 	    int op = OperadorSala.find.where().eq("personal.id", id).findRowCount();
+
+//        int series = Serie.find.where().eq("personal.id", id).findRowCount();
 	    
 	    System.out.println(fpa+" - "+pas+" - "+aspr+" - "+op );
 	    
 	    valor = ((fpa + pas + aspr + op)==0);
 	    if (valor) {
+            List<RegistroAcceso> ra = Ebean.find(RegistroAcceso.class).where().eq("usuario.id", id).findList();
+            Ebean.delete(ra);
 	        Personal x = Personal.find.ref(id);
-	       	x.delete();
+	       	Ebean.delete(x);
 	       	borrado = true;
 	    }
 		return ok ( "{\"borrable\":"+ valor+", \"borrado\":"+borrado+" }"); 		

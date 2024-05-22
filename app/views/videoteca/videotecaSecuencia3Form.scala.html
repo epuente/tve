@@ -326,13 +326,19 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
             <div class="row" style="margin-top:25px;">
                 <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
                     <div class="form-group">
-                        @select(
-                        forma("disponibilidad.id"),
-                        options(models.Disponibilidad.options),
-                        '_label -> "19. Disponibilidad", '_default -> "-- Seleccione --",
-                        '_showConstraints -> false,
-                        'class->"form-control"
-                        )
+                        <dl class=" " id="dispo_id_field">
+                            <dt style="margin-bottom:-10px;"><label for="disponibilidad_id">19. Disponibilidad</label></dt>
+                            <dd>
+                                @for(n<-models.Disponibilidad.find.all){
+                                <div class="checkbox checkbox-group">
+                                    <input type="checkbox" id="disponibilidades@n.id" name="disponibilidades[@(n.id-1)].disponibilidad.id" value="@n.id" style="margin-left:0px;" class="input-block-level" data-name="cbDispo">
+                                    <span style="margin-left:20px; margin-right:20px;" > @n.descripcion</span>
+                                </div>
+                                }
+                            </dd>
+                            <dd class="info"> </dd>
+                        </dl>
+                        <div class="help-block with-errors"></div>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
@@ -506,7 +512,7 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="form-group">
-                        @textarea(forma("observaciones"), '_label -> "35. Observaciones", 'maxlength->"300", 'class->"form-control", 'rows->3, 'cols->"300",  'placeholder->"Ejem. El ponente original no se presentó y en su lugar se contó con el Director de la escuela", 'required->true )
+                        @textarea(forma("observaciones"), '_label -> "35. Observaciones", 'maxlength->"300", 'class->"form-control", 'rows->3, 'cols->"300",  'placeholder->"Ejem. El ponente original no se presentó y en su lugar se contó con el Director de la escuela")
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="tve2024-0.0.4-SNAPSHOT-assets">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/target/tve2024-0.0.4-SNAPSHOT-assets.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

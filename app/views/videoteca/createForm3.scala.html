@@ -10,11 +10,14 @@
 
 @main {
     <style>
+        .form-control {
+            border-radius: 6px !important;
+        }
         .form-control:focus {
-        border-color: #66afe9;
-        outline: 0;
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6) ! important;
-    }
+            border-color: #66afe9;
+            outline: 0;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6) ! important;
+        }
     </style>
     @ventanasModales()
     <div class="row">
@@ -123,7 +126,7 @@
 		}).on("change", function(e, date){
 		});
 
-        // DatePicker para fecha de publicacion
+        // DatePicker para fecha de publicación
         $('#fechaPublicacion').bootstrapMaterialDatePicker
 		({
 			format: 'DD/MM/YYYY',
@@ -135,6 +138,8 @@
 		}).on("change", function(e, date){
 		});
 
+        //Seleccionar audio Stereo ACC - 48 kbps – 32/44,1/48  kHz   -16 Bits
+        $("#audio_id option[value='3']").attr("selected", true);
         //Seleccionar .mp4 como predeterminada en formato
         $("#formato_id option[value=2]").prop("selected", true);
 

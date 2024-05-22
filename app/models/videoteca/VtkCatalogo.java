@@ -88,9 +88,13 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
 
     @Column(length = 10)
     public String fechaPublicacion;
-
+    /*
     @ManyToOne
     public Disponibilidad disponibilidad;
+     */
+
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "catalogo")
+    public List<VtkDisponibilidad> disponibilidades;
 
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "catalogo")
@@ -127,7 +131,6 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     public String calidadVideo;
 
     @Column(length = 3000)
-    @NotNull
     public String observaciones;
 
     @Version

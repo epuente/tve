@@ -16,7 +16,7 @@
     </div>
 </div>
 
-<h1>(info3)Detalle del ID @forma.get().clave</h1>
+<h1>(info3)Detalle del ID: @forma.get().clave</h1>
 
 <div class="panel panel-default">
     <div class="panel-body">
@@ -90,7 +90,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-12 col-sm-4 col-md-2 col-lg-2"><div class="campoLabel">19. Disponibilidad</div> @if(forma.get().disponibilidad!=null){@forma.get().disponibilidad.descripcion}</div>
+            <div class="col-xs-12 col-sm-4 col-md-2 col-lg-2"><div class="campoLabel">19. Disponibilidad</div> @if(forma.get().disponibilidades!=null){@for(d<-forma.get().disponibilidades){d.disponibilidad.descripcion}}</div>
             <div class="col-xs-12 col-sm-4 col-md-8 col-lg-8"><div class="campoLabel">20. Área temática</div>
                 @for(at<-forma.get().areastematicas){
                     @if(at.areatematica!=null){

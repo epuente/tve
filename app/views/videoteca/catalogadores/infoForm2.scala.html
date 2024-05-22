@@ -1,6 +1,7 @@
 @(id: Long, forma: Form[models.videoteca.VtkCatalogo], losCreditos:String)
 
 @import scala.Predef; var msgEv = ""
+@import scala.Predef; var msgDi= ""
 @import scala.Predef; var msgAT= ""
 @import scala.Predef; var msgCred= ""
 @import scala.Predef; var msgNi= ""
@@ -40,6 +41,15 @@
     }
 }
 
+@msgDispo={
+    @for(d<-forma.get().disponibilidades){
+        @if(d.disponibilidad!=null){
+            @(msgDi= msgDi+d.disponibilidad.descripcion+", ")
+        }
+    }
+    @msgDi.take(msgDi.length-2)
+}
+
 @msgAreasTematicas={
     @for(at<-forma.get().areastematicas){
         @if(at.areatematica!=null){
@@ -52,6 +62,7 @@
     }
     @msgAT.take(msgAT.length-2)
 }
+
 @main {
     <style>
         .campoLabel {
@@ -70,8 +81,7 @@
         </div>
     </div>
 
-    <h1>Detalle del ID @forma.get().clave</h1>
-
+    <h1>Detalle del ID: @forma.get().clave</h1>
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
@@ -144,7 +154,9 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="campoLabel">19. Disponibilidad</div> @if(forma.get().disponibilidad!=null){@forma.get().disponibilidad.descripcion}</div>
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="campoLabel">19. Disponibilidad</div>
+                    @msgDispo
+                </div>
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><div class="campoLabel">20. Área temática</div>
                     @msgAreasTematicas
                 </div>
@@ -180,7 +192,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="">@if(tl.desde==null){<i><small>no definido</small></i>}else{@tl.convierteACadena(tl.desde)}</div></div>
                         <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"><div class="">@if(tl.hasta==null){<i><small>no definido</small></i>}else{@tl.convierteACadena(tl.hasta)}</div></div>
-                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="">@tl.personaje.nombre</div></div>
+                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="">@if(tl.personaje==null){<i><small>no definido</small></i>}else{@tl.personaje.nombre}</div></div>
                         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="">@tl.gradoacademico</div></div>
                         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><div class="">@tl.cargo</div></div>
                         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"><div class="">@tl.tema</div></div>

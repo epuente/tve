@@ -1,17 +1,2 @@
-clean
-reload
-compile
-exit
-clean
-reload
-compile
-run
-run 9090
-exit
-run 9091
-clean
-dist
-sbt
-run 9091
-EXIT
+run 9097
 exit

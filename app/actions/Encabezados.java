@@ -71,17 +71,16 @@ public class Encabezados  extends Action.Simple {
  *  comando: wget -q -S -O - localhost:8089 | :
  *
  * regresa:
- * 	HTTP/1.1 200 OK
-  	Content-Security-Policy: style-src 'self' 'unsafe-inline'
-  	Content-Type: text/html; charset=utf-8
-  	Permissions-Policy: geolocation=(), camera=(), microphone=()
-  	Referrer-Policy: same-origin
-  	Set-Cookie: PLAY_SESSION="3365ab521e94e032f60440cd70fa83f78d939857-nonce=nYgYcYni3lxGkBYFmyJQwARohdE&csrfToken=8e58ffdc5f322d66293be8298d15ab9a94e90e8c-1703003776665-d08d3d161959d097635a45d3"; Path=/; HTTPOnly
-  	Strict-Transport-Security: max-age=31536000
-  	X-Content-Type-Options: nosniff
-  	X-Frame-Options: sameorigin
-  	Content-Length: 11282
-
+ * 	  HTTP/1.1 200 OK
+  Content-Security-Policy: style-src 'self' 'unsafe-inline' https://framework-gb.cdn.gob.mx/assets/styles/main.css http://fonts.googleapis.com/css https://framework-gb.cdn.gob.mx/gm/v4/css/main.css https://www.ipn.mx/assets/files/main/css/estilo-compresion.min.css https://framework-gb.cdn.gob.mx/assets/styles/main.css
+  Content-Type: text/html; charset=utf-8
+  Permissions-Policy: geolocation=(), camera=(), microphone=()
+  Referrer-Policy: same-origin
+  Set-Cookie: PLAY_SESSION_ERDD="9f7e3a563057ee58ec8da4214f0c4b7073884488-csrfToken=000196c7112ebcb55f6c3681c85094c6e1de3b98-1714787366652-cc762376ee44f781341bd68c"; Path=/; HTTPOnly
+  Strict-Transport-Security: max-age=31536000
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: sameorigin
+  Content-Length: 11936
 */
 
 

@@ -275,9 +275,21 @@ public class AdminVideotecaController extends ControladorSeguroAdministrador {
 			jo.put("grabacion", c.tipograbacion!=null?c.tipograbacion.descripcion:noDefinida);
 			jo.put("fechaproduccion", c.fechaProduccion!=null&&c.fechaProduccion.length()>0?c.fechaProduccion:noDefinida);
 			jo.put("fechapublicacion", c.fechaPublicacion!=null&&c.fechaPublicacion.length()>0?c.fechaPublicacion:noDefinida);
-			jo.put("disponibilidad", c.disponibilidad!=null?c.disponibilidad.descripcion:noDefinida);
-			jo.put("formato", c.formato!=null?c.formato.descripcion:noDefinido);
 
+            if (c.disponibilidades == null){
+                jo.put("disponibilidad", noDefinida);
+            } else {
+                JSONArray jaDispo = new JSONArray();
+                for (VtkDisponibilidad dispo : c.disponibilidades) {
+                    JSONObject jDispo = new JSONObject();
+                    jDispo.put("id", dispo.disponibilidad.id);
+                    jDispo.put("descripcion", dispo.disponibilidad.descripcion);
+                    jaDispo.put(jDispo);
+                }
+                jo.put("disponibilidad", jaDispo);
+            }
+
+			jo.put("formato", c.formato!=null?c.formato.descripcion:noDefinido);
 			if (c.timeline!=null) {
 				for (VtkTimeLine tl : c.timeline) {
 					JSONObject joTL = new JSONObject();

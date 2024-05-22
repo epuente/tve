@@ -124,12 +124,6 @@ $("#btnActualizar, #btnAgregar").click(function(e){
                 }
 
 
-
-            if (  !$("#observaciones").val()  ){
-                msgError+="Escriba sus observaciones<br>";
-                $("#observaciones").closest("div.form-group").addClass("has-error has-danger");
-                }
-
             if (msgError.length>1){
                     event.preventDefault();
                     //msgError.length==1? msgError+="<br><br>Complete el campo faltante" : msgError+="<br><br>Complete los campos faltantes";

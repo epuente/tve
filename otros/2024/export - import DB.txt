@@ -1,6 +1,16 @@
 EXPORT (dump) en formato custom
+----------------------------------
+pg_dump -U tve -W -F c -h localhost -c --if-exists --exclude-table=play_evolutions tveservicios > tveservicios`date +%Y%m%d_%H%M`.dump
 
-pg_dump -U tve -W -F c -h localhost -c --if-exists tveservicios > tveservicios`date +%Y%m%d_%H%M`.dump
+EXPORT (dump) como sql (con COPY en lugar de INSERT)
+-----------------------
+pg_dump -U tve -W -h localhost -c --if-exists --exclude-table=play_evolutions tveservicios > tveservicios`date +%Y%m%d_%H%M`.sql
+
+
+EXPORT (dump) como sql (con INSERT)
+-----------------------
+pg_dump -U tve -W -h localhost -c --if-exists --exclude-table=play_evolutions --column-inserts tveservicios > tveservicios`date +%Y%m%d_%H%M`.sql
+
 
 
 -U Usuario de la DB

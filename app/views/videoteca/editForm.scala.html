@@ -15,11 +15,15 @@
 
 @main {
     <style>
+        .form-control {
+            border-radius: 6px !important;
+        }
+
         .form-control:focus {
-        border-color: #66afe9;
-        outline: 0;
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6) ! important;
-    }
+            border-color: #66afe9;
+            outline: 0;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6) !important;
+        }
     </style>
 
 
@@ -262,6 +266,15 @@
         @if(forma.get().produccion!=null){
             $("#produccion_id").val(@forma.get().produccion.id);
             $("#produccionDescripcion").val("@forma.get().produccion.descripcion");
+        }
+
+        // Disponibilidades
+        console.log("tam dispo: @forma.get().disponibilidades.size()")
+        @for(d<-forma.get().disponibilidades){
+            @if(d.disponibilidad!=null){
+                console.log("d: @d.id "+ "@d.disponibilidad.id")
+                $("#disponibilidades@d.disponibilidad.id").prop("checked", true);
+            }
         }
 
         // Área temática
