@@ -305,7 +305,7 @@ GET     /vtkCatalogo/edit/:id               controllers.VideotecaController.cata
 
 POST    /vtkCatalogo/save                   controllers.VideotecaController.save()
 POST    /vtkCatalogo/update                 controllers.VideotecaController.update()
-POST    /vtkCatalogo/update2                controllers.VideotecaController.update2()
+#POST    /vtkCatalogo/update2                controllers.VideotecaController.update2()
 
 GET     /supervisor/catalogadores           controllers.SupCatalogadorController.lista()
 GET     /supervisor/catalogadoresDTSS       controllers.SupCatalogadorController.listaDTSS()
@@ -322,8 +322,9 @@ GET     /catalogoSup                        controllers.SupCatalogadorController
 GET     /vtkCatalogoDTSSSup                 controllers.SupCatalogadorController.catalogoDTSS()
 
 GET     /supervisor/info/:id                controllers.SupCatalogadorController.catalogoInfo(id:Long)
-GET     /supervisor/info2/:id                controllers.SupCatalogadorController.catalogoInfo2(id:Long)
-GET     /supervisor/info3/:id                controllers.SupCatalogadorController.catalogoInfo3(id:Long)
+GET     /supervisor/info2/:id               controllers.SupCatalogadorController.catalogoInfo2(id:Long)
+GET     /supervisor/info3/:id               controllers.SupCatalogadorController.catalogoInfo3(id:Long)
+POST    /supervisor/eliminaCatalogo         controllers.SupCatalogadorController.eliminaCatalogo()
 
 #POST    /vtkBuscaFolio                      controllers.VideotecaController.buscaFolio()
 POST    /vtkBuscaClaveID                    controllers.VideotecaController.buscaClaveID()

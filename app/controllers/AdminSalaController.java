@@ -293,7 +293,10 @@ System.out.println(forma);
 			System.out.println("Error en AdminSalaController.update2. se realiza rollback "+e+" *** "+e.getMessage()+" --- "+e.getCause());
 			Ebean.rollbackTransaction();
 			return ok(Json.parse("{\"estado\":\"error\"}"));
-		}
+        }finally {
+            Ebean.endTransaction();
+        }
+
     }
     
     public static Result delete(Long id) {

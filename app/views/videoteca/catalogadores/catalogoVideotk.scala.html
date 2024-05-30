@@ -1,47 +1,35 @@
 @main {
-
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <ol class="breadcrumb">
-            <li>Catálogo videoteca</li>
-        </ol>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+                <li>Catálogo videoteca</li>
+            </ol>
+        </div>
     </div>
-</div>
-
-
-
-<div class="row">
-    <div class="col-sm-12">
-        <h1 id="homeTitle">Catálogo</h1>
+    <div class="row">
+        <div class="col-sm-12">
+            <h1 id="homeTitle">Catálogo</h1>
+        </div>
     </div>
-</div>
+    @views.html.flashes()
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped" id="tabla">
+            <thead>
+            <tr>
+                <td>ID</td>
+                <td>Serie</td>
+                <td>Titulo</td>
+                <td>Obra</td>
+                <td>Catalogador</td>
+                <td></td>
+            </tr>
+            </thead>
 
-
-@views.html.flashes()
-
-
-<div class="table-responsive">
-    <table class="table table-bordered table-striped" id="tabla">
-        <thead>
-        <tr>
-            <td>ID</td>
-            <td>Serie</td>
-            <td>Titulo</td>
-            <td>Obra</td>
-            <td>Catalogador</td>
-        </tr>
-        </thead>
-
-    </table>
-</div>
-
+        </table>
+    </div>
 }
 
-
-
 <script>
-
-
     $(function(){
         $("#wrapper").toggleClass("toggled");
         $("#tabla").DataTable({
@@ -83,14 +71,77 @@
                     "render": function(data, type, row, meta){
                         return data==null || data.length==0?"<span style='font-size:small'>Sin información</span>":data;
                     }
-                }
+                },
+                {"data": null,
+                    render: function(data, type, row, meta){
+                    return "<button class='btn btn-primary btn-sm' id='btnEliminaCatalogo' data-valor="+row['id']+" onclick='javascript:void(0);' >Eliminar </button>";
+                }}
               ]
         });
         $('[data-toggle="popover"]').popover()
     });
 
-
-
+    $(document).on("click", "#btnEliminaCatalogo", function(e){
+        console.log("cloick")
+        var id = $(this).data("valor");
+        console.log(id)
+        swal({
+          title: 'Confirmar',
+          text: '¿Desea eliminar este registro?',
+          type: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Eliminarlo',
+          cancelButtonText: 'Conservarlo',
+          confirmButtonColor: "#d33",
+          cancelButtonColor: '#3085d6',
+          preConfirm: () => {
+            return new Promise((resolve) => {
+                resolve();
+            });
+          }
+        }).then((result) => {
+            console.dir(result)
+                  if (result) {
+                    $.ajax({
+                            url:"@routes.SupCatalogadorController.eliminaCatalogo()",
+                            method: 'POST',
+                            data: JSON.stringify( {  id: id}),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json"
+                    }).success(function(data){
+                        if (data.estado=="eliminado"){
+                            swal({
+                                title: 'Eliminado',
+                                html: "Se eliminó correctamente el registro<br><br><hr><small>Redirigiendo...</small>",
+                                type: 'success',
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                footer: "pie"
+                            }).catch(swal.noop);
+                            setTimeout(function(){
+                                    location.reload();
+                                }, 3000);
+                        } else {
+                                swal({
+                                    title: 'Error',
+                                    html: "No fue posible la eliminación del registro.",
+                                    type: 'error',
+                                    showCancelButton: false,
+                                    showConfirmButton: false
+                                })
+                        }
+                    }).error(function(xhr, status, error) {
+                        console.log("no eliminado")
+                    });
+                  } else {
+                    swal('Cancelado', 'Se canceló la eliminación', 'error');
+                  }
+        }
+        ,function (dismiss) {
+                console.log("dm")
+                swal('Cancelado', 'Se canceló la eliminación. Se conserva el registro.', 'info');
+        }).catch(swal.noop);
+    });
 
 </script>
 

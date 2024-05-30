@@ -86,6 +86,8 @@
         // Palabras clave
         var inputpc = document.querySelector("textarea[id='palabrasClaveStr']"),
         tagifyPC = new Tagify(inputpc,{
+            trim:   true,
+            transformTag:   tagifySinEnter,
             callbacks:{
                 change: (e)=>{
                     console.log("change de tagify "+e.detail)
@@ -143,7 +145,7 @@
         //Seleccionar .mp4 como predeterminada en formato
         $("#formato_id option[value=2]").prop("selected", true);
 
-        // Intervencion de personajes
+        // Créditos
         var listaBlanca=[];
         @for( p<-models.Personal.nombresCompletos()) {
             listaBlanca.push("@p.nombreCompleto()");
@@ -152,6 +154,8 @@
         $(arrTabs).each(function(i,e){
             var inputx = document.querySelector("textarea[id='"+e.id+"']"),
             tagify = new Tagify(inputx, {
+                trim:   true,
+                transformTag:   tagifySinEnter,
                 whitelist: listaBlanca,
                 dropdown: {
                     position: "inputx",
@@ -185,6 +189,7 @@
         $('[data-toggle="popover"]').popover()
         //agregarAbrir();
         $('[data-toggle="tooltip"]').tooltip();
+        $("#elBody").fadeIn(1000);
     });  // fin del $(function()
 
 
@@ -209,6 +214,9 @@
         var textoExistente = $("#ta"+elId).val().length >0;
         $("#ta"+elId).val(  $("#ta"+elId).val()+(textoExistente?", ":"") + $(this).text()    );
     });
+
+
+
 
 </script>
 

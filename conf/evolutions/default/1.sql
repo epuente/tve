@@ -1147,6 +1147,7 @@ create table vtk_catalogo (
   duracion                  bigint,
   fecha_produccion          varchar(10),
   fecha_publicacion         varchar(10),
+  disponibilidad_otra       varchar(255),
   area_tematica_otra        varchar(255),
   nresguardo                varchar(255),
   liga                      varchar(255),

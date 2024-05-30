@@ -9,13 +9,15 @@ import play.db.ebean.Model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static play.mvc.Controller.session;
 
 @Entity
 @EntityConcurrencyMode(ConcurrencyMode.NONE)
-public class VtkCatalogo extends models.utils.PlantillaModelo{
+public class VtkCatalogo extends models.utils.PlantillaModelo implements Serializable {
 
     @ManyToOne
     @Column(length = 30)
@@ -96,6 +98,7 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "catalogo")
     public List<VtkDisponibilidad> disponibilidades;
 
+    public String disponibilidadOtra;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "catalogo")
     @NotNull
@@ -207,5 +210,7 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
             Logger.debug("\n\n\n\nVtlCatalogo Retornonado "+p.getList().size());
         return p;
     }
+
+
 
 }

@@ -9,7 +9,7 @@ pg_dump -U tve -W -h localhost -c --if-exists --exclude-table=play_evolutions tv
 
 EXPORT (dump) como sql (con INSERT)
 -----------------------
-pg_dump -U tve -W -h localhost -c --if-exists --exclude-table=play_evolutions --column-inserts tveservicios > tveservicios`date +%Y%m%d_%H%M`.sql
+pg_dump -U tve -W -h localhost -c --if-exists --exclude-table=play_evolutions --column-inserts tveservicios > ~/dumps/tveserviciosLocal`date +%Y%m%d_%H%M`.sql
 
 
 

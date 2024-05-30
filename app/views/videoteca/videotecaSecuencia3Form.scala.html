@@ -324,24 +324,30 @@ Los campos en <label class="campoRequerido">color oscuro</label> son obligatorio
 
             <!-- 19 a 21 -->
             <div class="row" style="margin-top:25px;">
-                <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <div class="form-group">
                         <dl class=" " id="dispo_id_field">
                             <dt style="margin-bottom:-10px;"><label for="disponibilidad_id">19. Disponibilidad</label></dt>
                             <dd>
-                                @for(n<-models.Disponibilidad.find.all){
-                                <div class="checkbox checkbox-group">
-                                    <input type="checkbox" id="disponibilidades@n.id" name="disponibilidades[@(n.id-1)].disponibilidad.id" value="@n.id" style="margin-left:0px;" class="input-block-level" data-name="cbDispo">
-                                    <span style="margin-left:20px; margin-right:20px;" > @n.descripcion</span>
-                                </div>
+                                @for((n, in)<-models.Disponibilidad.find.all.zipWithIndex){
+                                    <div class="checkbox checkbox-group">
+                                        <input type="checkbox" id="disponibilidades@n.id" name="disponibilidades[@in].disponibilidad.id" value="@n.id" style="margin-left:0px;" class="input-block-level" data-name="cbDispo">
+                                        <span style="margin-left:20px; margin-right:20px;" > @n.descripcion</span>
+                                    </div>
                                 }
                             </dd>
                             <dd class="info"> </dd>
                         </dl>
                         <div class="help-block with-errors"></div>
                     </div>
+
+                    <div id="divDisponibilidadOtra" style="display:none">
+                        <div>Especifique otra disponibilidad</div>
+                        <input type="text" id="disponibilidadOtra" name="disponibilidadOtra" maxlength="50" class="form-control" placeholder="Ejem. Otra disponibilidad">
+                    </div>
+
                 </div>
-                <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
                     <div class="form-group">
                         <dl class=" " id="areatematica_id_field">
                             <dt style="margin-bottom:-10px;"><label for="areatematica_id">20. Área temática</label></dt>

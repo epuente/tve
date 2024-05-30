@@ -1,16 +1,13 @@
 package models;
 
 import com.avaje.ebean.Page;
-import play.Logger;
 import play.db.ebean.Model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 public class Catalogador extends models.utils.PlantillaModelo{

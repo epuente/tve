@@ -68,6 +68,8 @@
 
 <script type="text/javascript">
     var texto="";
+    var inputpc;
+    var tagifyPC;
     $(function() {
         $('form').validator();
         $("#serie_id").selectpicker({
@@ -122,8 +124,26 @@
         $("#anioProduccion").prop("max","@anio");
 
         // Palabras clave
-        var inputpc = document.querySelector("textarea[id='palabrasClaveStr']"),
-        tagifyPC = new Tagify(inputpc);
+        inputpc = document.querySelector("textarea[id='palabrasClaveStr']"),
+        tagifyPC = new Tagify(inputpc,{
+            trim:   true,
+            transformTag:   tagifySinEnter,
+            callbacks:{
+                change: (e)=>{
+                    console.log("change de tagify "+e.detail)
+                    x = valoresPalabrasClave();
+                    if (  x.length==0 ){
+                        console.log("sin valores")
+                        $("#palabrasClaveStr").parent().find("tags").css("border","1px solid #b94a48");
+                        //$("#palabrasClaveStr").parent().find("tags").css("--tags-hover-border-color","#b94a48");
+                    } else {
+                        console.log("con valores")
+                        $("#palabrasClaveStr").parent().find("tags").css("border","1px solid #DDD");
+                        //$("#palabrasClaveStr").parent().find("tags").css("outline","1px solid #DDD");
+                        }
+                }
+            }
+        });
 
 
         var listaBlanca=[];
@@ -145,6 +165,8 @@
             console.debug(e.id)
             var inputx = document.querySelector("textarea[id='"+e.id+"']"),
             tagify = new Tagify(inputx, {
+                trim:   true,
+                transformTag:   tagifySinEnter,
                 whitelist: listaBlanca,
                 dropdown: {
                     position: "inputx",
@@ -181,6 +203,8 @@
         //agregarAbrir();
 
         $('[data-toggle="tooltip"]').tooltip();
+        $("#elBody").fadeIn(1000);
+
     });  // fin del $(function()
 
 
@@ -230,32 +254,6 @@
                 }
         }
 
-
-
-
-
-        // Palabras clave
-        var inputpc = document.querySelector("textarea[id='palabrasClaveStr']"),
-        tagifyPC = new Tagify(inputpc,{
-            callbacks:{
-                change: (e)=>{
-                    console.log("change de tagify "+e.detail)
-                    x = valoresPalabrasClave();
-                    if (  x.length==0 ){
-                        console.log("sin valores")
-                        $("#palabrasClaveStr").parent().find("tags").css("border","1px solid #b94a48");
-                        //$("#palabrasClaveStr").parent().find("tags").css("--tags-hover-border-color","#b94a48");
-                    } else {
-                        console.log("con valores")
-                        $("#palabrasClaveStr").parent().find("tags").css("border","1px solid #DDD");
-                        //$("#palabrasClaveStr").parent().find("tags").css("outline","1px solid #DDD");
-                        }
-                }
-            }
-        });
-
-
-
         var arr = [];
         @for(c<-forma.get().palabrasClave){
             arr.push( {value:"@c.descripcion", id:@c.id} );
@@ -274,6 +272,10 @@
             @if(d.disponibilidad!=null){
                 console.log("d: @d.id "+ "@d.disponibilidad.id")
                 $("#disponibilidades@d.disponibilidad.id").prop("checked", true);
+                @if(d.disponibilidad.id==999){
+                     $("#disponibilidadOtra").val("@forma.get().disponibilidadOtra");
+                     $("#divDisponibilidadOtra").show();
+                }
             }
         }
 
@@ -302,7 +304,6 @@
             var inputCred = document.querySelector("textarea[id='ta"+@c.tipoCredito.id+"']");
             tagifyCreds = new Tagify(inputCred);
             tagifyCreds.addTags("@c.personas");
-
         }
 
 
@@ -438,10 +439,10 @@
 <script src="@routes.Assets.at("javascripts/jquery.mask.min.js")"></script>
 
 
-<script src="@routes.Assets.at("javascripts/videoteca.js")"></script>
-<script src="@routes.Assets.at("javascripts/videotecaUR.js")"></script>
-<script src="@routes.Assets.at("javascripts/videotecaSerie.js")"></script>
-<script src="@routes.Assets.at("javascripts/imask.js")"></script>
+<script src="@routes.Assets.at("javascripts/videoteca.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("javascripts/videotecaUR.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("javascripts/videotecaSerie.js")" nonce="@session.get("nonce")"></script>
+<script src="@routes.Assets.at("javascripts/imask.js")" nonce="@session.get("nonce")"></script>
 
 <script type="text/javascript" src="https://momentjs.com/downloads/moment-with-locales.js"></script>
 

@@ -1,7 +1,6 @@
 package controllers;
 
 import classes.Duracion;
-import classes.ListaPersonal;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.avaje.ebean.Page;
@@ -19,7 +18,6 @@ import play.mvc.Result;
 import views.html.videoteca.catalogadores.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +36,7 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
 
     public static Result listaDTSS(){
         System.out.println("Desde SupCatalogador.listaDTSS............"+new Date());
+        /*
         System.out.println( "parametros:"+ request() );
         System.out.println( "parametros draw:"+ request().getQueryString("draw"));
         System.out.println( "parametros start:"+ request().getQueryString("start"));
@@ -46,6 +45,8 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
 
         System.out.println( "parametros order[0][column]:"+ request().getQueryString("order[0][column]"));
         System.out.println( "parametros order[0][dir]:"+ request().getQueryString("order[0][dir]"));
+
+         */
 
 
         String filtro = request().getQueryString("search[value]");
@@ -60,9 +61,6 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
                     totalCatalogadores++;
             }
         }
-
-        Logger.debug("totalCatalogadores "+totalCatalogadores);
-
         int numPag = 0;
         if (Integer.parseInt(request().getQueryString("start")) != 0)
             numPag = Integer.parseInt(request().getQueryString("start")) /   Integer.parseInt(request().getQueryString("length"));
@@ -230,8 +228,6 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
         System.out.println("\n\nDesde SupCatalogadorController.update");
         Form<Personal> formaP = form(Personal.class).bindFromRequest();
         DynamicForm forma = form().bindFromRequest();
-        System.out.println(forma);
-        System.out.println("...000");
         if(forma.hasErrors()) {
             System.out.println("...forma con errores");
             System.out.println(forma);
@@ -246,14 +242,9 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
         nvo.cuentas.get(0).username = forma.get("username");
         nvo.cuentas.get(0).password = forma.get("password");
 
-        Logger.debug("correo-> "+forma.get("correos[0].email"));
-        Logger.debug("correo-> "+formaP.field("correos[0].email").value());
-
-
         PersonalCorreo pcorreo = new PersonalCorreo();
         pcorreo.email = formaP.field("correos[0].email").value();
         nvo.correos.get(0).setEmail(formaP.field("correos[0].email").value());
-
 
         nvo.update(id);
         return redirect( routes.SupCatalogadorController.lista() );
@@ -274,8 +265,6 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
             jo.put("estado","error");
             jo.put("descripcion", "tiene "+existencias+" registros");
         } else {
-            //Catalogador aux = Catalogador.find.byId(id);
-            Logger.debug("id:"+id);
             Personal aux = Personal.find.byId(id);
             jo.put("eliminado", aux.nombreCompleto());
             for ( CuentaRol x : aux.cuentas.get(0).roles){
@@ -283,9 +272,6 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
                     //  x.delete();
                 }
             }
-
-            Logger.debug("aux.cuentas.get(0).roles.size() "+aux.cuentas.get(0).roles.size());
-
             if (aux.cuentas.get(0).roles.size()==1) {
                 for ( Cuenta c :  aux.cuentas ){
                     c.delete();
@@ -308,18 +294,14 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
 
 
         Personal nvo = Personal.find.byId(id);
-        Logger.debug("activo:"+nvo.activo);
         if (nvo.activo.compareTo("S") ==0) {
-            Logger.debug("ruta S");
             nvo.activo = "N";
             jo.put( "resultado", "inactivo");
         } else
             if (nvo.activo.compareTo("N")==0) {
-                Logger.debug("ruta N");
                 nvo.activo = "S";
                 jo.put( "resultado", "activo");
             }
-        jo.put("estado", "correcto");
         nvo.update();
         return ok (jo.toString());
     }
@@ -387,11 +369,6 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
                 "order by concat(EXTRACT('YEAR' FROM vc.audit_update),' ', EXTRACT('MONTH' FROM vc.audit_update)), concat(p.nombre,' ',p.paterno, ' ',p.materno), catalogador_id ";
         List<SqlRow> sqlRows2 = Ebean.createSqlQuery(query2).findList();
 
-        for (SqlRow s : sqlRows2){
-            Logger.debug(" -->fecha "+s.getString("fecha")+ "  nombre "+s.getString("nombre")+"    "+s.getLong("total"));
-        }
-
-
         JSONObject joGraf2 = new JSONObject();
         JSONArray jaDatasets = new JSONArray();
 
@@ -458,6 +435,7 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
 
     public static Result catalogoDTSS(){
         System.out.println("Desde SupCatalogadorController.catalogoDTSS............"+new Date());
+        /*
         System.out.println( "parametros 0:"+ request() );
         System.out.println( "parametros draw:"+ request().getQueryString("draw"));
         System.out.println( "parametros start:"+ request().getQueryString("start"));
@@ -469,29 +447,17 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
 
         System.out.println("  -  -  - - -1");
 
+         */
+
         String filtro = request().getQueryString("search[value]");
         String colOrden =  request().getQueryString("order[0][column]");
         String tipoOrden = request().getQueryString("order[0][dir]");
-        System.out.println("  -  -  - - -5");
         String nombreColOrden = request().getQueryString("columns["+colOrden+"][data]");
-
-        System.out.println("  -  -  - - -7");
-
         List<VtkCatalogo> cat = null;
-
-        System.out.println("  -  -  - - -rolActual "+session("rolActual"));
-
         // Es supervisor de catalogadores?
         if (session("rolActual").compareTo("133")==0){
-            System.out.println("  -  -  - - -10");
             cat = VtkCatalogo.find.all();
-            System.out.println("  -  -  - - -11");
         }
-
-        System.out.println("  -  -  - - -");
-
-
-
         int numPag = 0;
         if (Integer.parseInt(request().getQueryString("start")) != 0)
             numPag = Integer.parseInt(request().getQueryString("start")) /   Integer.parseInt(request().getQueryString("length"));
@@ -501,10 +467,6 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
                 , nombreColOrden
                 , tipoOrden
         );
-        Logger.debug("pag: "+pag);
-        Logger.debug("pag getTotalRowCount: "+pag.getTotalRowCount());
-
-
         response().setContentType("application/json");
         JSONObject json2 = new JSONObject();
         try {
@@ -514,7 +476,6 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
 
             if (cat.isEmpty()){
                 json2.put("recordsFiltered", 0);
-                //losDatos.put(new JSONObject());
                 json2.put("data", new JSONArray());
             } else {
                 json2.put("recordsFiltered", pag.getTotalRowCount());
@@ -539,7 +500,6 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
             System.out.println("ERROR - VideotecaController.catalogoDTSS ");
             e.printStackTrace();
         }
-        System.out.println("retornando:  "+json2.toString());
         return ok( json2.toString() );
     }
 
@@ -550,24 +510,13 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
                 .fetch("niveles")
                 .where().eq("id", id)
                 .findUnique();
-        //Logger.debug(  session("usuario") +"  -  "+ );
 
-        Logger.debug("001 id "+id);
         Form<VtkCatalogo> forma = form(VtkCatalogo.class).fill(catalogo);
-        Logger.debug("002 FORMA "+forma);
         Duracion d = new Duracion();
         if (catalogo.duracion!=null)
             d = new Duracion(catalogo.duracion);
         else
             d = new Duracion(0L);
-        Logger.debug("003 duracion " + d.horas+":"+d.minutos+":"+d.segundos);
-        /*
-        List<TipoCredito> tipos = TipoCredito.find.all();
-        List<TipoCredito> tiposOrdenados = tipos.stream()
-                .sorted(Comparator.comparing(TipoCredito::getId))
-                .collect(Collectors.toList());
-        */
-
 
         StringBuilder losCreditos= new StringBuilder();
 
@@ -578,39 +527,18 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
                     "order by tipo_credito_id ";
             List<SqlRow> sqlRows = Ebean.createSqlQuery(sql).findList();
             for (SqlRow sqlRow : sqlRows) {
-                //JSONObject joGpo = new JSONObject();
-                //JSONArray jaGpo = new JSONArray();
                 List<Credito> creditos = Credito.find.setDistinct(true).where()
                         .and(Expr.eq("catalogo_id", id), Expr.eq("tipoCredito.id", sqlRow.getLong("tipo_credito_id")))
                         .findList();
-                //JSONArray jaPersonas = new JSONArray();
                 losCreditos.append("<strong>"+sqlRow.getString(("descripcion") )+": </strong>");
                 for ( Credito credito :creditos ) {
-                    //JSONObject jo1 = new JSONObject();
-
-                    //jo1.put("persona", credito.personas);
-                    //jaPersonas.put(jo1);
                     losCreditos.append(  credito.personas +", " );
                 }
                 if (losCreditos.toString().length()>2)
                     losCreditos.deleteCharAt(losCreditos.length() - 2);
                 losCreditos.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-
-
-                //joGpo.put("grupo", sqlRow.getString("descripcion"));
-                //joGpo.put("personas",jaPersonas);
-                //jaCreditos.put(joGpo);
-            }
-            //jo.put("creditos", jaCreditos);
-        }
-
-        if (!forma.get().niveles.isEmpty()) {
-            for (VtkNivel n : forma.get().niveles) {
-                Logger.debug(n.nivel.descripcion);
             }
         }
-
-        Logger.debug("retornando...");
         return ok( views.html.videoteca.catalogadores.infoForm2.render(id, forma, losCreditos.toString())  );
 
     }
@@ -618,45 +546,26 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
     public static Result catalogoInfo2(Long id){
         System.out.println("\n\nDesde SupCatalogadorController.catalogoInfo2");
         VtkCatalogo catalogo = VtkCatalogo.find.byId(id);
-        //Logger.debug(  session("usuario") +"  -  "+ );
-
-        Logger.debug("001 id "+id);
         Form<VtkCatalogo> forma = form(VtkCatalogo.class).fill(catalogo);
-        Logger.debug("002 FORMA "+forma);
         Duracion d = new Duracion();
         if (catalogo.duracion!=null)
             d = new Duracion(catalogo.duracion);
         else
             d = new Duracion(0L);
-        Logger.debug("003 duracion " + d.horas+":"+d.minutos+":"+d.segundos);
-        /*
-        List<TipoCredito> tipos = TipoCredito.find.all();
-        List<TipoCredito> tiposOrdenados = tipos.stream()
-                .sorted(Comparator.comparing(TipoCredito::getId))
-                .collect(Collectors.toList());
-*/
         return ok( views.html.videoteca.catalogadores.infoForm2.render(id, forma, "jajaaj")  );
-
     }
 
 
     public static Result catalogoInfo3(Long id){
         System.out.println("\n\nDesde SupCatalogadorController.catalogoInfo2");
         VtkCatalogo catalogo = VtkCatalogo.find.byId(id);
-        //Logger.debug(  session("usuario") +"  -  "+ );
-
-        Logger.debug("001 id "+id);
         Form<VtkCatalogo> forma = form(VtkCatalogo.class).fill(catalogo);
-        Logger.debug("002 FORMA "+forma);
         Duracion d = new Duracion();
         if (catalogo.duracion!=null)
             d = new Duracion(catalogo.duracion);
         else
             d = new Duracion(0L);
-        Logger.debug("003 duracion " + d.horas+":"+d.minutos+":"+d.segundos);
-
         StringBuilder losCreditos= new StringBuilder();
-
         if (catalogo.creditos!=null) {
             String sql ="select distinct tipo_credito_id, tc.descripcion  " +
                     "from credito c inner join tipo_credito tc on c.tipo_credito_id = tc.id  " +
@@ -664,35 +573,29 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
                     "order by c.tipo_credito_id ";
             List<SqlRow> sqlRows = Ebean.createSqlQuery(sql).findList();
             for (SqlRow sqlRow : sqlRows) {
-                //JSONObject joGpo = new JSONObject();
-                //JSONArray jaGpo = new JSONArray();
                 List<Credito> creditos = Credito.find.setDistinct(true).where()
                         .and(Expr.eq("catalogo_id", id), Expr.eq("tipoCredito.id", sqlRow.getLong("tipo_credito_id")))
                         .findList();
-                //JSONArray jaPersonas = new JSONArray();
                 losCreditos.append("<span class='bloque'><strong>"+sqlRow.getString(("descripcion") )+": </strong>");
                 for ( Credito credito :creditos ) {
-                    //JSONObject jo1 = new JSONObject();
-
-                    //jo1.put("persona", credito.personas);
-                    //jaPersonas.put(jo1);
                     losCreditos.append(  credito.personas +", " );
                 }
                 if (losCreditos.toString().length()>2)
                     losCreditos.deleteCharAt(losCreditos.length() - 2);
 
-
                 losCreditos.append("</span>");
-                //joGpo.put("grupo", sqlRow.getString("descripcion"));
-                //joGpo.put("personas",jaPersonas);
-                //jaCreditos.put(joGpo);
             }
-            //jo.put("creditos", jaCreditos);
         }
-
-
         return ok( views.html.videoteca.catalogadores.infoForm3.render(id, forma, losCreditos.toString() )  );
-
     }
 
+
+    public static Result eliminaCatalogo() throws JSONException {
+        JSONObject retorno = new JSONObject().put("estado","error");
+        JsonNode json = request().body().asJson();
+        VtkCatalogo aux = VtkCatalogo.find.byId(json.findValue("id").asLong());
+        Ebean.delete(aux);
+        retorno.put("estado", "eliminado");
+        return ok(  retorno.toString()  );
+    }
 }

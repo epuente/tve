@@ -1,5 +1,6 @@
 package controllers;
 
+import akka.event.EventBus;
 import classes.ColorConsola;
 import classes.Duracion;
 import com.avaje.ebean.Ebean;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.db.ebean.Model;
 import play.libs.Json;
 import play.mvc.Result;
 import views.html.videoteca.createForm3;
@@ -549,6 +551,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 vtk.palabrasClave.add(pc);
             }
         }
+
         JSONArray jsonArrTL = new JSONArray();
         if (forma.field("txaTimeLine")!=null) {
             if (forma.field("txaTimeLine").value() != null) {
@@ -580,6 +583,23 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 vtk.creditos = creditos;
             }
         }
+
+        // Elimina de VtkDisponibilidad las disponibilidades iguales a null
+        if (vtk.disponibilidades != null) {
+            vtk.disponibilidades = vtk.disponibilidades.stream().filter(f -> f.disponibilidad != null).collect(Collectors.toList());
+            if (  vtk.disponibilidades.stream().noneMatch(p->p.disponibilidad.id==999))
+                vtk.disponibilidadOtra = "";
+        }
+
+
+        // Elimina de VtkAreatematica las areastematica iguales a null
+        if (vtk.areastematicas != null){
+            vtk.areastematicas = vtk.areastematicas.stream().filter(f -> f.areatematica != null).collect(Collectors.toList());
+            if (vtk.areastematicas.stream().noneMatch(p->p.areatematica.id==999))
+                vtk.areaTematicaOtra = "";
+        }
+
+
         vtk.catalogador = usuarioActual;
         return vtk;
     }
@@ -596,10 +616,47 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
         Ebean.beginTransaction();
         try {
-            VtkCatalogo db = VtkCatalogo.find.byId(forma.get().id);
+            VtkCatalogo db = VtkCatalogo.find
+                    .fetch("niveles")
+                    .where().eq("id", forma.get().id)
+                    .findUnique();
+
+            VtkCatalogo aux3 = forma.get();
+            // Eliminar los null que pudieran existir en los OneToMany
+            aux3.eventos = aux3.eventos.stream().filter(f->f.servicio!=null).collect(Collectors.toList());
+            aux3.niveles = aux3.niveles.stream().filter(f->f.nivel!=null).collect(Collectors.toList());
+            aux3.disponibilidades = aux3.disponibilidades.stream().filter(f->f.disponibilidad!=null).collect(Collectors.toList());
+            aux3.areastematicas = aux3.areastematicas.stream().filter(f->f.areatematica!=null).collect(Collectors.toList());
+            aux3.creditos = aux3.creditos.stream().filter(f->f.tipoCredito!=null || (f.personas!=null && f.personas.length()>0) ).collect(Collectors.toList());
+            aux3.palabrasClave = aux3.palabrasClave.stream().filter(f->f.descripcion!=null && f.descripcion.length()>0).collect(Collectors.toList());
+
+            // Si dispobilidades y/o areastemáticas tiene difetene a Otra (id!=999) eliminar el texto de disponibilidadotra y/o areatematicaotra
+            if (aux3.disponibilidades.stream().noneMatch(p->p.disponibilidad.id==999))
+                aux3.disponibilidadOtra = "";
+            if (aux3.areastematicas.stream().noneMatch(p->p.areatematica.id==999))
+                aux3.areaTematicaOtra = "";
+
+            //Eventos
+            for ( VtkEvento e :db.eventos){
+                e.delete();
+            }
+            //Niveles
+            for ( VtkNivel n :db.niveles){
+                n.delete();
+            }
 
             VtkCatalogo vtk = forma.get();
             vtk.catalogador = usuarioActual;
+
+            //Disponibilidad
+            db.disponibilidades.forEach(Model::delete);
+            db.disponibilidadOtra=null;
+
+            //Areas tematicas
+            db.areastematicas.forEach(Model::delete);
+            db.areaTematicaOtra=null;
+            Ebean.update(db);
+
 
             // CREDITOS
             if (forma.field("txtLosCreditos")!=null) {
@@ -712,16 +769,16 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             flash("success", "Se actualizó al acervo ");
         } catch(Exception e) {
             flash("danger", "No se aplicarón los cambios. No fué posible la actualización ");
-            Ebean.rollbackTransaction();
             System.out.println(ColorConsola.ANSI_RED+"Ocurrió un error al intentar actualizar el registro. "+e+ColorConsola.ANSI_RESET);
             e.printStackTrace();
+            Ebean.rollbackTransaction();
         }finally {
             Ebean.endTransaction();
         }
         return redirect( routes.VideotecaController.catalogo());
     }
 
-
+    /*
     public static Result update2() throws JSONException {
         System.out.println("\n\n\nDesde VideotecaController.update2");
         Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
@@ -858,6 +915,8 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         flash("success", "Se actualizó al acervo");
         return redirect( routes.VideotecaController.catalogo() );
     }
+
+     */
 
 
     public static Result catalogoDelete() throws JSONException {

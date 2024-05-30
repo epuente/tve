@@ -470,6 +470,15 @@ $("#clave").blur(function(e){
     }
 });
 
+// Cuando se seleccione 'Otra' en Disponibilidad, mostrar un input para especificarla
+$("#disponibilidades999").change(function(){
+    console.log("click")
+    if ( $(this).prop("checked")==true ){
+        $("#divDisponibilidadOtra").show();
+    } else
+        $("#divDisponibilidadOtra").hide();
+});
+
 
 // Cuando se seleccione 'Otra' en Área temática, mostrar un input para especificarla
 $("input[data-name='cbArea'][value=999]").change(function(){
@@ -480,8 +489,10 @@ $("input[data-name='cbArea'][value=999]").change(function(){
 });
 
 
-
-
+// Si la entrada a tagify incluye algún enter (retorno de carro), lo sustituye por un espacio en blanco
+function tagifySinEnter( tagData ){
+    tagData.value = tagData.value.replace(/\r?\n/g, ' ');
+}
 
 
 

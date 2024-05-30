@@ -143,6 +143,7 @@ public class AdminFolioController extends ControladorSeguroAdministrador {
 			flash("success", "Se agregó el folio " + foliorForm.get().numfolio);
 		} catch(Exception e) {
 			System.out.println("Ocurrió un error al intentar grabar el folio "+e);
+            Ebean.rollbackTransaction();
 		}finally {
 			Ebean.endTransaction();
 		}
