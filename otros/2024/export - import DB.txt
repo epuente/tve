@@ -11,6 +11,8 @@ EXPORT (dump) como sql (con INSERT)
 -----------------------
 pg_dump -U tve -W -h localhost -c --if-exists --exclude-table=play_evolutions --column-inserts tveservicios > ~/dumps/tveserviciosLocal`date +%Y%m%d_%H%M`.sql
 
+Si se quiere exportar como un usuario pero importar como otro, agregar al export anterior --no-owner
+
 
 
 -U Usuario de la DB
@@ -29,3 +31,6 @@ el archivo de salida será tveservicios<fechaHora>.dump
 RESTAURAR
 ---------
 pg_restore -U tve -W -F c --create --clean -h localhost -d tveservicios < tveservicios20240124_0934.dump
+
+si es sql
+psql -U tve -h localhost -d tveservicios_dev < ~/dumps/tveserviciosLocal-20240821_1658.sql

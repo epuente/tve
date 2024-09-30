@@ -1,0 +1,136 @@
+@main {
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+                <li>Transferencia de archivos</li>
+            </ol>
+        </div>
+    </div>
+    @views.html.flashes()
+
+    <form enctype="multipart/form-data">
+        <div id="fileUpload"></div>
+    </form>
+
+
+
+
+    <div id="drop-zone" style="width:600px; height:600px; border:5px solid red;">
+
+    </div>
+    <div>
+        <button id ="btnDirecto" type="button" class="btn btn-primary">Upload direct</button>
+        <button id ="btnTA" type="button" class="btn btn-primary">Subir a TranzApp</button>
+        <button id ="btnTA2" type="button" class="btn btn-primary">Subir a TranzApp via curl binario</button>
+    </div>
+
+}
+<script>
+    $(function(){
+      $("#fileUpload").fileUpload();
+
+    });
+
+
+    $('#drop-zone').on('dragover', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+
+    $('#drop-zone').on('drop', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var files = e.originalEvent.dataTransfer.files;
+        console.log(files[0]);
+    });
+
+
+    $('#fileUpload').on('change', function(event) {
+        console.log("...change")
+        const files = event.target.files; // Obtiene los archivos seleccionados
+        const fileList = $('#fileList');
+        fileList.empty(); // Limpia la lista anterior
+
+        for (let i = 0; i < files.length; i++) {
+            const fileName = files[i].name; // Obtiene el nombre del archivo
+            fileList.append(`<p>${fileName}</p>`); // Muestra el nombre en la lista
+        }
+        console.log(fileList)
+    });
+
+
+
+
+
+    $("#btnTA").on ("click", function(){
+        console.log("desde el click");
+        console.log("tasm "+$('#fileUpload-1').prop('files').length)
+        for (x=0; x<$('#fileUpload-1').prop('files').length;x++){
+            este = $('#fileUpload-1').prop('files')[x];
+            console.log("nombre: "+este.path)
+
+              var formData = new FormData();
+              var file = este;
+              formData.append('file', file);
+
+              $.ajax({
+                type: 'POST',
+                url: '/pruebaTranzApp',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function() {
+                  alert('File uploaded!');
+                }
+              });
+        }
+    });
+
+
+    $("#btnTA2").on ("click", function(){
+        console.log("...............");
+
+    });
+
+    $("#btnDirecto").on("click", function(e){
+        console.log("Desde btnDirecto");
+        var formData = new FormData();
+        console.log("num archs "+$("#fileUpload-1")[0].files.length)
+
+        for(x=0; x<$("#fileUpload-1")[0].files.length; x++){
+            formData.append(
+                        "archivo",
+                        $("#fileUpload-1")[0].files[x], $("#fileUpload-1")[0].files[x]
+                        );
+        }
+
+        console.log(formData)
+
+
+            var form = $('form')[0]; // You need to use standard javascript object here
+            var formData2 = new FormData(form);
+
+              $.ajax({
+                type: 'POST',
+                url: '/tranzappUpload',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                  console.dir(data);
+                }
+              });
+    });
+
+
+
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined">
+<script src="@routes.Assets.at("fileUpLoad/fileUpload.js")"></script>
+<link  href="@routes.Assets.at("fileUpLoad/fileUpload.css")" rel="stylesheet" type="text/css"  nonce="@session.get("nonce")"/>
+
+
+
+
+
+

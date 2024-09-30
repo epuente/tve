@@ -32,7 +32,7 @@ public class ProductorServiciosController extends ControladorDefault{
 		String fecha = (df.get("fecha")!=null?df.get("fecha"):null);
 		Long eventoId = (df.get("eventoId")!=null)?Long.parseLong(df.get("eventoId")):null;
 		String tipo = (df.get("tipo")!=null)?df.get("tipo"):null;
-		Long folio= (df.get("folio")!=null)?Long.parseLong(df.get("folio")):null;
+		Long folio= (df.get("folio")!=null)?Long.parseLong(df.get("folio").trim()):null;
 		
 	
 		new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");

@@ -62,8 +62,8 @@ public class Ctacorreo  extends models.utils.PlantillaModelo  {
 		System.out.println(" * * * * * * * * filtr :"+filtro);
 		System.out.println(" * * * * * * * * filtr tam :"+filtro.length());
 		Page<Ctacorreo> p = Ebean.find(Ctacorreo.class)
-				.where("  hostname like :cadena OR puerto like :cadena  OR  cuenta like :cadena ")
-            .setParameter("cadena", "%"+filtro+"%")
+				.where("  unaccent(lower(hostname)) like :cadena OR puerto like :cadena  OR  unaccent(lower(cuenta)) like :cadena ")
+            .setParameter("cadena", "%"+filtro.toLowerCase()+"%")
                 .orderBy( columnaOrden +" "+tipoOrden )
                 .findPagingList(pageSize)
                 .setFetchAhead(true)

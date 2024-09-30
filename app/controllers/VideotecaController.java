@@ -1,6 +1,7 @@
 package controllers;
 
 import akka.event.EventBus;
+import classes.CUrl;
 import classes.ColorConsola;
 import classes.Duracion;
 import com.avaje.ebean.Ebean;
@@ -8,7 +9,9 @@ import com.avaje.ebean.RawSql;
 import com.avaje.ebean.RawSqlBuilder;
 import com.avaje.ebean.SqlRow;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.*;
+import models.utils.PlantillaArchivo;
 import models.videoteca.*;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,15 +21,23 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.db.ebean.Model;
 import play.libs.Json;
+import play.mvc.Http;
 import play.mvc.Result;
 import views.html.videoteca.createForm3;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 
-
+import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static play.data.Form.form;
 
 public class VideotecaController extends ControladorSeguroVideoteca{
@@ -960,5 +971,103 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 views.html.videoteca.createForm3.render(forma, tiposOrdenados, campos)
         );
     }
+
+
+    public static Result tranzapp(){
+        return ok(views.html.videoteca.tranzapp.render());
+    }
+
+    public static Result tranzappUpload() {
+        System.out.println("Desde tranzappUpload");
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+
+        String urlTranzapp="https://tranzapp.dev.ipn.mx/";
+        String apipage = "script.php";
+        String downloadpage="f.php";
+
+        System.out.println("10   "+request().body());
+        Logger.debug("body "+body.getFiles());
+        List<Http.MultipartFormData.FilePart> archs = body.getFiles();
+        Logger.debug("body, num file: "+archs.size());
+        Oficio of = Oficio.find.byId(22L);
+        ObjectNode jo = Json.newObject();
+        for (Http.MultipartFormData.FilePart arch : archs) {
+            Logger.debug("   "+arch.getKey()+ " -> "+ arch.getFile().getAbsolutePath());
+
+            Path p = Paths.get(arch.getFile().getPath());
+            byte[] byteFile = null;
+            try {
+                byteFile = Files.readAllBytes(p);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            PlantillaArchivo pa = new PlantillaArchivo();
+            pa.nombrearchivo = arch.getFilename();
+            pa.contenttype = arch.getContentType();
+            pa.contenido = byteFile;
+
+            OficioImagen ofIma = new OficioImagen(pa.nombrearchivo, pa.contenttype, pa.contenido);
+            of.imagenes.add(ofIma);
+            of.update( of.id );
+
+            String datos = lecturaComando("send", arch.getFile().getAbsolutePath());
+            System.out.println("-->>>>>>>>ya se hizo la lecturaComando");
+            StringBuilder sb = new StringBuilder(datos);
+
+            System.out.println("-->>>>>>>>datos:"+sb.toString());
+            String[] arrString = sb.toString().split("\r");
+            System.out.println("--->arrString:"+ Arrays.toString(arrString));
+
+            jo.put("archivo", "archivo");
+            jo.put("idArchivo", arrString[0]);
+            jo.put("cveBorrado", arrString[1]);
+            jo.put("descargar",   urlTranzapp+downloadpage+"?h="+arrString[0] );
+            jo.put("borrar",   urlTranzapp+downloadpage+"?h="+arrString[0]+"&d="+arrString[1]);
+
+            System.out.println("El retornorno en json¸\n\n"+jo);
+        }
+        return ok( Json.toJson(jo) );
+    }
+
+
+    // El comando a ejecutar es algo como:
+    ///       usr/bin/curl -X POST --http1.0 -F time=month -F file=@/home/eduardo/archivoPrueba.txt https://tranzapp.dev.ipn.mx/script.php
+    public static String lecturaComando(String tipo, String archivo){
+            String line = "";
+            String aux="";
+            try {
+                //String cmd = "/home/eduardo/tranzAppAPI.sh send /home/eduardo/archivoPrueba.txt";
+                // En el archivo /home/eduardo/tranzAppAPI2.sh se llama a:
+                //        /usr/bin/curl -X POST --http1.0 -F time=month -F file=@rutaCompletaDelArchivoASubir https://tranzapp.dev.ipn.mx/script.php
+                String cmdAPI = "/home/eduardo/tranzAppAPI2.sh "+tipo+" "+archivo;
+                System.out.println("comando:"+cmdAPI);
+                Runtime run = Runtime.getRuntime();
+                Process pr = run.exec(cmdAPI);
+
+                pr.waitFor();
+                System.out.println("Lectura terminada");
+                BufferedReader buf = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+
+                System.out.println("Retorno: -----");
+                while ((line=buf.readLine())!=null) {
+                    System.out.println(line);
+                    aux+=line+ "\r";
+                }
+                System.out.println("---------------");
+            } catch(java.io.IOException e) {
+                System.out.print(e.getMessage());
+            } catch (java.lang.InterruptedException e) {
+                System.out.print(e.getMessage());
+            }
+            System.out.println(aux);
+            return aux;
+
+    }
+
+
+
+
+
 
 }

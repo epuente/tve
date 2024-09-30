@@ -1,5 +1,9 @@
+clean
+reload
+compile
 run
-run 9000
-run
-run 9000
-exit
+run 8087
+clean
+reload
+compile
+run 8087

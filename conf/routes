@@ -353,5 +353,6 @@ POST    /videotecaAdmin/asignarProductor    controllers.AdminVideotecaController
 # VIDEOTECA - productor
 POST    /videoteca/productor/catalogoInfo   controllers.ProductorVideotecaController.catalogoInfo()
 
-
+GET     /tranzapp                           controllers.VideotecaController.tranzapp()
+POST    /tranzappUpload                       controllers.VideotecaController.tranzappUpload()
 

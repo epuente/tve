@@ -1,15 +1,15 @@
-[info] Updating {file:/home/eduardo/playFramework/tve2024_devMayo/project/}tve2024_devmayo-build...
-[debug] :: resolving dependencies :: default#tve2024_devmayo-build;0.1-SNAPSHOT
+[info] Updating {file:/home/eduardo/playFramework/tve2024_devSeptiembre/project/}tve2024_devseptiembre-build...
+[debug] :: resolving dependencies :: default#tve2024_devseptiembre-build;0.1-SNAPSHOT
 [debug] 	confs: [compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool]
 [debug] 	validate = true
 [debug] 	refresh = false
 [debug] resolving dependencies for configuration 'compile'
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
 [info] Resolving org.scala-sbt#global-plugins;0.0 ...
 [debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#global-plugins;0.0 {compile=[default(compile)]}
 [debug] 	found org.scala-sbt#global-plugins;0.0 in inter-project
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
 [info] Resolving com.typesafe.play#sbt-plugin;2.3.7 ...
 [debug] sbt-chain: Checking cache for: dependency: com.typesafe.play#sbt-plugin;2.3.7 {compile=[default(compile)]}
 [debug] sbt-chain: module revision found in cache: com.typesafe.play#sbt-plugin;2.3.7
@@ -2673,23 +2673,23 @@
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe#webdriver_2.10;1.0.0 [compile->master]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.0 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.2 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
 [info] Resolving org.javassist#javassist;3.20.0-GA ...
 [debug] sbt-chain: Checking cache for: dependency: org.javassist#javassist;3.20.0-GA {compile=[default(compile)]}
 [debug] sbt-chain: module revision found in cache: org.javassist#javassist;3.20.0-GA
 [debug] 	found org.javassist#javassist;3.20.0-GA in sbt-chain
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime(*)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile(*)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime(*)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile(*)]
 [debug] resolving dependencies for configuration 'runtime'
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [runtime]
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [runtime]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->runtime]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->compile]
@@ -4762,16 +4762,16 @@
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe#webdriver_2.10;1.0.0 [compile->master]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.0 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.2 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
 [debug] resolving dependencies for configuration 'test'
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [test]
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [runtime]
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [test]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [runtime]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->runtime]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->compile]
@@ -6844,17 +6844,17 @@
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe#webdriver_2.10;1.0.0 [compile->master]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.0 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.2 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
 [debug] resolving dependencies for configuration 'provided'
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [provided]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->runtime]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->master]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-sbt#sbt;0.13.7 [provided->default(compile)]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [provided]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->runtime]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->master]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-sbt#sbt;0.13.7 [provided->default(compile)]
 [info] Resolving org.scala-sbt#sbt;0.13.7 ...
 [debug] sbt-chain: Checking cache for: dependency: org.scala-sbt#sbt;0.13.7 {provided=[default(compile)]}
 [debug] sbt-chain: module revision found in cache: org.scala-sbt#sbt;0.13.7
@@ -7538,12 +7538,12 @@
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-compiler;2.9.3 {provided=[default(compile)]} => dependency: org.scala-lang#scala-compiler;2.10.4 {provided=[default(compile)]}
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.9.3 {compile=[default(compile)]} => dependency: org.scala-lang#scala-library;2.10.4 {compile=[default(compile)]}
 [debug] resolving dependencies for configuration 'optional'
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [optional]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [optional]
 [debug] resolving dependencies for configuration 'compile-internal'
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [compile-internal]
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [compile-internal]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->runtime]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->compile]
@@ -9616,17 +9616,17 @@
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe#webdriver_2.10;1.0.0 [compile->master]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.0 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.2 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [optional]
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [provided]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->runtime]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->master]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-sbt#sbt;0.13.7 [provided->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [optional]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [provided]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->runtime]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->master]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-sbt#sbt;0.13.7 [provided->default(compile)]
 [debug] == resolving dependencies org.scala-sbt#sbt;0.13.7->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
 [debug] == resolving dependencies org.scala-sbt#sbt;0.13.7->org.scala-lang#scala-library;2.10.4 [compile->runtime]
 [debug] == resolving dependencies org.scala-sbt#sbt;0.13.7->org.scala-lang#scala-library;2.10.4 [compile->compile]
@@ -10102,11 +10102,11 @@
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-compiler;2.9.3 {provided=[default(compile)]} => dependency: org.scala-lang#scala-compiler;2.10.4 {provided=[default(compile)]}
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.9.3 {compile=[default(compile)]} => dependency: org.scala-lang#scala-library;2.10.4 {compile=[default(compile)]}
 [debug] resolving dependencies for configuration 'runtime-internal'
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [runtime-internal]
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [runtime]
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [runtime-internal]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [runtime]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->runtime]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->compile]
@@ -12179,18 +12179,18 @@
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe#webdriver_2.10;1.0.0 [compile->master]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.0 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.2 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [optional]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [optional]
 [debug] resolving dependencies for configuration 'test-internal'
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [test-internal]
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [test]
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [runtime]
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [test-internal]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [test]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [runtime]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-sbt#global-plugins;0.0 [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->com.typesafe.play#sbt-plugin;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->runtime]
 [debug] == resolving dependencies com.typesafe.play#sbt-plugin;2.3.7->com.typesafe.play#build-link;2.3.7 [compile->compile]
@@ -14263,17 +14263,17 @@
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe#webdriver_2.10;1.0.0 [compile->master]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.0 [compile->default(compile)]
 [debug] == resolving dependencies com.typesafe.sbt#sbt-webdriver;1.0.0->com.typesafe.sbt#sbt-web;1.0.2 [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [optional]
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [provided]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->default(compile)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->runtime]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->master]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-sbt#sbt;0.13.7 [provided->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->runtime]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.javassist#javassist;3.20.0-GA [compile->master]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [optional]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [provided]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->default(compile)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->runtime]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->master]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-sbt#sbt;0.13.7 [provided->default(compile)]
 [debug] == resolving dependencies org.scala-sbt#sbt;0.13.7->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
 [debug] == resolving dependencies org.scala-sbt#sbt;0.13.7->org.scala-lang#scala-library;2.10.4 [compile->runtime]
 [debug] == resolving dependencies org.scala-sbt#sbt;0.13.7->org.scala-lang#scala-library;2.10.4 [compile->compile]
@@ -14745,18 +14745,18 @@
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-compiler;2.9.3 {provided=[default(compile)]} => dependency: org.scala-lang#scala-compiler;2.10.4 {provided=[default(compile)]}
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.9.3 {compile=[default(compile)]} => dependency: org.scala-lang#scala-library;2.10.4 {compile=[default(compile)]}
 [debug] resolving dependencies for configuration 'plugin'
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [plugin]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [plugin]
 [debug] resolving dependencies for configuration 'sources'
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [sources]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [sources]
 [debug] resolving dependencies for configuration 'docs'
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [docs]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [docs]
 [debug] resolving dependencies for configuration 'pom'
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [pom]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [pom]
 [debug] resolving dependencies for configuration 'scala-tool'
-[debug] == resolving dependencies for default#tve2024_devmayo-build;0.1-SNAPSHOT [scala-tool]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->default]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->runtime]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->compile]
+[debug] == resolving dependencies for default#tve2024_devseptiembre-build;0.1-SNAPSHOT [scala-tool]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->default]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->runtime]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->compile]
 [debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-library;2.10.4 [compile->master(*)]
 [debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-library;2.10.4 [compile->compile(*)]
 [debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-library;2.10.4 [compile->default]
@@ -14774,8 +14774,8 @@
 [debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#scala-reflect;2.10.4 [runtime->compile]
 [debug] == resolving dependencies org.scala-lang#scala-reflect;2.10.4->org.scala-lang#scala-library;2.10.4 [runtime->runtime(*)]
 [debug] == resolving dependencies org.scala-lang#scala-reflect;2.10.4->org.scala-lang#scala-library;2.10.4 [runtime->compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->master]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->optional(default)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->master]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-compiler;2.10.4 [scala-tool->optional(default)]
 [debug] == resolving dependencies org.scala-lang#scala-compiler;2.10.4->org.scala-lang#jline;2.10.4 [optional->master(*)]
 [info] Resolving org.scala-lang#jline;2.10.4 ...
 [debug] sbt-chain: Checking cache for: dependency: org.scala-lang#jline;2.10.4 {optional=[compile(*), master(*)]}
@@ -14788,11 +14788,11 @@
 [debug] sbt-chain: module revision found in cache: org.fusesource.jansi#jansi;1.4
 [debug] 	found org.fusesource.jansi#jansi;1.4 in sbt-chain
 [debug] == resolving dependencies org.scala-lang#jline;2.10.4->org.fusesource.jansi#jansi;1.4 [compile->compile(*)]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->default]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->runtime]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->compile]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->master]
-[debug] == resolving dependencies default#tve2024_devmayo-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->optional(default)]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->default]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->runtime]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->compile]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->master]
+[debug] == resolving dependencies default#tve2024_devseptiembre-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [scala-tool->optional(default)]
 [debug] all callers are evicted for org.scala-sbt#control;0.13.5: evicting too
 [debug] all callers are evicted for org.scala-sbt#control;0.13.5: evicting too
 [debug] 	resolved ivy file produced in cache
@@ -14975,19 +14975,19 @@
 [debug] 	[NOT REQUIRED] org.scala-sbt#apply-macro;0.13.7!apply-macro.jar
 [debug] 	[NOT REQUIRED] org.scala-lang#jline;2.10.4!jline.jar
 [debug] 	[NOT REQUIRED] org.fusesource.jansi#jansi;1.4!jansi.jar
-[debug] :: resolution report :: resolve 8642ms :: artifacts dl 227ms
-[debug] 	report for default#tve2024_devmayo-build;0.1-SNAPSHOT compile produced in /home/eduardo/playFramework/tve2024_devMayo/project/target/resolution-cache/reports/default-tve2024_devmayo-build-compile.xml
-[debug] 	report for default#tve2024_devmayo-build;0.1-SNAPSHOT runtime produced in /home/eduardo/playFramework/tve2024_devMayo/project/target/resolution-cache/reports/default-tve2024_devmayo-build-runtime.xml
-[debug] 	report for default#tve2024_devmayo-build;0.1-SNAPSHOT test produced in /home/eduardo/playFramework/tve2024_devMayo/project/target/resolution-cache/reports/default-tve2024_devmayo-build-test.xml
-[debug] 	report for default#tve2024_devmayo-build;0.1-SNAPSHOT provided produced in /home/eduardo/playFramework/tve2024_devMayo/project/target/resolution-cache/reports/default-tve2024_devmayo-build-provided.xml
-[debug] 	report for default#tve2024_devmayo-build;0.1-SNAPSHOT optional produced in /home/eduardo/playFramework/tve2024_devMayo/project/target/resolution-cache/reports/default-tve2024_devmayo-build-optional.xml
-[debug] 	report for default#tve2024_devmayo-build;0.1-SNAPSHOT compile-internal produced in /home/eduardo/playFramework/tve2024_devMayo/project/target/resolution-cache/reports/default-tve2024_devmayo-build-compile-internal.xml
-[debug] 	report for default#tve2024_devmayo-build;0.1-SNAPSHOT runtime-internal produced in /home/eduardo/playFramework/tve2024_devMayo/project/target/resolution-cache/reports/default-tve2024_devmayo-build-runtime-internal.xml
-[debug] 	report for default#tve2024_devmayo-build;0.1-SNAPSHOT test-internal produced in /home/eduardo/playFramework/tve2024_devMayo/project/target/resolution-cache/reports/default-tve2024_devmayo-build-test-internal.xml
-[debug] 	report for default#tve2024_devmayo-build;0.1-SNAPSHOT plugin produced in /home/eduardo/playFramework/tve2024_devMayo/project/target/resolution-cache/reports/default-tve2024_devmayo-build-plugin.xml
-[debug] 	report for default#tve2024_devmayo-build;0.1-SNAPSHOT sources produced in /home/eduardo/playFramework/tve2024_devMayo/project/target/resolution-cache/reports/default-tve2024_devmayo-build-sources.xml
-[debug] 	report for default#tve2024_devmayo-build;0.1-SNAPSHOT docs produced in /home/eduardo/playFramework/tve2024_devMayo/project/target/resolution-cache/reports/default-tve2024_devmayo-build-docs.xml
-[debug] 	report for default#tve2024_devmayo-build;0.1-SNAPSHOT pom produced in /home/eduardo/playFramework/tve2024_devMayo/project/target/resolution-cache/reports/default-tve2024_devmayo-build-pom.xml
-[debug] 	report for default#tve2024_devmayo-build;0.1-SNAPSHOT scala-tool produced in /home/eduardo/playFramework/tve2024_devMayo/project/target/resolution-cache/reports/default-tve2024_devmayo-build-scala-tool.xml
-[debug] 	resolve done (8642ms resolve - 227ms download)
+[debug] :: resolution report :: resolve 21585ms :: artifacts dl 191ms
+[debug] 	report for default#tve2024_devseptiembre-build;0.1-SNAPSHOT compile produced in /home/eduardo/playFramework/tve2024_devSeptiembre/project/target/resolution-cache/reports/default-tve2024_devseptiembre-build-compile.xml
+[debug] 	report for default#tve2024_devseptiembre-build;0.1-SNAPSHOT runtime produced in /home/eduardo/playFramework/tve2024_devSeptiembre/project/target/resolution-cache/reports/default-tve2024_devseptiembre-build-runtime.xml
+[debug] 	report for default#tve2024_devseptiembre-build;0.1-SNAPSHOT test produced in /home/eduardo/playFramework/tve2024_devSeptiembre/project/target/resolution-cache/reports/default-tve2024_devseptiembre-build-test.xml
+[debug] 	report for default#tve2024_devseptiembre-build;0.1-SNAPSHOT provided produced in /home/eduardo/playFramework/tve2024_devSeptiembre/project/target/resolution-cache/reports/default-tve2024_devseptiembre-build-provided.xml
+[debug] 	report for default#tve2024_devseptiembre-build;0.1-SNAPSHOT optional produced in /home/eduardo/playFramework/tve2024_devSeptiembre/project/target/resolution-cache/reports/default-tve2024_devseptiembre-build-optional.xml
+[debug] 	report for default#tve2024_devseptiembre-build;0.1-SNAPSHOT compile-internal produced in /home/eduardo/playFramework/tve2024_devSeptiembre/project/target/resolution-cache/reports/default-tve2024_devseptiembre-build-compile-internal.xml
+[debug] 	report for default#tve2024_devseptiembre-build;0.1-SNAPSHOT runtime-internal produced in /home/eduardo/playFramework/tve2024_devSeptiembre/project/target/resolution-cache/reports/default-tve2024_devseptiembre-build-runtime-internal.xml
+[debug] 	report for default#tve2024_devseptiembre-build;0.1-SNAPSHOT test-internal produced in /home/eduardo/playFramework/tve2024_devSeptiembre/project/target/resolution-cache/reports/default-tve2024_devseptiembre-build-test-internal.xml
+[debug] 	report for default#tve2024_devseptiembre-build;0.1-SNAPSHOT plugin produced in /home/eduardo/playFramework/tve2024_devSeptiembre/project/target/resolution-cache/reports/default-tve2024_devseptiembre-build-plugin.xml
+[debug] 	report for default#tve2024_devseptiembre-build;0.1-SNAPSHOT sources produced in /home/eduardo/playFramework/tve2024_devSeptiembre/project/target/resolution-cache/reports/default-tve2024_devseptiembre-build-sources.xml
+[debug] 	report for default#tve2024_devseptiembre-build;0.1-SNAPSHOT docs produced in /home/eduardo/playFramework/tve2024_devSeptiembre/project/target/resolution-cache/reports/default-tve2024_devseptiembre-build-docs.xml
+[debug] 	report for default#tve2024_devseptiembre-build;0.1-SNAPSHOT pom produced in /home/eduardo/playFramework/tve2024_devSeptiembre/project/target/resolution-cache/reports/default-tve2024_devseptiembre-build-pom.xml
+[debug] 	report for default#tve2024_devseptiembre-build;0.1-SNAPSHOT scala-tool produced in /home/eduardo/playFramework/tve2024_devSeptiembre/project/target/resolution-cache/reports/default-tve2024_devseptiembre-build-scala-tool.xml
+[debug] 	resolve done (21585ms resolve - 191ms download)
 [info] Done updating.

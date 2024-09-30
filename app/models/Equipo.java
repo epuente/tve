@@ -40,8 +40,8 @@ public class Equipo  extends models.utils.PlantillaModelo{
     	System.out.println(" * * * * * * * * ");    	
     	Page<Equipo> p = find
     		.fetch("estado")	
-            .where("  descripcion like :cadena OR estado.descripcion like :cadena  OR serie like :cadena  OR  marca like :cadena  OR  modelo like :cadena  OR  observacion like :cadena")
-            .setParameter("cadena", "%"+filtro+"%")
+            .where("  unaccent(lower(descripcion)) like :cadena OR unaccent(lower(estado.descripcion)) like :cadena  OR unaccent(lower(serie)) like :cadena  OR  unaccent(lower(marca)) like :cadena  OR  unaccent(lower(modelo)) like :cadena  OR  unaccent(lower(observacion)) like :cadena")
+            .setParameter("cadena", "%"+filtro.toLowerCase()+"%")
                 .orderBy( columnaOrden +" "+tipoOrden )
                 .findPagingList(pageSize)                
                 .setFetchAhead(false)

@@ -519,10 +519,10 @@ System.out.println(json);
 		 if (estado.compareTo("*")==0){
 			 Query<Folio> q1 = Folio.find.where("productoresAsignados.personal.id = "+session("usuario"));
 			 Query<Folio> q2 = Folio.find.where("productoresAsignados.personal.id = "+session("usuario")+" AND ("+
-						"folio like :cadena "+
-						"or oficio.urremitente.nombreLargo like :cadena "+
-						"or oficio.descripcion like :cadena "+
-					    ")").setParameter("cadena", "%"+filtro+"%");
+						"unaccent(lower(folio)) like :cadena "+
+						"or unaccent(lower(oficio.urremitente.nombreLargo)) like :cadena "+
+						"or unaccent(lower(oficio.descripcion)) like :cadena "+
+					    ")").setParameter("cadena", "%"+filtro.toLowerCase()+"%");
 			 
 			 serv = Folio.find
 					 .fetch("oficio")
@@ -535,10 +535,10 @@ System.out.println(json);
 					 .fetch("estado")					 
 					 .where("productoresAsignados.personal.id = "+session("usuario")+" and "
 			 		+ " ("+
-							"folio like :cadena "+
-							"or oficio.urremitente.nombreLargo like :cadena "+
-							"or oficio.descripcion like :cadena "+
-						    ")").setParameter("cadena", "%"+filtro+"%")					 
+							"unaccent(lower(folio)) like :cadena "+
+							"or unaccent(lower(oficio.urremitente.nombreLargo)) like :cadena "+
+							"or unaccent(lower(oficio.descripcion)) like :cadena "+
+						    ")").setParameter("cadena", "%"+filtro.toLowerCase()+"%")
 					 	.orderBy( "c"+    (colOrden==0?columnasOrdenables.get(0)  :  columnasOrdenables.get(colOrden)-1)  +" "+tipoOrden )
 						.findPagingList(numRegistros)
 						.setFetchAhead(false)
@@ -547,10 +547,10 @@ System.out.println(json);
 			 if (session("rolActual").compareTo("1")==0){
 				 q1 = Folio.find.query();
 				 q2 = Folio.find.where(
-							"folio like :cadena "+
-							"or oficio.urremitente.nombreLargo like :cadena "+
-							"or oficio.descripcion like :cadena "
-						    ).setParameter("cadena", "%"+filtro+"%");				 
+							"unaccent(lower(folio)) like :cadena "+
+							"or unaccent(lower(oficio.urremitente.nombreLargo)) like :cadena "+
+							"or unaccent(lower(oficio.descripcion)) like :cadena "
+						    ).setParameter("cadena", "%"+filtro.toLowerCase()+"%");
 				 serv = Folio.find
 						 .fetch("oficio")
 						 .fetch("oficio.urremitente")
@@ -561,10 +561,10 @@ System.out.println(json);
 						 .fetch("productoresAsignados.agenda.estado")
 						 .fetch("estado")					 
 						 .where(
-								"folio like :cadena "+
-								"or oficio.urremitente.nombreLargo like :cadena "+
-								"or oficio.descripcion like :cadena "
-							    ).setParameter("cadena", "%"+filtro+"%")					 
+								"lower(folio) like :cadena "+
+								"or unaccent(lower(oficio.urremitente.nombreLargo)) like :cadena "+
+								"or unaccent(lower(oficio.descripcion)) like :cadena "
+							    ).setParameter("cadena", "%"+filtro.toLowerCase()+"%")
 						 	.orderBy( "c"+    (colOrden==0?columnasOrdenables.get(0)  :  columnasOrdenables.get(colOrden)-1)  +" "+tipoOrden )
 							.findPagingList(numRegistros)
 							.setFetchAhead(false)
@@ -603,17 +603,17 @@ System.out.println(json);
 			 
 			 Query<Oficio> q1 = Oficio.find.where("id  not in("+ arrToString +")" );
 			 Query<Oficio> q2 = Oficio.find.where("id  not in("+ arrToString +")  AND ("+
-						"urremitente.nombreLargo like :cadena "+
-						"or descripcion like :cadena "+
-					    ")").setParameter("cadena", "%"+filtro+"%");
+						"unaccent(lower(urremitente.nombreLargo)) like :cadena "+
+						"or unaccent(lower(descripcion)) like :cadena "+
+					    ")").setParameter("cadena", "%"+filtro.toLowerCase()+"%");
 			 
 			 pagOficio = Oficio.find
 					 .fetch("urremitente")
 					 .where("id  not in("+ arrToString +") and "
 			 		+ " ("+
-							"urremitente.nombreLargo like :cadena "+
-							"or descripcion like :cadena "+
-						    ")").setParameter("cadena", "%"+filtro+"%")					 
+							"unaccent(lower(urremitente.nombreLargo)) like :cadena "+
+							"or unaccent(lower(descripcion)) like :cadena "+
+						    ")").setParameter("cadena", "%"+filtro.toLowerCase()+"%")
 					 	.orderBy( "c"+    (colOrden==0?columnasOrdenables.get(0)  :  columnasOrdenables.get(colOrden)-1)  +" "+tipoOrden )
 						.findPagingList(numRegistros)
 						.setFetchAhead(false)
@@ -627,10 +627,10 @@ System.out.println(json);
 		 if (estado.compareTo("4")==0){
 			 Query<Folio> q1 = Folio.find.where("productoresAsignados.personal.id = "+session("usuario"));
 			 Query<Folio> q2 = Folio.find.where("productoresAsignados.personal.id = "+session("usuario")+" and productoresAsignados.folio.estado.id = 4 "+" AND ("+
-						"folio like :cadena "+
-						"or oficio.urremitente.nombreLargo like :cadena "+
-						"or oficio.descripcion like :cadena "+
-					    ")").setParameter("cadena", "%"+filtro+"%");
+						"unaccent(lower(folio like)) :cadena "+
+						"or unaccent(lower(oficio.urremitente.nombreLargo)) like :cadena "+
+						"or unaccent(lower(oficio.descripcion)) like :cadena "+
+					    ")").setParameter("cadena", "%"+filtro.toLowerCase()+"%");
 			 
 			 
 			 serv = Folio.find.select("")
@@ -642,10 +642,10 @@ System.out.println(json);
 					 .where("productoresAsignados.personal.id = "+session("usuario")+" and "
 			 	//	+ "estado.id = 4 AND ("+
 					+ "productoresAsignados.folio.estado.id = 4 AND ("+
-							"folio like :cadena "+
-							"or oficio.urremitente.nombreLargo like :cadena "+
-							"or oficio.descripcion like :cadena "+
-						    ")").setParameter("cadena", "%"+filtro+"%")					 
+							"unaccent(lower(folio)) like :cadena "+
+							"or unaccent(lower(oficio.urremitente.nombreLargo)) like :cadena "+
+							"or unaccent(lower(oficio.descripcion)) like :cadena "+
+						    ")").setParameter("cadena", "%"+filtro.toLowerCase()+"%")
 					 	.orderBy( "c"+    (colOrden==0?columnasOrdenables.get(0)  :  columnasOrdenables.get(colOrden)-1)  +" "+tipoOrden )
 						.findPagingList(numRegistros)
 						.setFetchAhead(false)
@@ -655,10 +655,10 @@ System.out.println(json);
 				 System.out.println("------ rol 1 administrador");
 				 q1 = Folio.find.query();
 				 q2 = Folio.find.where("productoresAsignados.folio.estado.id = 4 AND ("+
-							"folio like :cadena "+
-							"or oficio.urremitente.nombreLargo like :cadena "+
-							"or oficio.descripcion like :cadena "+
-						    ")").setParameter("cadena", "%"+filtro+"%");
+							"unaccent(lower(folio)) like :cadena "+
+							"or unaccent(lower(oficio.urremitente.nombreLargo)) like :cadena "+
+							"or unaccent(lower(oficio.descripcion)) like :cadena "+
+						    ")").setParameter("cadena", "%"+filtro.toLowerCase()+"%");
 				 
 				 
 				 serv = Folio.find.select("")
@@ -671,10 +671,10 @@ System.out.println(json);
 						 					 
 						 .where(
 								"productoresAsignados.folio.estado.id = 4 AND ("+
-								"folio like :cadena "+
-								"or oficio.urremitente.nombreLargo like :cadena "+
-								"or oficio.descripcion like :cadena "+
-							    ")").setParameter("cadena", "%"+filtro+"%")					 
+								"unaccent(lower(folio)) like :cadena "+
+								"or unaccent(lower(oficio.urremitente.nombreLargo)) like :cadena "+
+								"or unaccent(lower(oficio.descripcion)) like :cadena "+
+							    ")").setParameter("cadena", "%"+filtro.toLowerCase()+"%")
 						 	.orderBy( "c"+    (colOrden==0?columnasOrdenables.get(0)  :  columnasOrdenables.get(colOrden)-1)  +" "+tipoOrden )
 							.findPagingList(numRegistros)
 							.setFetchAhead(false)
@@ -687,10 +687,10 @@ System.out.println(json);
 		 if (estado.compareTo("5")==0){
 			 Query<Folio> q1 = Folio.find.where(" (productoresAsignados.preagendas.estado.id = "+estado+") and productoresAsignados.personal.id = "+session("usuario"));
 			 Query<Folio> q2 = Folio.find.where(" (productoresAsignados.preagendas.estado.id = "+estado+") and productoresAsignados.personal.id = "+session("usuario")+" AND ("+
-						"folio like :cadena "+
-						"or oficio.urremitente.nombreLargo like :cadena "+
-						"or oficio.descripcion like :cadena "+
-					    ")").setParameter("cadena", "%"+filtro+"%");
+						"unaccent(lower(folio)) like :cadena "+
+						"or unaccent(lower(oficio.urremitente.nombreLargo)) like :cadena "+
+						"or unaccent(lower(oficio.descripcion)) like :cadena "+
+					    ")").setParameter("cadena", "%"+filtro.toLowerCase()+"%");
 			 serv = Folio.find
 					 .fetch("oficio")
 					 .fetch("oficio.urremitente")
@@ -698,10 +698,10 @@ System.out.println(json);
 					 .fetch("productoresAsignados.preagendas")
 					 .fetch("productoresAsignados.preagendas.estado")
 					 .where(" (productoresAsignados.preagendas.estado.id = "+estado+") and productoresAsignados.personal.id = "+session("usuario")+" AND ("+
-						"folio like :cadena "+
-						"or oficio.urremitente.nombreLargo like :cadena "+
-						"or oficio.descripcion like :cadena "+
-					    ")").setParameter("cadena", "%"+filtro+"%")
+						"unaccent(lower(folio)) like :cadena "+
+						"or unaccent(lower(oficio.urremitente.nombreLargo)) like :cadena "+
+						"or unaccent(lower(oficio.descripcion) like :cadena "+
+					    ")").setParameter("cadena", "%"+filtro.toLowerCase()+"%")
 					 .orderBy( "c"+columnasOrdenables.get(colOrden)+" "+tipoOrden )
 					.findPagingList(numRegistros)
 					.setFetchAhead(false)
@@ -709,10 +709,10 @@ System.out.println(json);
 			 if (session("rolActual").compareTo("1")==0){
 				 q1 = Folio.find.where(" (productoresAsignados.preagendas.estado.id = "+estado+") ");
 				 q2 = Folio.find.where(" (productoresAsignados.preagendas.estado.id = "+estado+")  AND ("+
-							"folio like :cadena "+
-							"or oficio.urremitente.nombreLargo like :cadena "+
-							"or oficio.descripcion like :cadena "+
-						    ")").setParameter("cadena", "%"+filtro+"%");
+							"unaccent(lower(folio)) like :cadena "+
+							"or unaccent(lower(oficio.urremitente.nombreLargo)) like :cadena "+
+							"or unaccent(lower(oficio.descripcion)) like :cadena "+
+						    ")").setParameter("cadena", "%"+filtro.toLowerCase()+"%");
 				 serv = Folio.find
 						 .fetch("oficio")
 						 .fetch("oficio.urremitente")
@@ -720,10 +720,10 @@ System.out.println(json);
 						 .fetch("productoresAsignados.preagendas")
 						 .fetch("productoresAsignados.preagendas.estado")
 						 .where(" (productoresAsignados.preagendas.estado.id = "+estado+") and ("+
-							"folio like :cadena "+
-							"or oficio.urremitente.nombreLargo like :cadena "+
-							"or oficio.descripcion like :cadena "+
-						    ")").setParameter("cadena", "%"+filtro+"%")
+							"unaccent(lower(folio)) like :cadena "+
+							"or unaccent(lower(oficio.urremitente.nombreLargo)) like :cadena "+
+							"or unaccent(lower(oficio.descripcion)) like :cadena "+
+						    ")").setParameter("cadena", "%"+filtro.toLowerCase()+"%")
 						 .orderBy( "c"+columnasOrdenables.get(colOrden)+" "+tipoOrden )
 						.findPagingList(numRegistros)
 						.setFetchAhead(false)
@@ -735,10 +735,10 @@ System.out.println(json);
 		 if (estado.compareTo("7")==0){
 			 Query<Folio> q1 = Folio.find.where(" (productoresAsignados.agenda.estado.id = "+estado+") and productoresAsignados.personal.id = "+session("usuario"));
 			 Query<Folio> q2 = Folio.find.where(" (productoresAsignados.agenda.estado.id = "+estado+") and productoresAsignados.personal.id = "+session("usuario")+" AND ("+
-				"folio like :cadena "+
-				"or oficio.urremitente.nombreLargo like :cadena "+
-				"or oficio.descripcion like :cadena "+
-			    ")").setParameter("cadena", "%"+filtro+"%");	
+				"unaccent(lower(folio)) like :cadena "+
+				"or unaccent(lower(oficio.urremitente.nombreLargo)) like :cadena "+
+				"or unaccent(lower(oficio.descripcion)) like :cadena "+
+			    ")").setParameter("cadena", "%"+filtro.toLowerCase()+"%");
 			 serv = Folio.find
 				 .fetch("oficio")
 				 .fetch("oficio.urremitente")	
@@ -746,10 +746,10 @@ System.out.println(json);
 				 .fetch("productoresAsignados.agenda")
 				 .fetch("productoresAsignados.agenda.estado")
 				 .where(" (productoresAsignados.agenda.estado.id = "+estado+") and productoresAsignados.personal.id = "+session("usuario")+" AND ("+
-					"folio like :cadena "+
-					"or oficio.urremitente.nombreLargo like :cadena "+
-					"or oficio.descripcion like :cadena "+
-				    ")").setParameter("cadena", "%"+filtro+"%")
+					"unaccent(lower(folio)) like :cadena "+
+					"or unaccent(lower(oficio.urremitente.nombreLargo)) like :cadena "+
+					"or unaccent(lower(oficio.descripcion)) like :cadena "+
+				    ")").setParameter("cadena", "%"+filtro.toLowerCase()+"%")
 				 .orderBy( "c"+columnasOrdenables.get(colOrden)+" "+tipoOrden )
 				.findPagingList(numRegistros)
 				.setFetchAhead(false)
@@ -757,10 +757,10 @@ System.out.println(json);
 			 if (session("rolActual").compareTo("1")==0){
 				 q1 = Folio.find.where(" (productoresAsignados.agenda.estado.id = "+estado+") ");
 				 q2 = Folio.find.where(" (productoresAsignados.agenda.estado.id = "+estado+") and ("+
-					"folio like :cadena "+
-					"or oficio.urremitente.nombreLargo like :cadena "+
-					"or oficio.descripcion like :cadena "+
-				    ")").setParameter("cadena", "%"+filtro+"%");	
+					"unaccent(lower(folio)) like :cadena "+
+					"or unaccent(lower(oficio.urremitente.nombreLargo)) like :cadena "+
+					"or unaccent(lower(oficio.descripcion)) like :cadena "+
+				    ")").setParameter("cadena", "%"+filtro.toLowerCase()+"%");
 				 serv = Folio.find
 					 .fetch("oficio")
 					 .fetch("oficio.urremitente")	
