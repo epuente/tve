@@ -7,3 +7,7 @@ clean
 reload
 compile
 run 8087
+run 8077
+run 8087
+run 8077
+run 8087

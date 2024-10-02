@@ -38,7 +38,9 @@ function LlamadaAjaxSerialize(ur,metodo, forma){
 	  url: ur,
 	  method: metodo,
 	  type: metodo,
-	  data: forma	
+	  data: forma,
+	  // Tipo que se recibe desde el server
+	  dataType: "json"
 	}).done(function(data) {
 		d.resolve(data);
 	}).fail(function(e){

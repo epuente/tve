@@ -8,20 +8,14 @@
     </div>
     @views.html.flashes()
 
-    <form enctype="multipart/form-data">
-        <div id="fileUpload"></div>
+    <form id="frmTA" enctype="multipart/form-data">
+        <div id="fileUpload" webkitfiles></div>
     </form>
 
-
-
-
-    <div id="drop-zone" style="width:600px; height:600px; border:5px solid red;">
-
-    </div>
     <div>
-        <button id ="btnDirecto" type="button" class="btn btn-primary">Upload direct</button>
-        <button id ="btnTA" type="button" class="btn btn-primary">Subir a TranzApp</button>
-        <button id ="btnTA2" type="button" class="btn btn-primary">Subir a TranzApp via curl binario</button>
+        <!--button id ="btnDirecto" type="button" class="btn btn-primary">Upload</button-->
+        <button id ="btnDirecto2" type="button" class="btn btn-primary">Directo</button>
+        <!--button id ="btnDirecto3" type="button" class="btn btn-primary">Formulario multi</button-->
     </div>
 
 }
@@ -32,17 +26,7 @@
     });
 
 
-    $('#drop-zone').on('dragover', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-    });
 
-    $('#drop-zone').on('drop', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      var files = e.originalEvent.dataTransfer.files;
-        console.log(files[0]);
-    });
 
 
     $('#fileUpload').on('change', function(event) {
@@ -62,71 +46,143 @@
 
 
 
-    $("#btnTA").on ("click", function(){
-        console.log("desde el click");
-        console.log("tasm "+$('#fileUpload-1').prop('files').length)
-        for (x=0; x<$('#fileUpload-1').prop('files').length;x++){
-            este = $('#fileUpload-1').prop('files')[x];
-            console.log("nombre: "+este.path)
+    $("#btnDirecto2").on ("click", function(){
+        console.log("Desde btnDirecto2");
+        var formData = new FormData();
+        console.log("num archs "+$("#fileUpload-1")[0].files.length)
+        for(x=0; x<$("#fileUpload-1")[0].files.length; x++){
+            var arch = $("#fileUpload-1")[0].files[x];
+            console.log(x+"  "+arch.name)
+            elAux(arch, x, arch.name);
+        }
+    });
 
-              var formData = new FormData();
-              var file = este;
-              formData.append('file', file);
-
-              $.ajax({
-                type: 'POST',
-                url: '/pruebaTranzApp',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function() {
-                  alert('File uploaded!');
-                }
-              });
+    // Igual al btnDirecto2, pero llama a elAux2
+    $("#btnDirecto3").on ("click", function(){
+        console.clear()
+        console.log("Desde btnDirecto2");
+        var formData = new FormData();
+        console.log("num archs "+$("#fileUpload-1")[0].files.length)
+        for(x=0; x<$("#fileUpload-1")[0].files.length; x++){
+            var arch = $("#fileUpload-1")[0].files[x];
+            console.log(x+"  "+arch.name+"->"+arch)
+            elAux2(arch, x, arch.name);
         }
     });
 
 
-    $("#btnTA2").on ("click", function(){
-        console.log("...............");
+    function getBase64(file) {
+       var reader = new FileReader();
+       reader.readAsDataURL(file);
+       reader.onload = function () {
+         console.log(reader.result);
+         return reader.result;
+       };
+       reader.onerror = function (error) {
+         //console.log('Error: ', error);
+         return "error";
+       };
+    }
 
+    function elAux2(parametro, x, nombreArchivo){
+
+        //getBase64($("#fileUpload-1")[0].files[0]);
+        //getBase64(parametro);
+        console.log(parametro)
+
+        var nvaForma = new FormData( $("#frmTA")[0]);
+        nvaForma.append("nombreArchivo", nombreArchivo);
+        nvaForma.append("archivo", parametro);
+
+        const serializedFormData = $(nvaForma).serialize();
+        console.log($("#frmTA").serialize())
+
+        $aux = LlamadaAjaxSerialize("/tranzappUploadDirecto2", "POST", $("#frmTA").serialize() );
+        $.when($aux).done(function(data){
+              console.dir( data);
+              console.log("#subido-"+x)
+              if (data.estado=="subido"){
+                  $("#subido-"+x).html("Si");
+                  $("#descarga-"+x).html("<a href="+data.descargar+" target='_blank'>Descarga</a>");
+                  $("#borrado-"+ x).html("<a href="+data.borrar+" target='_blank'>Borrar</a>");
+              }
+              if (data.estado=="error"){
+                $("#subido-"+x).html("No");
+                $("#descarga-"+x).html("Error");
+                $("#borrado-"+x).html("Error");
+              }
+        });
+    }
+
+
+
+function elAux(parametro, x, nombreArchivo){
+    console.log(parametro)
+    $aux = LlamadaAjaxTA("/tranzappUploadDirecto", "POST", parametro);
+    $.when($aux).done(function(data){
+          console.dir( data);
+          console.log("#subido-"+x)
+          if (data.estado=="subido"){
+              $("#subido-"+x).html("<div class='text-success'>Si</div>");
+              $("#descarga-"+x).html("<a href="+data.descargar+" target='_blank'>Descarga</a>");
+              $("#borrado-"+ x).html("<a href="+data.borrar+" target='_blank'>Borrar</a>");
+          }
+          if (data.estado=="error"){
+            $("#subido-"+x).html("<div class='text-danger'>No</div>");
+            $("#descarga-"+x).html("Error");
+            $("#borrado-"+x).html("Error");
+          }
     });
+}
+
+
+function LlamadaAjaxTA(ur,metodo, parametro){
+	var d = $.Deferred();
+	$.ajax({
+          url: ur,
+          method: metodo,
+          type: metodo,
+    	  data: parametro,
+          contentType: false,
+          processData: false
+	}).success(function(data) {
+		d.resolve(data);
+	}).fail(function(e){
+		d.reject;
+	});
+	return d.promise();
+}
+
+
 
     $("#btnDirecto").on("click", function(e){
         console.log("Desde btnDirecto");
         var formData = new FormData();
         console.log("num archs "+$("#fileUpload-1")[0].files.length)
-
         for(x=0; x<$("#fileUpload-1")[0].files.length; x++){
-            formData.append(
-                        "archivo",
-                        $("#fileUpload-1")[0].files[x], $("#fileUpload-1")[0].files[x]
-                        );
+            var arch = $("#fileUpload-1")[0].files[x];
+            console.log(arch.name)
+            formData.append('files[]', arch, arch.name)
         }
-
         console.log(formData)
+        $.ajax({
+            type: 'POST',
+            url: '/tranzappUpload',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+              console.dir( JSON.parse(data));
+            }
+        });
 
-
-            var form = $('form')[0]; // You need to use standard javascript object here
-            var formData2 = new FormData(form);
-
-              $.ajax({
-                type: 'POST',
-                url: '/tranzappUpload',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(data) {
-                  console.dir(data);
-                }
-              });
     });
 
 
 
 </script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined">
-<script src="@routes.Assets.at("fileUpLoad/fileUpload.js")"></script>
+<script src="@routes.Assets.at("fileUpLoad/fileUploadModificado.js")"></script>
 <link  href="@routes.Assets.at("fileUpLoad/fileUpload.css")" rel="stylesheet" type="text/css"  nonce="@session.get("nonce")"/>
 
 

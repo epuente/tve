@@ -977,9 +977,24 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         return ok(views.html.videoteca.tranzapp.render());
     }
 
-    public static Result tranzappUpload() {
+    public static Result tranzappUpload() throws JSONException, IOException {
         System.out.println("Desde tranzappUpload");
         Http.MultipartFormData body = request().body().asMultipartFormData();
+
+        // Para obtener el nombre de los archivos
+        List<Http.MultipartFormData.FilePart> archivos = body.getFiles();
+        Logger.debug("body, num file: "+archivos.size());
+        JSONArray ja = new JSONArray();
+        for (Http.MultipartFormData.FilePart arch : archivos) {
+            JSONObject jo = new JSONObject();
+            Path p = Paths.get(arch.getFile().getPath());
+            System.out.println("nombnre: "+p +"   "+arch.getFilename());
+        }
+
+       //--------------
+
+
+
 
         String urlTranzapp="https://tranzapp.dev.ipn.mx/";
         String apipage = "script.php";
@@ -989,34 +1004,22 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         Logger.debug("body "+body.getFiles());
         List<Http.MultipartFormData.FilePart> archs = body.getFiles();
         Logger.debug("body, num file: "+archs.size());
-        Oficio of = Oficio.find.byId(22L);
-        ObjectNode jo = Json.newObject();
+        JSONObject retorno = new JSONObject();
+
+        if (1==6)
         for (Http.MultipartFormData.FilePart arch : archs) {
-            Logger.debug("   "+arch.getKey()+ " -> "+ arch.getFile().getAbsolutePath());
-
+            JSONObject jo = new JSONObject();
             Path p = Paths.get(arch.getFile().getPath());
-            byte[] byteFile = null;
-            try {
-                byteFile = Files.readAllBytes(p);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            PlantillaArchivo pa = new PlantillaArchivo();
-            pa.nombrearchivo = arch.getFilename();
-            pa.contenttype = arch.getContentType();
-            pa.contenido = byteFile;
 
-            OficioImagen ofIma = new OficioImagen(pa.nombrearchivo, pa.contenttype, pa.contenido);
-            of.imagenes.add(ofIma);
-            of.update( of.id );
+            Logger.debug("   "+arch.getKey()+ " -> "+ arch.getFile().getAbsolutePath()+"    "+arch.getFile().getName()+"  "+arch.getFilename());
 
+
+            //String datos ="";
             String datos = lecturaComando("send", arch.getFile().getAbsolutePath());
-            System.out.println("-->>>>>>>>ya se hizo la lecturaComando");
-            StringBuilder sb = new StringBuilder(datos);
+            //System.out.println("-->>>>>>>>ya se hizo la lecturaComando");
 
-            System.out.println("-->>>>>>>>datos:"+sb.toString());
-            String[] arrString = sb.toString().split("\r");
+            //System.out.println("-->>>>>>>>datos:"+sb.toString());
+            String[] arrString = datos.split("\r");
             System.out.println("--->arrString:"+ Arrays.toString(arrString));
 
             jo.put("archivo", "archivo");
@@ -1025,9 +1028,11 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             jo.put("descargar",   urlTranzapp+downloadpage+"?h="+arrString[0] );
             jo.put("borrar",   urlTranzapp+downloadpage+"?h="+arrString[0]+"&d="+arrString[1]);
 
-            System.out.println("El retornorno en json¸\n\n"+jo);
+            ja.put(jo);
         }
-        return ok( Json.toJson(jo) );
+        retorno.put("datos", ja);
+        System.out.println("El retornorno en json¸\n\n"+retorno);
+        return ok( retorno.toString() );
     }
 
 
@@ -1041,33 +1046,130 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 // En el archivo /home/eduardo/tranzAppAPI2.sh se llama a:
                 //        /usr/bin/curl -X POST --http1.0 -F time=month -F file=@rutaCompletaDelArchivoASubir https://tranzapp.dev.ipn.mx/script.php
                 String cmdAPI = "/home/eduardo/tranzAppAPI2.sh "+tipo+" "+archivo;
-                System.out.println("comando:"+cmdAPI);
+                //System.out.println("comando:"+cmdAPI);
                 Runtime run = Runtime.getRuntime();
                 Process pr = run.exec(cmdAPI);
 
                 pr.waitFor();
-                System.out.println("Lectura terminada");
+                //System.out.println("Lectura terminada");
                 BufferedReader buf = new BufferedReader(new InputStreamReader(pr.getInputStream()));
 
-                System.out.println("Retorno: -----");
+                //System.out.println("Retorno: -----");
                 while ((line=buf.readLine())!=null) {
-                    System.out.println(line);
+                    //System.out.println(line);
                     aux+=line+ "\r";
                 }
-                System.out.println("---------------");
+                //System.out.println("---------------");
             } catch(java.io.IOException e) {
                 System.out.print(e.getMessage());
             } catch (java.lang.InterruptedException e) {
                 System.out.print(e.getMessage());
             }
-            System.out.println(aux);
+            //System.out.println(aux);
             return aux;
+    }
 
+
+    public static Result tranzappUploadDirecto() throws IOException, JSONException {
+        String urlTranzapp="https://tranzapp.dev.ipn.mx/";
+        String apipage = "script.php";
+        String downloadpage="f.php";
+        ObjectNode retorno = Json.newObject();
+        System.out.println("recibiendo");
+        retorno.put("estado", "error");
+
+
+
+
+        try {
+            File file = request().body().asRaw().asFile();
+            System.out.println("File getName "+ file.getName());
+            String datos = lecturaComando("send", file.getAbsolutePath());
+            System.out.println("datos de regreso del comando "+ datos);
+            if (!datos.contains("Error")) {
+                String[] arrString = datos.split("\r");
+                System.out.println("--->arrString:" + Arrays.toString(arrString));
+                retorno.put("estado", "subido");
+                retorno.put("archivo", "archivo");
+                retorno.put("idArchivo", arrString[0]);
+                retorno.put("cveBorrado", arrString[1]);
+                retorno.put("descargar", urlTranzapp + downloadpage + "?h=" + arrString[0]);
+                retorno.put("borrar", urlTranzapp + downloadpage + "?h=" + arrString[0] + "&d=" + arrString[1]);
+            }
+        } catch (Exception e) {
+            //throw new RuntimeException(e);
+            System.out.println("Ocurrió un error "+e.getMessage());
+            return ok (retorno);
+        }
+        System.out.println(retorno);
+        return ok(retorno);
     }
 
 
 
 
+    public static Result tranzappUploadDirecto2() throws IOException, JSONException {
+        String urlTranzapp="https://tranzapp.dev.ipn.mx/";
+        String apipage = "script.php";
+        String downloadpage="f.php";
+        ObjectNode retorno = Json.newObject();
+        System.out.println("recibiendo");
+        retorno.put("estado", "error");
+
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+//        System.out.println("\nMultipartFormData body.getFiles size: "+body.getFiles().size());
+
+        JsonNode json = request().body().asJson();
+
+        System.out.println("json:   "+json);
+
+
+        DynamicForm fd = DynamicForm.form().bindFromRequest();
+        System.out.println(fd);
+
+
+        if (1==4) {
+            List<Http.MultipartFormData.FilePart> archs = body.getFiles();
+            Logger.debug("body, num file: " + archs.size());
+            for (Http.MultipartFormData.FilePart arch : archs) {
+                Logger.debug("   " + arch.getKey() + " -> " + arch.getFilename());
+                String[] aux1 = arch.getKey().split("-");
+                int tipo = Integer.parseInt(aux1[1]);
+                int sec = Integer.parseInt(aux1[2]);
+                PlantillaArchivo pa = new PlantillaArchivo();
+                Path p = Paths.get(arch.getFile().getPath());
+                byte[] byteFile = null;
+                try {
+                    byteFile = Files.readAllBytes(p);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                pa.nombrearchivo = arch.getFilename();
+                pa.contenttype = arch.getContentType();
+                pa.contenido = byteFile;
+
+            }
+
+
+            File file = request().body().asRaw().asFile();
+            System.out.println("File getName " + file.getName());
+            String datos = lecturaComando("send", file.getAbsolutePath());
+            System.out.println("datos de regreso del comando " + datos);
+            if (!datos.contains("Error")) {
+                String[] arrString = datos.split("\r");
+                System.out.println("--->arrString:" + Arrays.toString(arrString));
+                retorno.put("estado", "subido");
+                retorno.put("archivo", "archivo");
+                retorno.put("idArchivo", arrString[0]);
+                retorno.put("cveBorrado", arrString[1]);
+                retorno.put("descargar", urlTranzapp + downloadpage + "?h=" + arrString[0]);
+                retorno.put("borrar", urlTranzapp + downloadpage + "?h=" + arrString[0] + "&d=" + arrString[1]);
+            }
+        }
+        System.out.println(retorno);
+        return ok(retorno);
+    }
 
 
 }

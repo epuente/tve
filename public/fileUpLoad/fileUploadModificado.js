@@ -19,7 +19,7 @@
                          Para seleccionar más de un archivo, usa la tecla control.
                         </p>
                     </div>
-                    <input type="file" id="${fileUploadId}" name="${fileUploadId}" multiple hidden  style="display:none5" />
+                    <input type="file" id="${fileUploadId}" name="${fileUploadId}" multiple hidden  style="display:none" />
                 </label>
             `;
 
@@ -34,10 +34,11 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th style="width: 30%;">Nombre archivo</th>
-                                <th>Vista</th>
-                                <th style="width: 20%;">Tamaño</th>
-                                <th>Tipo</th>
+                                <th style="width: 20%;">Nombre archivo</th>
+                                <th style="width: 10%;">Tamaño</th>
+                                <th style="width: 10%;">Subido</th>
+                                <th style="width: 25%;">Liga descarga</th>
+                                <th style="width: 25%;">Liga borrado</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -70,9 +71,12 @@
                             <tr>
                                 <td>${index + 1}</td>
                                 <td>${fileName}</td>
-                                <td>${preview}</td>
+
                                 <td>${fileSize}</td>
-                                <td>${fileType}</td>
+
+                                <td><div id="subido-${index}"></td>
+                                <td><div id="descarga-${index}"></td>
+                                <td><div id="borrado-${index}"></td>
                                 <td><button type="button" class="deleteBtn"><i class="material-icons-outlined">delete</i></button></td>
                             </tr>
                         `);
