@@ -358,3 +358,4 @@ POST    /tranzappUpload                     controllers.VideotecaController.tran
 POST    /tranzappUploadDirecto              controllers.VideotecaController.tranzappUploadDirecto()
 POST    /tranzappUploadDirecto2             controllers.VideotecaController.tranzappUploadDirecto2()
 
+POST    /uploadForma                        controllers.VideotecaController.uploadForma()

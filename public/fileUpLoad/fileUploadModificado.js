@@ -11,12 +11,12 @@
                 <label for="${fileUploadId}" class="file-upload">
                     <div>
                         <i class="material-icons-outlined">cloud_upload</i>
-                        <p>Arrastra y suelta los archivos aqui</p>
-                        <span>O</span>
-                        <div>Explora archivos</div>
+                        <p>Arrastrar y soltar los archivos aqui</p>
+                        <p>O</p>
+                        <div>Explorar archivos</div>
                         <br><br>
-                        <p>
-                         Para seleccionar más de un archivo, usa la tecla control.
+                        <p class="text-muted" style="color:#777; font-weight:normal;">
+                         Al explorar, para seleccionar más de un archivo se debe presionar la tecla <i>control</i> mientras se seleccionan los archivos.
                         </p>
                     </div>
                     <input type="file" id="${fileUploadId}" name="${fileUploadId}" multiple hidden  style="display:none" />
@@ -61,7 +61,14 @@
                 if (files.length > 0) {
                     $.each(files, function (index, file) {
                         var fileName = file.name;
+                        //var fileSize = (file.size / 1024).toFixed(2) + " KB";
                         var fileSize = (file.size / 1024).toFixed(2) + " KB";
+                        if (fileSize.substring(0,  fileSize.length-3 )>=1000)
+                            fileSize = (fileSize.substring(0,  fileSize.length-3 ) / 1000).toFixed(2) + " MB";
+                        if (fileSize.substring(0,  fileSize.length-3 )>=1000)
+                            fileSize = (fileSize.substring(0,  fileSize.length-3 ) / 1000).toFixed(2) + " GB";
+                        if (fileSize.substring(0,  fileSize.length-3 )>=1000)
+                            fileSize = (fileSize.substring(0,  fileSize.length-3 ) / 1000).toFixed(2) + " TB";
                         var fileType = file.type;
                         var preview = fileType.startsWith("image")
                             ? `<img src="${URL.createObjectURL(file)}" alt="${fileName}" height="30">`

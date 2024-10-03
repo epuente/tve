@@ -12,9 +12,10 @@
         <div id="fileUpload" webkitfiles></div>
     </form>
 
-    <div>
+    <div class="m-2">
         <!--button id ="btnDirecto" type="button" class="btn btn-primary">Upload</button-->
-        <button id ="btnDirecto2" type="button" class="btn btn-primary">Directo</button>
+        <!--button id ="btnDirecto2" type="button" class="btn btn-primary">Directo</button-->
+        <button id ="btnFormas" type="button" class="btn btn-primary">Formas</button>
         <!--button id ="btnDirecto3" type="button" class="btn btn-primary">Formulario multi</button-->
     </div>
 
@@ -24,10 +25,6 @@
       $("#fileUpload").fileUpload();
 
     });
-
-
-
-
 
     $('#fileUpload').on('change', function(event) {
         console.log("...change")
@@ -47,13 +44,19 @@
 
 
     $("#btnDirecto2").on ("click", function(){
+        console.clear();
         console.log("Desde btnDirecto2");
         var formData = new FormData();
-        console.log("num archs "+$("#fileUpload-1")[0].files.length)
-        for(x=0; x<$("#fileUpload-1")[0].files.length; x++){
-            var arch = $("#fileUpload-1")[0].files[x];
-            console.log(x+"  "+arch.name)
-            elAux(arch, x, arch.name);
+        var cantidad = $("#fileUpload-1")[0].files.length;
+        if (cantidad == 0)
+            alert("No se han seleccionado archivos");
+        if (cantidad>0){
+            console.log("num archs "+cantidad)
+            for(x=0; x<$("#fileUpload-1")[0].files.length; x++){
+                var arch = $("#fileUpload-1")[0].files[x];
+                console.log(x+"  "+arch.name)
+                elAux(arch, x, arch.name);
+            }
         }
     });
 
@@ -178,6 +181,87 @@ function LlamadaAjaxTA(ur,metodo, parametro){
 
     });
 
+    $("#btnFormas").on("click", function(e){
+        e.preventDefault();
+        console.clear();
+        console.log("btnFormas")
+        if ($("#fileUpload-1")[0].files.length==0){
+            swal(
+              'Aviso',
+              'No se han seleccionado archivos',
+              'warning'
+            )
+        } else {
+            // Crear un formData por cada archivo en el file input (#fileUpload-1)
+            for (i=0; i<$("#fileUpload-1")[0].files.length; i++){
+                var formData = new FormData();
+                var a = $("#fileUpload-1")[0].files[i];
+                console.log("nombre: "+a.name)
+                formData.append(a.name, a);
+                // Llamada ajax
+                var $aux=auxiliar(formData, i);
+            }
+        }
+
+    });
+
+
+    function auxiliar(parametro, x){
+        console.log(parametro)
+        $aux = LlamaAjaxMultiPart(parametro, x);
+        $.when($aux).done(function(data){
+              console.dir( data);
+              console.log("#subido-"+x)
+              if (data.estado=="subido"){
+                  $("#subido-"+x).html("<div class='text-success'>Si</div>");
+                  $("#descarga-"+x).html("<a href="+data.descargar+" target='_blank'>Descarga</a>");
+                  $("#borrado-"+ x).html("<a href="+data.borrar+" target='_blank'>Borrar</a>");
+              }
+              if (data.estado=="error"){
+                $("#subido-"+x).html("<div class='text-danger'>No</div>");
+                $("#descarga-"+x).html("Error");
+                $("#borrado-"+x).html("Error");
+
+              }
+        });
+    }
+
+
+    function LlamaAjaxMultiPart(formData, i){
+        var d = $.Deferred();
+            $.ajax({
+                   url: '/uploadForma',
+                   data: formData,
+                   type: 'POST',
+                   enctype: 'multipart/form-data',
+                   contentType: false,
+                   processData: false,
+                   cache: false,
+                   dataType: "json",
+                   beforeSend: function () {
+                        $("#subido-"+i).html("<div class='text-success'>En proceso...</div>");
+                   },
+                   success: function (  data) {
+                        console.dir(data)
+                          if (data.estado=="subido"){
+                              $("#subido-"+i).html("<div class='text-success'>Si</div>");
+                              $("#descarga-"+i).html("<a href="+data.descargar+" target='_blank'>Descarga</a>");
+                              $("#borrado-"+ i).html("<a href="+data.borrar+" target='_blank'>Borrar</a>");
+                          }
+                          if (data.estado=="error"){
+                            $("#subido-"+i).html("<div class='text-danger'>No</div>");
+                            $("#descarga-"+i).html("Error");
+                            $("#borrado-"+i).html("Error");
+                          }
+                        d.resolve(data);
+                  },
+                  fail:function(data){
+                    alert("error de ajax");
+                    d.reject;
+                  }
+            });
+            return d.promise();
+    }
 
 
 </script>
