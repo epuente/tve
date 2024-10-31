@@ -22,7 +22,8 @@
                             <i class="fas fa-film fa-4x"></i>
                         </div>
                         <div class="col-sm-10 col-md-10 col-lg-10">
-                            Total de registros: <span id="spanTotal"></span></br>
+                            Total de bitácoras: <span id="spanTotal"></span></br>
+                            Mis bitácoras: <span id="spanTotalCatalogador"></span></br>
                             Total de series:<span id="spanSeries"></span></br>
                         </div>
                     </div>
@@ -255,88 +256,83 @@
             type: 'success',
             newest_on_top: true,
             z_index: 999000
-            });
         });
+    });
 
 
     function actualiza(){
     $.ajax({
-    url: '/ajaxTableroVideoTK',
-    method: 'GET',
-    dataType: "json"
-    }).success(function(data){
-    console.debug("retornando.........")
-    console.dir(data)
+        url: '/ajaxTableroVideoTK',
+        method: 'GET',
+        dataType: "json"
+        }).success(function(data){
+        console.debug("retornando.........")
+        console.dir(data)
 
-    $("#spanTotal").html(data.total.toLocaleString('es-MX'));
-    $("#spanSeries").html(data.series.toLocaleString('es-MX'));
-
-
-    console.log(myChart.data)
-
-    // Widget Área Temática
-    myChart.data.datasets[0].data = data.areaDatos;
-    myChart.data.labels = data.areaLabels;
-    myChart.update();
-    var cadArea="<table class='tile_info' style='padding-right:10px'>";
-        for (var i=0; i<data.areaDatos.length; i++){
-        cadArea+="<tr>";
-            cadArea+="  <td> <i class='fa fa-square fa-2x' style='color:"+coloresChart[i]+"'></i> "+data.areaLabels[i]+"</td>";
-            cadArea+="  <td style='text-align:right'>"+data.areaDatos[i].toLocaleString('es-MX')+"</td>";
-            cadArea+="</tr>";
-        }
-        cadArea+="</table>";
-    $("#tablaCanvas1").html("cadArea");
+        $("#spanTotal").html(data.total.toLocaleString('es-MX'));
+        $("#spanTotalCatalogador").html(data.totalCatalogador.toLocaleString('es-MX'));
+        $("#spanSeries").html(data.series.toLocaleString('es-MX'));
 
 
-    // Widget Formatos
-    myChart2.data.datasets[0].data = data.formatoDatos;
-    myChart2.data.labels = data.formatoLabels;
-    myChart2.update();
-    var cadArea2="<table class='tile_info' style='padding-right:10px; width:100%;'>";
-        for (var i=0; i<data.formatoDatos.length; i++){
-        cadArea2+="<tr>";
-            cadArea2+="  <td> <i class='fa fa-square' style='color:"+coloresChart[i]+"'></i> "+data.formatoLabels[i]+"</td>";
-            cadArea2+="  <td style='text-align:right'>"+data.formatoDatos[i].toLocaleString('es-MX')+"</td>";
-            cadArea2+="</tr>";
-        }
-        cadArea2+="</table>";
-    $("#tablaCanvas2").html(cadArea2);
+        console.log(myChart.data)
+
+        // Widget Área Temática
+        myChart.data.datasets[0].data = data.areaDatos;
+        myChart.data.labels = data.areaLabels;
+        myChart.update();
+        var cadArea="<table class='tile_info' style='padding-right:10px'>";
+            for (var i=0; i<data.areaDatos.length; i++){
+            cadArea+="<tr>";
+                cadArea+="  <td> <i class='fa fa-square fa-2x' style='color:"+coloresChart[i]+"'></i> "+data.areaLabels[i]+"</td>";
+                cadArea+="  <td style='text-align:right'>"+data.areaDatos[i].toLocaleString('es-MX')+"</td>";
+                cadArea+="</tr>";
+            }
+            cadArea+="</table>";
+        $("#tablaCanvas1").html("cadArea");
 
 
-    // Widget Producción
-    myChart3.data.datasets[0].data = data.prodDatos;
-    myChart3.data.labels = data.prodLabels;
-    myChart3.update();
-    var cadArea3="<table class='tile_info' style='padding-right:10px; width:100%;'>";
-        for (var i=0; i<data.prodDatos.length; i++){
-        cadArea3+="<tr>";
-            cadArea3+="  <td> <i class='fa fa-square' style='color:"+coloresChart[i]+"'></i> "+data.prodLabels[i]+"</td>";
-            cadArea3+="  <td style='text-align:right'>"+data.prodDatos[i].toLocaleString('es-MX')+"</td>";
-            cadArea3+="</tr>";
-        }
-        cadArea3+="</table>";
-    $("#tablaCanvas3").html(cadArea3);
+        // Widget Formatos
+        myChart2.data.datasets[0].data = data.formatoDatos;
+        myChart2.data.labels = data.formatoLabels;
+        myChart2.update();
+        var cadArea2="<table class='tile_info' style='padding-right:10px; width:100%;'>";
+            for (var i=0; i<data.formatoDatos.length; i++){
+            cadArea2+="<tr>";
+                cadArea2+="  <td> <i class='fa fa-square' style='color:"+coloresChart[i]+"'></i> "+data.formatoLabels[i]+"</td>";
+                cadArea2+="  <td style='text-align:right'>"+data.formatoDatos[i].toLocaleString('es-MX')+"</td>";
+                cadArea2+="</tr>";
+            }
+            cadArea2+="</table>";
+        $("#tablaCanvas2").html(cadArea2);
 
 
-    // Widget Anio Prod
-    myChart4.data.datasets[0].data = data.aniosProdDatos;
-    myChart4.data.labels = data.aniosProdLabels;
-    myChart4.update();
+        // Widget Producción
+        myChart3.data.datasets[0].data = data.prodDatos;
+        myChart3.data.labels = data.prodLabels;
+        myChart3.update();
+        var cadArea3="<table class='tile_info' style='padding-right:10px; width:100%;'>";
+            for (var i=0; i<data.prodDatos.length; i++){
+            cadArea3+="<tr>";
+                cadArea3+="  <td> <i class='fa fa-square' style='color:"+coloresChart[i]+"'></i> "+data.prodLabels[i]+"</td>";
+                cadArea3+="  <td style='text-align:right'>"+data.prodDatos[i].toLocaleString('es-MX')+"</td>";
+                cadArea3+="</tr>";
+            }
+            cadArea3+="</table>";
+        $("#tablaCanvas3").html(cadArea3);
 
 
+        // Widget Anio Prod
+        myChart4.data.datasets[0].data = data.aniosProdDatos;
+        myChart4.data.labels = data.aniosProdLabels;
+        myChart4.update();
 
-
-    }).error(function(xhr, status, error) {
-    alert("error rn ajax -  "+ xhr.responseText );
-    alert("error rn ajax -  "+ error );
-    alert("error rn ajax -  "+ xhr);
-    });
+        }).error(function(xhr, status, error) {
+            alert("error rn ajax -  "+ xhr.responseText );
+            alert("error rn ajax -  "+ error );
+            alert("error rn ajax -  "+ xhr);
+        });
+        $("#elBody").fadeIn(500);
     }
-
-
-
-
 
 </script>
 

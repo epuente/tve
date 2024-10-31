@@ -1177,8 +1177,19 @@ create table vtk_evento (
   audit_insert              timestamp,
   audit_update              timestamp,
   catalogo_id               bigint,
-  servicio_id               bigint,
+  servicio_id               bigint not null,
   constraint pk_vtk_evento primary key (id))
+;
+
+create table vtk_evidencia (
+  id                        bigint not null,
+  audit_insert              timestamp,
+  audit_update              timestamp,
+  catalogo_id               bigint,
+  nombrearchivo             varchar(255),
+  ligadescarga              varchar(255),
+  ligaborrado               varchar(255),
+  constraint pk_vtk_evidencia primary key (id))
 ;
 
 create table vtk_formato (
@@ -1195,7 +1206,7 @@ create table vtk_nivel (
   audit_insert              timestamp,
   audit_update              timestamp,
   catalogo_id               bigint,
-  nivel_id                  bigint,
+  nivel_id                  bigint not null,
   constraint pk_vtk_nivel primary key (id))
 ;
 
@@ -1206,7 +1217,7 @@ create table vtk_time_line (
   catalogo_id               bigint,
   personaje_id              bigint,
   gradoacademico            varchar(50),
-  cargo                     varchar(50),
+  cargo                     varchar(150),
   desde                     bigint,
   hasta                     bigint,
   tema                      varchar(200),
@@ -1447,6 +1458,8 @@ create sequence vtk_catalogo_seq;
 create sequence vtk_disponibilidad_seq;
 
 create sequence vtk_evento_seq;
+
+create sequence vtk_evidencia_seq;
 
 create sequence vtk_formato_seq;
 
@@ -1774,18 +1787,20 @@ alter table vtk_evento add constraint fk_vtk_evento_catalogo_159 foreign key (ca
 create index ix_vtk_evento_catalogo_159 on vtk_evento (catalogo_id);
 alter table vtk_evento add constraint fk_vtk_evento_servicio_160 foreign key (servicio_id) references servicio (id);
 create index ix_vtk_evento_servicio_160 on vtk_evento (servicio_id);
-alter table vtk_formato add constraint fk_vtk_formato_usuario_161 foreign key (usuario_id) references personal (id);
-create index ix_vtk_formato_usuario_161 on vtk_formato (usuario_id);
-alter table vtk_nivel add constraint fk_vtk_nivel_catalogo_162 foreign key (catalogo_id) references vtk_catalogo (id);
-create index ix_vtk_nivel_catalogo_162 on vtk_nivel (catalogo_id);
-alter table vtk_nivel add constraint fk_vtk_nivel_nivel_163 foreign key (nivel_id) references nivel (id);
-create index ix_vtk_nivel_nivel_163 on vtk_nivel (nivel_id);
-alter table vtk_time_line add constraint fk_vtk_time_line_catalogo_164 foreign key (catalogo_id) references vtk_catalogo (id);
-create index ix_vtk_time_line_catalogo_164 on vtk_time_line (catalogo_id);
-alter table vtk_time_line add constraint fk_vtk_time_line_personaje_165 foreign key (personaje_id) references video_personaje (id);
-create index ix_vtk_time_line_personaje_165 on vtk_time_line (personaje_id);
-alter table vtk_time_line add constraint fk_vtk_time_line_catalogador_166 foreign key (catalogador_id) references personal (id);
-create index ix_vtk_time_line_catalogador_166 on vtk_time_line (catalogador_id);
+alter table vtk_evidencia add constraint fk_vtk_evidencia_catalogo_161 foreign key (catalogo_id) references vtk_catalogo (id);
+create index ix_vtk_evidencia_catalogo_161 on vtk_evidencia (catalogo_id);
+alter table vtk_formato add constraint fk_vtk_formato_usuario_162 foreign key (usuario_id) references personal (id);
+create index ix_vtk_formato_usuario_162 on vtk_formato (usuario_id);
+alter table vtk_nivel add constraint fk_vtk_nivel_catalogo_163 foreign key (catalogo_id) references vtk_catalogo (id);
+create index ix_vtk_nivel_catalogo_163 on vtk_nivel (catalogo_id);
+alter table vtk_nivel add constraint fk_vtk_nivel_nivel_164 foreign key (nivel_id) references nivel (id);
+create index ix_vtk_nivel_nivel_164 on vtk_nivel (nivel_id);
+alter table vtk_time_line add constraint fk_vtk_time_line_catalogo_165 foreign key (catalogo_id) references vtk_catalogo (id);
+create index ix_vtk_time_line_catalogo_165 on vtk_time_line (catalogo_id);
+alter table vtk_time_line add constraint fk_vtk_time_line_personaje_166 foreign key (personaje_id) references video_personaje (id);
+create index ix_vtk_time_line_personaje_166 on vtk_time_line (personaje_id);
+alter table vtk_time_line add constraint fk_vtk_time_line_catalogador_167 foreign key (catalogador_id) references personal (id);
+create index ix_vtk_time_line_catalogador_167 on vtk_time_line (catalogador_id);
 
 
 
@@ -2024,6 +2039,8 @@ drop table if exists vtk_catalogo cascade;
 drop table if exists vtk_disponibilidad cascade;
 
 drop table if exists vtk_evento cascade;
+
+drop table if exists vtk_evidencia cascade;
 
 drop table if exists vtk_formato cascade;
 
@@ -2264,6 +2281,8 @@ drop sequence if exists vtk_catalogo_seq;
 drop sequence if exists vtk_disponibilidad_seq;
 
 drop sequence if exists vtk_evento_seq;
+
+drop sequence if exists vtk_evidencia_seq;
 
 drop sequence if exists vtk_formato_seq;
 

@@ -203,6 +203,9 @@
         //agregarAbrir();
 
         $('[data-toggle="tooltip"]').tooltip();
+
+        $("#fileUpload").fileUpload();
+
         $("#elBody").fadeIn(1000);
 
     });  // fin del $(function()
@@ -335,6 +338,33 @@
             }
         }
 
+
+        // Tranzapp
+        console.log("Evidencias")
+        agregarTablaEvidencias();
+
+
+        @for((c, ic)<-forma.get().evidencias.zipWithIndex){
+            agregarRenglonTablaEvidencias();
+            console.log(  "@c.nombrearchivo"  );
+            $("#laTablaEvidencias-1 tr:last td").eq(0).html("@(ic+1) <div name='evidenciaId' style='display:none;'>@c.id</div>");
+            $("#laTablaEvidencias-1 tr:last td").eq(1).html("@c.nombrearchivo");
+            $("#laTablaEvidencias-1 tr:last td").eq(3).html("Si");
+            $("#laTablaEvidencias-1 tr:last td").eq(4).html("<a href='@c.ligadescarga' target=_blank>@c.ligadescarga</a>");
+            $("#laTablaEvidencias-1 tr:last td").eq(5).html("<a href='@c.ligaborrado' target=_blank>@c.ligaborrado</a>");
+        }
+        alert(@forma.get().evidencias.length)
+        if (@forma.get().evidencias.length>0){
+            console.log("intentando el borrado")
+            $("#tblDetalleArchivos td.no-file").parent().remove();
+        }
+
+        if (@forma.get().evidencias.length==0){
+            $("#soloTablaEvidencias").closest("div.panel-default").remove();
+        }
+
+        $("#traduccionaudio").attr("checked",  @forma.get().traduccionaudio );
+
         $("#accesibilidad_audio").attr("checked",  @forma.get().accesibilidadAudio );
         $("#accesibilidad_video").attr("checked",  @forma.get().accesibilidadVideo );
 
@@ -346,8 +376,7 @@
             $("#calidad_video_@forma.get().calidadVideo").attr("checked", true);
         }
 
-        $("#divRegistro").append("Registro/actualización :"+moment("@forma.get().auditInsert").format("DD-MM-YYYY HH:mm:ss")).show();
-
+        $("#divRegistro").append("Registro/actualización :"+"@forma.get().auditInsert.format("dd-MM-yyyy HH:mm:ss")").show();
     }
 
 
@@ -451,4 +480,7 @@
 <link rel="stylesheet" href="@routes.Assets.at("bootstrap-material-datetimepicker-gh-pages/css/googleApisMaterial.css")" nonce="@session.get("nonce")"/>
 <link rel="stylesheet" href="@routes.Assets.at("bootstrap-material-datetimepicker-gh-pages/css/googleApisRoboto.css")" nonce="@session.get("nonce")"/>
 
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined">
+<script src="@routes.Assets.at("fileUpLoad/fileUploadModificado.js")"></script>
+<link  href="@routes.Assets.at("fileUpLoad/fileUpload.css")" rel="stylesheet" type="text/css"  nonce="@session.get("nonce")"/>
 

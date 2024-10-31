@@ -1,14 +1,121 @@
+run 8089
+exit
+sbt
+run 8089
+exit
+run 8089
+exit
+run 8089
 clean
 reload
 compile
-run
+run 8089
+reload
+run 8089
+reload
+compile
+run 8089
+RELOAD
+reload
+compile
+run 8089
+run 443
+run 8443
+run 2195
+run 2195 -Dhttp.address=148.204.111.41
+version
+exit
+run 8089
+run 8081
 run 8087
 clean
 reload
 compile
 run 8087
-run 8077
+CLEAN
+clean
+dist
+exit
 run 8087
-run 8077
+run 9000
+clean
+reload
+compile
+run 9000
+clean
+reload
+compile
+run 9000
+clean
+reload
+compile
+clean
+reload
+compile
+run 9000
+clean
+reload
+compile
+run 9000
+clean
+reload
+compile
+run 9000
+clean
+reload
+compile
+;clean;reload;compile;run 9000
+reload
+run 9000
+reload
+run 9000
+clean
+reload
+compile
+run 9000
+RELOAD
+reload
+run 9000
+reload
+compile
+run 9000
+reload
+run 9000
+clean
+reload
+compile
+run 9000
+;clean;reload;compile;run 9000
+clean
+;clean;reload;compile;run 9000
+run 9000
+;clean;reload;compile;run 9000
+run 9000
+;clean;reload;compile;run 9000
+run 9000
+;clean;reload;compile;run 9000
+compile
+run 9000
+compile
+run 9000
+compile
+run 9000
+;clean;reload;compile;run 9000
+exit
+;clean;reload;compile;run 9000
+run 9000
+;clean;reload;compile;run 9000
+sbt evolutions
+evolutions
+exit
+run 9000
+;clean;reload;compile;run 9000
+run 9000
+run 8087
+compile
+run 8087
+compile
+run 8087
+exit
 run 8087
 exit

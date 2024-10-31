@@ -102,6 +102,11 @@ public class Personal  extends models.utils.PlantillaModelo{
     	return this.nombre+" "+this.paterno+" "+this.materno;
     }
 
+    // Regresa una cadena, concatenados  paterno, materno y nombre
+    public String nombreCompletoOficial(){
+        return this.paterno+" "+this.materno+" "+this.nombre;
+    }
+
 	// Regresa un List<Personal> de la totalidad del personal ordenado por nombre
 	public static List<Personal> nombresCompletos() {
 		List<Personal> aux = Personal.find.all();

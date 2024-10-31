@@ -1,7 +1,5 @@
 @(estado:Long, numFolio:Long)
 @import helper._
-
-@estado  @numFolio
 @main{
 	<style nonce="@session.get("nonce")">
 	.vbottom{
@@ -143,7 +141,6 @@
 
 	var rolActual = '@session.get("rolActual")';
 	$(function(){
-		
         $.notifyDefaults({
 			type: 'success',
 			newest_on_top: true,
@@ -202,20 +199,10 @@
                 }else{
                     seleccionaPrimerRenlon();
                 }
-
-
-
-
                 $('.popover, [data-toggle="popover"]').popover();
-                
-                
              //   $('div.dataTables_scrollBody').css("max-height", $(window).height()-400+"px" );
-                
             }
         } );
-
-
-
 
 		 toggleFiltro( $("#filtro5") );
 		 
@@ -242,8 +229,7 @@
 					$("#menu1").html(lista);  
 				  }
 			});
-		 
-		 
+		 $("#elBody").fadeIn(500);
 	});
 
 	

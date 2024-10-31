@@ -52,14 +52,19 @@ function abrirSeries(){
 
 $(document).off("click","#btnNuevaSerie");
 $(document).on("click","#btnNuevaSerie", function(e){
+    // Anteriormente no se permitian series llamadas 'especiales' o alguna de sus deriavantes
+    /*
     const excepcionesSerieER=[/especiales/, /espesiales/, /espeziales/, /especialez/, /espesialez/, /espezialez/, /ezpezialez/,
                                                           /ezpeciales/, /ezpesiales/, /ezpeziales/, /ezpecialez/, /ezpesialez/,
                                                           /especial/, /espesial/, /espezial/,
                                                           /ezpecial/, /ezpesial/, /ezpezial/];
+    */
     var coincide = false;
     console.log("abc")
     e.preventDefault();
     var laNueva = $("#serieDescripcion").val().trim().toLowerCase();
+     // Anteriormente no se permitian series llamadas 'especiales' o alguna de sus deriavantes
+     /*
     excepcionesSerieER.forEach(expresion => {
         //coincide = coincide && expresion.test(laNueva);
 
@@ -72,7 +77,7 @@ $(document).on("click","#btnNuevaSerie", function(e){
           }
 
     });
-
+    */
     console.log("COINCIDE "+coincide)
     e.preventDefault();
 

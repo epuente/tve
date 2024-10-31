@@ -28,9 +28,19 @@ el archivo de salida será tveservicios<fechaHora>.dump
 
 
  	
-RESTAURAR
----------
+RESTAURAR / IMPORT
+-------------------
+Si es dump
 pg_restore -U tve -W -F c --create --clean -h localhost -d tveservicios < tveservicios20240124_0934.dump
 
-si es sql
+-U          Usuario
+-W          Password
+-F c        Formato custom
+--create    Crea la db
+--clean     Hace un drop por cada objeto de la db que será restaurado
+-h          host (servidor)
+-d          database
+
+
+Si es sql
 psql -U tve -h localhost -d tveservicios_dev < ~/dumps/tveserviciosLocal-20240821_1658.sql

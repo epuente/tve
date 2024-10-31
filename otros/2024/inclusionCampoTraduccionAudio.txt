@@ -1,0 +1,6 @@
+Se agregó al modelo VtkCatalogo un campo, dado que ya esta en producción, se desabilitó evolutions con evolutionplugin=disabled  en el archivo conf/application.conf.   Debe agregarse manualmente el campo en la DB
+---------------------------------------------------------------------
+
+alter table vtk_catalogo  add column traduccionaudio bool default false;
+
+update vtk_catalogo set traduccionaudio= false;

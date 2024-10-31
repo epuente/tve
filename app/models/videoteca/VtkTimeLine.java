@@ -20,7 +20,7 @@ public class VtkTimeLine extends models.utils.PlantillaModelo{
     @Column(length = 50, nullable = true)
     public String gradoacademico;
 
-    @Column(length = 50, nullable = true)
+    @Column(length = 150, nullable = true)
     public String cargo;
 
 

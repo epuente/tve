@@ -1,0 +1,401 @@
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+@import helper._
+
+<style>
+    .upload-area{
+        width: 70%;
+        height: 200px;
+        border: 2px dashed lightgray;
+        border-radius: 15px;
+        margin: 0 auto;
+        margin-top: 100px;
+        text-align: center;
+        overflow: auto;
+        background-color: white;
+    }
+
+    .upload-area:hover{
+        cursor: pointer;
+    }
+
+    .upload-area h1{
+        text-align: center;
+        font-weight: normal;
+        font-family: sans-serif;
+        line-height: 50px;
+        color: darkslategray;
+    }
+
+    #file{
+        display: none;
+    }
+
+    #listaArchivos{
+        width: 70%;
+        height: 200px;
+        border: 2px solid lightgray;
+        border-radius: 3px;
+        margin: 0 auto;
+        margin-top: 5px;
+        text-align: center;
+        overflow: auto;
+        table tbody tr {
+            font-size:14px;
+        }
+    }
+
+</style>
+
+@main {
+
+    <div class="modal fade" id="modalDD" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog-lg" role="document" style="width: 95%; height: 95%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Visor de videos</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div style="width: 100%">
+                            <video id="preview>" width="320" height="240" controls>
+                                <source type="video/mp4" src="" id="fteVideo">
+                                El navegador no soporta la etiqueta video de html
+                            </video>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btnDDCerrar">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    Drag and drop
+
+    @form(CSRF(routes.VideotecaController.pruebaTA()), 'role->"form", 'id->"frm", 'name->"frm", 'enctype -> "multipart/form-data") {
+    }
+
+<div class="container" >
+        <input type="file" name="file" id="file" multiple>
+
+        <!-- Drag and Drop container-->
+        <div class="upload-area"  id="uploadArea">
+            <div style="color:#808080; margin: 1rem;" >
+                <i class="fa-solid fa-cloud-arrow-up fa-4x"></i>
+            </div>
+            <div>Arrastre y suelte los archivos aqui</div>
+            <div>o</div>
+            <div>Click aquí para explorar archivos</div>
+
+        </div>
+        <div id="listaArchivos">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th scope="col">Archivo</th>
+                    <th scope="col">Tamaño</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Liga descarga</th>
+                    <th scope="col">Liga borrado</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="6" class="sinArchivos" style="text-align: center; line-height:2.5;">No se han seleccionado archivos</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <button id="btnFormulario">Forma</button>
+    </div>
+
+}
+
+<script>
+    $(function() {
+        // preventing page from redirecting
+        $("html").on("dragover", function(e) {
+             e.preventDefault();
+             e.stopPropagation();
+        });
+
+        $("html").on("drop", function(e) { e.preventDefault(); e.stopPropagation(); });
+
+        // Drag enter
+        $('.upload-area').on('dragenter', function (e) {
+             e.stopPropagation();
+             e.preventDefault();
+        });
+
+        // Drag over
+        $('.upload-area').on('dragover', function (e) {
+             e.stopPropagation();
+             e.preventDefault();
+        });
+
+        // Drop
+        $('.upload-area').on('drop', function (e) {
+             e.stopPropagation();
+             e.preventDefault();
+             var file = e.originalEvent.dataTransfer.files;
+             $.each(file, function(i,e){
+                 console.log(e)
+                 console.log(e.name)
+                //$('#file').files.append(e);
+                 var fd = new FormData();
+                 fd.append('file', e);
+                 agregarTabla(fd);
+
+                 //******************
+                 //var files = $('#file')[0].files;
+                 //$(files).each(function(i,e){
+                 //   var fd = new FormData();
+                 //   fd.append('file',e);
+                 //   agregarTabla(fd);
+                 //});
+             });
+        });
+        $("#elBody").fadeIn(500);
+    }); // Temina el function()
+
+    function subirEvidencias2(archivo, i){
+        console.log("subirEvidencias2")
+        var formData = new FormData();
+        console.log("nombre: "+archivo.name)
+        formData.append(archivo.name, archivo);
+        // Llamada ajax
+        auxiliar(formData, i);
+    }
+
+    // Open file selector on div click
+    $("#uploadArea").click(function(){
+         $("#file").click();
+    });
+
+
+    // file selected
+    $("#file").change(function(){
+         var files = $('#file')[0].files;
+         $(files).each(function(i,e){
+            var fd = new FormData();
+            fd.append('file',e);
+            agregarTabla(fd);
+         });
+    });
+
+
+    // Bytes conversion
+    function convertSize(size) {
+        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        if (size == 0) return '0 Byte';
+        var i = parseInt(Math.floor(Math.log(size) / Math.log(1024)));
+        return Math.round(size / Math.pow(1024, i), 2) + ' ' + sizes[i];
+    }
+
+
+    // Agrega el archivo a un renglon de la tabla listaArchivos
+    function agregarTabla(fd){
+        console.log(fd)
+        var archivo =  fd.get('file');
+        console.log(archivo)
+
+        var path = (window.URL || window.webkitURL).createObjectURL(archivo);
+
+        alert(path)
+        $(".sinArchivos").closest("tr").remove();
+        var sec = $("#listaArchivos table tbody tr").length+1;
+        $("#listaArchivos table tbody").append("<tr>" +
+                    "<td>"+sec+"</td>" +
+                    "<td>"+archivo.name+"</td>" +
+                    "<td>"+convertSize(archivo.size)+"</td>" +
+                    "<td id='estadoA-"+sec+"'>Inactivo</td>" +
+                    "<td id='descarga-"+sec+"'>No se ha generado</td>" +
+                    "<td id='borrado-"+sec+"'>No se ha generado</td>" +
+                    "<td><a href='javascript:void(0)' class='eliminaRenglon'><i class='fa-regular fa-trash-can eliminaArchivo'></i></a></td>" +
+                    "<td> <input type='file' id='divArch-"+sec+"' style='display:none'/></td>"+
+                    "<td> <button name='btnVer-"+sec+"'>Ver</button> </td>"+
+                    "</tr>");
+        console.log("nombre: "+archivo.name)
+
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(archivo);
+        const fileList = dataTransfer.files;
+
+        $("#divArch-"+sec).prop('files', fileList);
+
+        subirEvidencias2(archivo, sec);
+    }
+
+
+
+    function auxiliar(parametro, x){
+        console.log("desde auxiliar...")
+        console.log(parametro)
+        $aux = LlamaAjaxMultiPart(parametro, x);
+        $.when($aux).done(function(data){
+              console.log("Despues de subir a tranzapp")
+              console.dir( data);
+              console.log("#subido-"+x)
+              if (data.estado=="subido"){
+                  $("#estadoA-"+x).html("<div class='text-success'><i class='fa-solid fa-check'></i></div>");
+                  $("#descarga-"+x).html("<a href="+data.descargar+" target='_blank'>"+data.descargar+"</a>");
+                  $("#borrado-"+ x).html("<a href="+data.borrar+" target='_blank'>"+data.borrar+"</a>");
+              }
+              if (data.estado=="error"){
+                $("#estadoA-"+x).html("<div class='text-danger'><i class='fa-solid fa-xmark'></i></div>");
+                $("#descarga-"+x).html("Error");
+                $("#borrado-"+x).html("Error");
+              }
+        });
+    }
+
+
+    function LlamaAjaxMultiPart(formData, i){
+        console.log("Llamada desde dragdrop.scala LlamaAjaxMultiPart: "+formData)
+        var d = $.Deferred();
+            $.ajax({
+                   url: '/uploadForma',
+                   data: formData,
+                   type: 'POST',
+                   enctype: 'multipart/form-data',
+                   contentType: false,
+                   processData: false,
+                   cache: false,
+                   dataType: "json",
+                   beforeSend: function () {
+                        $("#estadoA-"+i).html("<div class='text-success'>Procesando...</div>");
+                   },
+                   success: function (  data) {
+                        d.resolve(data);
+                  },
+                  fail:function(data){
+                    alert("error de ajax");
+                    d.reject;
+                  }
+            });
+            return d.promise();
+    }
+
+    $(document).on("click", ".eliminaRenglon",function(e){
+        $(this).closest("tr").remove();
+    });
+
+
+    $("#btnFormulario").click(function(e){
+        var fd = new FormData();
+        /*
+        $("#listaArchivos table tbody tr").each(function(i,e){
+            console.log("renglon "+i)
+            fd.append("file", $(e).find("td:eq(7)") );
+        });
+        console.log(fd)
+        console.log("tam forma "+fd.get('file').length)
+        var archivos = fd.get('file');
+
+        for(i=0; i< archivos.length; i++){
+            console.log("nombre "+archivos[i])
+        }
+        */
+
+        // Recorre la tabla
+        $("#listaArchivos table tbody tr td input[type='file'][id^='divArch-']").each(function(i,e){
+            console.log("---->"+e)
+            console.log("---->"+e.files)
+            console.log("---->"+e.files[0])
+            fd.append("file", e.files[0]);
+        });
+        console.log(fd)
+
+
+        var xEvidencias = {};
+        xEvidencias = valoresEvidencias();
+        console.dir(JSON.stringify(xEvidencias))
+
+        $("<textarea style='padding-left:100px; display:none;' name='txaTranzapp' id='txaTranzapp'>"+JSON.stringify(xEvidencias)+"</textarea>").appendTo("form[name='frm']");
+
+
+        //$("form[name='frm']").submit();
+
+    });
+
+
+
+
+    function valoresEvidencias(){
+        var j=[];
+
+        //********** Cuando es create se usa tblDetalle, cuando es edit se usa ....tblDetalleArchivos
+        var trs = $("#listaArchivos table tbody tr");
+        console.log("trs "+$(trs).length)
+        $(trs).each(function(i,e){
+            console.log("renglon "+i+"   "+$(e).find("td:eq(3)").hasClass("text-success")   )
+
+
+            var lDescarga="";
+            var lBorrado="";
+            var nombre ="";
+            var id="";
+            var path="";
+            console.log("Es si")
+            nombre = $(e).find("td:eq(1)").text();
+            lDescarga = $(e).find("td:eq(4)").text();
+            lBorrado = $(e).find("td:eq(5)").text();
+            path = $(e).find("td:eq(7) input[type='file']")[0].files.path;
+
+            if ($(e).find("td:eq(0) div[name='evidenciaId']").length!=0)
+                id = $(e).find("td:eq(0) div[name='evidenciaId']").text();
+
+            var evidencia = {};
+            evidencia["archivo"] = nombre;
+            evidencia["lDescarga"] = lDescarga;
+            evidencia["lBorrado"] = lBorrado;
+            evidencia["id"]= id;
+            evidencia["path"]= path;
+            j.push(evidencia);
+        });
+        console.dir(j)
+        return j;
+    }
+
+
+
+    function getVideoThumbnail(videoElement, seconds) {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      videoElement.currentTime = seconds;
+      videoElement.play();
+      canvas.width = videoElement.videoWidth;
+      canvas.height = videoElement.videoHeight;
+      ctx.drawImage(videoElement, 0, 0);
+      const imageData = canvas.toDataURL("image/png");
+      return imageData;
+    }
+
+
+    $(document).on("click", "button[name^='btnVer-']", function(e){
+        console.log("btnVer")
+        $('#modalDD').modal('show');
+        var secuencial = $(this).attr("name").split("-")[1];
+        var archivo = $("#divArch-"+secuencial)[0].files[0];
+        var $source = $('#fteVideo');
+        $source[0].src = URL.createObjectURL(  archivo );
+        $source.parent()[0].load();
+        //  poner URL.revokeObjectURL($source[0].src)    cuando se deje de usar
+    });
+
+    $("#btnDDCerrar").click(function(e){
+        var $source = $('#fteVideo');
+        URL.revokeObjectURL($source[0].src);
+        console.log("se cerró el video src")
+    });
+
+</script>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined">

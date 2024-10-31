@@ -31,7 +31,7 @@
 
     <h1>Agregar al catálogo de videoteca</h1>
 
-    @form(CSRF(routes.VideotecaController.save()), 'role->"form", 'id->"frmVTKCreate", 'name->"frmVTK" , Symbol("data-modo")->"creacion" ) {
+    @form(CSRF(routes.VideotecaController.save()), 'role->"form", 'id->"frmVTKCreate", 'name->"frmVTK" , Symbol("data-modo")->"creacion",    Symbol("autocomplete")->"off"  ) {
         @videotecaSecuencia3Form(forma, auxCreditos)
         <br/><br/>
         <div class="row">
@@ -56,6 +56,7 @@
 <script type="text/javascript">
     var texto="";
     $(function() {
+
         $('form').validator();
         $("#serie_id").selectpicker({
             title:"Escriba, seleccione o busque un número de oficio o descripción del oficio",
@@ -189,7 +190,12 @@
         $('[data-toggle="popover"]').popover()
         //agregarAbrir();
         $('[data-toggle="tooltip"]').tooltip();
-        $("#elBody").fadeIn(1000);
+
+        $("#fileUpload").fileUpload();
+
+        $("#soloTablaEvidencias").closest("div.panel-default").remove();
+
+        $("#elBody").fadeIn(500);
     });  // fin del $(function()
 
 
@@ -214,6 +220,17 @@
         var textoExistente = $("#ta"+elId).val().length >0;
         $("#ta"+elId).val(  $("#ta"+elId).val()+(textoExistente?", ":"") + $(this).text()    );
     });
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -244,4 +261,6 @@
 <link rel="stylesheet" href="@routes.Assets.at("bootstrap-material-datetimepicker-gh-pages/css/googleApisMaterial.css")" nonce="@session.get("nonce")"/>
 <link rel="stylesheet" href="@routes.Assets.at("bootstrap-material-datetimepicker-gh-pages/css/googleApisRoboto.css")" nonce="@session.get("nonce")"/>
 
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined">
+<script src="@routes.Assets.at("fileUpLoad/fileUploadModificado.js")"></script>
+<link  href="@routes.Assets.at("fileUpLoad/fileUpload.css")" rel="stylesheet" type="text/css"  nonce="@session.get("nonce")"/>

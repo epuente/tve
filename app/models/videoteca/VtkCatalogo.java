@@ -16,8 +16,9 @@ import java.util.stream.Collectors;
 import static play.mvc.Controller.session;
 
 @Entity
-@EntityConcurrencyMode(ConcurrencyMode.NONE)
-public class VtkCatalogo extends models.utils.PlantillaModelo implements Serializable {
+//@EntityConcurrencyMode(ConcurrencyMode.NONE)
+//public class VtkCatalogo extends models.utils.PlantillaModelo implements Serializable {
+public class VtkCatalogo extends models.utils.PlantillaModelo{
 
     @ManyToOne
     @Column(length = 30)
@@ -66,13 +67,13 @@ public class VtkCatalogo extends models.utils.PlantillaModelo implements Seriali
     @ManyToOne
     public Idioma idioma;
 
-
+    public boolean traduccionaudio = false;
 
     // Soporte de ayuda para personas con debilidad auditiva (sordos). Incluye lenguaje de señas.
 
     public boolean accesibilidadAudio;
 
-    // Soporte de ayuda para personas con debilidad visual (ciegos). Incluye subtítulos descriptivos.
+    // Soporte de ayuda para personas con debilidad auditiva (sordos). Incluye subtítulos descriptivos.
     public boolean accesibilidadVideo;
     @ManyToOne
     public TipoGrabacion tipograbacion;
@@ -132,6 +133,9 @@ public class VtkCatalogo extends models.utils.PlantillaModelo implements Seriali
     @Column(length = 2)
     @NotNull
     public String calidadVideo;
+
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "catalogo")
+    public List<VtkEvidencia> evidencias;
 
     @Column(length = 3000)
     public String observaciones;

@@ -11,12 +11,12 @@
                 <label for="${fileUploadId}" class="file-upload">
                     <div>
                         <i class="material-icons-outlined">cloud_upload</i>
-                        <p>Arrastrar y soltar los archivos aqui</p>
-                        <p>O</p>
-                        <div>Explorar archivos</div>
+                        <p>Arrastra y suelta los archivos aqui</p>
+                        <span>O</span>
+                        <div>Explora archivos</div>
                         <br><br>
-                        <p class="text-muted" style="color:#777; font-weight:normal;">
-                         Al explorar, para seleccionar más de un archivo se debe presionar la tecla <i>control</i> mientras se seleccionan los archivos.
+                        <p>
+                         Para seleccionar más de un archivo, usa la tecla control.
                         </p>
                     </div>
                     <input type="file" id="${fileUploadId}" name="${fileUploadId}" multiple hidden  style="display:none" />
@@ -57,18 +57,21 @@
                     createTable();
                 }
 
-                tableBody.empty();
+                //tableBody.empty();
                 if (files.length > 0) {
                     $.each(files, function (index, file) {
                         var fileName = file.name;
-                        //var fileSize = (file.size / 1024).toFixed(2) + " KB";
                         var fileSize = (file.size / 1024).toFixed(2) + " KB";
-                        if (fileSize.substring(0,  fileSize.length-3 )>=1000)
-                            fileSize = (fileSize.substring(0,  fileSize.length-3 ) / 1000).toFixed(2) + " MB";
-                        if (fileSize.substring(0,  fileSize.length-3 )>=1000)
-                            fileSize = (fileSize.substring(0,  fileSize.length-3 ) / 1000).toFixed(2) + " GB";
-                        if (fileSize.substring(0,  fileSize.length-3 )>=1000)
-                            fileSize = (fileSize.substring(0,  fileSize.length-3 ) / 1000).toFixed(2) + " TB";
+                        var auxTam =  parseInt( fileSize.split(" ")[0] );
+                        if (auxTam>1000){
+                            fileSize = (auxTam / 1024).toFixed(2)+ " MB";
+                            auxTam =  parseInt( fileSize.split(" ")[0] );
+                            if (auxTam>1000) {
+                                fileSize = (auxTam / 1024).toFixed(2)+ " GB";
+
+                            }
+                        }
+
                         var fileType = file.type;
                         var preview = fileType.startsWith("image")
                             ? `<img src="${URL.createObjectURL(file)}" alt="${fileName}" height="30">`
@@ -90,11 +93,49 @@
                     });
 
                     tableBody.find(".deleteBtn").click(function () {
-                        $(this).closest("tr").remove();
+                        console.log("deleteBtn...")
+                        var boton = $(this);
 
-                        if (tableBody.find("tr").length === 0) {
-                            tableBody.append('<tr><td colspan="6" class="no-file">Sin archivos</td></tr>');
-                        }
+
+                        swal({
+                          title: "Eliminar el archivo de evidencia",
+                          html: 'También se eliminará de tranzapp.',
+                          type: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#d33",
+                          cancelButtonColor: '#3085d6',
+                          confirmButtonText: "Si, borrar",
+                          cancelButtonText: "No, cancelar borrado.",
+                          preConfirm: function(){
+                              return new Promise(function (resolve, reject) {
+                                    $(boton).closest("tr").remove();
+                                    if (tableBody.find("tr").length === 0) {
+                                        tableBody.append('<tr><td colspan="6" class="no-file">Sin archivos</td></tr>');
+                                    }
+                                    // Eliminar de tranzapp el archivo
+                                    var liga = $(boton).closest("tr").find("td:eq(5)").find("a").attr("href");
+                                    console.log(liga);
+                                    liga = liga.replace("f.php","script.php");
+                                    // De manera desatendida elimina el archivo en tranzapp
+                                    var $eTA = LlamadaAjax("/apiEliminarTranzapp", "POST", JSON.stringify({liga:liga}));
+                                    resolve();
+                              });
+                          }
+                        }).then(function () {
+                                  swal(
+                    							    'Eliminado!',
+                    							    'Se eliminó correctamente la evidencia.',
+                    							    'success'
+                    							  )
+                    				}, function (dismiss) {
+                    					  if (dismiss === 'cancel') {
+                    					    swal(
+                    					      'Cancelado',
+                    					      'Usted canceló la eliminación de evidencia.',
+                    					      'error'
+                    					    )
+                    					  }
+                    				}).catch(swal.noop);
                     });
                 }
             }
@@ -109,12 +150,14 @@
                     e.preventDefault();
                     fileUploadDiv.removeClass("dragover");
                     handleFiles(e.originalEvent.dataTransfer.files);
+                    subirEvidencias();
                 },
             });
 
             // Event triggered when file is selected.
             fileUploadDiv.find(`#${fileUploadId}`).change(function () {
                 handleFiles(this.files);
+                subirEvidencias();
             });
         });
     };

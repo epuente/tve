@@ -3,7 +3,7 @@ create user tve with password 'tve';
 create database tveservicios_dev;
 alter database tveservicios_dev owner to tve;
 
-GRANT ALL PRIVILEGES ON DATABASE tveservicios TO tve
+GRANT ALL PRIVILEGES ON DATABASE tveservicios_dev TO tve;
 
 \c tveservicios_dev;
 CREATE EXTENSION unaccent;

@@ -270,6 +270,9 @@ public class AdminVideotecaController extends ControladorSeguroAdministrador {
 
 			jo.put("produccion", c.produccion!=null?c.produccion.descripcion:noDefinida);
 			jo.put("idioma", c.idioma!=null?c.idioma.descripcion:noDefinido);
+
+            jo.put("traduccionaudio", c.traduccionaudio);
+
 			jo.put("accesibilidadAudio", c.accesibilidadAudio);
 			jo.put("accesibilidadVideo", c.accesibilidadVideo);
 			jo.put("grabacion", c.tipograbacion!=null?c.tipograbacion.descripcion:noDefinida);

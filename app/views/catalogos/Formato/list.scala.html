@@ -55,17 +55,18 @@
     $(function(){
          $("#wrapper").toggleClass("toggled");
          
-            $("#tabla").DataTable({
-            	"stateSave": true,
-                "pageLength": 5,
-               "lengthMenu": [  [3, 5, 10, 25, 50, -1], [3, 5, 10, 25, 50, "Todos"]   ],
-               "language": {
-                    "url": "@routes.Assets.at("Spanish.json")" 
-               }
-            });          
-            $('[data-toggle="popover"]').popover(
-                    {trigger: "hover"}
-                    );         
+        $("#tabla").DataTable({
+            "stateSave": true,
+            "pageLength": 5,
+           "lengthMenu": [  [3, 5, 10, 25, 50, -1], [3, 5, 10, 25, 50, "Todos"]   ],
+           "language": {
+                "url": "@routes.Assets.at("Spanish.json")"
+           }
+        });
+        $('[data-toggle="popover"]').popover(
+                {trigger: "hover"}
+                );
+        $("#elBody").fadeIn(500);
     });
 
     $("#btnAgregar").click(function(){

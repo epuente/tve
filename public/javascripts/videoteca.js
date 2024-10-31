@@ -16,21 +16,14 @@ $("#btnModalGuardar").on("click", function(){
 
 //function agregaJSON(){
 $("#btnActualizar, #btnAgregar").click(function(e){
-
         console.clear()
         console.log(" - agregaJSON -")
-
-        var aux4 = valoresCreditos2();
-        $("#txtLosCreditos").val(   aux4   );
+        //var aux4 = valoresCreditos2();
+        //$("#txtLosCreditos").val(   aux4   );
         $("#txaTimeLine").val(JSON.stringify(valoresTimeLine()));
-
         console.debug(    JSON.stringify(valoresTimeLine())   );
-
-
         var msgError="";
-
         console.log("has-error:"+  $("div.has-error").length)
-
         if ($("form[name='frmVTK']").attr("data-modo")=="edicion"){
             $("#id").val(  $("#id").val()   );
         }
@@ -160,12 +153,28 @@ $("#btnActualizar, #btnAgregar").click(function(e){
                 var xNiveles = {};
                 xNiveles = valoresNiveles();
 
+                var xEvidencias = {};
+                xEvidencias = valoresEvidencias();
+                console.log("xEvidencias: "+JSON.stringify(xEvidencias))
+
+                // Si es edición, se guardan los datos de la tabla tblDetalleArchivos (las evidencias que estan en la DB)
+                var xEvidenciasDB = {};
+                xEvidenciasDB = valoresEvidenciasDB();
+                console.log("xEvidenciasDB: "+JSON.stringify(xEvidenciasDB))
+
+
 
                 $("<textarea style='padding-left:100px; display:none;' name='txaEventos' id='txaEventos'>"+JSON.stringify(xEventos)+"</textarea>").appendTo("form[name='frmVTK']");
                 $("<textarea style='padding-left:100px; display:none;' name='txaNiveles' id='txaNiveles'>"+JSON.stringify(xNiveles)+"</textarea>").appendTo("form[name='frmVTK']");
                 $("<textarea style='padding-left:100px; display:none;' name='txaCreditos' id='txaCreditos'>"+JSON.stringify(x)+"</textarea>").appendTo("form[name='frmVTK']");
                 //$("<textarea style='padding-left:100px; display:none;' name='txaCreditos2' id='txaCreditos2'>"+JSON.stringify(x2)+"</textarea>").appendTo("form[name='frmVTK']");
                 $("#txaPalabrasClave").val(JSON.stringify(valoresPalabrasClave()));
+                $("<textarea style='padding-left:100px; display:none;' name='txaTranzapp' id='txaTranzapp'>"+JSON.stringify(xEvidencias)+"</textarea>").appendTo("form[name='frmVTK']");
+                $("<textarea style='padding-left:100px; display:none;' name='txaTranzappDB' id='txaTranzappDB'>"+JSON.stringify(xEvidenciasDB)+"</textarea>").appendTo("form[name='frmVTK']");
+
+
+                $("<textarea style='padding-left:100px; display:none;' name='pruebaCreditos'>"+valoresCreditos2()+"</textarea>").appendTo("form[name='frmVTK']");
+
                 $("form[name='frmVTK']").submit();
             }
         });  // fin del when
@@ -303,6 +312,83 @@ function valoresTimeLine(){
 }
 
 
+function valoresEvidencias(){
+    var j=[];
+    if ( $("#panelTranzapp").is(":checked") ){
+
+
+            //********** Cuando es create se usa tblDetalle, cuando es edit se usa ....tblDetalleArchivos
+
+
+
+            //var trs = $("#tblDetalle").length>0?$("#tblDetalle tr"):$("#tblDetalleArchivos tr");
+            var trs = $("#tblDetalle tr");
+
+            console.log("trs "+$(trs).length)
+
+
+
+            $(trs).each(function(i,e){
+                if ( $(e).find("td:eq(3)").text()=="Si" ){
+                    var lDescarga="";
+                    var lBorrado="";
+                    var nombre ="";
+                    var id="";
+                    console.log("Es si")
+                    nombre = $(e).find("td:eq(1)").text();
+                    lDescarga = $(e).find("td:eq(4)").text();
+                    lBorrado = $(e).find("td:eq(5)").text();
+
+                    if ($(e).find("td:eq(0) div[name='evidenciaId']").length!=0)
+                        id = $(e).find("td:eq(0) div[name='evidenciaId']").text();
+                    //console.log("elId de ta:"+  $(e).find("td:eq(0) div[name='evidenciaId']").text())
+
+
+                    var evidencia = {};
+                    evidencia["archivo"] = nombre;
+                    evidencia["lDescarga"] = lDescarga;
+                    evidencia["lBorrado"] = lBorrado;
+                    evidencia["id"]= id;
+                    j.push(evidencia);
+                }
+        });
+    }
+    console.dir(j)
+    return j;
+}
+
+function valoresEvidenciasDB(){
+    var j=[];
+    if ( $("#panelTranzapp").is(":checked") ){
+            //********** Cuando es create se usa tblDetalle, cuando es edit se usa ....tblDetalleArchivos
+            var trs = $("#tblDetalleArchivos tr");
+            console.log("trs (db)"+$(trs).length)
+            $(trs).each(function(i,e){
+                if ( $(e).find("td:eq(3)").text()=="Si" ){
+                    var lDescarga="";
+                    var lBorrado="";
+                    var nombre ="";
+                    var id="";
+                    console.log("Es si")
+                    nombre = $(e).find("td:eq(1)").text();
+                    lDescarga = $(e).find("td:eq(4)").text();
+                    lBorrado = $(e).find("td:eq(5)").text();
+
+                    if ($(e).find("td:eq(0) div[name='evidenciaId']").length!=0)
+                        id = $(e).find("td:eq(0) div[name='evidenciaId']").text();
+
+                    var evidencia = {};
+                    evidencia["archivo"] = nombre;
+                    evidencia["lDescarga"] = lDescarga;
+                    evidencia["lBorrado"] = lBorrado;
+                    evidencia["id"]= id;
+                    j.push(evidencia);
+                }
+        });
+    }
+    console.dir(j)
+    return j;
+}
 
 
 function labelsCamposRequeridos(){
@@ -423,6 +509,21 @@ function agregarTimeLine(){
 }
 
 
+function agregarTablaEvidencias(){
+    $("#baseEvidencias").clone()
+        .attr("id", "laTablaEvidencias-1")
+        .appendTo("#soloTablaEvidencias")
+        .css({"display":"block", "background-color": "white"
+    });
+    if ($("#tblDetalleArchivos tbody").find("tr").length === 0) {
+            $("#tblDetalleArchivos tbody").append('<tr><td colspan="6" class="no-file">Sin archivos</td></tr>');
+       }
+}
+
+function agregarRenglonTablaEvidencias(){
+    $("#laTablaEvidencias-1 tbody").append("<tr><td></td><td></td><td></td><td></td><td></td><td></td><td><button type='button' class='deleteBtn'><i class='material-icons-outlined'>delete</i></button></td></tr>");
+}
+
 function eliminarTimeLine(e){
     console.log("e "+$(e))
     console.dir("e "+$(e))
@@ -495,6 +596,133 @@ function tagifySinEnter( tagData ){
 }
 
 
+$(document).off("click","#panelTranzapp");
+$(document).on("click","#panelTranzapp", function(){
+    console.log("click panel tranzapp")
+    $("#divTranzapp").toggle();
+});
 
 
+ $('#fileUpload').on('change', function(event) {
+        console.log("...change")
+        const files = event.target.files; // Obtiene los archivos seleccionados
+        const fileList = $('#fileList');
+        fileList.empty(); // Limpia la lista anterior
+
+        for (let i = 0; i < files.length; i++) {
+            const fileName = files[i].name; // Obtiene el nombre del archivo
+            fileList.append(`<p>${fileName}</p>`); // Muestra el nombre en la lista
+        }
+        console.log(fileList)
+    });
+
+
+
+
+    function subirEvidencias(){
+        console.clear();
+        console.log("Se inicia subirEvidencias")
+        if ($("#fileUpload-1")[0].files.length==0){
+            swal(
+              'Aviso',
+              'No se han seleccionado archivos',
+              'warning'
+            )
+        } else {
+            // Crear un formData por cada archivo en el file input (#fileUpload-1)
+            for (i=0; i<$("#fileUpload-1")[0].files.length; i++){
+                var formData = new FormData();
+                console.log("i...")
+                var a = $("#fileUpload-1")[0].files[i];
+                console.log("nombre: "+a.name)
+                formData.append(a.name, a);
+                // Llamada ajax
+                console.log("llamando ajax   (auxiliar(formData, i))    " )
+                var $aux=auxiliar(formData, i);
+            }
+        }
+
+    }
+
+
+    function subirEvidenciasEnDisco(){
+        console.clear();
+        console.log("Se inicia subirEvidenciasEnDisco")
+        if ($("#fileUpload-1")[0].files.length==0){
+            swal(
+              'Aviso',
+              'No se han seleccionado archivos',
+              'warning'
+            )
+        } else {
+            // Crear un formData por cada archivo en el file input (#fileUpload-1)
+            for (i=0; i<$("#fileUpload-1")[0].files.length; i++){
+                var formData = new FormData();
+                console.log("i...")
+                var a = $("#fileUpload-1")[0].files[i];
+                console.log("nombre: "+a.name)
+                formData.append(a.name, a);
+                // Llamada ajax
+                console.log("llamando ajax   (auxiliar(formData, i))    " )
+                var $aux=auxiliar(formData, i);
+            }
+        }
+
+    }
+
+    function auxiliar(parametro, x){
+        console.log(parametro)
+        $aux = LlamaAjaxMultiPart(parametro, x);
+        $.when($aux).done(function(data){
+              console.dir( data);
+              console.log("#subido-"+x)
+              if (data.estado=="subido"){
+                  $("#subido-"+x).html("<div class='text-success'>Si</div>");
+                  $("#descarga-"+x).html("<a href="+data.descargar+" target='_blank'>"+data.descargar+"</a>");
+                  $("#borrado-"+ x).html("<a href="+data.borrar+" target='_blank'>"+data.borrar+"</a>");
+              }
+              if (data.estado=="error"){
+                $("#subido-"+x).html("<div class='text-danger'>No</div>");
+                $("#descarga-"+x).html("Error");
+                $("#borrado-"+x).html("Error");
+
+              }
+        });
+    }
+
+
+    function LlamaAjaxMultiPart(formData, i){
+        console.log("Llamada desde videoteca.js  LlamaAjaxMultiPart")
+        var d = $.Deferred();
+            $.ajax({
+                   url: '/uploadForma',
+                   data: formData,
+                   type: 'POST',
+                   enctype: 'multipart/form-data',
+                   contentType: false,
+                   processData: false,
+                   cache: false,
+                   dataType: "json",
+                   beforeSend: function (xhr) {
+                        $("#subido-"+i).html("<div class='text-success'>Procesando...</div>");
+                        xhr.setRequestHeader('CONTENT_LENGTH', '10737418240');
+                   },
+                   success: function (  data) {
+                        d.resolve(data);
+                  },
+                  fail:function(data){
+                    alert("error de ajax");
+                    d.reject;
+                  }
+            });
+            return d.promise();
+    }
+
+
+    // Para eliminar archivo de evidencia en edición de bitácora
+    $(document).on("click",".deleteBtn", function(btn){
+        console.log("click......")
+        $(this).closest("tr").remove();
+
+    });
 

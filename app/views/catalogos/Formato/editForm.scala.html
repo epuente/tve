@@ -11,16 +11,11 @@
         </div>
     </div>
         
-    <h1>Editar Vehículo</h1>
+    <h1>Editar Formato</h1>
     @form( CSRF(routes.AdminFormatoController.delete(id)), 'id->"frmAux") {
     }
     @form(CSRF(routes.AdminFormatoController.update(id)), 'role->"form") {
-    
-    
-    
-    
-     
-        @formatoForm(forma, roles, "edit")                
+        @formatoForm(forma, roles, "edit")
         <br/><br/>
         <div class="row">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
@@ -48,6 +43,7 @@
         $("#filtroOpera").click();
         $('form').validator();
         leer();
+        $("#elBody").fadeIn(500);
     });
 
     $("form").submit(function(){

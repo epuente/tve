@@ -1,3 +1,4 @@
+DOS
 @main{
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -93,6 +94,35 @@
     </div>
 
 
+    <div class="col-xs-12 col-sm-12 col-sm-6 col-md-8 col-lg-8">
+        <div class="x_panel fixed_height_320">
+            <div class="x_title">
+                <h2>Catalogadores POLAR</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <table class="centradoHV" style="width:100%">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <div class="chart-container">
+                                <canvas id="canvasP"  ></canvas>
+                            </div>
+                        </td>
+                        <td>
+                            <div id="tablaCanvasP" style="padding-left:15px; width:100%;"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <!--script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js" /-->
@@ -122,6 +152,11 @@
           newest_on_top: true,
           z_index: 999000
       });
+
+
+
+
+      $("#elBody").fadeIn(500);
   });
 
 
@@ -176,6 +211,10 @@
 		});
 
 
+      // POLAR
+      var polarAreaChart = new Chart(canvasP, {
+          type: 'line'
+      });
 
 
 
@@ -216,6 +255,9 @@
 
 			myChart2.data.datasets = data.grafica2.datasets;
 			myChart2.update();
+
+			// Polar
+			//var $datosPolar = LLamadaAjax("/datosPolar", "POST", JSON.stringify({}));
 
 
 	    }).error(function(xhr, status, error) {

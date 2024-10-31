@@ -66,6 +66,7 @@ public class EventoOperadorSala {
             auxAgeHorarios.append("(extract(dow from inicio) = ").append(ostx.diaSemana).append(" and inicio >=  cast( concat(to_char(inicio, 'YYYY-MM-DD'),' ").append(sdf.format(ostx.desde)).append("') as timestamp)").append("	and inicio <  cast( concat(to_char(fin, 'YYYY-MM-DD'),' ").append(sdf.format(ostx.hasta)).append("') as timestamp) 	").append("	and fin >  cast( concat(to_char(fin, 'YYYY-MM-DD'),' ").append(sdf.format(ostx.desde.getTime())).append("') as timestamp)").append("	and fin <=  cast( concat(to_char(fin, 'YYYY-MM-DD'),' ").append(sdf.format(ostx.hasta)).append("') as timestamp)	").append(") or ");
         }
         auxQueryH = auxAgeHorarios.toString();
+        System.out.println("auxQueryH: "+auxQueryH);
         // Quitar el ultimo 'or'
         if (!auxQueryH.isEmpty())
             auxQueryH = auxQueryH.substring(0, auxQueryH.length() - 3);
@@ -79,6 +80,8 @@ public class EventoOperadorSala {
                 .eq("preagendas.operadoresSala.personal.id", session("usuario"))
                 .in("preagendas.estado.id", Arrays.asList(4, 5))
                 .raw("(" + auxQueryH + ")");
+
+        System.out.println("Exagendas "+Exagendas);
 
         List<FolioProductorAsignado> fpasss = Exagendas.findList();
         //System.out.println("fpasss : "+fpasss.size());

@@ -1989,11 +1989,11 @@ if (typeof NProgress != 'undefined') {
 				
 				console.log('init_charts');
 			
-				
+				/*
 				Chart.defaults.global.legend = {
 					enabled: false
 				};
-				
+				*/
 				
 
 			if ($('#canvas_line').length ){
@@ -3144,12 +3144,14 @@ if (typeof NProgress != 'undefined') {
 					}
 				  }
 				},
-				legend: {
+				/*
+				legend: {finit chart
 				  data: ['Something #1', 'Something #2', 'Something #3', 'Something #4', 'Something #5'],
 				  orient: 'vertical',
 				  x: 'left',
 				  y: 'bottom'
 				},
+				*/
 				calculable: true,
 				series: [{
 				  name: '漏斗图',

@@ -1,0 +1,281 @@
+tres
+@main{
+    <style>
+        .fixed_width_400px {
+            width: 400px;
+        }
+
+        .fixed_width_600px {
+            width: 600px;
+        }
+
+        .fixed_height_400px {
+            height: 400px;
+        }
+
+
+        .fixed_width_100pc {
+            width: 100%;
+        }
+    </style>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h1>Tablero</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Generales</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div style="margin: 20px; line-height:1.4;">
+                    <h4>Total bitácoras: <span id="divTotalBitacoras"></span></h4>
+                    <h4>Total catalogadores: <span id="divTotalCatalogadores"></span></h4>
+                    <h4>Catalogadores inactivos: <span id="divCatalogadoresInactivos"></span></h4>
+                </div>
+                <div style="margin: 20px; line-height:1.4;">
+                    <h4>Total series: <span id="divTotalSeries"></span></h4>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Total bitácoras por catalogador</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Settings 1</a>
+                                <a class="dropdown-item" href="#">Settings 2</a>
+                            </div>
+                        </li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="" style="display: grid; place-items: center;">
+                        <canvas id="cavasTotalCat"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Bitácoras por mes y catalogador</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Settings 1</a>
+                                <a class="dropdown-item" href="#">Settings 2</a>
+                            </div>
+                        </li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <canvas id="canvasTotalMesCat"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+    <div class="col-md-6 col-sm-6  ">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Área temática</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                        </div>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <canvas id="canvasAreas"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js" /-->
+    <!--script src="@routes.Assets.at("javascripts/chart.umd.min.js")"></script-->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@@4.4.6/dist/chart.umd.min.js"></script>
+
+    <!--script src="/assets/Chart/Chart.min.js"></script-->
+    <script defer src="@routes.Assets.at("lib/moment/min/moment.min.js")" type="text/javascript"></script>
+    <script defer src="@routes.Assets.at("lib/moment/locale/es.js")" type="text/javascript"></script>
+    <script defer src="@routes.Assets.at("bootstrap-notify/bootstrap-notify.min.js")"></script>
+    <script src="/assets/gentelella/vendors/jquery/dist/jquery.min.js"  nonce="lWHiQVmBqnwntNj1PupMRyCbyvg"></script>
+    <script type="text/javascript">
+      $(function() {
+            $.ajax({
+                url: '@routes.SupCatalogadorController.ajaxTablero()',
+                method: 'POST',
+                dataType: "json"
+            }).success(function(data){
+                console.debug("retornando.........")
+                console.dir(data)
+                $("#elBody").fadeIn(500);
+
+                // Geenrales
+                $("#divTotalBitacoras").text(data.totalBitacoras);
+                $("#divTotalCatalogadores").text(data.totalCatalogadores);
+                $("#divCatalogadoresInactivos").text(data.totalCatalogadoresInactivos);
+                $("#divTotalSeries").text(data.totalSeries);
+
+                // Total catalogadores - polar
+                const totalCatalogadores = new Chart($("#cavasTotalCat"), {
+                  type: 'polarArea',
+                  data: {
+                    labels: data.totalLabels,
+                    datasets: [{
+                      label: 'Total bitácoras',
+                      data: data.totalDatos
+                    }]
+                  },
+                  options: {
+                        plugins: {
+                              legend: {
+                                position: 'left',
+                              }
+                        }
+                  }
+                });
+                totalCatalogadores.options.maintainAspectRatio = false;
+                // Resize the chart programmatically
+                totalCatalogadores.canvas.style.width = '200';
+                totalCatalogadores.canvas.style.height = '200';
+            });   // fin del succes de ajax
+
+
+
+
+
+            // Bitácoras por mes y catalogador
+            $.ajax({
+                url: '@routes.SupCatalogadorController.chartCatPorFecha()',
+                method: 'POST',
+                dataType: "json"
+            }).success(function(dataX){
+                console.log("---->>>>")
+                console.dir(dataX)
+                console.log("<<<<----")
+                const config = new Chart($("#canvasTotalMesCat"),{
+                    type: 'bar',
+                    data: {
+                            labels: dataX.labels,
+                            datasets: dataX.datasets
+                            },
+                    scales: {
+                      x: {
+                        type: 'time',
+                        display: true,
+                        offset: true,
+                        ticks: {
+                          source: 'data'
+                        },
+                        time: {
+                          unit: 'day'
+                        }
+                      }  // fin de x
+                    },  // fin de scales
+                    options : {
+                      plugins: {
+                        colors: {
+                          forceOverride: false
+                        },
+                        legend: {
+                          position: 'left',
+                        }
+                      }
+                    }
+                });
+                config.options.maintainAspectRatio = false;
+                // Resize the chart programmatically
+                config.canvas.parentNode.style.width = '100%';
+                config.canvas.parentNode.style.height = '25%';
+            });
+
+
+            // Area temática
+            $.ajax({
+                url: '@routes.SupCatalogadorController.chartAreaTematica()',
+                method: 'POST',
+                dataType: "json"
+            }).success(function(dataX){
+                console.log("--Areas-->>>>")
+                console.dir(dataX)
+                console.log("<<<<----")
+                const config = new Chart($("#canvasAreas"),{
+                    type: 'polarArea',
+                    data: {
+                            labels: dataX.labels,
+                            datasets: dataX.datasets
+                            },
+
+                    options : {
+                      plugins: {
+                        colors: {
+                          forceOverride: false
+                        },
+                        legend: {
+                          display: true,
+                          position: 'left',
+                        }
+                      }
+                    }
+                });
+                config.options.maintainAspectRatio = false;
+                // Resize the chart programmatically
+                config.canvas.parentNode.style.width = '100%';
+                config.canvas.parentNode.style.height = '25%';
+            });
+      });
+
+
+
+
+
+    </script>
+
+
+
+
+}

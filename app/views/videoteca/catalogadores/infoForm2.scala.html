@@ -92,7 +92,7 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"><div class="campoLabel">1. Folio PD</div> @forma.get().folio</div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"><div class="campoLabel">1. Folio DP</div> @forma.get().folio</div>
                     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"><div class="campoLabel">2. ID</div> @forma.get().clave</div>
                     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6"><div class="campoLabel">3. Instancia solicitante</div>@if(forma.get().unidadresponsable!=null){@forma.get().unidadresponsable.nombreLargo}</div>
                 </div>
@@ -142,7 +142,17 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6"><div class="campoLabel">12. Palabras clave</div> @for(pc<-forma.get().palabrasClave){@pc.descripcion&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</div>
                     <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2"><div class="campoLabel">13. Producción</div>    @if(forma.get().produccion!=null){@forma.get().produccion.descripcion}</div>
-                    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2"><div class="campoLabel">14. Idioma</div> @if(forma.get().idioma!=null){@forma.get().idioma.descripcion}</div>
+                    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2">
+                        <div class="campoLabel">
+                        14. Idioma</div> @if(forma.get().idioma!=null){@forma.get().idioma.descripcion}
+                        @if(forma.get().traduccionaudio==true){
+                            <div class="" style="font-size: small">
+                            Tiene traducción (audio)</div>
+                        }
+                    </div>
+
+
+
                     <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2"><div class="campoLabel">15. Accesibilidad</div>@msgAccesible</div>
                 </div>
                 <div class="row">
@@ -248,6 +258,7 @@
     var texto="";
     $(function() {
         $("#fechaRegistro").html(moment("@forma.get().auditInsert", "ddd MMM DD HH:mm:ss z YYYY").format("DD/MM/YYYY HH:mm:ss"));
+        $("#elBody").fadeIn(500);
     });  // fin del $(function()
 
     function imprimir(){

@@ -316,14 +316,20 @@ POST    /supervisor/catalogadoresUpdate/:id controllers.SupCatalogadorController
 POST    /supervisor/catalogadoresDelete     controllers.SupCatalogadorController.delete()
 POST    /supervisor/toggleActivo            controllers.SupCatalogadorController.toggleActivo()
 GET     /supervisor/tablero                 controllers.SupCatalogadorController.tablero()
-GET     /supervisor/tablero2                 controllers.SupCatalogadorController.tablero2()
+GET     /supervisor/tablero2                controllers.SupCatalogadorController.tablero2()
+GET     /supervisor/tablero3                controllers.SupCatalogadorController.tablero3()
+
+POST     /chartCatPorFecha                  controllers.SupCatalogadorController.chartCatPorFecha()
+POST     /chartAreaTematica                 controllers.SupCatalogadorController.chartAreaTematica()
+
+
+
 POST    /supervisor/ajaxTablero             controllers.SupCatalogadorController.ajaxTablero()
 GET     /catalogoSup                        controllers.SupCatalogadorController.catalogo()
 GET     /vtkCatalogoDTSSSup                 controllers.SupCatalogadorController.catalogoDTSS()
 
 GET     /supervisor/info/:id                controllers.SupCatalogadorController.catalogoInfo(id:Long)
 GET     /supervisor/info2/:id               controllers.SupCatalogadorController.catalogoInfo2(id:Long)
-GET     /supervisor/info3/:id               controllers.SupCatalogadorController.catalogoInfo3(id:Long)
 POST    /supervisor/eliminaCatalogo         controllers.SupCatalogadorController.eliminaCatalogo()
 
 #POST    /vtkBuscaFolio                      controllers.VideotecaController.buscaFolio()
@@ -353,9 +359,18 @@ POST    /videotecaAdmin/asignarProductor    controllers.AdminVideotecaController
 # VIDEOTECA - productor
 POST    /videoteca/productor/catalogoInfo   controllers.ProductorVideotecaController.catalogoInfo()
 
-GET     /tranzapp                           controllers.VideotecaController.tranzapp()
-POST    /tranzappUpload                     controllers.VideotecaController.tranzappUpload()
-POST    /tranzappUploadDirecto              controllers.VideotecaController.tranzappUploadDirecto()
-POST    /tranzappUploadDirecto2             controllers.VideotecaController.tranzappUploadDirecto2()
-
+# VIDEOTECA - catalogador
 POST    /uploadForma                        controllers.VideotecaController.uploadForma()
+GET    /javaCurl                            controllers.VideotecaController.javaCurl()
+POST   /apiEliminarTranzapp                 controllers.VideotecaController.eliminaTranzapp()
+
+GET     /dragdrop                           controllers.VideotecaController.dragdrop()
+
+POST    /pruebaTA                           controllers.VideotecaController.pruebaTA()
+GET    /pruebaResumable                    controllers.VideotecaController.pruebaResumable()
+
+
+POST   /pruebaRecepcionResumable2           controllers.VideotecaController.pruebaRecepcionResumable2()
+GET    /pruebaRecepcionResumable2           controllers.VideotecaController.uploadStatus()
+
+POST   /auxLecturaComando                   controllers.VideotecaController.auxLecturaComando()

@@ -44,36 +44,35 @@
 <script>
 
     $(function(){
-         $("#wrapper").toggleClass("toggled");
-         
-            $("#tabla").DataTable({
-            	"stateSave": true,
-                "pageLength": 5,
-               "lengthMenu": [  [3, 5, 10, 25, 50, -1], [3, 5, 10, 25, 50, "Todos"]   ],
-               "language": {
-                    "url": "@routes.Assets.at("Spanish.json")" 
-               },
-	            "processing": false,
-	            "serverSide": true,
-	            "ajax": {
-	                "url":  "/accesoriosDTSS",
-	                "contentType": "application/json; charset=utf-8",
-	                "dataType": "json"
-	            },
-	            "columns": [
-	                { "data": "descripcion", 
-	                  "render": function(data, type, row, meta){
-	                      return '<u><a href="/accesorio/'+row.id+'">'+data+"</a></u>";
-	                  }
-	                },
-	                { "data": "serie" },
-	                { "data": "tipo" },
-	                {"data": "modelo"},
-	                {"data": "estado"},
-	                {"data": "observacion"}
-	              ] 	            
-            });          
-         
+        $("#wrapper").toggleClass("toggled");
+        $("#tabla").DataTable({
+            "stateSave": true,
+            "pageLength": 5,
+           "lengthMenu": [  [3, 5, 10, 25, 50, -1], [3, 5, 10, 25, 50, "Todos"]   ],
+           "language": {
+                "url": "@routes.Assets.at("Spanish.json")"
+           },
+            "processing": false,
+            "serverSide": true,
+            "ajax": {
+                "url":  "/accesoriosDTSS",
+                "contentType": "application/json; charset=utf-8",
+                "dataType": "json"
+            },
+            "columns": [
+                { "data": "descripcion",
+                  "render": function(data, type, row, meta){
+                      return '<u><a href="/accesorio/'+row.id+'">'+data+"</a></u>";
+                  }
+                },
+                { "data": "serie" },
+                { "data": "tipo" },
+                {"data": "modelo"},
+                {"data": "estado"},
+                {"data": "observacion"}
+              ]
+        });
+        $("#elBody").fadeIn(500);
     });
 
     $("#btnAgregar").click(function(){

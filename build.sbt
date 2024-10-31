@@ -1,5 +1,5 @@
 name := """tve2024"""
-version := "0.0.6-SNAPSHOT"
+version := "1.0.1-SNAPSHOT"
 scalaVersion := "2.11.4"
 //sbt.version=0.13.7
 libraryDependencies ++= Seq(
@@ -11,12 +11,14 @@ libraryDependencies ++= Seq(
   //"org.postgresql" % "postgresql" % "9.4-1200-jdbc41",
   //"org.postgresql" % "postgresql" % "42.6.0",
   "com.impossibl.pgjdbc-ng" % "pgjdbc-ng" % "0.8.9",
+  //"org.postgresql" % "postgresql" % "42.7.4",
   //"org.webjars" % "font-awesome" % "5.4.1",
   "org.webjars" % "animate.css" % "3.2.5",
   "org.json" % "org.json" % "chargebee-1.0",
   "org.webjars.bower" % "moment" % "2.29.4",
   "com.sun.mail" % "javax.mail" % "1.6.2",
-  "org.apache.commons" % "commons-lang3" % "3.13.0"
+  "org.apache.commons" % "commons-lang3" % "3.13.0",
+  "org.jsoup" % "jsoup" % "1.18.1"
 )
 libraryDependencies += filters
 
