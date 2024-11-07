@@ -321,15 +321,15 @@ function valoresEvidencias(){
 
 
 
-            //var trs = $("#tblDetalle").length>0?$("#tblDetalle tr"):$("#tblDetalleArchivos tr");
-            var trs = $("#tblDetalle tr");
 
+            //var trs = $("#tblDetalle tr");
+            var trs = $("#divTablaArchivos table tr")
             console.log("trs "+$(trs).length)
 
 
 
             $(trs).each(function(i,e){
-                if ( $(e).find("td:eq(3)").text()=="Si" ){
+                if ( $(e).find("td:eq(3)").text()=="subido" ||  $(e).find("td:eq(3)").text()=="Subido" || $(e).find("td:eq(3)").text()=="Si" ){
                     var lDescarga="";
                     var lBorrado="";
                     var nombre ="";
@@ -361,7 +361,8 @@ function valoresEvidenciasDB(){
     var j=[];
     if ( $("#panelTranzapp").is(":checked") ){
             //********** Cuando es create se usa tblDetalle, cuando es edit se usa ....tblDetalleArchivos
-            var trs = $("#tblDetalleArchivos tr");
+            //var trs = $("#tblDetalleArchivos tr");
+            var trs = $("#divTablaArchivos table tr")
             console.log("trs (db)"+$(trs).length)
             $(trs).each(function(i,e){
                 if ( $(e).find("td:eq(3)").text()=="Si" ){
@@ -510,18 +511,21 @@ function agregarTimeLine(){
 
 
 function agregarTablaEvidencias(){
+    /*
     $("#baseEvidencias").clone()
         .attr("id", "laTablaEvidencias-1")
         .appendTo("#soloTablaEvidencias")
         .css({"display":"block", "background-color": "white"
     });
+    */
     if ($("#tblDetalleArchivos tbody").find("tr").length === 0) {
             $("#tblDetalleArchivos tbody").append('<tr><td colspan="6" class="no-file">Sin archivos</td></tr>');
        }
 }
 
 function agregarRenglonTablaEvidencias(){
-    $("#laTablaEvidencias-1 tbody").append("<tr><td></td><td></td><td></td><td></td><td></td><td></td><td><button type='button' class='deleteBtn'><i class='material-icons-outlined'>delete</i></button></td></tr>");
+    //$("#laTablaEvidencias-1 tbody").append("<tr><td></td><td></td><td></td><td></td><td></td><td></td><td><button type='button' class='deleteBtn'><i class='material-icons-outlined'>delete</i></button></td></tr>");
+    $("#divTablaArchivos table tbody").append("<tr><td></td><td></td><td></td><td></td><td></td><td></td><td><div class='deleteBtn'><i class='fa-solid fa-trash'></i></div></td></tr>");
 }
 
 function eliminarTimeLine(e){

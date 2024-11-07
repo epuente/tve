@@ -251,6 +251,20 @@ public class VideotecaController extends ControladorSeguroVideoteca{
     }
 
 
+    public static Result catalogoCreate5(){
+        Form<VtkCatalogo> forma = play.data.Form.form(VtkCatalogo.class);
+        List<TipoCredito> tipos = TipoCredito.find.all();
+        List<TipoCredito> tiposOrdenados = tipos.stream()
+                .sorted(Comparator.comparing(TipoCredito::getId))
+                .collect(Collectors.toList());
+        List<VtkCampo> campos = VtkCampo.find.all();
+        //response().setHeader(CONTENT_LENGTH, "10737418240");
+        return ok(
+                views.html.videoteca.createForm5.render(forma, tiposOrdenados, campos)
+        );
+    }
+
+
     // Aqui se usan 2 metodos, el primero es el clásico de busqueda aproximada (comparar una cadena con ilike y unaccent)
     // El segundo usa textsearch con ts_vector y ts_query
     // Se regresa un dataset con la combinacion de los dos resultados, poniendo primero los resultados de la comparación clásica
@@ -957,15 +971,27 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             BufferedReader buf = new BufferedReader(new InputStreamReader(pr.getInputStream()));
 
             System.out.println("Retorno: -----");
+            //System.out.println("Retorno:? "+buf.readLine());
             while ((line=buf.readLine())!=null) {
                 System.out.println(line);
+                if (line.equals("Error 25") || line.equals("Error while uploading."))
+                    throw new RuntimeException("Ocurrió un error durante la carga del archivo en tranzapp");
+
                 aux+=line+ "\r";
             }
-            //System.out.println("---------------");
+            System.out.println("---------------");
         } catch(java.io.IOException e) {
-            System.out.print(e.getMessage());
+            System.out.println("Hubo una excepción de IO en lecturaComandoNombre");
+            System.out.println(e.getMessage());
+            aux="error IO";
         } catch (java.lang.InterruptedException e) {
-            System.out.print(e.getMessage());
+            System.out.println("Hubo una excepción de interrupción en lecturaComandoNombre");
+            System.out.println(e.getMessage());
+            aux="error de interrupción";
+        } catch(Exception e) {
+            System.out.println("Hubo una excepción en lecturaComandoNombre");
+            System.out.println(e.getMessage());
+            aux="error";
         }
         //System.out.println(aux);
         return aux;
@@ -1140,9 +1166,6 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         return ok ();
     }
 
-    public static Result dragdrop(){
-        return ok (views.html.videoteca.dragdrop.render());
-    }
 
     public static Result pruebaTA(){
         System.out.println("\n\n\n\nDesde VTKController.pruebaTA");
@@ -1153,8 +1176,14 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         return ok( "ok" );
     }
 
+    public static Result dragdrop(){
+        return ok (views.html.videoteca.dragdrop.render());
+    }
+
+
+
     public static Result pruebaResumable(){
-        return ok (views.html.videoteca.resumable.render());
+        return ok (views.html.videoteca.resumable2.render());
     }
 
 
@@ -1162,7 +1191,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
 
 
     public static Result pruebaRecepcionResumable2() {
-        System.out.println("pruebaRecepcionResumable2!");
+        System.out.println("Desde VideotecaController.pruebaRecepcionResumable2!");
         String urlTranzapp="https://tranzapp.dev.ipn.mx/";
         String apipage = "script.php";
         String downloadpage="f.php";
@@ -1207,27 +1236,31 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 System.out.println(  info.uploadedChunks.size() );
 
                 // Ya se subió al server, ahora enviarlo a tranzapp
-                String datos = lecturaComandoNombre("send", info.resumableFilename,  info.resumableFilename);
-                JSONObject retorno = new JSONObject();
-                retorno.put("estado", "error");
-                if (!datos.contains("Error")) {
-                    String[] arrString = datos.split("\r");
-                    System.out.println("--->arrString:" + Arrays.toString(arrString));
-                    retorno.put("nombreArchivo", info.resumableFilename);
-                    retorno.put("estado", "subido");
-                    retorno.put("archivo", "archivo");
-                    retorno.put("idArchivo", arrString[0]);
-                    retorno.put("cveBorrado", arrString[1]);
-                    retorno.put("descargar", urlTranzapp + downloadpage + "?h=" + arrString[0]);
-                    retorno.put("borrar", urlTranzapp + downloadpage + "?h=" + arrString[0] + "&d=" + arrString[1]);
+                if (1==2) {
+                    System.out.println("Enviando a lecturaComandoNombre");
+                    String datos = lecturaComandoNombre("send", info.resumableFilename, info.resumableFilename);
+                    System.out.println("resultado de lecturaComandoNombre... " + datos.toString());
+                    JSONObject retorno = new JSONObject();
+                    retorno.put("estado", "error");
+                    if (!datos.contains("Error")) {
+                        String[] arrString = datos.split("\r");
+                        System.out.println("--->arrString:" + Arrays.toString(arrString));
+                        retorno.put("nombreArchivo", info.resumableFilename);
+                        retorno.put("estado", "subido");
+                        retorno.put("archivo", "archivo");
+                        retorno.put("idArchivo", arrString[0]);
+                        retorno.put("cveBorrado", arrString[1]);
+                        retorno.put("descargar", urlTranzapp + downloadpage + "?h=" + arrString[0]);
+                        retorno.put("borrar", urlTranzapp + downloadpage + "?h=" + arrString[0] + "&d=" + arrString[1]);
 
-                    System.out.println(retorno);
-                    Path filePath = Paths.get(info.resumableFilename);
-                    try {
-                        Files.delete(filePath);
-                        Logger.info("archivo temporal eliminado: "+filePath);
-                    } catch (IOException e) {
-                        System.err.println("Error deleting file: " + e.getMessage());
+                        System.out.println(retorno);
+                        Path filePath = Paths.get(info.resumableFilename);
+                        try {
+                            Files.delete(filePath);
+                            Logger.info("archivo temporal eliminado: " + filePath);
+                        } catch (IOException e) {
+                            System.err.println("Error deleting file: " + e.getMessage());
+                        }
                     }
                 }
 
@@ -1247,7 +1280,6 @@ public class VideotecaController extends ControladorSeguroVideoteca{
     public static Result uploadStatus() {
         System.out.println("UPLOAD STATUS!");
         try {
-
             int resumableChunkNumber        = getResumableChunkNumber(request());
 
             ResumableInfo info = getResumableInfo(request());
@@ -1293,9 +1325,53 @@ public class VideotecaController extends ControladorSeguroVideoteca{
     }
 
 
+    public static Result otro(Integer resumableChunkNumber, Long resumableChunkSize, Long resumableCurrentChunkSize, Long resumableTotalSize, String resumableType, Long resumableIdentifier, String resumableFilename, String resumableRelativePath, Integer resumableTotalChunks){
+
+
+        return ok ("");
+    }
+
+
+    public static Result UnoPorUno() throws JSONException {
+        String urlTranzapp="https://tranzapp.dev.ipn.mx/";
+        String apipage = "script.php";
+        String downloadpage="f.php";
+        JSONObject retorno = new JSONObject();
+        JsonNode json = request().body().asJson();
+        System.out.println("Desde VideotecaController.UnoPorUno");
+        System.out.println(json);
+        String nombreArchivo = json.findValue("nombreArchivo").asText().replaceAll(" ", "_");
+        String idArch = json.findValue("idArch").asText();
 
 
 
+        String datos = lecturaComandoNombre("send", nombreArchivo, nombreArchivo);
+        System.out.println("resultado de lecturaComandoNombre... " + datos.toString());
+        retorno.put("idArch", idArch);
+        retorno.put("estado", "error");
+        if (!datos.toString().equals("error")) {
+            String[] arrString = datos.split("\r");
+            System.out.println("--->arrString:" + Arrays.toString(arrString));
+            retorno.put("nombreArchivo", nombreArchivo);
+            retorno.put("estado", "subido");
+            retorno.put("archivo", "archivo");
+            retorno.put("idArchivo", arrString[0]);
+            retorno.put("cveBorrado", arrString[1]);
+            retorno.put("descargar", urlTranzapp + downloadpage + "?h=" + arrString[0]);
+            //retorno.put("ver", urlTranzapp + downloadpage + "?h=" + arrString[0]+"&p=1");
+            retorno.put("borrar", urlTranzapp + downloadpage + "?h=" + arrString[0] + "&d=" + arrString[1]);
+
+            System.out.println(retorno);
+            Path filePath = Paths.get(nombreArchivo);
+            try {
+                Files.delete(filePath);
+                Logger.info("archivo temporal eliminado: " + filePath);
+            } catch (IOException e) {
+                System.err.println("Error deleting file: " + e.getMessage());
+            }
+        }
+        return ok (retorno.toString());
+    }
 
 }
 

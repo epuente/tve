@@ -1,0 +1,16 @@
+Al implementar @MappedSuperclass a los modelos, en algunos casos marca error de datos, 
+esto se debe a que el valor 0000-00-00 00:00:00 no puede ser traducido como datetime o timestamp, requiere un valor válido.
+
+Tablas a actualizar los campos insert y update:   se les asigna (2018-01-01 00:00:00)
+
+UnidadResponsable
+Personal
+Equipo
+Accesorio
+Cuenta
+CuentaRol
+Estado
+Servicio
+TipoPersonal
+
+

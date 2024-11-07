@@ -1,0 +1,71 @@
+
+    <div id="frame">
+        <div class="resumable-error">
+            Este navegador no soporta Resumable.js. The library requires support for <a href="http://www.w3.org/TR/FileAPI/">the HTML5 File API</a> along with <a href="http://www.w3.org/TR/FileAPI/#normalization-of-params">file slicing</a>.
+        </div>
+
+        <div class="resumable-drop resumable-browse" style="cursor:pointer; " >
+            <div style="color:#808080; margin: 1rem;" class="center-block">
+                <i class="fa-solid fa-cloud-arrow-up fa-4x"></i>
+            </div>
+
+
+
+            <div>Arrastre y suelte los archivos aqui</div>
+            <div>o</div>
+            <div>Click aquí para explorar archivos</div>
+
+        </div>
+
+
+        <div class="resumable-progress">
+            <table>
+                <tr>
+                    <td width="100%">Progreso total<div class="progress-container"><div class="progress-bar"></div></div></td>
+                    <td class="progress-text" nowrap="nowrap"></td>
+                    <td class="progress-pause" nowrap="nowrap">
+                        <a href="#" onclick="r.upload(); return(false);" class="progress-resume-link">						<img  src="@routes.Assets.at("resumable.js/resume.png")" title="reanudar">
+                        </a>
+                        <a href="#" onclick="r.pause(); return(false);" class="progress-pause-link"><img src="@routes.Assets.at("resumable.js/pause.png")" title="Pause upload" /></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+
+
+        <div id="divTablaArchivos">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Archivo</th>
+                    <th scope="col">Tamaño</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Liga descarga</th>
+                    <th scope="col">Liga borrado</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr id="tablaVacia">
+                        <td colspan="6" style="text-align:center;"><i>No se han agregado archivos.</i></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <form id="frmAux"></form>
+    </div>
+
+
+<script>
+
+
+
+</script>
+
+
+
+

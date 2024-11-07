@@ -289,6 +289,7 @@ GET     /catalogo                           controllers.VideotecaController.cata
 GET     /vtkCatalogoDTSS                    controllers.VideotecaController.catalogoDTSS()
 #GET     /vtkCatalogo/create                 controllers.VideotecaController.catalogoCreate()
 GET     /vtkCatalogo/create2                controllers.VideotecaController.catalogoCreate2()
+GET     /vtkCatalogo/create5                controllers.VideotecaController.catalogoCreate5()
 POST    /vtkCatalogo/delete                 controllers.VideotecaController.catalogoDelete()
 
 POST    /textsearch                         controllers.VideotecaController.textsearch()
@@ -372,5 +373,8 @@ GET    /pruebaResumable                    controllers.VideotecaController.prueb
 
 POST   /pruebaRecepcionResumable2           controllers.VideotecaController.pruebaRecepcionResumable2()
 GET    /pruebaRecepcionResumable2           controllers.VideotecaController.uploadStatus()
+#GET    /otro/:resumableChunkNumber/:resumableChunkSize/:resumableCurrentChunkSize/:resumableTotalSize/:resumableType/:resumableIdentifier/:resumableFilename/:resumableRelativePath/:resumableTotalChunks           controllers.VideotecaController.otro(resumableChunkNumber:Integer, resumableChunkSize:Long, resumableCurrentChunkSize:Long, resumableTotalSize:Long, resumableType:String, resumableIdentifier:Long, resumableFilename:String, resumableRelativePath:String, resumableTotalChunks:Integer)
 
 POST   /auxLecturaComando                   controllers.VideotecaController.auxLecturaComando()
+
+POST    /UnoPorUno                          controllers.VideotecaController.UnoPorUno()

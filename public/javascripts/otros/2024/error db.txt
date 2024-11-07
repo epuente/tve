@@ -1,0 +1,13 @@
+ERROR - Failed to acquire connection to jdbc:pgsql://localhost/tveservicios2023_testnoviembre?protocol.message.size.max=500000000 Sleeping for 1000ms and trying again. Attempts left: 5. Exception: null.Message:Connection Error: remaining connection slots are reserved for non-replication superuser connections
+
+
+Para corregir lo anterior, editar el archivo postgresql.conf que esta en la ruta /etc/postgresql/14/main
+
+Buscar la linea que dice:
+max_connections = 100
+y modificar el valor
+Guardar modificaciones y reiniciar el servicio de postgresql.
+
+
+
+

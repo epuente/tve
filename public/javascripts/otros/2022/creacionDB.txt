@@ -1,0 +1,71 @@
+sudo mysql -u root -p
+CREATE DATABASE `tveservicios2022_dev` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+grant all on tveservicios2022_dev.* to 'tve'@'%';
+
+
+
+ALTER TABLE tveservicios2022_dev.play_evolutions MODIFY COLUMN apply_script longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL;
+ALTER TABLE tveservicios2022_dev.play_evolutions MODIFY COLUMN revert_script longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL;
+
+
+
+delete from cuenta_rol WHERE cuenta_id  in (
+select c.id
+from  cuenta c  
+	inner join personal p on c.personal_id  = p.id 	and p.activo='N'
+);
+
+
+
+delete from cuenta c WHERE c.personal_id  in (
+select p.id from  personal p where p.activo  = 'N'
+);
+
+
+delete from personal_horario ph WHERE ph.personal_id in (select id from personal WHERE activo ='N');
+
+
+delete from personal WHERE activo ='N';
+
+
+
+
+
+RESTAURAR
+mysql -u root -p tveservicios2022_dev < ~/playFramework/tve2022/otros/2022/dump-tveservicios2022_devCargaInicialModificado.sql
+
+EN CASO DE QUE SE PIERDAN LOS AUTOINCREMENTS DE LAS TABLAS.....
+HABILIAR LOS IDS DE CADA TABLA COMO AUTOINCREMENT
+correr el script autoincrents.sql
+
+
+AGREGAR CONSTRAINT UNIQUE A LA TABLA DE agenda_servicio_ingesta
+ALTER TABLE agenda_servicio_ingesta ADD CONSTRAINT unique_agenda_servicio UNIQUE KEY(agendaservicio_id);
+
+
+
+
+
+
+
+
+
+Postgresql
+-----------------------
+epuente@epuente-HP-ProDesk-400-G3-MT:~$ sudo -i -u postgres
+[sudo] contraseña para epuente: 
+postgres@epuente-HP-ProDesk-400-G3-MT:~$ psql
+psql (14.5 (Ubuntu 14.5-0ubuntu0.22.04.1), server 10.20 (Ubuntu 10.20-1.pgdg18.04+1))
+Type "help" for help.
+
+postgres=# create user tve with password 'tve';
+CREATE ROLE
+postgres=# create database tveservicios2022_dev owner tve;
+CREATE DATABASE
+postgres=# grant all privileges on database tveservicios2022_dev to tve;
+GRANT
+postgres=# alter database tveservicios2022_dev owner to tve;
+ALTER DATABASE
+postgres=# 
+
+

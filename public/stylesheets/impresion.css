@@ -4,24 +4,26 @@
     h1 {font-size: 14px; }
 
     .col-lg-1 { width:8%;  }
-    .col-lg-2 { width:17%;  }
-    .col-lg-3 { width:25%;  }
-    .col-lg-4 { width:33%;  }
-    .col-lg-5 { width:42%;  }
-    .col-lg-6 { width:50%;  }
-    .col-lg-7 { width:59%;  }
-    .col-lg-8 { width:67%;  }
-    .col-lg-9 { width:75%;  }
-    .col-lg-10 { width:83%;  }
-    .col-lg-11 { width:92%;  }
+    .col-lg-2 { width:16%;  }
+    .col-lg-3 { width:24%;  }
+    .col-lg-4 { width:32%;  }
+    .col-lg-5 { width:40%;  }
+    .col-lg-6 { width:48%;  }
+    .col-lg-7 { width:56%;  }
+    .col-lg-8 { width:64%;  }
+    .col-lg-9 { width:72%;  }
+    .col-lg-10 { width:80%;  }
+    .col-lg-11 { width:88%;  }
     .col-lg-12 { width:100%;  }
     @page {
-        size: landscape;
-        margin: 25mm 25mm 25mm 25mm;
+        size: letter landscape;
+        margin: 10mm 10mm 10mm 10mm;
+
     }
     .footer, footer {
        display: none !important;
     }
+
 
     #lineaFooter {
         font-size: 10px;
@@ -31,4 +33,7 @@
         display: none !important;
     }
 
-}
+
+
+
+

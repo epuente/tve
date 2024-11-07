@@ -574,9 +574,6 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
         int iColores=0;
         for ( Personal catalogador: catalogadores) {
             JSONObject joAux = new JSONObject();
-
-
-
             String query = "select to_char(vc.audit_update, 'YYYY MM') fecha, " +
                     "concat(p.paterno, ' ',p.materno, ' ', p.nombre ) nombre , count(catalogador_id) total " +
                     "from vtk_catalogo vc " +
@@ -598,15 +595,10 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
                 for (SqlRow r : sqlRows) {
                     tsLabels.add(r.getString("fecha"));
                     JSONObject joData = new JSONObject();
-                    System.out.println("   " + r.getString("nombre") + "  " + r.getString("fecha") + "    " + r.getInteger("total"));
+                    //System.out.println("   " + r.getString("nombre") + "  " + r.getString("fecha") + "    " + r.getInteger("total"));
 
                     joData.put("x", r.getString("fecha"));
                     joData.put("y", r.getInteger("total"));
-
-                    //joData.put("backgroundColor", jaColores.get(iColores) );
-                    //joData.put("borderColor", jaColores.get(iColores) );
-
-                    //iColores++;
 
                     jaData.put(joData);
                 }
@@ -622,6 +614,32 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
             }
         }
 
+        // Se agregan totales por año mes
+        String queryTotalAnioMes = "select to_char(vc.audit_update, 'YYYY MM') fecha, count(*) total " +
+                "from vtk_catalogo vc " +
+                "group by to_char(vc.audit_update, 'YYYY MM') " +
+                "order by to_char(vc.audit_update, 'YYYY MM')";
+        List<SqlRow> sqlRowsTotal = Ebean.createSqlQuery(queryTotalAnioMes).findList();
+
+        if (!sqlRowsTotal.isEmpty()) {
+            JSONArray jaDataTotal = new JSONArray();
+            JSONObject joDatasetTotal = new JSONObject();
+            joDatasetTotal.put("label", "Total año mes");
+            joDatasetTotal.put("type", "line");
+            for (SqlRow r : sqlRowsTotal  ){
+                JSONObject joAux0 = new JSONObject();
+                joAux0.put("x", r.getString("fecha"));
+                joAux0.put("y",  r.getInteger("total"));
+                jaDataTotal.put(joAux0);
+            }
+            joDatasetTotal.put("data",  jaDataTotal);
+            joDatasetTotal.put("backgroundColor", jaColores.get(iColores++));
+
+
+
+            jaDataSets.put(joDatasetTotal);
+        }
+        // termina totales por año mes
 
         retorno.put("datasets", jaDataSets);
         retorno.put("labels", tsLabels);
@@ -748,7 +766,7 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
            // colores.add(jaColores.get(iColores++));
         }
         JSONObject jo = new JSONObject();
-        jo.put("label", "ds1");
+        jo.put("label", "Total área");
         jo.put("data", numeros);
         jo.put("pointStyle", "circle");
         jo.put("pointRadius", 10);

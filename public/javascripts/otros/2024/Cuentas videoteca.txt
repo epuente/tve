@@ -1,0 +1,15 @@
+20240516
+
+Se listan las cuentas para Videoteca del Sistema de Servicios de TVE
+
+
+
+
+select p.paterno , p.materno, p.nombre ,  cta.username , cta."password" , r.descripcion nombreRol
+from personal p 
+inner join cuenta cta on p.id = cta.personal_id 
+inner join cuenta_rol cr on cta.id = cr.cuenta_id
+inner join tipo_contrato tc on p.tipocontrato_id = tc.id 
+inner join  rol r on cr.rol_id = r.id 
+where cr.rol_id = 132 or cr.rol_id =133
+order by cr.rol_id, p.paterno , p.materno , p.nombre  

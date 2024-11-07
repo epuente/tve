@@ -4,7 +4,7 @@ Sistema de Televisión Educativa de la Dirección de Educación Virtual (En desa
 
 El objetivo del sistema es el registro y seguimiento de los servicios del Departamento de Televisión Educativa.
 
-Se adicionó el módulo de videoteca en el año 2023.
+Se adicionó el módulo de videoteca en el año 2023. Se puso en producción en mayo del 2024.
 
 ## Arquitectura
 - Lenguaje de programación: java 8.

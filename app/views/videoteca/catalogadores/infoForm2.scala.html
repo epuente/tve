@@ -71,10 +71,15 @@
 
 @main {
     <style>
+
+
         .campoLabel {
             font-size: small;
             color: #acaeb1;
         }
+
+
+        html, body { height:50%; }
     </style>
 
 
@@ -153,7 +158,7 @@
 
 
 
-                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2"><div class="campoLabel">15. Accesibilidad</div>@msgAccesible</div>
+                    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2"><div class="campoLabel">15. Accesibilidad</div>@msgAccesible</div>
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -262,10 +267,7 @@
     });  // fin del $(function()
 
     function imprimir(){
-        window.print({
-            header: null,
-            footer: null
-        });
+        window.print();
     }
 
 

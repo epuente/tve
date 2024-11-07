@@ -1,0 +1,99 @@
+ESTO ES PARA POSTGRESQL
+
+
+#SELECT   concat('alter table ',table_name, ' disable trigger all;') FROM information_schema.tables 
+WHERE table_catalog = 'tveservicios2022_dev' and table_type='BASE TABLE' and table_schema ='public' and table_name <> 'play_evolutions' 
+ORDER by TABLE_NAME DESC ;
+
+
+
+Ejecutar lo siguiente desde consola como superuser (linux)
+
+
+alter table vehiculo disable trigger all;
+alter table unidad_responsable disable trigger all;
+alter table tipo_personal_fase disable trigger all;
+alter table tipo_personal disable trigger all;
+alter table tipo_mantenimiento disable trigger all;
+alter table tipo_equipo_accesorio disable trigger all;
+alter table tipo_contrato disable trigger all;
+alter table servicio disable trigger all;
+alter table sala_mantenimiento disable trigger all;
+alter table sala disable trigger all;
+alter table rol_derecho disable trigger all;
+alter table rol disable trigger all;
+alter table pre_agenda_vehiculo disable trigger all;
+alter table pre_agenda_tipo_personal disable trigger all;
+alter table pre_agenda_salida disable trigger all;
+alter table pre_agenda_sala_uso_cabina disable trigger all;
+alter table pre_agenda_sala disable trigger all;
+alter table pre_agenda_locutor disable trigger all;
+alter table pre_agenda_locacion disable trigger all;
+alter table pre_agenda_junta disable trigger all;
+alter table pre_agenda_ingesta_fmto_salida disable trigger all;
+alter table pre_agenda_ingesta_almacenamiento disable trigger all;
+alter table pre_agenda_ingesta disable trigger all;
+alter table pre_agenda_formato_entrega disable trigger all;
+alter table pre_agenda_equipo disable trigger all;
+alter table pre_agenda_cancelacion disable trigger all;
+alter table pre_agenda_accesorio disable trigger all;
+alter table pre_agenda disable trigger all;
+alter table personal_horario disable trigger all;
+alter table personal_correo disable trigger all;
+alter table personal_cambio_horario disable trigger all;
+alter table personal_avatar disable trigger all;
+alter table personal disable trigger all;
+alter table operador_sala disable trigger all;
+alter table oficio_servicio_solicitado disable trigger all;
+alter table oficio_respuesta disable trigger all;
+alter table oficio_productor_solicitado disable trigger all;
+alter table oficio_fecha_grabacion disable trigger all;
+alter table oficio_contacto_telefono disable trigger all;
+alter table oficio_contacto_correo disable trigger all;
+alter table oficio_contacto disable trigger all;
+alter table oficio disable trigger all;
+alter table motivo_cancelacion disable trigger all;
+alter table medio_almacenamiento disable trigger all;
+alter table idioma disable trigger all;
+alter table his_folio disable trigger all;
+alter table formato_ingesta disable trigger all;
+alter table formato disable trigger all;
+alter table folio_productor_asignado disable trigger all;
+alter table folio disable trigger all;
+alter table fase disable trigger all;
+alter table estado_material disable trigger all;
+alter table estado_equipo_accesorio_vehiculo disable trigger all;
+alter table estado disable trigger all;
+alter table equipo disable trigger all;
+alter table cuenta_rol disable trigger all;
+alter table cuenta disable trigger all;
+alter table ctacorreo disable trigger all;
+alter table computer disable trigger all;
+alter table cola_correos disable trigger all;
+alter table ambito disable trigger all;
+alter table agenda_servicio_vehiculo disable trigger all;
+alter table agenda_servicio_salida disable trigger all;
+alter table agenda_servicio_sala_uso_cabina disable trigger all;
+alter table agenda_servicio_sala disable trigger all;
+alter table agenda_servicio_personal disable trigger all;
+alter table agenda_servicio_locacion disable trigger all;
+alter table agenda_servicio_junta disable trigger all;
+alter table agenda_servicio_ing_problema disable trigger all;
+alter table agenda_servicio_ing_observacion disable trigger all;
+alter table agenda_servicio_ing_idioma_otro disable trigger all;
+alter table agenda_servicio_ing_idioma disable trigger all;
+alter table agenda_servicio_ing_formato_salida disable trigger all;
+alter table agenda_servicio_ing_formato_otro disable trigger all;
+alter table agenda_servicio_ing_formato disable trigger all;
+alter table agenda_servicio_ingesta disable trigger all;
+alter table agenda_servicio_ing_det_video disable trigger all;
+alter table agenda_servicio_ing_det_audio disable trigger all;
+alter table agenda_servicio_ing_almacenamiento disable trigger all;
+alter table agenda_servicio_formato_entrega disable trigger all;
+alter table agenda_servicio_equipo disable trigger all;
+alter table agenda_servicio_cancelacion disable trigger all;
+alter table agenda_servicio_accesorio disable trigger all;
+alter table agenda_servicio disable trigger all;
+alter table accesorio disable trigger all;
+
+

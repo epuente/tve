@@ -1140,6 +1140,7 @@ create table vtk_catalogo (
   obra                      varchar(5),
   formato_id                bigint not null,
   idioma_id                 bigint,
+  traduccionaudio           boolean,
   accesibilidad_audio       boolean,
   accesibilidad_video       boolean,
   tipograbacion_id          bigint,
