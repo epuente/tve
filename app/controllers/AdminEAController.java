@@ -15,7 +15,6 @@ import org.json.JSONObject;
 import play.libs.Json;
 import play.mvc.Result;
 
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -488,7 +487,7 @@ System.out.println(json);
 		JSONObject json2 = new JSONObject();		
 		int filtrados = 0;
 		int sinFiltro = 0;
-		Map<Integer, Integer> columnasOrdenables = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> columnasOrdenables = new HashMap<>();
 		columnasOrdenables.put(0, 1);
 		columnasOrdenables.put(1, 19);
 		columnasOrdenables.put(2, 9);
@@ -894,7 +893,7 @@ System.out.println(json);
 			// Oficios sin asignar
 			if (estado.compareTo("0")==0) {
 				for( Oficio p : pagOficio.getList()  ){
-					Set<String> losEstados = new HashSet<String>();
+					Set<String> losEstados = new HashSet<>();
 					JSONObject datoP = new JSONObject();
 					datoP.put("id", p.id);
 					datoP.put("folio", "No se le ha asignado folio");
@@ -919,7 +918,7 @@ System.out.println(json);
 				}	
 			} else {
 				for( Folio p : serv.getList()  ){
-					Set<String> losEstados = new HashSet<String>();
+					Set<String> losEstados = new HashSet<>();
 					JSONObject datoP = new JSONObject();
 					datoP.put("id", p.id);
 					datoP.put("folio", p.numfolio);
@@ -1009,8 +1008,7 @@ System.out.println(json);
 			// Quita el nodo personalIds
 			ObjectNode objectNode = (ObjectNode) json;
 			objectNode.remove("personalIds");
-			JsonNode updatedJsonNode = Json.parse(objectNode.toString());
-			json = updatedJsonNode;
+            json = Json.parse(objectNode.toString());
 
 			ObjectMapper mapper = new ObjectMapper();
 			obj = mapper.readValue(json.traverse(), Agenda.class);

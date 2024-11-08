@@ -13,6 +13,6 @@ public class VtkCampo extends models.utils.PlantillaModelo{
     @Column(length = 2000)
     public String indicaciones;
 
-    public static Model.Finder<Long,VtkCampo> find = new Model.Finder<Long,VtkCampo>(Long.class, VtkCampo.class);
+    public static Model.Finder<Long,VtkCampo> find = new Model.Finder<>(Long.class, VtkCampo.class);
 
 }

@@ -17,6 +17,6 @@ public class FolioCancelacion extends models.utils.PlantillaModelo{
     @ManyToOne
     public Estado estadoanterior;
 
-    public static Model.Finder<Long, FolioCancelacion> find = new Model.Finder<Long, FolioCancelacion>(Long.class, FolioCancelacion.class);
+    public static Model.Finder<Long, FolioCancelacion> find = new Model.Finder<>(Long.class, FolioCancelacion.class);
 
 }

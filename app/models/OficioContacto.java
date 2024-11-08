@@ -30,5 +30,5 @@ public class OficioContacto  extends models.utils.PlantillaModelo{
 	public List<OficioContactoCorreo> correos;	
 	
 	
-	public static Model.Finder<Long,OficioContacto> find = new Model.Finder<Long,OficioContacto>(Long.class, OficioContacto.class);	
+	public static Model.Finder<Long,OficioContacto> find = new Model.Finder<>(Long.class, OficioContacto.class);
 }

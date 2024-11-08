@@ -19,7 +19,7 @@ public class PreAgendaRol  extends models.utils.PlantillaModelo{
 	
 
 	
-    public static Model.Finder<Long,PreAgenda> find = new Model.Finder<Long,PreAgenda>(Long.class, PreAgenda.class);
+    public static Model.Finder<Long,PreAgenda> find = new Model.Finder<>(Long.class, PreAgenda.class);
 
 
 }

@@ -14,5 +14,5 @@ public class OficioServicioSolicitado  extends models.utils.PlantillaModelo{
 	@NotNull
 	public Servicio servicio;
 
-	public static Model.Finder<Long,OficioServicioSolicitado> find = new Model.Finder<Long,OficioServicioSolicitado>(Long.class, OficioServicioSolicitado.class);	
+	public static Model.Finder<Long,OficioServicioSolicitado> find = new Model.Finder<>(Long.class, OficioServicioSolicitado.class);
 }

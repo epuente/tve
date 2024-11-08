@@ -3,15 +3,12 @@ package controllers;
 import classes.ListaPersonal;
 import classes.ListaPersonal.lista;
 import com.avaje.ebean.Ebean;
-import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.text.json.JsonContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.*;
-import models.videoteca.Serie;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import play.Logger;
 import play.data.Form;
 import play.mvc.Result;
 

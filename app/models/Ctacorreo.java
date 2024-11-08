@@ -1,23 +1,12 @@
 package models;
 
-import classes.ColorConsola;
-import classes.Notificaciones.AuxNotificacion;
-import classes.Notificaciones.Notificacion;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Page;
 import play.db.ebean.Model;
 
 import javax.persistence.Entity;
-import javax.persistence.PostPersist;
-import javax.persistence.PostRemove;
-import javax.persistence.PostUpdate;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import static play.mvc.Controller.session;
 
 
 @Entity
@@ -31,7 +20,7 @@ public class Ctacorreo  extends models.utils.PlantillaModelo  {
 	public String cuenta;
 	public String contrasenia;
 	public boolean activa;
-	public static Model.Finder<Long,Ctacorreo> find = new Finder<Long,Ctacorreo>(Long.class, Ctacorreo.class);
+	public static Model.Finder<Long,Ctacorreo> find = new Finder<>(Long.class, Ctacorreo.class);
 
 
 

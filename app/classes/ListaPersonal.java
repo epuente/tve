@@ -66,7 +66,7 @@ public class ListaPersonal {
 	//public static Model.Finder<Long,ListaPersonal> find = new Model.Finder<Long,ListaPersonal>(Long.class, ListaPersonal.class);
 	
 	public ListaPersonal() {
-		laLista = new ArrayList<ListaPersonal.lista>();
+		laLista = new ArrayList<>();
 		for ( Personal p: Personal.find.all()  ) {
 			lista l = new lista();
 			l.id = p.id;
@@ -106,7 +106,7 @@ public class ListaPersonal {
 	
 	
 	public static  List<lista>  Pagina(ListaPersonal lp, int page, int pageSize, String filtro, String columnaOrden, String tipoOrden) {
-		List<lista> sortedList = new ArrayList<ListaPersonal.lista>(); 
+		List<lista> sortedList = new ArrayList<>();
 		//Filtrado
 		List<lista> ret = lp.laLista.stream().filter(
 						f->

@@ -1,17 +1,10 @@
 package classes.Notificaciones;
 
 import classes.ColorConsola;
-import com.avaje.ebean.Ebean;
-import com.avaje.ebean.Expr;
-import com.avaje.ebean.ExpressionList;
 import models.*;
-import play.Logger;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-
-import static play.mvc.Controller.session;
 
 public class Notificacion {
     private static Notificacion INSTANCE = new Notificacion();

@@ -12,6 +12,6 @@ public class CuentaRol  extends models.utils.PlantillaModelo{
 	@ManyToOne
 	public Rol rol;
 	
-    public static Model.Finder<Long,CuentaRol> find = new Model.Finder<Long,CuentaRol>(Long.class, CuentaRol.class);
+    public static Model.Finder<Long,CuentaRol> find = new Model.Finder<>(Long.class, CuentaRol.class);
 
 }

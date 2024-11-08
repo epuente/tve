@@ -22,7 +22,7 @@ public class VideoPersonaje extends models.utils.PlantillaModelo{
     @ManyToOne (optional = false)
     public Personal catalogador;
 
-    public static Model.Finder<Long,VideoPersonaje> find = new Model.Finder<Long,VideoPersonaje>(Long.class, VideoPersonaje.class);
+    public static Model.Finder<Long,VideoPersonaje> find = new Model.Finder<>(Long.class, VideoPersonaje.class);
 
 
 }

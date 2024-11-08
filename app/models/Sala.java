@@ -3,7 +3,6 @@ package models;
 import com.avaje.ebean.Page;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import play.db.ebean.Model;
 @Entity
@@ -16,7 +15,7 @@ public class Sala extends models.utils.PlantillaCatalogo  {
     
 
 
-    public static Model.Finder<Long,Sala> find = new Model.Finder<Long,Sala>(Long.class, Sala.class);    
+    public static Model.Finder<Long,Sala> find = new Model.Finder<>(Long.class, Sala.class);
 
     public static Page<Sala> page(int page, int pageSize, String filtro, String columnaOrden, String tipoOrden) {
     	Page<Sala> p = find

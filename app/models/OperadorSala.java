@@ -25,6 +25,6 @@ public class OperadorSala  extends models.utils.PlantillaModelo{
 	public java.util.Date version;
 
 
-	public static Model.Finder<Long,OperadorSala> find = new Model.Finder<Long,OperadorSala>(Long.class, OperadorSala.class);
+	public static Model.Finder<Long,OperadorSala> find = new Model.Finder<>(Long.class, OperadorSala.class);
 
 }

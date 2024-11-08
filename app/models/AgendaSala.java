@@ -26,7 +26,7 @@ public class AgendaSala  extends models.utils.PlantillaModelo{
 	@OneToMany(mappedBy="agendasala", cascade = CascadeType.ALL)
 	public List<AgendaSalaUsoCabina> usoscabina;
 	
-	public static  Model.Finder<Long, AgendaSala> find = new Model.Finder<Long, AgendaSala>(Long.class, AgendaSala.class);
+	public static  Model.Finder<Long, AgendaSala> find = new Model.Finder<>(Long.class, AgendaSala.class);
 
 
 }

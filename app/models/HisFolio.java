@@ -23,6 +23,6 @@ public class HisFolio  extends models.utils.PlantillaModelo{
 		@ManyToOne
 		public Rol rol;
 
-		public static Model.Finder<Long,HisFolio> find = new Model.Finder<Long,HisFolio>(Long.class, HisFolio.class);
+		public static Model.Finder<Long,HisFolio> find = new Model.Finder<>(Long.class, HisFolio.class);
 		
 }

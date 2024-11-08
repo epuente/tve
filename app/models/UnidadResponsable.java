@@ -44,10 +44,10 @@ public class UnidadResponsable  extends models.utils.PlantillaModelo{
 	
 	
 	
-	public static Model.Finder<Long,UnidadResponsable> find = new Model.Finder<Long,UnidadResponsable>(Long.class, UnidadResponsable.class);
+	public static Model.Finder<Long,UnidadResponsable> find = new Model.Finder<>(Long.class, UnidadResponsable.class);
 	
     public static Map<String,String> options() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        LinkedHashMap<String,String> options = new LinkedHashMap<>();
         for(UnidadResponsable c: UnidadResponsable.find.orderBy("nombreLargo").findList()) {
             options.put(c.id.toString(), c.nombreLargo);
         }

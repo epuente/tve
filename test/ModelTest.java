@@ -5,8 +5,6 @@ import java.util.*;
 import static play.test.Helpers.*;
 import static org.fest.assertions.Assertions.*;
 
-import models.*;
-
 import com.avaje.ebean.*;
 
 public class ModelTest {
@@ -19,7 +17,7 @@ public class ModelTest {
     public void findById() {
         running(fakeApplication(), new Runnable() {
            public void run() {
-               Computer macintosh = Computer.find.byId(21l);
+               Computer macintosh = Computer.find.byId(21L);
                assertThat(macintosh.name).isEqualTo("Macintosh");
                assertThat(formatted(macintosh.introduced)).isEqualTo("1984-01-24");
            }

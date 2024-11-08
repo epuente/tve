@@ -1,9 +1,7 @@
 package models;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +11,10 @@ public class Rol  extends models.utils.PlantillaCatalogo{
 	@OneToMany
 	private List<RolDerecho> derechos; 
 
-	public static Model.Finder<Long,Rol> find = new Model.Finder<Long,Rol>(Long.class, Rol.class);
+	public static Model.Finder<Long,Rol> find = new Model.Finder<>(Long.class, Rol.class);
 	
     public static Map<String,String> options() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        LinkedHashMap<String,String> options = new LinkedHashMap<>();
         for(Rol c: Rol.find.findList()) {
             options.put(c.id.toString(), c.descripcion);
         }

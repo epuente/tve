@@ -27,7 +27,7 @@ public class PersonalHorario extends models.utils.PlantillaModelo {
 	@Formats.DateTime(pattern="HH:mm")
 	public Date hasta;
 
-	public static Model.Finder<Long,PersonalHorario> find = new Model.Finder<Long,PersonalHorario>(Long.class, PersonalHorario.class);
+	public static Model.Finder<Long,PersonalHorario> find = new Model.Finder<>(Long.class, PersonalHorario.class);
 
 
 }

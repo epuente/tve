@@ -180,7 +180,9 @@ System.out.println(forma);
     	Form<Sala> forma = form(Sala.class).fill( aux  );
 	        return ok( editForm.render(id, forma, Rol.find.all(), "edit"  ));
 
-    }    
+    }
+
+
     @Transactional
     public static Result update() {
 		System.out.println("\n\n\n\ndesde AdminSalaController.update....");
@@ -224,7 +226,7 @@ System.out.println(forma);
         return ok ( Json.parse("{\"estado\":\"actualizado\"}"));
         //return redirect( routes.AdminSalaController.list());
     }    
-    
+
     
 
     public static Result update2() {

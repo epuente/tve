@@ -15,10 +15,10 @@ public class AgendaOperadorSala extends models.utils.PlantillaModelo {
 	@ManyToOne
 	public Personal personal;
 
-	public static Model.Finder<Long, AgendaOperadorSala> find = new Model.Finder<Long, AgendaOperadorSala>(Long.class, AgendaOperadorSala.class);
+	public static Model.Finder<Long, AgendaOperadorSala> find = new Model.Finder<>(Long.class, AgendaOperadorSala.class);
 	
     public static Map<String,String> options() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        LinkedHashMap<String,String> options = new LinkedHashMap<>();
         for(AgendaOperadorSala c: AgendaOperadorSala.find.findList()) {
             options.put(c.id.toString(), c.personal.nombreCompleto());
         }

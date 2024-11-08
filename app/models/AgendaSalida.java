@@ -19,5 +19,5 @@ public class AgendaSalida  extends models.utils.PlantillaModelo{
 	@NotNull
 	public Date salida;
 
-	public static Model.Finder<Long, AgendaSalida> find = new Model.Finder<Long, AgendaSalida>(Long.class, AgendaSalida.class);
+	public static Model.Finder<Long, AgendaSalida> find = new Model.Finder<>(Long.class, AgendaSalida.class);
 }

@@ -32,7 +32,6 @@ POST    /ur/delete/:id                      controllers.AdminUnidadResponsableCo
 GET     /ursDTSS                            controllers.AdminUnidadResponsableController.listDTSS()
 
 
-#GET		/oficios					    	controllers.AdminOficioController.list()
 GET		/oficios					    	controllers.AdminOficioController.list(filtro:String ?="")
 GET		/oficio/:id				        	controllers.AdminOficioController.edit(id:Long)
 POST	/oficio/update/:id					controllers.AdminOficioController.update(id:Long)
@@ -46,7 +45,7 @@ POST	/oficio/save						controllers.AdminOficioController.save()
 POST    /ajaxEliminaOficio                  controllers.AdminOficioController.ajaxEliminaOficio()
 GET     /oficioList                     	controllers.OficioController.ajaxList()
 
-GET	/folio/:idOficio					    controllers.AdminFolioController.create(idOficio:Long)
+GET	    /folio/:idOficio					    controllers.AdminFolioController.create(idOficio:Long)
 GET		/folio								controllers.AdminFolioController.createSinOficio()
 POST	/folioSave							controllers.AdminFolioController.save()
 POST	/folioSave2							controllers.AdminFolioController.saveSerializada()
@@ -135,10 +134,7 @@ POST    /formato/delete/:id                 controllers.AdminFormatoController.d
 #GET		/productorServicios					controllers.ProductorServiciosController.agenda(fecha:String ?= "", eventoId:Long?=0, tipo:String?="")
 POST	/productorServicios				    controllers.ProductorServiciosController.agenda()
 
-#GET		/ajaxDatosEventosAnterior			controllers.ProductorServiciosController.ajaxDatosEventosAnterior()
 GET		/ajaxDatosEventos					controllers.ProductorServiciosController.ajaxDatosEventos()
-
-
 
 GET		/adminAgenda/:idRevisar			    controllers.AdministracionController.agenda(idRevisar:Long)
 GET     /tableroAdmin                       controllers.AdministracionController.tablero()
@@ -177,7 +173,6 @@ POST	/ajaxEliminaEventoAdmin				controllers.AutorizacionController.ajaxEliminaEv
 POST	/ajaxAsignaEA					    controllers.AdminEAController.asignaEquipoAccesorios()
 
 POST	/ajaxEliminaEventoAdminOpera		controllers.AutorizacionController.ajaxEliminaEventoAdmin()
-#POST	/ajaxActualizaEventoAdmin			controllers.AdministracionController.ajaxActualizaEventoAdmin()
 
 POST	/ajaxLocutoresActivos				controllers.AdminPersonalController.ajaxLocutoresActivos()
 
@@ -209,7 +204,6 @@ POST	/ajaxCancelaEvento					controllers.UsuarioController.ajaxCancelaEvento()
 GET 	/ajaxOperadoresSalas				controllers.UsuarioController.ajaxOperadoresSalas()
 POST 	/ajaxBuscaPersona					controllers.UsuarioController.ajaxBuscaPersona()
 POST 	/ajaxBuscaTPersonal					controllers.UsuarioController.ajaxBuscaTPersonal()
-#POST 	/ajaxBuscaTPersonal					controllers.UsuarioController.ajaxBuscaTPersonal()
 
 POST	/ajaxValidaPrevioAutorizar			controllers.ValidacionesController.ajaxValidaPrevioAutorizar()
 POST	/ajaxValidaCantidadPerfiles			controllers.ValidacionesController.ajaxValidaCantidadPerfiles()
@@ -237,8 +231,6 @@ POST	/ajaxOperadoresDisponiblesPorSalaEvento     controllers.UsuarioController.a
 POST	/ajaxOperadoresDeSala				controllers.UsuarioController.ajaxOperadoresDeSala()
 
 GET	    /verOficio							controllers.UsuarioController.verOficio(id:Long, sufijo:String)
-#GET		/verOficio2							controllers.UsuarioController.verOficio2(id:Long)
-
 POST	/ajaxPersonalDisponible				controllers.UsuarioController.ajaxPersonalDisponible()
 
 GET		/correosSalida						controllers.AdminCorreoController.correosSalida()
@@ -260,8 +252,6 @@ POST	/envioCorreoPrueba					controllers.AdministracionController.envioCorreoPrue
 POST    /ajaxEstadoSala                     controllers.UsuarioController.ajaxEstadoSala()
 POST    /validacionesAgenda3                controllers.UsuarioController.validacionesAgenda3()
 POST    /todosIngenieros                    controllers.UsuarioController.todosIngenieros()
-
-#POST    /autorizaEquipoAccesorios           controllers.IngenieriaController.autorizaEquipoAccesorios()
 
 POST    /previoAgendar                      controllers.UsuarioController.previoAgendar()
 POST    /ajaxPersonalNoDisponible           controllers.UsuarioController.ajaxPersonalNoDisponible()
@@ -287,8 +277,6 @@ GET     /tableroVideoTK                     controllers.VideotecaController.tabl
 GET     /ajaxTableroVideoTK                 controllers.VideotecaController.ajaxTablero()
 GET     /catalogo                           controllers.VideotecaController.catalogo()
 GET     /vtkCatalogoDTSS                    controllers.VideotecaController.catalogoDTSS()
-#GET     /vtkCatalogo/create                 controllers.VideotecaController.catalogoCreate()
-GET     /vtkCatalogo/create2                controllers.VideotecaController.catalogoCreate2()
 GET     /vtkCatalogo/create5                controllers.VideotecaController.catalogoCreate5()
 POST    /vtkCatalogo/delete                 controllers.VideotecaController.catalogoDelete()
 
@@ -298,15 +286,12 @@ POST    /textsearchCampoCompleto            controllers.VideotecaController.text
 
 
 POST    /nuevaUR                            controllers.VideotecaController.nuevaUR()
-#POST    /nuevaProduccion                    controllers.VideotecaController.nuevaProduccion()
 POST    /nuevaAreaTematica                  controllers.VideotecaController.nuevaAreaTematica()
 
-#GET     /vtkcarga                           controllers.VideotecaController.cargaInicial()
 GET     /vtkCatalogo/edit/:id               controllers.VideotecaController.catalogoEdit(id:Long)
 
 POST    /vtkCatalogo/save                   controllers.VideotecaController.save()
 POST    /vtkCatalogo/update                 controllers.VideotecaController.update()
-#POST    /vtkCatalogo/update2                controllers.VideotecaController.update2()
 
 GET     /supervisor/catalogadores           controllers.SupCatalogadorController.lista()
 GET     /supervisor/catalogadoresDTSS       controllers.SupCatalogadorController.listaDTSS()
@@ -316,13 +301,12 @@ GET     /supervisor/catalogadoresEdit/:id   controllers.SupCatalogadorController
 POST    /supervisor/catalogadoresUpdate/:id controllers.SupCatalogadorController.update(id:Long)
 POST    /supervisor/catalogadoresDelete     controllers.SupCatalogadorController.delete()
 POST    /supervisor/toggleActivo            controllers.SupCatalogadorController.toggleActivo()
-GET     /supervisor/tablero                 controllers.SupCatalogadorController.tablero()
-GET     /supervisor/tablero2                controllers.SupCatalogadorController.tablero2()
+
 GET     /supervisor/tablero3                controllers.SupCatalogadorController.tablero3()
 
-POST     /chartCatPorFecha                  controllers.SupCatalogadorController.chartCatPorFecha()
-POST     /chartAreaTematica                 controllers.SupCatalogadorController.chartAreaTematica()
-
+POST    /chartCatPorFecha                   controllers.SupCatalogadorController.chartCatPorFecha()
+POST    /chartAreaTematica                  controllers.SupCatalogadorController.chartAreaTematica()
+POST    /chartNivel                         controllers.SupCatalogadorController.chartNivel()
 
 
 POST    /supervisor/ajaxTablero             controllers.SupCatalogadorController.ajaxTablero()
@@ -330,14 +314,9 @@ GET     /catalogoSup                        controllers.SupCatalogadorController
 GET     /vtkCatalogoDTSSSup                 controllers.SupCatalogadorController.catalogoDTSS()
 
 GET     /supervisor/info/:id                controllers.SupCatalogadorController.catalogoInfo(id:Long)
-GET     /supervisor/info2/:id               controllers.SupCatalogadorController.catalogoInfo2(id:Long)
 POST    /supervisor/eliminaCatalogo         controllers.SupCatalogadorController.eliminaCatalogo()
 
-#POST    /vtkBuscaFolio                      controllers.VideotecaController.buscaFolio()
 POST    /vtkBuscaClaveID                    controllers.VideotecaController.buscaClaveID()
-
-
-GET    /vtkManual                           controllers.VideotecaController.manual()
 
 POST    /miCuenta                           controllers.UsuarioController.miCuenta()
 POST    /cambioMiCuenta                     controllers.UsuarioController.cambioMiCuenta()
@@ -357,23 +336,12 @@ POST    /videotecaAdminCatalogoInfo         controllers.AdminVideotecaController
 POST    /videotecaAdmin/asignarProductor    controllers.AdminVideotecaController.asignarProductor()
 
 # VIDEOTECA - productor
-# VIDEOTECA - productor
 POST    /videoteca/productor/catalogoInfo   controllers.ProductorVideotecaController.catalogoInfo()
 
 # VIDEOTECA - catalogador
 POST    /uploadForma                        controllers.VideotecaController.uploadForma()
 GET    /javaCurl                            controllers.VideotecaController.javaCurl()
 POST   /apiEliminarTranzapp                 controllers.VideotecaController.eliminaTranzapp()
-
-GET     /dragdrop                           controllers.VideotecaController.dragdrop()
-
-POST    /pruebaTA                           controllers.VideotecaController.pruebaTA()
-GET    /pruebaResumable                    controllers.VideotecaController.pruebaResumable()
-
-
-POST   /pruebaRecepcionResumable2           controllers.VideotecaController.pruebaRecepcionResumable2()
-GET    /pruebaRecepcionResumable2           controllers.VideotecaController.uploadStatus()
-#GET    /otro/:resumableChunkNumber/:resumableChunkSize/:resumableCurrentChunkSize/:resumableTotalSize/:resumableType/:resumableIdentifier/:resumableFilename/:resumableRelativePath/:resumableTotalChunks           controllers.VideotecaController.otro(resumableChunkNumber:Integer, resumableChunkSize:Long, resumableCurrentChunkSize:Long, resumableTotalSize:Long, resumableType:String, resumableIdentifier:Long, resumableFilename:String, resumableRelativePath:String, resumableTotalChunks:Integer)
 
 POST   /auxLecturaComando                   controllers.VideotecaController.auxLecturaComando()
 

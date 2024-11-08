@@ -19,5 +19,5 @@ public class OficioEntradaSalida extends PlantillaArchivo {
         this.contenido = contenido;
     }
 
-    public static Finder<Long, OficioEntradaSalida> find = new Finder<Long, OficioEntradaSalida>(Long.class, OficioEntradaSalida.class);
+    public static Finder<Long, OficioEntradaSalida> find = new Finder<>(Long.class, OficioEntradaSalida.class);
 }

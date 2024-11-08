@@ -8,7 +8,6 @@ import models.Rol;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import play.mvc.Controller;
 import play.mvc.Result;
 
 import java.text.ParseException;
@@ -32,7 +31,7 @@ public class ValidacionesController extends ControladorSeguro{
 		System.out.println("id del estado "+json.findPath("estado").findPath("id").asLong());
 		
 		List<Rol> tsp = Rol.find.all();
-		Map<String, Integer> map = new HashMap<String, Integer>();
+		Map<String, Integer> map = new HashMap<>();
 		for (Rol tp : tsp) {
 			if ( map.get("totalTipo"+tp.id) == null ) {
 				map.put("totalTipo"+tp.id, 0);				

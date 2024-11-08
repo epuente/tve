@@ -19,5 +19,5 @@ public class AgendaCancelacion extends models.utils.PlantillaModelo {
 	@Column(length=600)
 	public String observacion;	
 
-	public static Model.Finder<Long, AgendaCancelacion> find = new Model.Finder<Long, AgendaCancelacion>(Long.class, AgendaCancelacion.class);
+	public static Model.Finder<Long, AgendaCancelacion> find = new Model.Finder<>(Long.class, AgendaCancelacion.class);
 }

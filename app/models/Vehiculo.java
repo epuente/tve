@@ -33,6 +33,6 @@ public class Vehiculo  extends models.utils.PlantillaModelo{
 	
 	
 	
-    public static Model.Finder<Long,Vehiculo> find = new Model.Finder<Long,Vehiculo>(Long.class, Vehiculo.class);		
+    public static Model.Finder<Long,Vehiculo> find = new Model.Finder<>(Long.class, Vehiculo.class);
 
 }

@@ -17,6 +17,6 @@ public class OficioContactoTelefono  extends models.utils.PlantillaModelo{
 	
 
 	
-	public static Model.Finder<Long,OficioContactoTelefono> find = new Model.Finder<Long,OficioContactoTelefono>(Long.class, OficioContactoTelefono.class);		
+	public static Model.Finder<Long,OficioContactoTelefono> find = new Model.Finder<>(Long.class, OficioContactoTelefono.class);
 	
 }

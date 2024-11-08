@@ -28,7 +28,7 @@ public class PersonalCorreo  extends models.utils.PlantillaModelo{
 	
 
 	
-	public static Model.Finder<Long,PersonalCorreo> find = new Model.Finder<Long,PersonalCorreo>(Long.class, PersonalCorreo.class);
+	public static Model.Finder<Long,PersonalCorreo> find = new Model.Finder<>(Long.class, PersonalCorreo.class);
 
 	
 }

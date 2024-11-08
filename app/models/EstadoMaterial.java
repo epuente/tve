@@ -1,7 +1,6 @@
 package models;
 
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
 
 import play.db.ebean.Model;
 
@@ -12,5 +11,5 @@ import play.db.ebean.Model;
 
 @Entity
 public class EstadoMaterial  extends models.utils.PlantillaCatalogo{
-	public static Model.Finder<Long,EstadoMaterial> find = new Model.Finder<Long,EstadoMaterial>(Long.class, EstadoMaterial.class);
+	public static Model.Finder<Long,EstadoMaterial> find = new Model.Finder<>(Long.class, EstadoMaterial.class);
 }

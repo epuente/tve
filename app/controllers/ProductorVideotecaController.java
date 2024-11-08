@@ -1,6 +1,5 @@
 package controllers;
 
-import classes.ColorConsola;
 import classes.Duracion;
 import com.avaje.ebean.*;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,7 +13,6 @@ import play.mvc.Result;
 import views.html.usuario.miCatalogoVideotecaProductor;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ProductorVideotecaController extends ControladorSeguroProductor{
 

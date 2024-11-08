@@ -27,24 +27,23 @@ public class Catalogador extends models.utils.PlantillaModelo{
     @Column(length=25)
     public String password;
 
-    public static  Model.Finder<Long, Catalogador> find = new Model.Finder<Long, Catalogador>(Long.class, Catalogador.class);
+    public static  Model.Finder<Long, Catalogador> find = new Model.Finder<>(Long.class, Catalogador.class);
 
     public static Page<Catalogador> page(int page, int pageSize, String filtro, String columnaOrden, String tipoOrden) {
         if (columnaOrden.compareTo("estado")==0 || columnaOrden.compareTo("tipo")==0)
             columnaOrden+=".descripcion";
-        Page<Catalogador> p = find
+        return find
                 .where("upper(nombre) like :cadena OR upper(paterno) like :cadena OR upper(materno) like :cadena")
                 .setParameter("cadena", "%"+filtro.toUpperCase()+"%")
                 .orderBy( columnaOrden +" "+tipoOrden )
                 .findPagingList(pageSize)
                 .setFetchAhead(false)
                 .getPage(page);
-        return p;
     }
 
 
     public static Page<Personal> page2(int page, int pageSize, String filtro, String columnaOrden, String tipoOrden) {
-        List<String> personalIds = new ArrayList<String>();
+        List<String> personalIds = new ArrayList<>();
         if (columnaOrden.compareTo("estado")==0 || columnaOrden.compareTo("tipo")==0)
             columnaOrden+=".descripcion";
 
@@ -63,7 +62,12 @@ public class Catalogador extends models.utils.PlantillaModelo{
         System.out.println("\n\n\ncadena "+cadena2+"\n\n");
 
 
-        Page<Personal> p = Personal.find
+        //.where("id = 93 AND  numEmpleado like :cadena OR paterno like :cadena  OR  materno like :cadena  OR  nombre like :cadena  OR tipocontrato.descripcion like :cadena OR cuentas.roles.rol.descripcion like :cadena")
+
+
+        //  List<Long> ctasCatalogadores = Cuenta.find.where().ne("peronal.id", null).filterMany("roles").eq("id", 133).findList();
+//        Logger.debug("Catalogador.page2 regresa:"+p.getList().size()+" registros");
+        return Personal.find
                 //.where("id = 93 AND  numEmpleado like :cadena OR paterno like :cadena  OR  materno like :cadena  OR  nombre like :cadena  OR tipocontrato.descripcion like :cadena OR cuentas.roles.rol.descripcion like :cadena")
                 .where("  (id in ("+cadena2+") ) AND(  numEmpleado like :cadena OR paterno like :cadena  OR  materno like :cadena  OR  nombre like :cadena  OR tipocontrato.descripcion like :cadena OR cuentas.roles.rol.descripcion like :cadena)")
                 .setParameter("cadena", "%"+filtro+"%")
@@ -71,12 +75,6 @@ public class Catalogador extends models.utils.PlantillaModelo{
                 .findPagingList(pageSize)
                 .setFetchAhead(false)
                 .getPage(page);
-
-
-
-      //  List<Long> ctasCatalogadores = Cuenta.find.where().ne("peronal.id", null).filterMany("roles").eq("id", 133).findList();
-//        Logger.debug("Catalogador.page2 regresa:"+p.getList().size()+" registros");
-        return p;
     }
 
 

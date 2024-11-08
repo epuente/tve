@@ -225,7 +225,7 @@ public class AdminFolioController extends ControladorSeguroAdministrador {
 		if (json.findValue("numeroresguardo")!=null)
 			if (json.findValue("numeroresguardo").asText() != null )
 				nuevo.numeroresguardo = json.findValue("numeroresguardo").asText();
-		nuevo.productoresAsignados = new ArrayList<FolioProductorAsignado>();
+		nuevo.productoresAsignados = new ArrayList<>();
 		JsonNode json2 = request().body().asJson();
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode jsonNode = objectMapper.readTree(json2.toString());

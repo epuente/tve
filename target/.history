@@ -129,3 +129,14 @@ run 8087
 exit
 run 8087
 exit
+run 8087
+CLEAN
+RELOAD
+clean
+reload
+compile
+exit
+clean
+reload
+compile
+exit

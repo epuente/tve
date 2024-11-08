@@ -8,7 +8,6 @@ import play.db.DB;
 import play.filters.csrf.CSRFFilter;
 import play.filters.gzip.GzipFilter;
 import play.libs.F.Promise;
-import play.mvc.Http;
 import play.mvc.Http.RequestHeader;
 import play.mvc.Result;
 import views.html.errorPage;

@@ -12,10 +12,10 @@ public class EstadoEquipoAccesorioVehiculo  extends models.utils.PlantillaModelo
 	@Column(length=50)
 	public String descripcion;
 
-	public static Model.Finder<Long,EstadoEquipoAccesorioVehiculo> find = new Model.Finder<Long,EstadoEquipoAccesorioVehiculo>(Long.class, EstadoEquipoAccesorioVehiculo.class);
+	public static Model.Finder<Long,EstadoEquipoAccesorioVehiculo> find = new Model.Finder<>(Long.class, EstadoEquipoAccesorioVehiculo.class);
 	
     public static Map<String,String> options() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        LinkedHashMap<String,String> options = new LinkedHashMap<>();
         for(EstadoEquipoAccesorioVehiculo c: EstadoEquipoAccesorioVehiculo.find.findList()) {
             options.put(c.id.toString(), c.descripcion);
         }

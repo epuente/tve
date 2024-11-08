@@ -53,7 +53,7 @@ public class FunctionalTest {
 
                 assertThat(status(result)).isEqualTo(BAD_REQUEST);
                 
-                Map<String,String> data = new HashMap<String,String>();
+                Map<String,String> data = new HashMap<>();
                 data.put("name", "FooBar");
                 data.put("introduced", "badbadbad");
                 data.put("company.id", "1");

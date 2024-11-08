@@ -12,10 +12,10 @@ public class Disponibilidad extends models.utils.PlantillaCatalogo{
     @ManyToOne
     public Personal usuario;
 
-    public static Model.Finder<Long,Disponibilidad> find = new Model.Finder<Long,Disponibilidad>(Long.class, Disponibilidad.class);
+    public static Model.Finder<Long,Disponibilidad> find = new Model.Finder<>(Long.class, Disponibilidad.class);
 
     public static Map<String,String> options() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        LinkedHashMap<String,String> options = new LinkedHashMap<>();
         for(Disponibilidad c: Disponibilidad.find.findList()) {
             options.put(c.id.toString(), c.descripcion);
         }

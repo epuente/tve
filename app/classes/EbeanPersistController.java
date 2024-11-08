@@ -23,16 +23,16 @@ import java.util.TreeMap;
  */
 public class EbeanPersistController extends BeanPersistAdapter {
 
-    private Map<String,Method> prePersistMap = new TreeMap<String, Method>();
-    private Map<String,Method> postPersistMap = new TreeMap<String, Method>();
+    private Map<String,Method> prePersistMap = new TreeMap<>();
+    private Map<String,Method> postPersistMap = new TreeMap<>();
 
-    private Map<String,Method> preUpdateMap = new TreeMap<String, Method>();
-    private Map<String,Method> postUpdateMap = new TreeMap<String, Method>();
+    private Map<String,Method> preUpdateMap = new TreeMap<>();
+    private Map<String,Method> postUpdateMap = new TreeMap<>();
 
-    private Map<String,Method> preDestroyMap = new TreeMap<String, Method>();
-    private Map<String,Method> postDestroyMap = new TreeMap<String, Method>();
+    private Map<String,Method> preDestroyMap = new TreeMap<>();
+    private Map<String,Method> postDestroyMap = new TreeMap<>();
 
-    private Map<String,Method> postLoadMap = new TreeMap<String, Method>();
+    private Map<String,Method> postLoadMap = new TreeMap<>();
 
 
     @Override

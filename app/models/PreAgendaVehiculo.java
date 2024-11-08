@@ -16,5 +16,5 @@ public class PreAgendaVehiculo  extends models.utils.PlantillaModelo{
 	public PreAgenda preagenda;
 	
 	
-	public static Model.Finder<Long,PreAgendaVehiculo> find = new Model.Finder<Long,PreAgendaVehiculo>(Long.class, PreAgendaVehiculo.class);
+	public static Model.Finder<Long,PreAgendaVehiculo> find = new Model.Finder<>(Long.class, PreAgendaVehiculo.class);
 }

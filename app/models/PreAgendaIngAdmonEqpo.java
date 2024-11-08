@@ -22,5 +22,5 @@ public class PreAgendaIngAdmonEqpo  extends models.utils.PlantillaModelo{
 	
 
 	
-	public static Finder<Long, PreAgendaIngAdmonEqpo> find = new Finder<Long, PreAgendaIngAdmonEqpo>(Long.class, PreAgendaIngAdmonEqpo.class);
+	public static Finder<Long, PreAgendaIngAdmonEqpo> find = new Finder<>(Long.class, PreAgendaIngAdmonEqpo.class);
 }

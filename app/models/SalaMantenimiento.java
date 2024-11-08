@@ -43,6 +43,6 @@ public class SalaMantenimiento  extends models.utils.PlantillaModelo{
 	
 
 	
-    public static Model.Finder<Long,SalaMantenimiento> find = new Model.Finder<Long,SalaMantenimiento>(Long.class, SalaMantenimiento.class);		
+    public static Model.Finder<Long,SalaMantenimiento> find = new Model.Finder<>(Long.class, SalaMantenimiento.class);
 
 }

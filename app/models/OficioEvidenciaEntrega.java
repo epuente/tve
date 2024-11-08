@@ -19,5 +19,5 @@ public class OficioEvidenciaEntrega extends PlantillaArchivo {
         this.contenido = contenido;
     }
 
-    public static Finder<Long, OficioEvidenciaEntrega> find = new Finder<Long, OficioEvidenciaEntrega>(Long.class, OficioEvidenciaEntrega.class);
+    public static Finder<Long, OficioEvidenciaEntrega> find = new Finder<>(Long.class, OficioEvidenciaEntrega.class);
 }

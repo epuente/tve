@@ -1,12 +1,8 @@
 package controllers;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import classes.ColorConsola;
-import com.avaje.ebean.Ebean;
 import models.*;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,11 +10,7 @@ import org.json.JSONObject;
 
 import com.avaje.ebean.Page;
 import com.avaje.ebean.Query;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import play.mvc.Result;
 
@@ -510,7 +502,7 @@ System.out.println(json);
 		JSONObject json2 = new JSONObject();		
 		int filtrados = 0;
 		int sinFiltro = 0;
-		Map<Integer, Integer> columnasOrdenables = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> columnasOrdenables = new HashMap<>();
 		columnasOrdenables.put(0, 1);
 		columnasOrdenables.put(1, 19);
 		columnasOrdenables.put(2, 9);
@@ -916,7 +908,7 @@ System.out.println(json);
 			// Oficios sin asignar
 			if (estado.compareTo("0")==0) {
 				for( Oficio p : pagOficio.getList()  ){
-					Set<String> losEstados = new HashSet<String>();
+					Set<String> losEstados = new HashSet<>();
 					JSONObject datoP = new JSONObject();
 					datoP.put("id", p.id);
 					datoP.put("folio", "No se le ha asignado folio");
@@ -941,7 +933,7 @@ System.out.println(json);
 				}	
 			} else {
 				for( Folio p : serv.getList()  ){
-					Set<String> losEstados = new HashSet<String>();
+					Set<String> losEstados = new HashSet<>();
 					JSONObject datoP = new JSONObject();
 					datoP.put("id", p.id);
 					datoP.put("folio", p.numfolio);

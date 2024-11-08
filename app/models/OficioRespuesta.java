@@ -4,7 +4,6 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 import models.utils.PlantillaArchivo;
 import play.data.format.Formats;
@@ -25,7 +24,7 @@ public class OficioRespuesta  extends PlantillaArchivo {
 	}
 
 
-	public static Model.Finder<Long,OficioRespuesta> find = new Model.Finder<Long,OficioRespuesta>(Long.class, OficioRespuesta.class);
+	public static Model.Finder<Long,OficioRespuesta> find = new Model.Finder<>(Long.class, OficioRespuesta.class);
 
 	@Formats.DateTime(pattern="dd-MM-yyyy")
 	public Date fecharespuesta;

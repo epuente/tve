@@ -1,19 +1,13 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import classes.ColorConsola;
-import classes.Notificaciones.Notificacion;
 import play.db.ebean.Model;
-
-import static play.mvc.Controller.session;
 
 @Entity
 public class FolioProductorAsignado  extends models.utils.PlantillaModelo{
@@ -38,7 +32,7 @@ public class FolioProductorAsignado  extends models.utils.PlantillaModelo{
 	public List<PreAgenda> preagendas;
 
 
-    public static Model.Finder<Long,FolioProductorAsignado> find = new Model.Finder<Long,FolioProductorAsignado>(Long.class, FolioProductorAsignado.class);
+    public static Model.Finder<Long,FolioProductorAsignado> find = new Model.Finder<>(Long.class, FolioProductorAsignado.class);
 
     
     public boolean tieneEstado(Long estado){
@@ -67,7 +61,7 @@ public class FolioProductorAsignado  extends models.utils.PlantillaModelo{
     }    
     
     public List<String> listaEstadosServicios(){
-    	List<String> lista = new ArrayList<String>();
+    	List<String> lista = new ArrayList<>();
 		for ( PreAgenda pags : this.preagendas) {
 			lista.add(pags.estado.descripcion);
 		}

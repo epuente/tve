@@ -8,5 +8,5 @@ import play.db.ebean.Model;
 public class Fase  extends models.utils.PlantillaModelo{
 	@Column(length=50)
 	public String descripcion;
-    public static Model.Finder<Long,Fase> find = new Model.Finder<Long,Fase>(Long.class, Fase.class);
+    public static Model.Finder<Long,Fase> find = new Model.Finder<>(Long.class, Fase.class);
 }

@@ -8,7 +8,6 @@ import play.libs.F;
 import play.mvc.Action;
 import play.mvc.Result;
 import play.mvc.Results;
-import classes.ColorConsola.*;
 
 public class ConfirmarAdministradorOperadorSala extends Action.Simple {
     public F.Promise<Result> call(play.mvc.Http.Context ctx) throws Throwable {

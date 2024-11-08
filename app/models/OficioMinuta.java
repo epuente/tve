@@ -21,5 +21,5 @@ public class OficioMinuta extends PlantillaArchivo {
         this.contenido = contenido;
     }
 
-    public static Model.Finder<Long,OficioMinuta> find = new Model.Finder<Long,OficioMinuta>(Long.class, OficioMinuta.class);
+    public static Model.Finder<Long,OficioMinuta> find = new Model.Finder<>(Long.class, OficioMinuta.class);
 }

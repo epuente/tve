@@ -14,5 +14,5 @@ public class AgendaIngAdmonEqpo extends models.utils.PlantillaModelo {
     @ManyToOne
     @NotNull
     public Personal ingeniero;
-    public static Model.Finder<Long, AgendaIngAdmonEqpo> find = new Model.Finder<Long, AgendaIngAdmonEqpo>(Long.class, AgendaIngAdmonEqpo.class);
+    public static Model.Finder<Long, AgendaIngAdmonEqpo> find = new Model.Finder<>(Long.class, AgendaIngAdmonEqpo.class);
 }

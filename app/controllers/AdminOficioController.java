@@ -3,7 +3,6 @@ package controllers;
 import static play.data.Form.form;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -140,8 +139,7 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 			}
 
 			if (tipo==5){
-				OficioEntradaSalida a = new OficioEntradaSalida(pa.nombrearchivo, pa.contenttype, pa.contenido);
-				aux.entradassalida = a;
+                aux.entradassalida = new OficioEntradaSalida(pa.nombrearchivo, pa.contenttype, pa.contenido);
 				aux.entradassalida.oficio = aux;
 			}
 
@@ -151,14 +149,12 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 			}
 
 			if (tipo==7){
-				OficioEvidenciaEntrega a = new OficioEvidenciaEntrega(pa.nombrearchivo, pa.contenttype, pa.contenido);
-				aux.evidenciaentrega = a;
+                aux.evidenciaentrega = new OficioEvidenciaEntrega(pa.nombrearchivo, pa.contenttype, pa.contenido);
 				aux.evidenciaentrega.oficio = aux;
 			}
 
 			if (tipo==8){
-				OficioEncuesta a = new OficioEncuesta(pa.nombrearchivo, pa.contenttype, pa.contenido);
-				aux.encuesta = a;
+                aux.encuesta = new OficioEncuesta(pa.nombrearchivo, pa.contenttype, pa.contenido);
 				aux.encuesta.oficio = aux;
 			}
 		}
@@ -258,8 +254,7 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 			}
 
 			if (tipo==5){
-				OficioEntradaSalida a = new OficioEntradaSalida(pa.nombrearchivo, pa.contenttype, pa.contenido);
-				o.entradassalida = a;
+                o.entradassalida = new OficioEntradaSalida(pa.nombrearchivo, pa.contenttype, pa.contenido);
 				o.entradassalida.oficio = o;
 			}
 
@@ -273,14 +268,12 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 			}
 
 			if (tipo==7){
-				OficioEvidenciaEntrega a = new OficioEvidenciaEntrega(pa.nombrearchivo, pa.contenttype, pa.contenido);
-				o.evidenciaentrega = a;
+                o.evidenciaentrega = new OficioEvidenciaEntrega(pa.nombrearchivo, pa.contenttype, pa.contenido);
 				o.evidenciaentrega.oficio = o;
 			}
 
 			if (tipo==8){
-				OficioEncuesta a = new OficioEncuesta(pa.nombrearchivo, pa.contenttype, pa.contenido);
-				o.encuesta = a;
+                o.encuesta = new OficioEncuesta(pa.nombrearchivo, pa.contenttype, pa.contenido);
 				o.encuesta.oficio = o;
 			}
 	    }
@@ -319,6 +312,7 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 		return ok("{\"eliminado\":" + eliminado + "}");
 	}
 
+    /*
 	@Transactional
 	public static Result save2() {
 		System.out.println("\n\nDesde AdminOficio.save2");
@@ -352,7 +346,7 @@ public class AdminOficioController extends ControladorSeguroAdministrador {
 			return ok (   "{\"estado\": \"error\"}"   );
 		}
 	}
-
+    */
 
 	@Transactional
 	public static Result update2() {

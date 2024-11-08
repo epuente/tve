@@ -13,10 +13,10 @@ public class Areatematica extends models.utils.PlantillaCatalogo{
 
     @ManyToOne
     public Personal catalogador;
-    public static Model.Finder<Long,Areatematica> find = new Model.Finder<Long,Areatematica>(Long.class, Areatematica.class);
+    public static Model.Finder<Long,Areatematica> find = new Model.Finder<>(Long.class, Areatematica.class);
 
     public static Map<String,String> options() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        LinkedHashMap<String,String> options = new LinkedHashMap<>();
         for(Areatematica c: Areatematica.find.findList()) {
             options.put(c.id.toString(), c.descripcion);
         }

@@ -16,7 +16,7 @@ public class VtkEvidencia extends models.utils.PlantillaModelo{
 
     public String ligaborrado;
 
-    public static Model.Finder<Long,VtkEvidencia> find = new Model.Finder<Long,VtkEvidencia>(Long.class, VtkEvidencia.class);
+    public static Model.Finder<Long,VtkEvidencia> find = new Model.Finder<>(Long.class, VtkEvidencia.class);
 
 
 }

@@ -30,6 +30,6 @@ public class PersonalCambioHorario  extends models.utils.PlantillaModelo{
 	
 
 	
-	public static Model.Finder<Long,PersonalCambioHorario> find = new Model.Finder<Long,PersonalCambioHorario>(Long.class, PersonalCambioHorario.class);		
+	public static Model.Finder<Long,PersonalCambioHorario> find = new Model.Finder<>(Long.class, PersonalCambioHorario.class);
 
 }

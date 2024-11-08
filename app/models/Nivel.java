@@ -10,11 +10,11 @@ import java.util.Map;
 public class Nivel extends models.utils.PlantillaCatalogo{
 
 
-    public static Model.Finder<Long,Nivel> find = new Model.Finder<Long,Nivel>(Long.class, Nivel.class);
+    public static Model.Finder<Long,Nivel> find = new Model.Finder<>(Long.class, Nivel.class);
 
 
     public static Map<String,String> options() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        LinkedHashMap<String,String> options = new LinkedHashMap<>();
         for(Nivel c: Nivel.find.findList()) {
             options.put(c.id.toString(), c.descripcion);
         }

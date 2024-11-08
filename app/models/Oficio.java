@@ -87,10 +87,10 @@ public class Oficio  extends models.utils.PlantillaModelo{
 	
 	
 	
-	public static Model.Finder<Long,Oficio> find = new Model.Finder<Long,Oficio>(Long.class, Oficio.class);	
+	public static Model.Finder<Long,Oficio> find = new Model.Finder<>(Long.class, Oficio.class);
     
     public static Map<String,String> options() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        LinkedHashMap<String,String> options = new LinkedHashMap<>();
         for(Oficio c: Oficio.find.findList()) {
             options.put(c.id.toString(), c.descripcion);
         }
@@ -114,7 +114,5 @@ public class Oficio  extends models.utils.PlantillaModelo{
 	}
 
 
-	public void despuesInsert(){
 
-	}
 }

@@ -4,8 +4,6 @@ import models.*;
 
 import java.util.Date;
 
-import java.util.List;
-
 public class AuxEventoOperadorSala {
     public String tipo;
     public Long id;

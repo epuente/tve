@@ -12,8 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import play.Logger;
-import play.data.DynamicForm;
-import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.gobEncabezado;
 import views.html.login;

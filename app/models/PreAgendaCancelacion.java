@@ -23,6 +23,6 @@ public class PreAgendaCancelacion  extends models.utils.PlantillaModelo{
 
 
 	
-	public static Model.Finder<Long, PreAgendaCancelacion> find = new Model.Finder<Long, PreAgendaCancelacion>(Long.class, PreAgendaCancelacion.class);
+	public static Model.Finder<Long, PreAgendaCancelacion> find = new Model.Finder<>(Long.class, PreAgendaCancelacion.class);
 
 }

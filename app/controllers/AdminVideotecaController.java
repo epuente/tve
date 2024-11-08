@@ -3,28 +3,18 @@ package controllers;
 import classes.Duracion;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
-import com.avaje.ebean.Page;
 import com.avaje.ebean.SqlRow;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import models.*;
 import models.videoteca.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import play.Logger;
-import play.data.Form;
-import play.db.ebean.Model;
-import play.db.ebean.Transactional;
-import play.libs.Json;
 import play.mvc.Result;
 import views.html.videoteca.admin.*;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-
-import static play.data.Form.form;
 
 public class AdminVideotecaController extends ControladorSeguroAdministrador {
 

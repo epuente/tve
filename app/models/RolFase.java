@@ -17,6 +17,6 @@ public class RolFase  extends models.utils.PlantillaModelo{
 	
 
 	
-	public static Model.Finder<Long,RolFase> find = new Model.Finder<Long,RolFase>(Long.class, RolFase.class);		
+	public static Model.Finder<Long,RolFase> find = new Model.Finder<>(Long.class, RolFase.class);
 	
 }

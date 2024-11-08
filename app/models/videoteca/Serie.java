@@ -27,11 +27,11 @@ public class Serie extends Model{
     public Personal catalogador;
 
 
-    public static Model.Finder<Long,Serie> find = new Model.Finder<Long,Serie>(Long.class, Serie.class);
+    public static Model.Finder<Long,Serie> find = new Model.Finder<>(Long.class, Serie.class);
 
 
     public static Map<String,String> options() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        LinkedHashMap<String,String> options = new LinkedHashMap<>();
 
         List<Serie> aux = Serie.find.all();
 

@@ -90,7 +90,7 @@ public class PreAgenda  extends models.utils.PlantillaModelo{
 //	@OneToMany(mappedBy="preagenda", cascade=CascadeType.ALL)
 //	public List<PreAgendaIngesta2> ingestas2;		
 	
-	public static Model.Finder<Long,PreAgenda> find = new Model.Finder<Long,PreAgenda>(Long.class, PreAgenda.class);
+	public static Model.Finder<Long,PreAgenda> find = new Model.Finder<>(Long.class, PreAgenda.class);
 		
 	
 }

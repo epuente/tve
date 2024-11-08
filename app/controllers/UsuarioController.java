@@ -35,7 +35,6 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -45,10 +44,8 @@ import static models.OperadorSala.find;
 
 public class UsuarioController extends ControladorSeguro{
 
-    public static Result misServicios(){
-        UsuarioController.registraAcceso(request().path());
-        return ok (misServicios.render(0L,0L));
-    }
+
+
     public static Result misServicios( Long estado, Long id){
         UsuarioController.registraAcceso(request().path());
         return ok (misServicios.render(estado, id));
@@ -60,7 +57,7 @@ public class UsuarioController extends ControladorSeguro{
         UsuarioController.registraAcceso(request().path());
         int filtrados;
         int sinFiltro;
-        Map<Integer, Integer> columnasOrdenables = new HashMap<Integer, Integer>();
+        Map<Integer, Integer> columnasOrdenables = new HashMap<>();
         columnasOrdenables.put(0, 1);
         columnasOrdenables.put(1, 19);
         columnasOrdenables.put(2, 9);
@@ -529,7 +526,7 @@ public class UsuarioController extends ControladorSeguro{
             // Oficios sin asignar
             if (estado.compareTo("0")==0) {
                 for( Oficio p : pagOficio.getList()  ){
-                    Set<String> losEstados = new HashSet<String>();
+                    Set<String> losEstados = new HashSet<>();
                     JSONObject datoP = new JSONObject();
                     datoP.put("id", p.id);
                     datoP.put("folio", "No se le ha asignado folio");
@@ -728,7 +725,7 @@ public class UsuarioController extends ControladorSeguro{
 
             // Preagenda del mismo folioproductorasignado
             List<PreAgenda> x = Agenda.find.where().eq("id", id).findUnique().folioproductorasignado.preagendas;
-            List<Long> lstIds = new ArrayList<Long>(Arrays.asList());
+            List<Long> lstIds = new ArrayList<>(Arrays.asList());
             x.forEach(preAgenda -> {
                 preAgenda.equipos.forEach( equipo->{
                     System.out.println("equipo id "+equipo.id);
@@ -937,7 +934,7 @@ public class UsuarioController extends ControladorSeguro{
 
             // PreAgendaRol
             if (obj.personal.size()>0) {
-                List<PreAgendaRol> nvos = new ArrayList<PreAgendaRol>();
+                List<PreAgendaRol> nvos = new ArrayList<>();
                 for (int x=0;x<obj.personal.size();x++) {
                     PreAgendaRol prol = obj.personal.get(x);
                     PreAgendaRol pasRol = new PreAgendaRol();
@@ -1122,7 +1119,7 @@ public class UsuarioController extends ControladorSeguro{
                         }
                         if (o.salas.size()==0) {
                             System.out.println("se crea la sala");
-                            o.salas =  new ArrayList<PreAgendaSala>();
+                            o.salas = new ArrayList<>();
                             PreAgendaSala nuevaSala = new PreAgendaSala();
                             nuevaSala.preagenda = o;
                             nuevaSala.sala =  Sala.find.byId(laSala);
@@ -2010,7 +2007,7 @@ public class UsuarioController extends ControladorSeguro{
         System.out.println("\nPersonal NO disponible en agenda (sin importar su rol) "+noDisponibles.size());
         // Roles por fase
         List<RolFase> x = RolFase.find.where().eq("fase.id", fase).findList();
-        List<Long> roles = new ArrayList<Long>();
+        List<Long> roles = new ArrayList<>();
         for (  RolFase r: x  ) {
             roles.add(r.rol.id);
         }
@@ -3004,11 +3001,9 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
         System.out.println("desde auxAjaxOperadorSalaDisponible "+eventoId+" "+salaId+" "+desde+" "+hasta);
         List<Object> disponibles = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Date d = desde;
-        Date h = hasta;
-        List<Object> operadorSala = auxOperadorEnHorario(sdf.format(d), sdf.format(h), eventoId, salaId);
+        List<Object> operadorSala = auxOperadorEnHorario(sdf.format(desde), sdf.format(hasta), eventoId, salaId);
         if ( operadorSala.size()!=0) {
-            List<Object> arr = auxOperadorNoDisponible(sdf.format(d), sdf.format(h), eventoId);
+            List<Object> arr = auxOperadorNoDisponible(sdf.format(desde), sdf.format(hasta), eventoId);
             disponibles = find
                     .where().eq("personal.activo", "S")
                     .eq("sala.id", salaId)
@@ -3017,7 +3012,7 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
                     .findIds();
             //.stream().map(f->f.personal.id).collect(Collectors.toList());
         }
-        System.out.println("Operadores disponibles de:"+sdf.format(d)+" hasta:"+sdf.format(h)+"  : "+disponibles.size());
+        System.out.println("Operadores disponibles de:"+sdf.format(desde)+" hasta:"+sdf.format(hasta)+"  : "+disponibles.size());
         if (disponibles.size()>0) {
             for (Object x : disponibles) {
                 String cadena = String.valueOf(x);
@@ -3116,6 +3111,8 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
         System.out.println("retorno: "+jsonContext.toJsonString(p));
         return ok(jsonContext.toJsonString(p));
     }
+
+
 
     @Transactional
     public static Result ajaxCancelaEvento() {
@@ -3217,7 +3214,7 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
         JSONObject json;
         int filtrados = 0;
         int sinFiltro = 0;
-        Map<Integer, Integer> columnasOrdenables = new HashMap<Integer, Integer>();
+        Map<Integer, Integer> columnasOrdenables = new HashMap<>();
         columnasOrdenables.put(0, 1);
         columnasOrdenables.put(1, 19);
         columnasOrdenables.put(2, 9);
@@ -3237,11 +3234,11 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
             numPag = Integer.parseInt(request().getQueryString("start")) /   Integer.parseInt(request().getQueryString("length"));
         int numRegistros = Integer.parseInt(request().getQueryString("length"));
 
-        Set<Long> setIdsPreagendas = new HashSet<Long>();
-        Set<Long> setIdsAagendas = new HashSet<Long>();
+        Set<Long> setIdsPreagendas = new HashSet<>();
+        Set<Long> setIdsAagendas = new HashSet<>();
 
         Query<Folio> qFolios = Ebean.find(Folio.class);
-        Set<Long> losIdsFolio = new HashSet<Long>();
+        Set<Long> losIdsFolio = new HashSet<>();
 
 
         List<AuxEventoOperadorSala> x = new EventoOperadorSala().obtener();
@@ -3338,7 +3335,7 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
                 json2.put("data", new JSONArray() );
             } else {
                 for( Folio p : pagina.getList()  ){
-                    Set<String> losEstados = new HashSet<String>();
+                    Set<String> losEstados = new HashSet<>();
                     JSONObject datoP = new JSONObject();
                     datoP.put("id", p.id);
                     datoP.put("folio", p.numfolio);
@@ -3437,7 +3434,7 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
         String desde = json.findValue("desde").asText();
         String hasta = json.findValue("hasta").asText();
 
-        List<PreAgendaSala> pass = new ArrayList<PreAgendaSala>();
+        List<PreAgendaSala> pass = new ArrayList<>();
         try {
             Date date1=new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(fecha+" "+desde);
             Date date2=new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(fecha+" "+hasta);
@@ -3488,7 +3485,7 @@ arrEq2.forEach(nda-> System.out.println("<<"+nda+">> " ));
     }
 
     // Regresa el archivo relacionado al oficio
-    public static Result verOficio(Long id, String sufijo) throws SQLException {
+    public static Result verOficio(Long id, String sufijo) {
         System.out.println("Desde verOficio.......  id "+id);
         System.out.println("id: "+id+"   sufijo: "+sufijo);
         PlantillaArchivo pa = new PlantillaArchivo();

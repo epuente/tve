@@ -20,5 +20,5 @@ public class OficioEncuesta extends PlantillaArchivo {
     }
 
 
-    public static Finder<Long, OficioEncuesta> find = new Finder<Long, OficioEncuesta>(Long.class, OficioEncuesta.class);
+    public static Finder<Long, OficioEncuesta> find = new Finder<>(Long.class, OficioEncuesta.class);
 }

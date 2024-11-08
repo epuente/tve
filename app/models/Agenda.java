@@ -38,7 +38,7 @@ public class Agenda extends models.utils.PlantillaModelo implements Comparable<A
 	@Transient
     public String tipo = "agenda";	
     
-	public static Model.Finder<Long, Agenda> find = new Model.Finder<Long, Agenda>(Long.class, Agenda.class);
+	public static Model.Finder<Long, Agenda> find = new Model.Finder<>(Long.class, Agenda.class);
 
 	@OneToMany(mappedBy="agenda", cascade=CascadeType.ALL)
 	public List<AgendaSalida> salidas;

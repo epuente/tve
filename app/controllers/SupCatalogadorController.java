@@ -300,15 +300,7 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
         return ok (jo.toString());
     }
 
-    public static Result tablero(){
-        Logger.debug("desde SupCatalogadorController.tablero");
-        return ok( views.html.videoteca.catalogadores.tablero.render());
-    }
 
-    public static Result tablero2(){
-        Logger.debug("desde SupCatalogadorController.tablero2");
-        return ok( views.html.videoteca.catalogadores.tablero2.render());
-    }
 
     public static Result tablero3(){
         Logger.debug("desde SupCatalogadorController.tablero2");
@@ -488,55 +480,8 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
             }
         }
         return ok( views.html.videoteca.catalogadores.infoForm2.render(id, forma, losCreditos.toString())  );
-
     }
 
-    public static Result catalogoInfo2(Long id){
-        System.out.println("\n\nDesde SupCatalogadorController.catalogoInfo2");
-        VtkCatalogo catalogo = VtkCatalogo.find.byId(id);
-        Form<VtkCatalogo> forma = form(VtkCatalogo.class).fill(catalogo);
-        Duracion d = new Duracion();
-        if (catalogo.duracion!=null)
-            d = new Duracion(catalogo.duracion);
-        else
-            d = new Duracion(0L);
-        return ok( views.html.videoteca.catalogadores.infoForm2.render(id, forma, "jajaaj")  );
-    }
-
-    /*
-    public static Result catalogoInfo3(Long id){
-        System.out.println("\n\nDesde SupCatalogadorController.catalogoInfo2");
-        VtkCatalogo catalogo = VtkCatalogo.find.byId(id);
-        Form<VtkCatalogo> forma = form(VtkCatalogo.class).fill(catalogo);
-        Duracion d = new Duracion();
-        if (catalogo.duracion!=null)
-            d = new Duracion(catalogo.duracion);
-        else
-            d = new Duracion(0L);
-        StringBuilder losCreditos= new StringBuilder();
-        if (catalogo.creditos!=null) {
-            String sql ="select distinct tipo_credito_id, tc.descripcion  " +
-                    "from credito c inner join tipo_credito tc on c.tipo_credito_id = tc.id  " +
-                    "where catalogo_id =" + id +
-                    "order by c.tipo_credito_id ";
-            List<SqlRow> sqlRows = Ebean.createSqlQuery(sql).findList();
-            for (SqlRow sqlRow : sqlRows) {
-                List<Credito> creditos = Credito.find.setDistinct(true).where()
-                        .and(Expr.eq("catalogo_id", id), Expr.eq("tipoCredito.id", sqlRow.getLong("tipo_credito_id")))
-                        .findList();
-                losCreditos.append("<span class='bloque'><strong>"+sqlRow.getString(("descripcion") )+": </strong>");
-                for ( Credito credito :creditos ) {
-                    losCreditos.append(  credito.personas +", " );
-                }
-                if (losCreditos.toString().length()>2)
-                    losCreditos.deleteCharAt(losCreditos.length() - 2);
-
-                losCreditos.append("</span>");
-            }
-        }
-        return ok( views.html.videoteca.catalogadores.infoForm3.render(id, forma, losCreditos.toString() )  );
-    }
-    */
 
     public static Result eliminaCatalogo() throws JSONException {
         JSONObject retorno = new JSONObject().put("estado","error");
@@ -551,13 +496,9 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
     public static Result chartCatPorFecha() throws JSONException {
         JSONObject retorno = new JSONObject();
         JSONArray ja = new JSONArray();
-
         JSONArray jaDataSets = new JSONArray();
-
         TreeSet<String> tsLabels = new TreeSet<>();
-
         JSONArray jaColores = coloresBG();
-
         // Primero seleccionar los catalogadores
         List<Personal> catalogadores = Ebean.find(Personal.class)
                 .setDistinct(true)
@@ -566,9 +507,6 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
                 .findList();
 
         System.out.println("Cantidad catalogadore43s "+  catalogadores.size()  );
-
-
-
 
         // Loop por catalogador
         int iColores=0;
@@ -648,6 +586,41 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
 
         return ok (retorno.toString());
     }
+
+
+    public static Result chartNivel() throws JSONException {
+        JSONObject retorno = new JSONObject();
+        JSONArray ja = new JSONArray();
+        JSONArray jaDataSets = new JSONArray();
+        List<String> lstLabels = new ArrayList<>();
+        JSONArray jaColores = coloresBG();
+        String query ="select n.id, n.descripcion , count(*) total " +
+                "from vtk_nivel vn " +
+                "inner join nivel n on vn.nivel_id = n.id " +
+                "group by n.id , n.descripcion " +
+                "order by n.id";
+
+        List<SqlRow> sqlRows = Ebean.createSqlQuery(query).findList();
+        if (!sqlRows.isEmpty()) {
+            //joAux.put("label", catalogador.nombreCompletoOficial());
+            JSONArray jaData = new JSONArray();
+            JSONObject joAux = new JSONObject();
+            for (SqlRow r : sqlRows) {
+                lstLabels.add(r.getString("descripcion"));
+                jaData.put(r.getInteger("total"));
+            }
+            joAux.put("data", jaData);
+            joAux.put("backgroundColor", coloresBG());
+            JSONArray jaAux = new JSONArray();
+            jaAux.put(joAux);
+
+            retorno.put("labels", lstLabels);
+            retorno.put("datasets", jaAux);
+        }
+        System.out.println("\n\nchartNivel: "+retorno.toString());
+        return ok (retorno.toString());
+    }
+
 
 
     // Estos son los colores que se usan para las series de las gráficas

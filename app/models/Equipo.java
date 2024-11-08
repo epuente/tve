@@ -34,20 +34,19 @@ public class Equipo  extends models.utils.PlantillaModelo{
 	@Column(length=600)
 	public String observacion;
 
-    public static Model.Finder<Long,Equipo> find = new Model.Finder<Long,Equipo>(Long.class, Equipo.class);		
+    public static Model.Finder<Long,Equipo> find = new Model.Finder<>(Long.class, Equipo.class);
 
     public static Page<Equipo> page(int page, int pageSize, String filtro, String columnaOrden, String tipoOrden) {
-    	System.out.println(" * * * * * * * * ");    	
-    	Page<Equipo> p = find
-    		.fetch("estado")	
-            .where("  unaccent(lower(descripcion)) like :cadena OR unaccent(lower(estado.descripcion)) like :cadena  OR unaccent(lower(serie)) like :cadena  OR  unaccent(lower(marca)) like :cadena  OR  unaccent(lower(modelo)) like :cadena  OR  unaccent(lower(observacion)) like :cadena")
-            .setParameter("cadena", "%"+filtro.toLowerCase()+"%")
-                .orderBy( columnaOrden +" "+tipoOrden )
-                .findPagingList(pageSize)                
-                .setFetchAhead(false)
-                .getPage(page);
-//    	System.out.println(" * * * * * * * * registros:"+p.getTotalRowCount());
-        return p;
+    	System.out.println(" * * * * * * * * ");
+        //    	System.out.println(" * * * * * * * * registros:"+p.getTotalRowCount());
+        return find
+            .fetch("estado")
+.where("  unaccent(lower(descripcion)) like :cadena OR unaccent(lower(estado.descripcion)) like :cadena  OR unaccent(lower(serie)) like :cadena  OR  unaccent(lower(marca)) like :cadena  OR  unaccent(lower(modelo)) like :cadena  OR  unaccent(lower(observacion)) like :cadena")
+.setParameter("cadena", "%"+filtro.toLowerCase()+"%")
+.orderBy( columnaOrden +" "+tipoOrden )
+.findPagingList(pageSize)
+.setFetchAhead(false)
+.getPage(page);
     }      
     
     

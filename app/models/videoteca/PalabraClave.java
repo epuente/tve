@@ -1,7 +1,6 @@
 package models.videoteca;
 
 import models.Personal;
-import models.videoteca.VtkCatalogo;
 import play.db.ebean.Model;
 
 import javax.persistence.Column;

@@ -51,7 +51,7 @@ public final class CUrl {
         } catch (Exception ignored) {}
     }
 
-    private static final Map<String, Integer> optMap = Util.mapPut(new LinkedHashMap<String, Integer>(),
+    private static final Map<String, Integer> optMap = Util.mapPut(new LinkedHashMap<>(),
             "-E", 32,
             "--cert", 32, 					// <certificate[:password]> Client certificate file and password
             "--cacert", 34, 				// <truststore[:password]> Truststore to verify server certs, default to system truststore
@@ -117,12 +117,12 @@ public final class CUrl {
     private static final String BOUNDARY = "------------aia113jBkadk7289";
     private static final byte[] NEWLINE = "\r\n".getBytes();
 
-    private final List<String> options = new ArrayList<String>();
-    private final Map<String, IO> iomap = new HashMap<String, IO>();
-    private final Map<String, String> tags = new LinkedHashMap<String, String>();
-    private final Map<String, String> headers = new LinkedHashMap<String, String>();
-    private final List<List<String[]>> responseHeaders = new ArrayList<List<String[]>>(4);
-    private final List<URL> locations = new ArrayList<URL>(4);
+    private final List<String> options = new ArrayList<>();
+    private final Map<String, IO> iomap = new HashMap<>();
+    private final Map<String, String> tags = new LinkedHashMap<>();
+    private final Map<String, String> headers = new LinkedHashMap<>();
+    private final List<List<String[]>> responseHeaders = new ArrayList<>(4);
+    private final List<URL> locations = new ArrayList<>(4);
     private long startTime;
     private long execTime;
     private int httpCode;
@@ -468,7 +468,7 @@ public final class CUrl {
 
     public static List<HttpCookie> parseCookies(String input) {
         BufferedReader br = new BufferedReader(new StringReader(input));
-        ArrayList<HttpCookie> result = new ArrayList<HttpCookie>();
+        ArrayList<HttpCookie> result = new ArrayList<>();
         try {
             for (String line = br.readLine(), l[]; line != null; line = br.readLine()) {
                 if (line.trim().length() == 0 || line.startsWith("# ") || (l = line.split("\t")).length < 7) continue;
@@ -605,7 +605,7 @@ public final class CUrl {
         final MemIO stdout = new MemIO();
         IO stderr = stdout, output = stdout, cookieJar = null, dumpHeader = null;
         StringBuilder dataSb = new StringBuilder();
-        Map<String, Util.Ref<String>> form = new LinkedHashMap<String, Util.Ref<String>>();
+        Map<String, Util.Ref<String>> form = new LinkedHashMap<>();
         float connectTimeout = 0, maxTime = 0, retryDelay = 0, retryMaxTime = 0;
         int retry = 0, maxDownload = 0;
         boolean location = false, silent = false, mergeData = false, insecure = false;
@@ -678,7 +678,7 @@ public final class CUrl {
                             }
                             break;
                         default: // name=content
-                            Map<String, String> m = Util.split(data, "&", "=", new LinkedHashMap<String, String>());
+                            Map<String, String> m = Util.split(data, "&", "=", new LinkedHashMap<>());
                             for (Map.Entry<String, String> en: m.entrySet()) {
                                 try { en.setValue(URLEncoder.encode(en.getValue(), "UTF-8")); } catch (Exception ignored) { }
                             }
@@ -692,11 +692,11 @@ public final class CUrl {
                 case 7: // --form  CONTENT  Specify HTTP multipart POST data (H)
                     data = options.get(++i);
                     idx = data.indexOf('=');
-                    form.put(data.substring(0, idx), new Util.Ref<String>(1, data.substring(idx + 1)));
+                    form.put(data.substring(0, idx), new Util.Ref<>(1, data.substring(idx + 1)));
                     break;
                 case 71: // --form-string  STRING  Specify HTTP multipart POST data (H)
                     for (String[] pair: Util.split(options.get(++i), "&", "=")) {
-                        form.put(pair[0], new Util.Ref<String>(pair[1]));
+                        form.put(pair[0], new Util.Ref<>(pair[1]));
                     }
                     break;
                 case 8: // --get  Send the -d data with a HTTP GET (H)
@@ -813,7 +813,7 @@ public final class CUrl {
             if (method == null) method = "POST";
         } else if (dataSb.length() > 0) {
             dataStr = !mergeData ? dataSb.toString()
-                    : Util.join(Util.split(dataSb.toString(), "&", "=", new LinkedHashMap<String, String>()), "&", "=");
+                    : Util.join(Util.split(dataSb.toString(), "&", "=", new LinkedHashMap<>()), "&", "=");
             if (method == null) method = "POST";
         }
         if (method == null) method = "GET";
@@ -845,7 +845,7 @@ public final class CUrl {
                         throw new RuntimeException("Too many redirects.");
                     }
                     locations.add(urlObj);
-                    responseHeaders.add(new ArrayList<String[]>());
+                    responseHeaders.add(new ArrayList<>());
                 }
                 if (verbose) {
                     Util.logStderr("Prepare open connection - URL.openConnection()");
@@ -1099,7 +1099,7 @@ public final class CUrl {
     }
 
     private static final HashSet<Class> RECOVERABLES = Util.listAdd(
-            new HashSet<Class>(),
+            new HashSet<>(),
             (Class) Recoverable.class,
             ConnectException.class,
             HttpRetryException.class,
@@ -1298,7 +1298,7 @@ public final class CUrl {
          * @return
          */
         public Map<String, String> parseDumpedHeader() {
-            Map<String, String> result = new LinkedHashMap<String, String>();
+            Map<String, String> result = new LinkedHashMap<>();
             String s = Util.b2s(this.toByteArray(), null, null);
             for (String l: s.split("[\r\n]+")) {
                 if (l.trim().length() == 0) continue;
@@ -1324,7 +1324,7 @@ public final class CUrl {
         protected final Map<String, List<HttpCookie>> cookiesMap;
 
         public CookieIO() {
-            cookiesMap = new HashMap<String, List<HttpCookie>>();
+            cookiesMap = new HashMap<>();
         }
 
         protected Map<String, List<HttpCookie>> getCookiesMap() {
@@ -1361,7 +1361,7 @@ public final class CUrl {
 
         @Override
         public List<HttpCookie> getCookies() {
-            List<HttpCookie> result = new ArrayList<HttpCookie>();
+            List<HttpCookie> result = new ArrayList<>();
             for (List<HttpCookie> cc: getCookiesMap().values()) {
                 for (ListIterator<HttpCookie> it = cc.listIterator(); it.hasNext();)
                     if (it.next().hasExpired()) it.remove();
@@ -1372,7 +1372,7 @@ public final class CUrl {
 
         @Override
         public List<URI> getURIs() {
-            Set<URI> result = new HashSet<URI>();
+            Set<URI> result = new HashSet<>();
             for (HttpCookie cookie: getCookies()) {
                 String scheme = cookie.getSecure() ? "https" : "http";
                 String domain = cookie.getDomain();
@@ -1381,7 +1381,7 @@ public final class CUrl {
                     result.add(new URI(scheme, domain, cookie.getPath(), null));
                 } catch (URISyntaxException ignored) {}
             }
-            return new ArrayList<URI>(result);
+            return new ArrayList<>(result);
         }
 
         @Override
@@ -1421,7 +1421,7 @@ public final class CUrl {
 
         private final ThreadLocal<Map<String, List<HttpCookie>>> cookies = new ThreadLocal<Map<String, List<HttpCookie>>>() {
             @Override protected synchronized Map<String, List<HttpCookie>> initialValue() {
-                return new HashMap<String, List<HttpCookie>>();
+                return new HashMap<>();
             }
         };
 
@@ -1445,15 +1445,15 @@ public final class CUrl {
         }
 
         public static <T> List<T> asList(Object o) {
-            if (o == null) return new ArrayList<T>(0);
+            if (o == null) return new ArrayList<>(0);
             if (o instanceof Collection) {
-                return new ArrayList<T>((Collection<T>) o);
+                return new ArrayList<>((Collection<T>) o);
             } else if (o.getClass().isArray()) {
-                ArrayList<T> list = new ArrayList<T>();
+                ArrayList<T> list = new ArrayList<>();
                 for (int i = 0, n = Array.getLength(o); i < n; i++) list.add((T) Array.get(o, i));
                 return list;
             } else {
-                return listAdd(new ArrayList<T>(1), (T) o);
+                return listAdd(new ArrayList<>(1), (T) o);
             }
         }
 
@@ -1501,7 +1501,7 @@ public final class CUrl {
         }
 
         public static <T> Iterable<T> safeIter(Iterable<T> iter) {
-            return iter != null ? iter : new ArrayList<T>(0);
+            return iter != null ? iter : new ArrayList<>(0);
         }
 
         public static <T> T[] safeArray(T[] array, Class<T> componentType) {
@@ -1509,7 +1509,7 @@ public final class CUrl {
         }
 
         public static Map<String, Object> newMap(Object... keyValuePairs) {
-            return mapPut(new LinkedHashMap<String, Object>(), keyValuePairs);
+            return mapPut(new LinkedHashMap<>(), keyValuePairs);
         }
 
         public static <K, V, M extends Map<K, V>> M mapPut(M map, Object... keyValuePairs) {
@@ -1611,7 +1611,7 @@ public final class CUrl {
 
         public static Map<String, String> split(String s, String entryDelim, String kvDelim, Map<String, String> toMap) {
             String[] ss = s.split(entryDelim);
-            if (toMap == null) toMap = new HashMap<String, String>(ss.length);
+            if (toMap == null) toMap = new HashMap<>(ss.length);
             for (String l : ss) {
                 String[] sub = l.split(kvDelim);
                 toMap.put(sub[0].trim(), sub.length > 1 ? sub[1].trim() : "");
@@ -1620,11 +1620,11 @@ public final class CUrl {
         }
 
         public static String join(Object mapOrColl, String delim, String subDelim) {
-            List<List<Object>> all = new ArrayList<List<Object>>();
+            List<List<Object>> all = new ArrayList<>();
             if (mapOrColl == null) { // do nothing
             } else if (mapOrColl instanceof Map) {
                 for (Map.Entry<?, ?> kv : ((Map<?, ?>) mapOrColl).entrySet()) {
-                    all.add(listAdd(new ArrayList<Object>(2), kv.getKey(), kv.getValue()));
+                    all.add(listAdd(new ArrayList<>(2), kv.getKey(), kv.getValue()));
                 }
             } else if (mapOrColl instanceof Collection) {
                 for (Object o : (Collection<?>) mapOrColl) all.add(asList(o));
@@ -1714,7 +1714,7 @@ public final class CUrl {
 
         public static void mkdirs(File dir) {
             File parent = dir.getAbsoluteFile();
-            List<File> mkdir = new ArrayList<File>();
+            List<File> mkdir = new ArrayList<>();
             for (; !parent.exists() || !parent.isDirectory(); parent = parent.getParentFile()) {
                 mkdir.add(parent);
             }
@@ -1838,12 +1838,12 @@ public final class CUrl {
             return sb.toString();
         }
 
-        private static final Map<Class<?>, Map<String, List<MemberInfo>>> mapClassMembers = new HashMap<Class<?>, Map<String, List<MemberInfo>>>();
+        private static final Map<Class<?>, Map<String, List<MemberInfo>>> mapClassMembers = new HashMap<>();
 
         private static synchronized List<MemberInfo> getMembers(Class<?> cls, String name) {
             if (!mapClassMembers.containsKey(cls)) {
                 Map<String, List<MemberInfo>> map;
-                mapClassMembers.put(cls, map = new LinkedHashMap<String, List<MemberInfo>>());
+                mapClassMembers.put(cls, map = new LinkedHashMap<>());
                 Class<?> clss = cls;
                 while (clss != null && !Object.class.equals(clss)) {
                     for (Constructor<?> c : safeArray(clss.getDeclaredConstructors(), Constructor.class)) {

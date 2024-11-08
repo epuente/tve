@@ -16,6 +16,6 @@ public class OficioProductorSolicitado  extends models.utils.PlantillaModelo{
 	
 
 
-	public static Model.Finder<Long,OficioProductorSolicitado> find = new Model.Finder<Long,OficioProductorSolicitado>(Long.class, OficioProductorSolicitado.class);	
+	public static Model.Finder<Long,OficioProductorSolicitado> find = new Model.Finder<>(Long.class, OficioProductorSolicitado.class);
 
 }

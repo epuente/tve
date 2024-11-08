@@ -20,7 +20,7 @@ public class ResumableInfoStorage {
     }
 
     //resumableIdentifier --  ResumableInfo
-    private HashMap<String, ResumableInfo> mMap = new HashMap<String, ResumableInfo>();
+    private HashMap<String, ResumableInfo> mMap = new HashMap<>();
 
     /**
      * Get ResumableInfo from mMap or Create a new one.

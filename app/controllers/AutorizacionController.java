@@ -33,8 +33,8 @@ public class AutorizacionController extends ControladorSeguroAdministradorOperad
         JsonNode json = request().body().asJson();
         System.out.println(json);
 
-        List<AgendaCuentaRol> personal = new ArrayList<AgendaCuentaRol>();
-        List<AgendaOperadorSala> operadores = new ArrayList<AgendaOperadorSala>();
+        List<AgendaCuentaRol> personal = new ArrayList<>();
+        List<AgendaOperadorSala> operadores = new ArrayList<>();
 
         List<JsonNode> arreglo2 = json.findPath("xyz").findValues("operadoresSala");
 
@@ -814,7 +814,7 @@ System.out.println("existePAS != null");
 				System.out.println("   ........................... despues de update ");	
 				*@*/
 
-        } catch (JsonParseException | JsonMappingException e) {
+        } catch (JsonParseException | JsonMappingException e ) {
 
             e.printStackTrace();
         } catch (IOException e) {

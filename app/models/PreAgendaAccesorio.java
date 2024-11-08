@@ -19,5 +19,5 @@ public class PreAgendaAccesorio  extends models.utils.PlantillaModelo{
 	@ManyToOne
 	public Estado estado;
 
-	public static Model.Finder<Long,PreAgendaAccesorio> find = new Model.Finder<Long,PreAgendaAccesorio>(Long.class, PreAgendaAccesorio.class);
+	public static Model.Finder<Long,PreAgendaAccesorio> find = new Model.Finder<>(Long.class, PreAgendaAccesorio.class);
 }

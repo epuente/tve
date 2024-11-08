@@ -208,7 +208,7 @@ System.out.println(forma);
 
 	private static final String key = "aesEncryptionKey";
 	private static final String initVector = "encryptionIntVec";
-	public static String encrypt(String value) {
+	private static String encrypt(String value) {
 		try {
 			IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
 			SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");

@@ -1,14 +1,9 @@
 package models;
 
-import classes.ColorConsola;
-import classes.Notificaciones.Notificacion;
 import controllers.PersonalController;
-import controllers.UsuarioController;
 import play.Logger;
 import play.data.format.Formats;
 import play.db.ebean.Model;
-import play.mvc.Controller;
-import play.mvc.Result;
 
 import javax.persistence.*;
 import java.util.*;
@@ -42,10 +37,10 @@ public class Folio  extends models.utils.PlantillaModelo{
 	@OneToOne
 	public FolioCancelacion foliocancelacion;
 
-    public static Model.Finder<Long,Folio> find = new Model.Finder<Long,Folio>(Long.class, Folio.class);
+    public static Model.Finder<Long,Folio> find = new Model.Finder<>(Long.class, Folio.class);
 
     public List<String> listaProductoresNombres() {
-		List<String> nombres = new ArrayList<String>();
+		List<String> nombres = new ArrayList<>();
 		for (FolioProductorAsignado fpa: this.productoresAsignados) {
 			nombres.add(fpa.personal.nombreCompleto());
 		}
@@ -106,8 +101,7 @@ public class Folio  extends models.utils.PlantillaModelo{
 		HisFolio hf = new HisFolio();
 		hf.folio = this;
 		hf.estado = this.estado;
-		Personal x = PersonalController.buscar(Long.parseLong(play.mvc.Controller.session("usuario")));
-		hf.usuario = x;
+        hf.usuario = PersonalController.buscar(Long.parseLong(play.mvc.Controller.session("usuario")));
 		hf.rol = Rol.find.byId(  Long.parseLong( play.mvc.Controller.session("rolActual")  ));
 		hf.save();
 	}

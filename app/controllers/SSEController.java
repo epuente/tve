@@ -4,10 +4,8 @@ import classes.Notificaciones.AuxNotificacion;
 import classes.Notificaciones.Notificacion;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import play.mvc.Controller;
 import play.mvc.Result;
 
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +19,7 @@ public class SSEController extends ControladorSeguro {
         return ok ( views.html.ssePrueba.render()  );
     }
 
-    public static Result stream() throws UnsupportedEncodingException {
+    public static Result stream() {
         //System.out.println("Desde SSEController.stream");
         long elUsuario = Long.decode(session("usuario"));
         long elRol      = Long.decode(session("rolActual"));

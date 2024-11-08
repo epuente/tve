@@ -34,8 +34,6 @@ import com.avaje.ebean.text.json.JsonContext;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import classes.miCorreo2;
-import models.Agenda;
-import play.libs.Json;
 import play.mvc.Result;
 import views.html.usuario.agenda;
 import play.db.ebean.Model;
@@ -288,124 +286,7 @@ System.out.println("agenda.....");
 		
 	}	
 	
-	
-	/*
-	public static Result ajaxActualizaEventoAdmin(){
-System.out.println("   ...........................   desde ajaxActualizaEventoAdmin ");		
-		Agenda obj;
-		JsonNode json = request().body().asJson();
-		
-System.out.println(json);
 
-		Agenda o = new Agenda();
-
-		if (   json.findPath("tipo").asText().compareTo("agenda") == 0    
-				||  json.findPath("estado").findPath("id").asLong() == 5   
-				||  json.findPath("estado").findPath("id").asLong() == 7   ){
-			
-			o = Agenda.find.byId( json.findPath("id").asLong()   );
-		
-			//Quitar nodo 'tipo'
-			for (JsonNode personNode : json) {
-			    if (personNode instanceof ObjectNode) {
-			        ObjectNode object = (ObjectNode) personNode;
-			        object.remove("tipo");
-			    }
-			}
-
-
-
-			  try {
-
-				ObjectMapper mapper = new ObjectMapper();				
-				obj = mapper.readValue(json.findPath("evento").traverse(), Agenda.class);
-
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-
-
-				o.inicio = sdf.parse(json.findPath("inicio").asText()); 						
-				o.fin = sdf.parse(json.findPath("fin").asText());
-				
-				
-				// Este loop solo muestra en consola los nodos de json
-				Object someObject = obj;
-				for (Field field : someObject.getClass().getDeclaredFields()) {
-				    field.setAccessible(true); // You might want to set modifier to public first.
-				    Object value = null;
-					try {
-						value = field.get(someObject);
-					} catch (IllegalArgumentException | IllegalAccessException e) {
-						e.printStackTrace();
-					} 
-				    if (value != null) {
-				        System.out.println(field.getName() + "=" + value);
-				    }
-				}				
-				
-
-
-
-				if (obj.salidas != null){
-					o.salidas.get(0).agenda =  obj;
-				}
-				if (obj.vehiculos != null){
-					o.vehiculos.get(0).agenda =  obj;
-				}
-				if (obj.locaciones.get(0)!= null){
-					o.locaciones.get(0).agenda =  obj;
-				}
-				if (obj.cuentaRol != null){
-					System.out.println("   evento con personal");
-					for( AgendaCuentaRol tp :  obj.cuentaRol) {
-						//System.out.println("       personal :"+tp.personal.id );
-						
-						o.cuentaRol.add(tp);
-					}
-					
-				}
-
-				
-				System.out.println("   ........................... 00 folioproductorasignado "+o.folioproductorasignado);
-				System.out.println("   ........................... 01 fase "+o.fase.id);
-				System.out.println("   ........................... 02 inicio "+o.inicio);
-				System.out.println("   ........................... 03 inicio "+o.fin);
-				System.out.println("   ........................... 04 estado "+o.estado.id);
-				
-
-				
-				
-				
-				System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++antes+++++++++++++++++++++");
-				o.update();
-				System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++despues+++++++++++++++++++");				
-				
-				
-
-				
-				
-			} catch (JsonParseException | JsonMappingException e) {
-				  System.out.println("Error!!!!!!!!!!!!!   "+e.getMessage());
-				e.printStackTrace();
-			} catch (IOException e) {
-
-				e.printStackTrace();
-			} catch ( Exception e){
-				System.out.println("Error!!!!!!!!!!!!!   "+e.getMessage());
-				e.printStackTrace();
-			}
-
-			  
-			
-			
-		}
-		   //   return ok( "{\"agregado\":"+(obj.id != null)+"}" );
-			return ok( "{\"actualizado\":"+(o.id != null)+",\"id\":"+o.id+"}" );
-		    
-		  
-		
-	}	
-	*/
-	
 	public static Result tablero(){
 		 Folio.find.where().in("estado.id",  Arrays.asList(4, 5, 7) ).findList();
 		return ok( views.html.usuario.tableroAdmin.render());
@@ -414,9 +295,9 @@ System.out.println(json);
 	
 	public static Result ajaxTablero(){
 		System.out.println("Desde AdministracionController.ajaxTablero");
-		List<Agenda> fechasCaducadas = new ArrayList<Agenda>();
-		List<PreAgenda> fechasCaducadasPreAgenda = new ArrayList<PreAgenda>();
-		TreeSet<String> eventos = new TreeSet<String>(); 
+		List<Agenda> fechasCaducadas = new ArrayList<>();
+		List<PreAgenda> fechasCaducadasPreAgenda = new ArrayList<>();
+		TreeSet<String> eventos = new TreeSet<>();
 		String jsonString;
 
 		 int oficioAll = Oficio.find.findRowCount();

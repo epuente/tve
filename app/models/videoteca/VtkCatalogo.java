@@ -1,17 +1,13 @@
 package models.videoteca;
 
 import com.avaje.ebean.Page;
-import com.avaje.ebean.annotation.ConcurrencyMode;
-import com.avaje.ebean.annotation.EntityConcurrencyMode;
 import models.*;
 import play.Logger;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static play.mvc.Controller.session;
 
@@ -148,7 +144,7 @@ public class VtkCatalogo extends models.utils.PlantillaModelo{
 
     public boolean validado=false;
 
-    public static Model.Finder<Long,VtkCatalogo> find = new Model.Finder<Long,VtkCatalogo>(Long.class, VtkCatalogo.class);
+    public static Model.Finder<Long,VtkCatalogo> find = new Model.Finder<>(Long.class, VtkCatalogo.class);
 
 
 

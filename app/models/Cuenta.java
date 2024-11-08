@@ -27,7 +27,7 @@ public class Cuenta  extends models.utils.PlantillaModelo{
 
 
 
-    public static Model.Finder<Long,Cuenta> find = new Model.Finder<Long,Cuenta>(Long.class, Cuenta.class);
+    public static Model.Finder<Long,Cuenta> find = new Model.Finder<>(Long.class, Cuenta.class);
     
 	public static Personal autenticar(String usuario, String password) {
 		Cuenta c = Cuenta.find.where()

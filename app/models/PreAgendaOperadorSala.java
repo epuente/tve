@@ -21,10 +21,10 @@ public class PreAgendaOperadorSala  extends models.utils.PlantillaModelo{
 
 	
 
-	public static Model.Finder<Long,PreAgendaOperadorSala> find = new Model.Finder<Long,PreAgendaOperadorSala>(Long.class, PreAgendaOperadorSala.class);
+	public static Model.Finder<Long,PreAgendaOperadorSala> find = new Model.Finder<>(Long.class, PreAgendaOperadorSala.class);
 	
     public static Map<String,String> options() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        LinkedHashMap<String,String> options = new LinkedHashMap<>();
         for(PreAgendaOperadorSala c: PreAgendaOperadorSala.find.findList()) {
             options.put(c.id.toString(), c.personal.nombreCompleto());
         }

@@ -40,7 +40,7 @@ public class ColaCorreos  extends models.utils.PlantillaModelo{
 	@Column(columnDefinition = "TEXT")
 	public String contenido;
 
-	public static Model.Finder<Long,ColaCorreos> find = new Model.Finder<Long,ColaCorreos>(Long.class, ColaCorreos.class);
+	public static Model.Finder<Long,ColaCorreos> find = new Model.Finder<>(Long.class, ColaCorreos.class);
 	
     public enum Status {
         @EnumValue("N")

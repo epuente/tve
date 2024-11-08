@@ -1,7 +1,6 @@
 package models.videoteca;
 
 import models.Disponibilidad;
-import models.Servicio;
 
 import javax.persistence.*;
 

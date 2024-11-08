@@ -19,5 +19,5 @@ public class OficioBitacora extends PlantillaArchivo {
         this.contenido = contenido;
     }
 
-    public static Finder<Long, OficioBitacora> find = new Finder<Long, OficioBitacora>(Long.class, OficioBitacora.class);
+    public static Finder<Long, OficioBitacora> find = new Finder<>(Long.class, OficioBitacora.class);
 }

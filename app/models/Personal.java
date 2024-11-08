@@ -55,9 +55,9 @@ public class Personal  extends models.utils.PlantillaModelo{
 	@OneToOne(mappedBy = "personal", cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
 	public PersonalAvatar avatar;
 	
-	public static Model.Finder<Long,Personal> find = new Model.Finder<Long,Personal>(Long.class, Personal.class);
+	public static Model.Finder<Long,Personal> find = new Model.Finder<>(Long.class, Personal.class);
     public static Map<String,String> optionsProductores() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        LinkedHashMap<String,String> options = new LinkedHashMap<>();
         //for(Personal c: Personal.find.where().eq("tipo.id", 2).orderBy("nombre").findList()) {
         for(Personal c: Personal.find.where().eq("cuentas.roles.rol.id", 100).orderBy("nombre").findList()) {
             options.put(c.id.toString(), c.nombreCompleto());
@@ -66,7 +66,7 @@ public class Personal  extends models.utils.PlantillaModelo{
     } 	
     
     public static Map<String,String> optionsProductoresActivos() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        LinkedHashMap<String,String> options = new LinkedHashMap<>();
         //for(Personal c: Personal.find.where().eq("tipo.id", 2).eq("activo", "S").orderBy("nombre").findList()) {
         for(Personal c: Personal.find.where().eq("cuentas.roles.rol.id", 100).eq("activo", "S").orderBy("nombre").findList()) {
             options.put(c.id.toString(), c.nombreCompleto());
@@ -75,7 +75,7 @@ public class Personal  extends models.utils.PlantillaModelo{
     }    
     
     public static Map<String,String> optionsProductoresInActivos() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        LinkedHashMap<String,String> options = new LinkedHashMap<>();
         for(Personal c: Personal.find.where().eq("cuentas.roles.rol.id", 100).eq("activo", "N").orderBy("nombre").findList()) {
             options.put(c.id.toString(), c.nombreCompleto());
         }
@@ -83,7 +83,7 @@ public class Personal  extends models.utils.PlantillaModelo{
     }     
     
     public static Map<String,String> optionsOperadoresSala() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        LinkedHashMap<String,String> options = new LinkedHashMap<>();
         
         List<Personal> auxP = Personal.find.fetch("cuentas").where().eq("cuentas.roles.rol.id", 16).findList();
         

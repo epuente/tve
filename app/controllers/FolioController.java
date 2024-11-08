@@ -8,7 +8,6 @@ import com.avaje.ebean.text.json.JsonContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.*;
 import play.Logger;
-import play.mvc.Controller;
 import play.mvc.Result;
 
 import java.text.SimpleDateFormat;

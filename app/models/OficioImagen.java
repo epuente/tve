@@ -13,7 +13,7 @@ public class OficioImagen  extends PlantillaArchivo implements Serializable {
 	@ManyToOne
 	public Oficio oficio;
 
-	public static Model.Finder<Long,OficioImagen> find = new Model.Finder<Long,OficioImagen>(Long.class, OficioImagen.class);
+	public static Model.Finder<Long,OficioImagen> find = new Model.Finder<>(Long.class, OficioImagen.class);
 
 
 	public OficioImagen(String nombrearchivo, String contenttype, byte[] contenido) {

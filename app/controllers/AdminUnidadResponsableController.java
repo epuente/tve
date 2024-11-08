@@ -6,7 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import play.data.Form;
-import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.catalogos.UnidadResponsable.*;
 

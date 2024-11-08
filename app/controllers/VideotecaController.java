@@ -25,7 +25,7 @@ import play.mvc.Result;
 import resumable.HttpUtils;
 import resumable.ResumableInfo;
 import resumable.ResumableInfoStorage;
-import views.html.videoteca.createForm3;
+import views.html.videoteca.createForm5;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -35,7 +35,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static play.data.Form.form;
 
 import org.jsoup.*;
@@ -234,21 +233,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
     }
 
 
-    //@BodyParser.Of(value = BodyParser.MultipartFormData.class, maxLength =  2 * 1024 * 1024) // 2 MB
-    //@BodyParser.Of(value = BodyParser.MultipartFormData.class, maxLength =  10 * 1024 * 1024 * 1024) // 10 GB MB
-    //@BodyParser.Of(BodyParser.AnyContent.class)
-    public static Result catalogoCreate2(){
-        Form<VtkCatalogo> forma = play.data.Form.form(VtkCatalogo.class);
-        List<TipoCredito> tipos = TipoCredito.find.all();
-        List<TipoCredito> tiposOrdenados = tipos.stream()
-                .sorted(Comparator.comparing(TipoCredito::getId))
-                .collect(Collectors.toList());
-        List<VtkCampo> campos = VtkCampo.find.all();
-        //response().setHeader(CONTENT_LENGTH, "10737418240");
-        return ok(
-                views.html.videoteca.createForm3.render(forma, tiposOrdenados, campos)
-        );
-    }
+
 
 
     public static Result catalogoCreate5(){
@@ -328,7 +313,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 .create();
         List<Serie> list2 = Serie.find.setRawSql(rawSql3).findList();
 
-        List<Serie> list3 = new ArrayList<Serie>();
+        List<Serie> list3 = new ArrayList<>();
         if ( !list1.isEmpty() &&  list1.size()>0)
             list3.addAll(list1);
         if ( !list2.isEmpty() &&  list2.size()>0)
@@ -467,7 +452,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         Ebean.beginTransaction();
         try {
             if (forma.hasErrors()) {
-                return badRequest(createForm3.render(forma, TipoCredito.find.all(), VtkCampo.find.all()));
+                return badRequest(createForm5.render(forma, TipoCredito.find.all(), VtkCampo.find.all()));
             }
             VtkCatalogo vtk = losDatos(forma, fd);
 
@@ -683,7 +668,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
     }
 
 
-    public static Result update() throws JSONException, IOException {
+    public static Result update() throws JSONException {
         System.out.println("\n\n\nDesde VideotecaController.update");
         Form<VtkCatalogo> forma = form(VtkCatalogo.class).bindFromRequest();
         DynamicForm fd = DynamicForm.form().bindFromRequest();
@@ -779,8 +764,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 vtk.catalogador = usuarioActual;
                 for (int x=0; x< jsonArr.length();x++){
                     PalabraClave pc = new PalabraClave();
-                    String valor = jsonArr.getJSONObject(x).get("value").toString();
-                    pc.descripcion = valor;
+                    pc.descripcion = jsonArr.getJSONObject(x).get("value").toString();;
                     pc.catalogador = usuarioActual;
                     vtk.palabrasClave.add(pc);
                 }
@@ -932,24 +916,6 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         }
         return ok ( jo.toString()  );
     }
-
-
-    public static Result manual(){
-        Form<VtkCatalogo> forma = play.data.Form.form(VtkCatalogo.class);
-        List<TipoCredito> tipos = TipoCredito.find.all();
-        List<TipoCredito> tiposOrdenados = tipos.stream()
-                .sorted(Comparator.comparing(TipoCredito::getId))
-                .collect(Collectors.toList());
-        List<VtkCampo> campos = VtkCampo.find.all();
-        return ok(
-                views.html.videoteca.createForm3.render(forma, tiposOrdenados, campos)
-        );
-    }
-
-
-
-
-
 
     // El comando a ejecutar es algo como:
     ///       usr/bin/curl -X POST --http1.0 -F time=month -F file=@/home/eduardo/archivoPrueba.txt;filename=estees.txt https://tranzapp.dev.ipn.mx/script.php
@@ -1165,116 +1131,6 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         System.out.println(html.select("body").text());
         return ok ();
     }
-
-
-    public static Result pruebaTA(){
-        System.out.println("\n\n\n\nDesde VTKController.pruebaTA");
-        DynamicForm fd = DynamicForm.form().bindFromRequest();
-        System.out.println(fd);
-
-
-        return ok( "ok" );
-    }
-
-    public static Result dragdrop(){
-        return ok (views.html.videoteca.dragdrop.render());
-    }
-
-
-
-    public static Result pruebaResumable(){
-        return ok (views.html.videoteca.resumable2.render());
-    }
-
-
-
-
-
-    public static Result pruebaRecepcionResumable2() {
-        System.out.println("Desde VideotecaController.pruebaRecepcionResumable2!");
-        String urlTranzapp="https://tranzapp.dev.ipn.mx/";
-        String apipage = "script.php";
-        String downloadpage="f.php";
-        try {
-            int resumableChunkNumber = getResumableChunkNumber(request());
-
-            ResumableInfo info = getResumableInfo(request());
-
-            Logger.info(info.resumableFilename);
-            RandomAccessFile raf = new RandomAccessFile(info.resumableFilename, "rw");
-
-            //Seek to position
-            raf.seek((resumableChunkNumber - 1) * (long)info.resumableChunkSize);
-
-            //Save to file
-            InputStream is = new FileInputStream(request().body().asRaw().asFile());
-            long readed = 0;
-            long content_length = request().body().asRaw().size();
-            //byte[] bytes = new byte[1024 * 100];
-            byte[] bytes = new byte[1024 * 10];
-            while(readed < content_length) {
-                int r = is.read(bytes);
-                if (r < 0)  {
-                    break;
-                }
-                raf.write(bytes, 0, r);
-                readed += r;
-            }
-            raf.close();
-            is.close();
-
-
-            //Mark as uploaded.
-            info.uploadedChunks.add(new ResumableInfo.ResumableChunkNumber(resumableChunkNumber));
-            if (info.checkIfUploadFinished()) { //Check if all chunks uploaded, and change filename
-                ResumableInfoStorage.getInstance().remove(info);
-                System.out.println("terminado!!!!!");
-
-                System.out.println(info.resumableFilename);
-                System.out.println(info.resumableFilePath);
-                System.out.println(info.resumableRelativePath);
-                System.out.println(  info.uploadedChunks.size() );
-
-                // Ya se subió al server, ahora enviarlo a tranzapp
-                if (1==2) {
-                    System.out.println("Enviando a lecturaComandoNombre");
-                    String datos = lecturaComandoNombre("send", info.resumableFilename, info.resumableFilename);
-                    System.out.println("resultado de lecturaComandoNombre... " + datos.toString());
-                    JSONObject retorno = new JSONObject();
-                    retorno.put("estado", "error");
-                    if (!datos.contains("Error")) {
-                        String[] arrString = datos.split("\r");
-                        System.out.println("--->arrString:" + Arrays.toString(arrString));
-                        retorno.put("nombreArchivo", info.resumableFilename);
-                        retorno.put("estado", "subido");
-                        retorno.put("archivo", "archivo");
-                        retorno.put("idArchivo", arrString[0]);
-                        retorno.put("cveBorrado", arrString[1]);
-                        retorno.put("descargar", urlTranzapp + downloadpage + "?h=" + arrString[0]);
-                        retorno.put("borrar", urlTranzapp + downloadpage + "?h=" + arrString[0] + "&d=" + arrString[1]);
-
-                        System.out.println(retorno);
-                        Path filePath = Paths.get(info.resumableFilename);
-                        try {
-                            Files.delete(filePath);
-                            Logger.info("archivo temporal eliminado: " + filePath);
-                        } catch (IOException e) {
-                            System.err.println("Error deleting file: " + e.getMessage());
-                        }
-                    }
-                }
-
-                return ok("All finished.");
-            } else {
-                return ok("Upload");
-            }
-        } catch (Exception e) {
-            System.out.println("EXC EPTIOB "+e.getCause()+  "   "+e.getMessage());
-            e.printStackTrace();
-            return internalServerError();
-        }
-    }
-
 
 
     public static Result uploadStatus() {

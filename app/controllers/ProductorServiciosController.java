@@ -15,7 +15,6 @@ import org.json.JSONObject;
 import com.avaje.ebean.Expr;
 
 import play.data.DynamicForm;
-import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.usuario.*;
 

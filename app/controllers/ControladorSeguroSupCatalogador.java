@@ -1,7 +1,6 @@
 package controllers;
 
 import actions.Autenticar;
-import actions.ConfirmarCatalogador;
 import actions.ConfirmarSupCatalogador;
 import actions.Encabezados;
 import play.mvc.Controller;

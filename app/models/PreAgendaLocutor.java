@@ -23,10 +23,10 @@ public class PreAgendaLocutor  extends models.utils.PlantillaModelo{
 
 	
 
-	public static Model.Finder<Long,PreAgendaLocutor> find = new Model.Finder<Long,PreAgendaLocutor>(Long.class, PreAgendaLocutor.class);
+	public static Model.Finder<Long,PreAgendaLocutor> find = new Model.Finder<>(Long.class, PreAgendaLocutor.class);
 	
     public static Map<String,String> options() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        LinkedHashMap<String,String> options = new LinkedHashMap<>();
         for(PreAgendaLocutor c: PreAgendaLocutor.find.findList()) {
             options.put(c.id.toString(), c.personal.nombreCompleto());
         }

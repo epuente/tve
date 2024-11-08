@@ -32,7 +32,7 @@ public class AgendaVehiculo  extends models.utils.PlantillaModelo{
 	@Version
 	public Date version = new Date();
 	
-	public static Model.Finder<Long, AgendaVehiculo> find = new Model.Finder<Long, AgendaVehiculo>(Long.class, AgendaVehiculo.class);
+	public static Model.Finder<Long, AgendaVehiculo> find = new Model.Finder<>(Long.class, AgendaVehiculo.class);
 	
 	
 	

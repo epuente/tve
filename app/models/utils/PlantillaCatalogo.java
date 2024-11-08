@@ -1,6 +1,5 @@
 package models.utils;
 
-import models.Estado;
 import play.db.ebean.Model;
 
 import javax.persistence.Column;
