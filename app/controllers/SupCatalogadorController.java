@@ -6,6 +6,7 @@ import com.avaje.ebean.Expr;
 import com.avaje.ebean.Page;
 import com.avaje.ebean.SqlRow;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import models.*;
 import models.videoteca.*;
 import org.json.JSONArray;
@@ -302,10 +303,13 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
 
 
 
-    public static Result tablero3(){
-        Logger.debug("desde SupCatalogadorController.tablero2");
-        return ok( views.html.videoteca.catalogadores.tablero3.render());
+
+
+    public static Result tablero4(){
+        Logger.debug("desde SupCatalogadorController.tablero4");
+        return ok( views.html.videoteca.catalogadores.tablero4.render());
     }
+
 
 
     public static Result ajaxTablero() throws JSONException {
@@ -520,9 +524,10 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
                     "inner join cuenta_rol cr on cta.id = cr.cuenta_id " +
                     "inner join rol r on cr.rol_id = r.id " +
                     "where r.id = 132 and to_char(vc.audit_update, 'YYYY MM') is not null "+
+                    "and vc.audit_update > CURRENT_DATE - INTERVAL '1 year' "+
                     "and concat(p.paterno, ' ', p.materno,' ', p.nombre) = '"+catalogador.nombreCompletoOficial()+"' "+
                     "group by to_char(vc.audit_update, 'YYYY MM'), concat(p.paterno, ' ',p.materno, ' ',p.nombre) " +
-                    "order by to_char(vc.audit_update, 'YYYY MM'), nombre";
+                    "order by to_char(vc.audit_update, 'YYYY MM'), nombre ";
             Logger.info(query);
             List<SqlRow> sqlRows = Ebean.createSqlQuery(query).findList();
             if (!sqlRows.isEmpty()) {
@@ -621,6 +626,70 @@ public class SupCatalogadorController extends ControladorSeguroSupCatalogador {
         return ok (retorno.toString());
     }
 
+
+    public static Result chartUR() throws JSONException {
+        int total = 0;
+        JSONObject retorno = new JSONObject();
+        String query ="select ur.id, ur.nombre_largo descripcion, count(*) total " +
+                "from vtk_catalogo vc " +
+                "inner join unidad_responsable ur on vc.unidadresponsable_id = ur.id " +
+                "group by ur.id, ur.nombre_largo " +
+                "union " +
+                "select '9999' id, 'Sin especificar' descripcion,  count(*) total " +
+                "from vtk_catalogo vc " +
+                "where unidadresponsable_id is null " +
+                "order by descripcion ";
+                //"order by ur.nombre_largo";
+
+        JSONObject datos = datasetsChart(query);
+
+        JSONObject uno = (JSONObject) datos.getJSONArray("datasets").get(0);
+
+
+
+
+       System.out.println("====>>"+   uno.getJSONArray("data").get(0).toString());
+        System.out.println("====>>"+   uno.getJSONArray("data").get(1).toString());
+
+        for (int x=0; x<uno.getJSONArray("data").length(); x++){
+            total+= Integer.parseInt(uno.getJSONArray("data").get(x).toString());
+        }
+        System.out.println("====>>"+   total);
+
+        datos.put("total", total);
+
+        String string = datos.toString();
+        System.out.println("chart UR: "+ string);
+        return ok (string);
+    }
+
+
+    // Método que recibe string query y regresa los datasets para las gráficas en un json
+    private static JSONObject datasetsChart(String query) throws JSONException {
+        JSONObject retorno = new JSONObject();
+        JSONArray ja = new JSONArray();
+        JSONArray jaDataSets = new JSONArray();
+        List<String> lstLabels = new ArrayList<>();
+        JSONArray jaColores = coloresBG();
+        final List<SqlRow> sqlRows = Ebean.createSqlQuery(query).findList();
+        if (!sqlRows.isEmpty()) {
+            //joAux.put("label", catalogador.nombreCompletoOficial());
+            JSONArray jaData = new JSONArray();
+            JSONObject joAux = new JSONObject();
+            for (SqlRow r : sqlRows) {
+                lstLabels.add(r.getString("descripcion"));
+                jaData.put(r.getInteger("total"));
+            }
+            joAux.put("data", jaData);
+            joAux.put("backgroundColor", coloresBG());
+            JSONArray jaAux = new JSONArray();
+            jaAux.put(joAux);
+
+            retorno.put("labels", lstLabels);
+            retorno.put("datasets", jaAux);
+        }
+        return retorno;
+    }
 
 
     // Estos son los colores que se usan para las series de las gráficas

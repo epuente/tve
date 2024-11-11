@@ -302,12 +302,14 @@ POST    /supervisor/catalogadoresUpdate/:id controllers.SupCatalogadorController
 POST    /supervisor/catalogadoresDelete     controllers.SupCatalogadorController.delete()
 POST    /supervisor/toggleActivo            controllers.SupCatalogadorController.toggleActivo()
 
-GET     /supervisor/tablero3                controllers.SupCatalogadorController.tablero3()
+#GET     /supervisor/tablero3                controllers.SupCatalogadorController.tablero3()
+GET     /supervisor/tablero4                controllers.SupCatalogadorController.tablero4()
+
 
 POST    /chartCatPorFecha                   controllers.SupCatalogadorController.chartCatPorFecha()
 POST    /chartAreaTematica                  controllers.SupCatalogadorController.chartAreaTematica()
 POST    /chartNivel                         controllers.SupCatalogadorController.chartNivel()
-
+POST    /chartUR                            controllers.SupCatalogadorController.chartUR()
 
 POST    /supervisor/ajaxTablero             controllers.SupCatalogadorController.ajaxTablero()
 GET     /catalogoSup                        controllers.SupCatalogadorController.catalogo()
