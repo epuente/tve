@@ -1,5 +1,5 @@
 name := """tve2024"""
-version := "1.0.1-SNAPSHOT"
+version := "1.0.7-SNAPSHOT"
 scalaVersion := "2.11.4"
 //sbt.version=0.13.7
 libraryDependencies ++= Seq(
@@ -30,8 +30,5 @@ doc in Compile <<= target.map(_ / "none")
 
 javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation", "-Werror", "-J-Xms128M", "-J-Xmx512m", "-J-server")
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
-
-
-
 
 

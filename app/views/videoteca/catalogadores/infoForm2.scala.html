@@ -246,8 +246,14 @@
             </div>
         </div>
     </div>
-    <div class="noImprimir">
-        <button id="btnImprimir" onclick="imprimir()">Imprimir</button>
+
+
+    <div class="row noImprimir">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div style="width: 10em" class="center-block">
+                <button id="btnImprimir"  class="btn btn-primary btn-block" onclick="imprimir()">Imprimir  <i class="fas fa-print"></i>  </button>
+            </div>
+        </div>
     </div>
     <div class="row" id="lineaFooter">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align: end;">
@@ -262,7 +268,9 @@
 <script type="text/javascript">
     var texto="";
     $(function() {
-        $("#fechaRegistro").html(moment("@forma.get().auditInsert", "ddd MMM DD HH:mm:ss z YYYY").format("DD/MM/YYYY HH:mm:ss"));
+        var f1 = moment("@forma.get().auditInsert", "ddd MMM DD HH:mm:ss z YYYY").format("DD/MM/YYYY HH:mm:ss");
+        var f2 = moment("@forma.get().auditUpdate", "ddd MMM DD HH:mm:ss z YYYY").format("DD/MM/YYYY HH:mm:ss");
+        $("#fechaRegistro").html(f1 +" / "+f2);
         $("#elBody").fadeIn(500);
     });  // fin del $(function()
 
@@ -275,7 +283,7 @@
 
 <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("bootstrap-select/css/bootstrap-select.min.css")">
 <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/videoteca.css")">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!--script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script-->
 
 <link rel="stylesheet" href="@routes.Assets.at("stylesheets/impresion.css")" type="text/css" media="print" />
 

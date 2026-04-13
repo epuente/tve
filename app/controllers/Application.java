@@ -70,7 +70,7 @@ public class Application extends ControladorDefault {
 		String password = jRequest.findValue("password").asText().trim();
 
 		Logger.debug(usuario);
-		Logger.debug(password);
+		//Logger.debug(password);
 		session().clear();
 		/*
 		DynamicForm requestData = form().bindFromRequest();

@@ -6,3 +6,56 @@ clean
 reload
 compile
 run 8087
+compile
+run 8085
+run 8087
+clean
+reload
+compile
+run 8087
+exit
+clean
+reload
+clean
+reload
+compile
+clean
+dist
+run 8087
+reload
+run 8087
+reload
+run 8087
+reload
+run 8087
+clean
+relaod
+reload
+compile
+run 8087
+clean
+reload
+compile
+run 8087
+exit
+run 8087
+exit
+run 8087
+clean
+dist
+clean
+dist
+exit
+run 8087
+clean
+exit
+run 8087
+clean
+reload
+compile
+run 8087
+reload
+clean
+dist
+exit
+run 8087

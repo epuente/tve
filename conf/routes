@@ -275,6 +275,7 @@ GET     /pruebaPdfExterno                   controllers.UsuarioController.prueba
 
 GET     /tableroVideoTK                     controllers.VideotecaController.tablero()
 GET     /ajaxTableroVideoTK                 controllers.VideotecaController.ajaxTablero()
+GET    /ajaxTableroCat1AnioMes             controllers.VideotecaController.chartCat1PorFecha2026()
 GET     /catalogo                           controllers.VideotecaController.catalogo()
 GET     /vtkCatalogoDTSS                    controllers.VideotecaController.catalogoDTSS()
 GET     /vtkCatalogo/create5                controllers.VideotecaController.catalogoCreate5()
@@ -306,10 +307,11 @@ POST    /supervisor/toggleActivo            controllers.SupCatalogadorController
 GET     /supervisor/tablero4                controllers.SupCatalogadorController.tablero4()
 
 
-POST    /chartCatPorFecha                   controllers.SupCatalogadorController.chartCatPorFecha()
+POST    /chartCatPorFecha2026                   controllers.SupCatalogadorController.chartCatPorFecha2026()
 POST    /chartAreaTematica                  controllers.SupCatalogadorController.chartAreaTematica()
 POST    /chartNivel                         controllers.SupCatalogadorController.chartNivel()
 POST    /chartUR                            controllers.SupCatalogadorController.chartUR()
+POST    /chartWordCloud                     controllers.SupCatalogadorController.chartWordCloud()
 
 POST    /supervisor/ajaxTablero             controllers.SupCatalogadorController.ajaxTablero()
 GET     /catalogoSup                        controllers.SupCatalogadorController.catalogo()

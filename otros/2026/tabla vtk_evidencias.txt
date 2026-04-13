@@ -1,0 +1,14 @@
+CREATE TABLE public.vtk_evidencia (
+	id int8 NOT NULL,
+	audit_insert timestamp NULL,
+	audit_update timestamp NULL,
+	catalogo_id int8 NULL,
+	nombrearchivo varchar(255) NULL,
+	ligadescarga varchar(255) NULL,
+	ligaborrado varchar(255) NULL,
+	CONSTRAINT pk_vtk_evidencia PRIMARY KEY (id),
+	CONSTRAINT fk_vtk_evidencia_catalogo_161 FOREIGN KEY (catalogo_id) REFERENCES public.vtk_catalogo(id)
+);
+CREATE INDEX ix_vtk_evidencia_catalogo_161 ON public.vtk_evidencia USING btree (catalogo_id);
+
+ALTER TABLE vtk_evidencia OWNER TO tve;

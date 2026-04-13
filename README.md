@@ -8,13 +8,15 @@ Se adicionó el módulo de videoteca en el año 2023. Se puso en producción en 
 
 ## Arquitectura
 - Lenguaje de programación: java 8.
-- Framework: Play!.
+- Framework: Play versión 2.3.7.
 - Patrón MVC.
 - ORM: ebean.
 - Motor de base de datos: Postgresql.
-- Driver postgresql: pgjdbc-ng.
-- Bootstrap.
-- Jquery.
+- Driver postgresql: pgjdbc-ng  versión 0.8.9.
+- Bootstrap versión 3.3.7.
+- Jquery versión 2.2.4.
 - Comunicación asíncrona para notificaciones en la capa de vista: SSE (Server Sent Event)
+- Libreria para graficación: chart.js
+- Libreria para fechas y horas: moment.js versión 2.29.4.
  
  

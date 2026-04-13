@@ -147,6 +147,8 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         retorno.put("aniosProdLabels", arrAniosProdLabels);
         retorno.put("aniosProdDatos", arrAniosProdDatos);
 
+        System.out.println("ajaxTablero retorna: "+retorno);
+
         return ok ( retorno.toString() );
     }
 
@@ -284,7 +286,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
         String queryTSQuery = "SELECT plainto_tsquery('spanish', '"+cadena+"')";
         SqlRow sqlRow2 = Ebean.createSqlQuery(queryTSQuery).findUnique();
         //Se obtiene el ts_query y le quita las comillas simples
-        String ts = sqlRow2.getString("plainto_tsquery").toString().replaceAll("'","");;
+        String ts = sqlRow2.getString("plainto_tsquery").toString().replaceAll("'","");
         String query3 ="";
         if (campo.compareTo("ur")==0)
             query3 = "SELECT id, nombre_largo, ts_rank(to_tsvector(coalesce(nombre_largo, ' ')), to_tsquery('"+ts+"'))" +
@@ -462,7 +464,7 @@ public class VideotecaController extends ControladorSeguroVideoteca{
             vtk.timeline.clear();
             Ebean.save(vtk);
             Ebean.refresh(vtk);
-            Long idVTK = vtk.id;
+
             /////////// TimeLine
             if (forma.field("txaTimeLine").value() != null   &&  forma.field("txaTimeLine").value()!="" ){
                 JSONArray jsonArrTimeLine = new JSONArray(forma.field("txaTimeLine").value());
@@ -1226,6 +1228,84 @@ public class VideotecaController extends ControladorSeguroVideoteca{
                 System.err.println("Error deleting file: " + e.getMessage());
             }
         }
+        return ok (retorno.toString());
+    }
+
+
+
+    // Para graficar por catalogador por año y mes
+    public static Result chartCat1PorFecha2026() throws JSONException {
+        JSONObject retorno = new JSONObject();
+        JSONArray ja = new JSONArray();
+        JSONArray jaDataSets = new JSONArray();
+        TreeSet<String> tsLabels = new TreeSet<>();
+        //JSONArray jaColores = coloresBG();
+        JSONArray jaColores = new JSONArray();
+        jaColores.put("rgb(255,140,0, 0.5)");               // Naranja
+        jaColores.put("rgb(150, 75, 0, 0.5)");        //Café
+        // Primero seleccionar al catalogador actual
+        long idUsuario = Long.parseLong(session("usuario"));
+        System.out.println("is uduario: " + idUsuario);
+        Personal catalogador = Ebean.find(Personal.class).setId(idUsuario)
+                .setDistinct(true)
+                .where().eq("cuentas.roles.rol.id", 132)
+                .findUnique();
+        System.out.println(catalogador.nombreCompletoOficial());
+
+
+
+
+        JSONObject joAux = new JSONObject();
+
+
+        List<SqlRow> sqlRows = Ebean.createSqlQuery(
+                "select to_char(vc.audit_insert, 'YYYY MM') fecha, concat(p.paterno, ' ',p.materno, ' ', p.nombre ) nombre , count(catalogador_id) total " +
+                "from vtk_catalogo vc " +
+                        "inner join personal p on vc.catalogador_id = p.id " +
+                        "where vc.catalogador_id = " + catalogador.id + " " +
+                        "group by to_char(vc.audit_insert, 'YYYY MM'), concat(p.paterno, ' ',p.materno, ' ', p.nombre ) "+
+                        "order by fecha, nombre "
+                ).findList();
+
+        System.out.println("select to_char(vc.audit_insert, 'YYYY MM') fecha, concat(p.paterno, ' ',p.materno, ' ', p.nombre ) nombre , count(catalogador_id) total " +
+                "from vtk_catalogo vc " +
+                "inner join personal p on vc.catalogador_id = p.id " +
+                "where vc.catalogador_id = " + catalogador.id + " " +
+                "group by to_char(vc.audit_insert, 'YYYY MM'), concat(p.paterno, ' ',p.materno, ' ', p.nombre ) "+
+                "order by fecha, nombre ");
+
+        if (!sqlRows.isEmpty()) {
+            JSONArray jaData = new JSONArray();
+            JSONObject joDataset = new JSONObject();
+            String catAnterior = sqlRows.get(0).getString("nombre");
+            int x = sqlRows.size();
+            // Hacer loop por catalogador
+            JSONArray jaCatalogadorMes = new JSONArray();
+
+
+            JSONObject joAux0 = new JSONObject();
+            List<SqlRow> y = sqlRows.stream().filter(f->f.getString("nombre").equals(catalogador.nombreCompletoOficial())).collect(Collectors.toList());
+            if (!y.isEmpty()) {
+                joAux0.put("label", catalogador.nombreCompletoOficial());
+                JSONArray jaAux1 = new JSONArray();
+
+                for (SqlRow r : y) {
+                    JSONObject joData = new JSONObject();
+                    joData.put("x", r.getString("fecha"));
+                    joData.put("y", r.getInteger("total"));
+                    tsLabels.add(r.getString("fecha"));
+                    jaAux1.put(joData);
+                }
+                joAux0.put("data", jaAux1);
+                joAux0.put("backgroundColor", jaColores.get(0));
+                jaDataSets.put(joAux0);
+            }
+        }
+
+        retorno.put("datasets", jaDataSets);
+        retorno.put("labels", tsLabels);
+        //System.out.println("chartCat1PorFecha regresa...");
+        //System.out.println(retorno.toString());
         return ok (retorno.toString());
     }
 

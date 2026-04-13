@@ -1,0 +1,2 @@
+alter table vtk_catalogo  add column traduccionaudio bool default false;
+update vtk_catalogo set traduccionaudio= false;
